@@ -26,7 +26,6 @@ Nick Name : RE_Document
 # Portfolio 
 
 ## AI
-- [카테고리 분석에 따른 여행지 추천](portfolio_Artficial_Intelligence\2조_1차_프로젝트_final.pdf)
-- [스팀의 세일 할인가격 예층]()
-- [늑대vs허스키 CNN 알고리즘 분석 테스트]()
-
+- [카테고리 분석에 따른 여행지 추천](portfolio_Artficial_Intelligence\카테고리 분석에 따른 여행지 추천.pdf)
+- [스팀의 세일 할인가격 예측](portfolio_Artficial_Intelligence\스팀의 세일 할인가격 예측.pdf)
+- [늑대vs허스키 CNN 알고리즘 분석 테스트](portfolio_Artficial_Intelligence\늑대vs허스키 CNN 알고리즘 분석 테스트.pdf)

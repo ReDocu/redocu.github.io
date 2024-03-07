@@ -2,129 +2,202 @@
 layout : main_home
 title : main
 ---
-
 <!-- Main -->
 <div id="main">
 	<div class="inner">
-		<!-- Header -->
-			<header id="header">
-				<a href="index.html" class="logo"><strong>Editorial</strong> by HTML5 UP</a>
-				<ul class="icons">
-					<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-					<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-					<li><a href="#" class="icon brands fa-snapchat-ghost"><span class="label">Snapchat</span></a></li>
-					<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-					<li><a href="#" class="icon brands fa-medium-m"><span class="label">Medium</span></a></li>
+		<!-- Section resume  -->
+		<section id="banner">
+			<div class="content">
+				<header>
+					<h1>RE_Document</h1>
+				</header>
+				<h2> Main : Game Contents Programming </h2>
+				<ul>
+					<li> sub : Human Computer Interaction(ICT Convergence)</li>
+					<li> sub : Data Analytics</li>
+				</ul>		
+				<h2> Career [ 2 year 6 month ] </h2>
+				<ul>
+					<li> [2020.07 - 2021.12] Unity Development  - AR Content</li>
+					<li> [2022.06 - 2023.05] Unreal Engine 5 - Autonomous Driving Simulation</li>
+				</ul>		
+				<ul class="actions">
+					<li><a href="#" class="button big">Learn More</a></li>
 				</ul>
+			</div>
+			<span class="image object">
+				<img src="{{site.user_img}}" style="width: 356px; height:356px;" alt="" />
+			</span>
+		</section>
+		<!-- Section History -->
+		<section id="history">
+			<header class="major">
+				<h2>Learning History </h2>
 			</header>
-		<!-- Banner -->
-			<section id="banner">
-				<div class="content">
-					<header>
-						<h1>Hi, I’m Editorial<br />
-						by HTML5 UP</h1>
-						<p>A free and fully responsive site template</p>
-					</header>
-					<p>Aenean ornare velit lacus, ac varius enim ullamcorper eu. Proin aliquam facilisis ante interdum congue. Integer mollis, nisl amet convallis, porttitor magna ullamcorper, amet egestas mauris. Ut magna finibus nisi nec lacinia. Nam maximus erat id euismod egestas. Pellentesque sapien ac quam. Lorem ipsum dolor sit nullam.</p>
+			<div class="features">
+				<article>
+					<div class="content">
+						<!-- Information Security -->
+						<h3>Information Security</h3>
+						<ul>
+							<li>[2012.03 - 2017.02] Computer Engineering BComp </li>
+							<li>[2013.05 - 2013.08] Computer Service Desk </li>
+						</ul>
+						<!-- Human Computer Interaction -->
+						<h3>Human Computer Interaction</h3>
+						<ul>
+							<li>[2017.03 - 2019.08] Department of Smart ICT Convergence MS
+							 </li>
+							<li>[2016.12 - 2017.06] Coding Academy Assistant instructor </li>
+						</ul>
+						<!-- Game Programming -->
+						<h3>Game Programming</h3>
+						<ul>
+							<li>[2019.09 - 2020.03] Game Academy completion</li>
+							<li>[2020.07 - 2021.12] AR Content Developer</li>
+							<li>[2022.06 - 2023.05] Autonomous Driving Simulation</li>
+						</ul>
+						<!-- Data Analytics -->
+						<h3>Data Analytics</h3>
+						<ul>
+							<li>[2023.09 - 2024.05] Data Academy completion platform </li>
+						</ul>
+					</div>
+				</article>
+				<article>
+					<div class="content">
+						<!-- Game Programming -->
+						<h3>Game Class Project [2019.09 - 2020.03]</h3>
+						<ul>
+							<li><a href="{{site.url}}/portfolio_Game\동방플라이트.pdf">[WINAPI 팀] 동방플라이트</a></li>
+							<li><a href="{{site.url}}/portfolio_Game\트릭스터 택틱스 기술문서.pdf">[WINAPI] 트릭스터 택틱스</a></li>
+							<li><a href="{{site.url}}/portfolio_Game\리그레션 기술문서.pdf">[UNITY 팀]리그레션</a></li>
+							<li><a href="{{site.url}}/portfolio_Game\덕덕 디펜스 기술문서.pdf">[UNITY]덕덕 디펜스</a></li>
+						</ul>
+						<!-- Data Analytics -->
+						<h3>Data Analytics Class Project [2023.09 - 2024.04]</h3>
+						<ul>
+							<li><a href="{{site.url}}/portfolio_Artficial_Intelligence\파이썬 슈팅게임 - 몬스터를 찾아서.pdf">[파이썬 기초 학습] 파이썬 슈팅게임</a></li>
+							<li><a href="{{site.url}}/portfolio_Artficial_Intelligence\카테고리 분석에 따른 여행지 추천.pdf">[데이터 분석] 카테고리 분석에 따른 여행지 추천</a></li>
+							<li><a href="{{site.url}}/portfolio_Artficial_Intelligence\스팀의 세일 할인가격 예측.pdf">[데이터 분석] 스팀의 세일 할인가격 예측</a></li>
+							<li><a href="{{site.url}}/portfolio_Artficial_Intelligence\늑대vs허스키 CNN 알고리즘 분석 테스트.pdf">[AI] 늑대vs허스키 CNN 알고리즘 분석 테스트</a></li>
+							<li><a href="{{site.url}}/portfolio_Artficial_Intelligence\AI 딥러닝 프로젝트.pdf">[AI] AI 딥러닝 프로젝트 (3종)</a></li>
+						</ul>
+					</div>
+				</article>
+			</div>
+		</section>
+		<!-- Section Portfolio-->
+		<section id="portfolio">
+			<header class="major">
+				<h2>Portfolio</h2>
+			</header>
+			<div class="posts">
+				<article>
+					<a href="#" class="image"><img src="images/pic01.jpg" alt="" /></a>
+					<h3>C/C++ Newbie Project</h3>
+					<p>개발중...</p>
 					<ul class="actions">
-						<li><a href="#" class="button big">Learn More</a></li>
+						<li><a href="#" class="button">More</a></li>
 					</ul>
-				</div>
-				<span class="image object">
-					<img src="images/pic10.jpg" alt="" />
-				</span>
-			</section>
-		<!-- Section -->
-			<section>
-				<header class="major">
-					<h2>Erat lacinia</h2>
-				</header>
-				<div class="features">
-					<article>
-						<span class="icon fa-gem"></span>
-						<div class="content">
-							<h3>Portitor ullamcorper</h3>
-							<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
-						</div>
-					</article>
-					<article>
-						<span class="icon solid fa-paper-plane"></span>
-						<div class="content">
-							<h3>Sapien veroeros</h3>
-							<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
-						</div>
-					</article>
-					<article>
-						<span class="icon solid fa-rocket"></span>
-						<div class="content">
-							<h3>Quam lorem ipsum</h3>
-							<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
-						</div>
-					</article>
-					<article>
-						<span class="icon solid fa-signal"></span>
-						<div class="content">
-							<h3>Sed magna finibus</h3>
-							<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
-						</div>
-					</article>
-				</div>
-			</section>
-		<!-- Section -->
-			<section>
-				<header class="major">
-					<h2>Ipsum sed dolor</h2>
-				</header>
-				<div class="posts">
-					<article>
-						<a href="#" class="image"><img src="images/pic01.jpg" alt="" /></a>
-						<h3>Interdum aenean</h3>
-						<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
-						<ul class="actions">
-							<li><a href="#" class="button">More</a></li>
-						</ul>
-					</article>
-					<article>
-						<a href="#" class="image"><img src="images/pic02.jpg" alt="" /></a>
-						<h3>Nulla amet dolore</h3>
-						<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
-						<ul class="actions">
-							<li><a href="#" class="button">More</a></li>
-						</ul>
-					</article>
-					<article>
-						<a href="#" class="image"><img src="images/pic03.jpg" alt="" /></a>
-						<h3>Tempus ullamcorper</h3>
-						<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
-						<ul class="actions">
-							<li><a href="#" class="button">More</a></li>
-						</ul>
-					</article>
-					<article>
-						<a href="#" class="image"><img src="images/pic04.jpg" alt="" /></a>
-						<h3>Sed etiam facilis</h3>
-						<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
-						<ul class="actions">
-							<li><a href="#" class="button">More</a></li>
-						</ul>
-					</article>
-					<article>
-						<a href="#" class="image"><img src="images/pic05.jpg" alt="" /></a>
-						<h3>Feugiat lorem aenean</h3>
-						<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
-						<ul class="actions">
-							<li><a href="#" class="button">More</a></li>
-						</ul>
-					</article>
-					<article>
-						<a href="#" class="image"><img src="images/pic06.jpg" alt="" /></a>
-						<h3>Amet varius aliquam</h3>
-						<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
-						<ul class="actions">
-							<li><a href="#" class="button">More</a></li>
-						</ul>
-					</article>
-				</div>
-			</section>
+				</article>
+				<article>
+					<a href="#" class="image"><img src="images/pic02.jpg" alt="" /></a>
+					<h3>WINAPI Newbie Project</h3>
+					<p>개발중...</p>
+					<ul class="actions">
+						<li><a href="#" class="button">More</a></li>
+					</ul>
+				</article>
+				<article>
+					<a href="#" class="image"><img src="images/pic03.jpg" alt="" /></a>
+					<h3>Unity Project</h3>
+					<p>개발중...</p>
+					<ul class="actions">
+						<li><a href="#" class="button">More</a></li>
+					</ul>
+				</article>
+				<article>
+					<a href="#" class="image"><img src="images/pic04.jpg" alt="" /></a>
+					<h3>Sed etiam facilis</h3>
+					<p>개발중...</p>
+					<ul class="actions">
+						<li><a href="#" class="button">More</a></li>
+					</ul>
+				</article>
+				<article>
+					<a href="#" class="image"><img src="images/pic05.jpg" alt="" /></a>
+					<h3>Feugiat lorem aenean</h3>
+					<p>개발중...</p>
+					<ul class="actions">
+						<li><a href="#" class="button">More</a></li>
+					</ul>
+				</article>
+				<article>
+					<a href="#" class="image"><img src="images/pic06.jpg" alt="" /></a>
+					<h3>Amet varius aliquam</h3>
+					<p>개발중...</p>
+					<ul class="actions">
+						<li><a href="#" class="button">More</a></li>
+					</ul>
+				</article>
+			</div>
+		</section>
+		<!-- Section project-->
+		<section id="project">
+			<header class="major">
+				<h2>project</h2>
+			</header>
+			<div class="posts">
+				<article>
+					<a href="#" class="image"><img src="images/pic01.jpg" alt="" /></a>
+					<h3>C/C++ Newbie Project</h3>
+					<p>개발중...</p>
+					<ul class="actions">
+						<li><a href="#" class="button">More</a></li>
+					</ul>
+				</article>
+				<article>
+					<a href="#" class="image"><img src="images/pic02.jpg" alt="" /></a>
+					<h3>WINAPI Newbie Project</h3>
+					<p>개발중...</p>
+					<ul class="actions">
+						<li><a href="#" class="button">More</a></li>
+					</ul>
+				</article>
+				<article>
+					<a href="#" class="image"><img src="images/pic03.jpg" alt="" /></a>
+					<h3>Unity Project</h3>
+					<p>개발중...</p>
+					<ul class="actions">
+						<li><a href="#" class="button">More</a></li>
+					</ul>
+				</article>
+				<article>
+					<a href="#" class="image"><img src="images/pic04.jpg" alt="" /></a>
+					<h3>Sed etiam facilis</h3>
+					<p>개발중...</p>
+					<ul class="actions">
+						<li><a href="#" class="button">More</a></li>
+					</ul>
+				</article>
+				<article>
+					<a href="#" class="image"><img src="images/pic05.jpg" alt="" /></a>
+					<h3>Feugiat lorem aenean</h3>
+					<p>개발중...</p>
+					<ul class="actions">
+						<li><a href="#" class="button">More</a></li>
+					</ul>
+				</article>
+				<article>
+					<a href="#" class="image"><img src="images/pic06.jpg" alt="" /></a>
+					<h3>Amet varius aliquam</h3>
+					<p>개발중...</p>
+					<ul class="actions">
+						<li><a href="#" class="button">More</a></li>
+					</ul>
+				</article>
+			</div>
+		</section>
 	</div>
 </div>

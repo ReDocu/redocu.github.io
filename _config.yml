@@ -24,12 +24,15 @@ menu_section_nav:
   - history : 
     name : history
     href : history
-  - portfolio : 
-    name : portfolio
-    href : portfolio
+  - room : 
+    name : room
+    href : room
   - project :
     name : project
     href : project
+  - develop_Note:
+    name : develop_note
+    href : develop_note
 
 # Build settings
 #theme: minima

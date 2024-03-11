@@ -1,0 +1,9 @@
+########################
+# STUDY LIST           #
+########################
+
+study_list:
+  - python:
+    name : PYTHON
+    href : python
+  

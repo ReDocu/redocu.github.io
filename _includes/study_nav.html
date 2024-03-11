@@ -7,12 +7,12 @@
                 <h2>Menu</h2>
             </header>
             <ul>
-                {% for item in site.menu_section_nav %}
+                <li><a href='main'>HOME</a></li>
+                {% for item in site.data.study.study_list %}
                 <li><a href="#{{item.href}}">{{item.name}}</a></li>
                 {% endfor %}
             </ul>
         </nav>
-
         <section>
             <header class="major">
                 <h2>Contact</h2>
@@ -23,11 +23,10 @@
                 <li class="icon solid fa-home">Gangdong-gu, Seoul, Republic of Korea</li>
             </ul>
         </section>
-
+        
         <!-- Footer -->
         <footer id="footer">
             <p class="copyright">&copy; Untitled. All rights reserved.</p>
         </footer>
     </div>
 </div>
-

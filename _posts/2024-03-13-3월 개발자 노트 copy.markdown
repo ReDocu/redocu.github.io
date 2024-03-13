@@ -1,0 +1,38 @@
+---
+layout: post
+title:  "3월 개발자 노트"
+date:   2024-03-12
+category : roadmap
+---
+
+## ◆ 메인 개발 : Flask 기반 웹사이트 
+
+- Flask 기본 문법 학습
+- Flask 프로그램 및 환경 설정 학습
+
+- Flask를 사용한 MVC 모델 구현
+- Flask를 사용한 MYSQL 구현
+- Flask를 사용한 SQLAlchemy 구현
+- Flask를 사용한 로그인 구현
+- Flask를 사용한 회원가입 구현
+- Flask를 사용한 게시판 구현
+- Flask를 사용한 이미지 관리 프로그램 구현
+- Flask를 사용한 물체 감지(Object Detecting) 구현
+- AWS 연동 및 배포
+
+## ◆ 서브 개발 : Pandas 복습 
+
+Pandas를 이용한 데이터 분석 실습
+
+- 데이터 이론 학습 [데이터 분석 기초 / 통계 기초 / 가상 환경 설정]
+- Pandas DataFrame 기초 이론
+- 데이터 랭글링
+- 데이터 집계
+- 데이터 시각화
+- seaborn과 사용자 정의 기술로 그림 그리기
+- 금융 분석 - 비트코인과 주식 시장
+- 규칙 기반 비정상 행위 탐지
+- 머신러닝 - scikit-learn을 사용한 다양한 예제 
+- 예측 더 잘하기 위한 모델 최적화
+- 머신러닝 기반 비정상 행위 탐지
+- 용어 사전 제작

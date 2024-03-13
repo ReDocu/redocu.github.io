@@ -8,7 +8,13 @@
             </header>
             <ul>
                 {% for item in site.menu_section_nav %}
-                <li><a href="#{{item.href}}">{{item.name}}</a></li>
+                    {% if page.layout == "post" %}
+                    <li><a href="/main">{{item.name}}</a></li>
+                    {% else %}
+                    <li><a href="#{{item.href}}">{{item.name}}</a></li>
+                    {% endif %}
+
+                
                 {% endfor %}
             </ul>
         </nav>

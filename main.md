@@ -152,7 +152,7 @@ title : main
 				<tr>
 					<th>Day</th>
 					<th>Content</th>
-					<th>Price</th>
+					<th>Category</th>
 				</tr>
 			</thead>
 			<tbody>

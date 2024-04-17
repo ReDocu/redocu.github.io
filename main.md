@@ -6,27 +6,40 @@ title : main
 <!-- Section resume  -->
 <section id="banner">
 	<div class="content">
-		<header>
-			<h1>RE_Document</h1>
-		</header>
-		<h2> Main : Game Contents Programming </h2>
-		<ul>
-			<li> sub : Information Security</li>
-			<li> sub : Human Computer Interaction(ICT Convergence)</li>
-			<li> sub : Data Analytics</li>
-		</ul>		
-		<h2> Career [ 2 year 6 month ] </h2>
-		<ul>
-			<li> [2020.07 - 2021.12] Unity Development  - AR Content</li>
-			<li> [2022.06 - 2023.05] Unreal Engine 5 - Autonomous Driving Simulation</li>
-		</ul>		
-		<ul class="actions">
-			<li><a href="#" class="button big">Not implemented</a></li>
-		</ul>
+		<div class="row">
+			<div class="col-6 col-12-small">
+				<header>
+					<h1>RE_Document</h1>
+				</header>
+				<h2> Main : Game Contents Programming </h2>
+				<ul>
+					<li> sub : Information Security</li>
+					<li> sub : Human Computer Interaction(ICT Convergence)</li>
+					<li> sub : Data Analytics</li>
+				</ul>		
+				<h2> Career [ 2 year 6 month ] </h2>
+				<ul>
+					<li> [2020.07 - 2021.12] Unity Development  - AR Content</li>
+					<li> [2022.06 - 2023.05] Unreal Engine 5 - Autonomous Driving Simulation</li>
+				</ul>
+			</div>
+			<div class="col-6 col-12-small">
+				<span class="image object">
+					<img src="assets\img\logo_imsi.png" style="width: 356px; height:356px;" alt="" />
+				</span>
+			</div>
+		</div>
+		<!--
+		<div class="row">
+			<a href="#" class="button big" style="margin:5px">C/C++(Not implemented)</a>
+			<a href="#" class="button big" style="margin:5px">Python(Not implemented)</a>
+			<a href="#" class="button big" style="margin:5px">UNITY(Not implemented)</a>
+			<a href="#" class="button big" style="margin:5px">[OOP]Design Pattern(Not implemented)</a>
+			<a href="#" class="button big" style="margin:5px">[Pandas/Numpy] Data Analysis(Not implemented)</a>
+		</div>
+		-->
 	</div>
-	<span class="image object">
-		<img src="{{site.user_img}}" style="width: 356px; height:356px;" alt="" />
-	</span>
+
 </section>
 <!-- Section History -->
 <section id="history">

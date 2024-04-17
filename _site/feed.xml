@@ -1,94 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-13T23:08:22+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Redocu Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">3월 개발자 노트</title><link href="http://localhost:4000/roadmap/2024/03/12/3%EC%9B%94-%EA%B0%9C%EB%B0%9C%EC%9E%90-%EB%85%B8%ED%8A%B8-copy.html" rel="alternate" type="text/html" title="3월 개발자 노트" /><published>2024-03-12T00:00:00+09:00</published><updated>2024-03-12T00:00:00+09:00</updated><id>http://localhost:4000/roadmap/2024/03/12/3%EC%9B%94%20%EA%B0%9C%EB%B0%9C%EC%9E%90%20%EB%85%B8%ED%8A%B8%20copy</id><content type="html" xml:base="http://localhost:4000/roadmap/2024/03/12/3%EC%9B%94-%EA%B0%9C%EB%B0%9C%EC%9E%90-%EB%85%B8%ED%8A%B8-copy.html"><![CDATA[<h2 id="-메인-개발--flask-기반-웹사이트">◆ 메인 개발 : Flask 기반 웹사이트</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-04-17T23:52:09+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Redocu Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">2024년 목표 개발자 로드맵</title><link href="http://localhost:4000/roadmap/2024/04/17/3%EC%9B%94-%EA%B0%9C%EB%B0%9C%EC%9E%90-%EB%85%B8%ED%8A%B8.html" rel="alternate" type="text/html" title="2024년 목표 개발자 로드맵" /><published>2024-04-17T00:00:00+09:00</published><updated>2024-04-17T00:00:00+09:00</updated><id>http://localhost:4000/roadmap/2024/04/17/3%EC%9B%94%20%EA%B0%9C%EB%B0%9C%EC%9E%90%20%EB%85%B8%ED%8A%B8</id><content type="html" xml:base="http://localhost:4000/roadmap/2024/04/17/3%EC%9B%94-%EA%B0%9C%EB%B0%9C%EC%9E%90-%EB%85%B8%ED%8A%B8.html"><![CDATA[<h2 id="-main-project-기본-학습-문서-제작">◆ [Main Project] 기본 학습 문서 제작</h2>
 
 <ul>
-  <li>Flask 기본 문법 학습</li>
-  <li>
-    <p>Flask 프로그램 및 환경 설정 학습</p>
-  </li>
-  <li>Flask를 사용한 MVC 모델 구현</li>
-  <li>Flask를 사용한 MYSQL 구현</li>
-  <li>Flask를 사용한 SQLAlchemy 구현</li>
-  <li>Flask를 사용한 로그인 구현</li>
-  <li>Flask를 사용한 회원가입 구현</li>
-  <li>Flask를 사용한 게시판 구현</li>
-  <li>Flask를 사용한 이미지 관리 프로그램 구현</li>
-  <li>Flask를 사용한 물체 감지(Object Detecting) 구현</li>
-  <li>AWS 연동 및 배포</li>
+  <li>[학원] AI 모델 예측 결과를 출력해주는 Flask 기반 홈페이지 제작</li>
+  <li>학생들 교육용 콘텐츠 제작 시작</li>
+  <li>인디게임 하나 제작 및 배포</li>
 </ul>
 
-<h2 id="-서브-개발--pandas-복습">◆ 서브 개발 : Pandas 복습</h2>
-
-<p>Pandas를 이용한 데이터 분석 실습</p>
+<h2 id="-game-development-study-팀">◆ [Game Development Study 팀]</h2>
 
 <ul>
-  <li>데이터 이론 학습 [데이터 분석 기초 / 통계 기초 / 가상 환경 설정]</li>
-  <li>Pandas DataFrame 기초 이론</li>
-  <li>데이터 랭글링</li>
-  <li>데이터 집계</li>
-  <li>데이터 시각화</li>
-  <li>seaborn과 사용자 정의 기술로 그림 그리기</li>
-  <li>금융 분석 - 비트코인과 주식 시장</li>
-  <li>규칙 기반 비정상 행위 탐지</li>
-  <li>머신러닝 - scikit-learn을 사용한 다양한 예제</li>
-  <li>예측 더 잘하기 위한 모델 최적화</li>
-  <li>머신러닝 기반 비정상 행위 탐지</li>
-  <li>용어 사전 제작</li>
-</ul>]]></content><author><name></name></author><category term="roadmap" /><summary type="html"><![CDATA[◆ 메인 개발 : Flask 기반 웹사이트]]></summary></entry><entry><title type="html">2024년 개발 로드맵</title><link href="http://localhost:4000/roadmap/2024/03/12/3%EC%9B%94-%EA%B0%9C%EB%B0%9C%EC%9E%90-%EB%85%B8%ED%8A%B8.html" rel="alternate" type="text/html" title="2024년 개발 로드맵" /><published>2024-03-12T00:00:00+09:00</published><updated>2024-03-12T00:00:00+09:00</updated><id>http://localhost:4000/roadmap/2024/03/12/3%EC%9B%94%20%EA%B0%9C%EB%B0%9C%EC%9E%90%20%EB%85%B8%ED%8A%B8</id><content type="html" xml:base="http://localhost:4000/roadmap/2024/03/12/3%EC%9B%94-%EA%B0%9C%EB%B0%9C%EC%9E%90-%EB%85%B8%ED%8A%B8.html"><![CDATA[<h2 id="3월">3월</h2>
+  <li>기본 학습 문서 제작이랑 연동 - C언어 학습 문서 제작하기</li>
+  <li>C언어/C++언어 프레임워크 작성</li>
+  <li>WINAPI 프레임워크 작성 및 학습 문서 제작</li>
+  <li>DIRECT3D 프레임워크 작성 및 학습 문서 제작</li>
+</ul>
 
-<p>◆ 메인 개발 : Flask 기반 웹사이트</p>
+<h2 id="-sub-project-기본-학습-문서-제작">◆ [SUB Project] 기본 학습 문서 제작</h2>
 
-<p>◇ 서브 개발 : 판다스 및 데이터 분석 PDF 자료 만들기</p>
-
-<h2 id="4월">4월</h2>
-
-<p>◆ 메인 개발 : Flask 기반 웹사이트</p>
-
-<p>◇ 서브 개발 : 판다스 및 데이터 분석 PDF 자료 만들기</p>
-
-<h2 id="5월">5월</h2>
-
-<p>◆ 메인 개발 : 휴식… 시간 나면 pygame 조금씩 개발하기</p>
-
-<p>◇ 서브 개발 : 판다스 및 데이터 분석 PDF 정리하기</p>
-
-<h2 id="6월">6월</h2>
-
-<p>◆ 메인 개발 : 유니티 및 언리얼 교육용 콘텐츠 개발하기</p>
-
-<p>◇ 서브 개발 : 파이썬 단기 프로그램 탐색하기</p>
-
-<h2 id="7월">7월</h2>
-
-<p>◆ 메인 개발 : 유니티 및 언리얼 교육용 콘텐츠 개발하기</p>
-
-<p>◇ 서브 개발 : 파이썬 단기 유용한 프로그램 개발하기</p>
-
-<h2 id="8월">8월</h2>
-
-<p>◆ 메인 개발 : 유니티 및 언리얼 교육용 콘텐츠 개발하기</p>
-
-<p>◇ 서브 개발 : 파이썬 단기 유용한 프로그램 개발하기</p>
-
-<h2 id="9월">9월</h2>
-
-<p>◆ 메인 개발 : 유니티 및 언리얼 교육용 콘텐츠 개발하기</p>
-
-<p>◇ 서브 개발 : 파이썬 단기 유용한 프로그램 개발하기</p>
-
-<h2 id="10월">10월</h2>
-
-<p>◆ 메인 개발 : 유니티 및 언리얼 교육용 콘텐츠 개발하기</p>
-
-<p>◇ 서브 개발 : 파이썬 단기 유용한 프로그램 개발하기</p>
-
-<h2 id="11월">11월</h2>
-
-<p>◆ 메인 개발 : 유니티 및 언리얼 교육용 콘텐츠 개발하기</p>
-
-<p>◇ 서브 개발 : 파이썬 단기 유용한 프로그램 개발하기</p>
-
-<h2 id="12월">12월</h2>
-
-<p>◆ 메인 개발 : 유니티 및 언리얼 교육용 콘텐츠 개발하기</p>
-
-<p>◇ 서브 개발 : 파이썬 단기 유용한 프로그램 개발하기</p>]]></content><author><name></name></author><category term="roadmap" /><summary type="html"><![CDATA[3월]]></summary></entry></feed>
+<ul>
+  <li>4월 - 6월 : C언어 학습 문서 제작하기</li>
+  <li>7월 - 8월 : Python언어 학습 문서 제작하기</li>
+  <li>9월 - 10월 : 디자인패턴 학습 문서 제작하기</li>
+  <li>
+    <p>11월 - 12월 : 데이터 분석 학습 문서 제작하기</p>
+  </li>
+  <li>2025년 1월 - 3월 : Unity 학습 문서 제작하기</li>
+  <li>2025년 4월 - 6월 : UE5 학습 문서 제작하기</li>
+</ul>]]></content><author><name></name></author><category term="roadmap" /><summary type="html"><![CDATA[◆ [Main Project] 기본 학습 문서 제작]]></summary></entry></feed>

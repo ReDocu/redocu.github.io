@@ -2,7 +2,7 @@
 # Feel free to add content and custom Front Matter to this file.
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
-layout: default
+layout: home
 ---
 
 <html lang="en">
@@ -15,9 +15,9 @@ layout: default
       background-color: black;
       overflow: hidden;
       margin: 0;
-      display: flex;
+      display: absolute;
       justify-content: center;
-      align-items: center;
+      align-items: center;s
       height: 30vh;
     }
     .matrix-text {
@@ -26,7 +26,7 @@ layout: default
       font-size: 20px;
       position: absolute;
       white-space: nowrap;
-      display: flex;
+      display: absolute;
       flex-wrap: wrap;
     }
     .letter {

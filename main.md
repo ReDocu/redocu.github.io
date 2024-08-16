@@ -95,6 +95,11 @@ title : main
 					<li><a href="{{site.url}}/portfolio_Artficial_Intelligence\늑대vs허스키 CNN 알고리즘 분석 테스트.pdf">[AI] 늑대vs허스키 CNN 알고리즘 분석 테스트</a></li>
 					<li><a href="{{site.url}}/portfolio_Artficial_Intelligence\AI 딥러닝 프로젝트.pdf">[AI] AI 딥러닝 프로젝트 (3종)</a></li>
 				</ul>
+				<!-- PortFolio -->
+				<h3>Lecture  [2024.09 - ]</h3>
+				<ul>
+					<li>VR Lecture</li>
+				</ul>
 				<p><br/></p>
 				<p><br/></p>
 			</div>
@@ -112,7 +117,7 @@ title : main
 			<h3>Program Collector</h3>
 			<p>유용한 프로그램 단기 제작 프로젝트</p>
 			<ul class="actions">
-				<li><a href="study" class="button">More</a></li>
+				<li><a href="study" class="button">Not implemented</a></li>
 			</ul>
 		</article>
 		<!-- 복붙용 -->
@@ -171,7 +176,8 @@ title : main
 			<tbody>
 				{% for post in site.posts %}
 				<tr>
-					<td>{{ post.date | date: "%Y-%m-%d" }}</td>
+					<!--<td>{{ post.date | date: "%Y-%m-%d" }}</td>-->
+					<td>{{ post.date | date : %Y-%m }}</td>
 					<td><a href="{{ post.url }}">{{ post.title }}</a></td>
 					<td>{{post.categories}}</td>
 				</tr>

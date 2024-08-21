@@ -177,7 +177,7 @@ title : main
 				{% for post in site.posts %}
 				<tr>
 					<!--<td>{{ post.date | date: "%Y-%m-%d" }}</td>-->
-					<td>{{ post.date | date: "%Y" }}
+					<td>{{ post.date | date: "%Y" }}</td>
 					<td><a href="{{ post.url }}">{{ post.title }}</a></td>
 					<td>{{post.categories}}</td>
 				</tr>

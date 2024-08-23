@@ -3,6 +3,9 @@
 ########################
 
 study_list:
+  - clang:
+    name : CLANG
+    href : clang
   - python:
     name : PYTHON
     href : python

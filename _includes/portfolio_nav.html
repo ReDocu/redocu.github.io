@@ -8,11 +8,12 @@
             </header>
             <ul>
                 <li><a href='main'>HOME</a></li>
-                {% for item in site.data.study.study_list %}
+                {% for item in site.data.portfolio.portfolio_list %}
                 <li><a href="#{{item.href}}">{{item.name}}</a></li>
                 {% endfor %}
             </ul>
         </nav>
+        
         <!-- Footer -->
         {% include main_footer.html %}
     </div>

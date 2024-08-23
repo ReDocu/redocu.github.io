@@ -3,29 +3,115 @@ layout : study_home
 title : study
 ---
 
-<section id="history">
+<!-- Section Portfolio-->
+<section id="python">
 	<header class="major">
-		<h2>Python</h2>
+		<h2>Study Room</h2>
 	</header>
-	<div class="features">
+	<div class="posts">
 		<article>
-			<div class="content">
-				<!-- Information Security -->
-				<h3>Title</h3>
-				<ul>
-					<li>[2012.03 - 2017.02] Computer Engineering BComp</li>
-				</ul>
-			</div>
+			<a href="#" class="image"><img src="images/pic01.jpg" alt="" /></a>
+			<h3>Program Collector</h3>
+			<p>유용한 프로그램 단기 제작 프로젝트</p>
+			<ul class="actions">
+				<li><a href="study" class="button">Not implemented</a></li>
+			</ul>
 		</article>
+		<!-- 복붙용 -->
+		<!--
 		<article>
-			<div class="content">
-				<!-- Information Security -->
-				<h3>Explanation</h3>
-				<ul>
-					<li>[2012.03 - 2017.02] Computer Engineering BComp </li>
-				</ul>
-			</div>
+			<a href="#" class="image"><img src="images/pic01.jpg" alt="" /></a>
+			<h3>Program Collector</h3>
+			<p>유용한 프로그램 단기 제작 프로젝트</p>
+			<ul class="actions">
+				<li><a href="study" class="button">More</a></li>
+			</ul>
 		</article>
+		-->
+	</div>
+</section>
 
+
+<!-- Section Portfolio-->
+<section id="clang">
+	<header class="major">
+		<h2>Study Room</h2>
+	</header>
+	<div class="posts">
+		<article>
+			<a href="#" class="image"><img src="images/pic01.jpg" alt="" /></a>
+			<h3>Program Collector</h3>
+			<p>유용한 프로그램 단기 제작 프로젝트</p>
+			<ul class="actions">
+				<li><a href="study" class="button">Not implemented</a></li>
+			</ul>
+		</article>
+		<!-- 복붙용 -->
+		<!--
+		<article>
+			<a href="#" class="image"><img src="images/pic01.jpg" alt="" /></a>
+			<h3>Program Collector</h3>
+			<p>유용한 프로그램 단기 제작 프로젝트</p>
+			<ul class="actions">
+				<li><a href="study" class="button">More</a></li>
+			</ul>
+		</article>
+		-->
+	</div>
+</section>
+
+<!-- Section Portfolio-->
+<section id="engine">
+	<header class="major">
+		<h2>Study Room</h2>
+	</header>
+	<div class="posts">
+		<article>
+			<a href="#" class="image"><img src="images/pic01.jpg" alt="" /></a>
+			<h3>Program Collector</h3>
+			<p>유용한 프로그램 단기 제작 프로젝트</p>
+			<ul class="actions">
+				<li><a href="study" class="button">Not implemented</a></li>
+			</ul>
+		</article>
+		<!-- 복붙용 -->
+		<!--
+		<article>
+			<a href="#" class="image"><img src="images/pic01.jpg" alt="" /></a>
+			<h3>Program Collector</h3>
+			<p>유용한 프로그램 단기 제작 프로젝트</p>
+			<ul class="actions">
+				<li><a href="study" class="button">More</a></li>
+			</ul>
+		</article>
+		-->
+	</div>
+</section>
+
+<!-- Section Portfolio-->
+<section id="interest">
+	<header class="major">
+		<h2>Study Room</h2>
+	</header>
+	<div class="posts">
+		<article>
+			<a href="#" class="image"><img src="images/pic01.jpg" alt="" /></a>
+			<h3>Program Collector</h3>
+			<p>유용한 프로그램 단기 제작 프로젝트</p>
+			<ul class="actions">
+				<li><a href="study" class="button">Not implemented</a></li>
+			</ul>
+		</article>
+		<!-- 복붙용 -->
+		<!--
+		<article>
+			<a href="#" class="image"><img src="images/pic01.jpg" alt="" /></a>
+			<h3>Program Collector</h3>
+			<p>유용한 프로그램 단기 제작 프로젝트</p>
+			<ul class="actions">
+				<li><a href="study" class="button">More</a></li>
+			</ul>
+		</article>
+		-->
 	</div>
 </section>

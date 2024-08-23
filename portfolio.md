@@ -4,29 +4,86 @@ title : study
 ---
 
 
-<section id="history">
+<!-- Section Portfolio-->
+<section id="unity">
 	<header class="major">
-		<h2>Python</h2>
+		<h2>Study Room</h2>
 	</header>
-	<div class="features">
+	<div class="posts">
 		<article>
-			<div class="content">
-				<!-- Information Security -->
-				<h3>Title</h3>
-				<ul>
-					<li>포트폴리오</li>
-				</ul>
-			</div>
+			<a href="#" class="image"><img src="images/pic01.jpg" alt="" /></a>
+			<h3>Program Collector</h3>
+			<p>유용한 프로그램 단기 제작 프로젝트</p>
+			<ul class="actions">
+				<li><a href="study" class="button">Not implemented</a></li>
+			</ul>
 		</article>
+		<!-- 복붙용 -->
+		<!--
 		<article>
-			<div class="content">
-				<!-- Information Security -->
-				<h3>Explanation</h3>
-				<ul>
-					<li>포트폴리오</li>
-				</ul>
-			</div>
+			<a href="#" class="image"><img src="images/pic01.jpg" alt="" /></a>
+			<h3>Program Collector</h3>
+			<p>유용한 프로그램 단기 제작 프로젝트</p>
+			<ul class="actions">
+				<li><a href="study" class="button">More</a></li>
+			</ul>
 		</article>
+		-->
+	</div>
+</section>
 
+<!-- Section Portfolio-->
+<section id="unreal">
+	<header class="major">
+		<h2>Study Room</h2>
+	</header>
+	<div class="posts">
+		<article>
+			<a href="#" class="image"><img src="images/pic01.jpg" alt="" /></a>
+			<h3>Program Collector</h3>
+			<p>유용한 프로그램 단기 제작 프로젝트</p>
+			<ul class="actions">
+				<li><a href="study" class="button">Not implemented</a></li>
+			</ul>
+		</article>
+		<!-- 복붙용 -->
+		<!--
+		<article>
+			<a href="#" class="image"><img src="images/pic01.jpg" alt="" /></a>
+			<h3>Program Collector</h3>
+			<p>유용한 프로그램 단기 제작 프로젝트</p>
+			<ul class="actions">
+				<li><a href="study" class="button">More</a></li>
+			</ul>
+		</article>
+		-->
+	</div>
+</section>
+
+<!-- Section Portfolio-->
+<section id="basic">
+	<header class="major">
+		<h2>Study Room</h2>
+	</header>
+	<div class="posts">
+		<article>
+			<a href="#" class="image"><img src="images/pic01.jpg" alt="" /></a>
+			<h3>Program Collector</h3>
+			<p>유용한 프로그램 단기 제작 프로젝트</p>
+			<ul class="actions">
+				<li><a href="study" class="button">Not implemented</a></li>
+			</ul>
+		</article>
+		<!-- 복붙용 -->
+		<!--
+		<article>
+			<a href="#" class="image"><img src="images/pic01.jpg" alt="" /></a>
+			<h3>Program Collector</h3>
+			<p>유용한 프로그램 단기 제작 프로젝트</p>
+			<ul class="actions">
+				<li><a href="study" class="button">More</a></li>
+			</ul>
+		</article>
+		-->
 	</div>
 </section>

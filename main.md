@@ -94,7 +94,7 @@ title : main
 					<li><a href="{{site.url}}/portfolio_Artficial_Intelligence\스팀의 세일 할인가격 예측.pdf">[데이터 분석] 스팀의 세일 할인가격 예측</a></li>
 					<li><a href="{{site.url}}/portfolio_Artficial_Intelligence\늑대vs허스키 CNN 알고리즘 분석 테스트.pdf">[AI] 늑대vs허스키 CNN 알고리즘 분석 테스트</a></li>
 					<li><a href="{{site.url}}/portfolio_Artficial_Intelligence\AI 딥러닝 프로젝트.pdf">[AI] AI 딥러닝 프로젝트 (3종)</a></li>
-					<li><[AI / Flask] 모델 등록 및 확인 [파이널 발표]</a></li>
+					<li>[AI / Flask] 모델 등록 및 확인 [파이널 발표]</li>
 				</ul>
 				<!-- PortFolio -->
 				<h3>Lecture  [2024.09 - ]</h3>

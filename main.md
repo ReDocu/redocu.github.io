@@ -16,6 +16,12 @@ title : main
 					<li> sub : Information Security</li>
 					<li> sub : Human Computer Interaction(ICT Convergence)</li>
 					<li> sub : Data Analytics</li>
+				</ul>
+				<h2> Introduce </h2>
+				<ul>
+					<li> 저는 ICT 융합과 메타버스가 만든 혼종.</li>
+					<li> 개발자로서의 삶을 선택한, 의미 있는 개발자가 되기 위해.</li>
+					<li> 함께 알아가는 방법을 배우고 익힘으로써, 보다 나은 개발과 미래가치 창출을 꿈꾸고 있습니다.</li>
 				</ul>		
 				<h2> Career [ 2 year 6 month ] </h2>
 				<ul>
@@ -73,6 +79,11 @@ title : main
 				<h3>Data Analytics</h3>
 				<ul>
 					<li>[2023.09 - 2024.05] Data Academy completion platform </li>
+				</ul>
+				<!-- Lecture -->
+				<h3>Lecture</h3>
+				<ul>
+					<li>[2024.08.13 - 2024.08.16] VR Basic </li>
 				</ul>
 			</div>
 		</article>

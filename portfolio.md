@@ -33,7 +33,7 @@ title : study
 <!-- Section Portfolio-->
 <section id="unreal">
 	<header class="major">
-		<h2>Study Room</h2>
+		<h2>Unreal</h2>
 	</header>
 	<div class="posts">
 		<article>

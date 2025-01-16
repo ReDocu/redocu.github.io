@@ -1,0 +1,22 @@
+---
+layout: main
+title:  "3D 게임 모델링 수집"
+date :   2025-01-14 22:40:16 +0900
+index : 1
+categories: 모델링 수집
+post_layout: true
+---
+
+`※ 본 작업에서 수집한 내용물들은 학습용으로 다운로드 하는 것이므로, 내용 참고 시, 상업적 용도가 불가능 합니다.`
+
+<h4> 모델링 수집 사이트 </h4>
+<ul class="actions">
+  <li><a href="https://www.aplaybox.com/" class="button">중국 MMD 모델 사이트 [ APlayBOX ]</a></li>
+</ul>
+
+<h4> 수집 모델링 </h4>
+
+<ul class="actions">
+  <li><a href="https://www.aplaybox.com/u/636064186" class="button">소녀전선2 공개 모델링</a></li>
+  <li><a href="https://like-tea.tistory.com/337" class="button">원신 공개 모델링(키라라까지)</a></li>
+</ul>

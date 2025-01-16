@@ -1,11 +1,16 @@
 ---
 layout: main
-title:  "언리얼 개발 강의 관련 커리큘럼 연구 노트 1주차"
+title:  "언리얼 개발 강의 관련 커리큘럼 학습 노트 1주차"
 date:   2025-01-09 23:00:00 +0900
 categories: 언리얼
 index : 1
 post_layout: true
 ---
+
+<h4> 학습 강좌 </h4>
+<ul class="actions">
+  <li><a href="https://www.udemy.com/course/unreal-engine-5-the-complete-beginners-course/" class="button">Unreal Beginners Course</a></li>
+</ul>
 
 <h4>Level Editor 구성요소 </h4>
 
@@ -66,3 +71,7 @@ post_layout: true
 - Box - Platform Block 2 [Transform : 900/5900/100 ,Brush Settings : 1200/200/200]
 - Box - Platform Block 3 [Transform : 900/5900/100 ,Brush Settings : 1200/200/200]
 - Materials - M_CobbleStone_Rough
+- Ctrl + G : Level 그룹화
+- Box - Platform Block 4 [Transform : 900/5900/100 ,Brush Settings : 1200/200/200]
+- Box - Platform Block 5 [Transform : 900/5900/100 ,Brush Settings : 1200/200/200]
+- Box - Platform Block 6 [Transform : 900/5900/100 ,Brush Settings : 1200/200/200]

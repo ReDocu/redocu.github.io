@@ -1,0 +1,22 @@
+---
+layout: main
+title:  "2D 게임 모델링 수집"
+date :   2025-01-14 22:40:16 +0900
+index : 2
+categories: 모델링 수집
+post_layout: true
+---
+
+`※ 본 작업에서 수집한 내용물들은 학습용으로 다운로드 하는 것이므로, 내용 참고 시, 상업적 용도가 불가능 합니다.`
+
+<h4> 모델링 관련 툴 </h4>
+<ul class="actions">
+  <li><a href="https://ko.esotericsoftware.com/spine-unity-download" class="button">Spine</a></li>
+</ul>
+
+<h4> Spine 사용 게임 </h4>
+
+<ul class="actions">
+  <li><a href="" class="button">소녀전선</a></li>
+  <li><a href="" class="button">명일방주</a></li>
+</ul>

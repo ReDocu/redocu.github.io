@@ -7,8 +7,8 @@ title : main
 		<header>
 			<h2>{{site.user_intro}}</h2>
 			<p>{{site.description}}</p>
-			<p></p>
-			<p></p>
+			<p>{{site.description_1}}</p>
+			<p>{{site.description_2}}</p>
 		</header>
 		<span class="image"><img src="images/pic01.jpg" alt="" /></span>
 	</div>
@@ -59,8 +59,8 @@ title : main
 				<section class="col-4 col-6-medium col-12-xsmall">
 					<span class="icon solid alt major fa-chart-area"></span>
 					<h3>게임 개발 노트</h3>
-					<p>스플랜더 게임개발 작성</p>
-					<a href="board_card" class="button">개발 일지로 들어가기</a>
+					<p>개발노트</p>
+					<a href="board_development" class="button">개발 일지로 들어가기</a>
 				</section>
 				<section class="col-4 col-6-medium col-12-xsmall">
 					<span class="icon solid alt major fa-comment"></span>
@@ -73,6 +73,24 @@ title : main
 					<h3>커리큘럼 연구</h3>
 					<p>언리얼 커리큘럼 연구중...</p>
 					<a href="board_curriculum" class="button">연구 일지로 들어가기</a>
+				</section>
+				<section class="col-4 col-6-medium col-12-xsmall">
+					<span class="icon solid alt major fa-flask"></span>
+					<h3>개발 관련 취미 일기</h3>
+					<p>모델링 수집 및 Convert 등 테스트</p>
+					<a href="board_diary" class="button">테스트 일지로 들어가기</a>
+				</section>
+				<section class="col-4 col-6-medium col-12-xsmall">
+					<span class="icon solid alt major fa-chart-area"></span>
+					<h3>게임 개발 노트</h3>
+					<p>스플랜더 게임개발 작성</p>
+					<a href="board_card" class="button">개발 일지로 들어가기</a>
+				</section>
+				<section class="col-4 col-6-medium col-12-xsmall">
+					<span class="icon solid alt major fa-chart-area"></span>
+					<h3>취미</h3>
+					<p>자작 시, 소설 등등</p>
+					<a href="board_hobby" class="button">취미 공간으로 들어가기</a>
 				</section>
 			</div>
 		</div>

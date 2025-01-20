@@ -52,7 +52,8 @@ title : main
 		<header class="major">
 			<h2>개발 노트</h2>
 			<p>연구 관심사 1 : Unity / 언리얼 / 자체엔진 개발 <br/>
-			연구 관심사 2 : ConfyUI / Python 기반 자동화 툴 / 개발 수집 웹 사이트 </p>
+			연구 관심사 2 : ConfyUI / Python 기반 자동화 툴 <br/>
+			취미 : 시 쓰기 / 작문 / 게임 스토리 분석하기 </p>
 		</header>
 		<div class="box alt">
 			<div class="row gtr-uniform">
@@ -75,19 +76,19 @@ title : main
 					<a href="board_curriculum" class="button">연구 일지로 들어가기</a>
 				</section>
 				<section class="col-4 col-6-medium col-12-xsmall">
-					<span class="icon solid alt major fa-flask"></span>
+					<span class="icon solid alt major fa-lock"></span>
 					<h3>개발 관련 취미 일기</h3>
-					<p>모델링 수집 및 Convert 등 테스트</p>
-					<a href="board_diary" class="button">테스트 일지로 들어가기</a>
+					<p>개발 및 중요 요소에 필요한 정보 공간</p>
+					<a href="board_diary" class="button">정보 공간으로 들어가기</a>
 				</section>
 				<section class="col-4 col-6-medium col-12-xsmall">
-					<span class="icon solid alt major fa-chart-area"></span>
-					<h3>게임 개발 노트</h3>
-					<p>스플랜더 게임개발 작성</p>
-					<a href="board_card" class="button">개발 일지로 들어가기</a>
+					<span class="icon solid alt major fa-file"></span>
+					<h3>개인 학습 공간</h3>
+					<p>인터넷 강의 요약 및 개인 학습 공간</p>
+					<a href="board_study" class="button">학습 일지로 들어가기</a>
 				</section>
 				<section class="col-4 col-6-medium col-12-xsmall">
-					<span class="icon solid alt major fa-chart-area"></span>
+					<span class="icon solid alt major fa-paper-plane"></span>
 					<h3>취미</h3>
 					<p>자작 시, 소설 등등</p>
 					<a href="board_hobby" class="button">취미 공간으로 들어가기</a>

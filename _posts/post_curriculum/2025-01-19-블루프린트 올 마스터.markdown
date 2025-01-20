@@ -1,0 +1,38 @@
+---
+layout: main
+title:  "블루프린트 올 마스터"
+date:   2025-01-19 22:40:16 +0900
+categories: 언리얼
+index : 1
+post_layout: true
+---
+
+<h4>강의 넘어가기</h4>
+<ul class="actions">
+  <li><a href="https://www.udemy.com/course/unreal-engine-5-create-video-game-in-ue5-with-blueprint/" class="button">블루프린트 All 마스터</a></li>
+</ul>
+
+## 1일차 : 레벨링 디자인을 위한 다양한 언리얼 기능에 대하여
+## 
+
+`1 - 1 Level map`
+
+- 좌표계를 이용한 움직임 구현하기 
+- 피벗 포인트를 활용한 오브젝트 회전하기
+- 움직이기
+- 회전하기
+- 확대하기
+- 고정하기
+- Grid에 맞춰서 움직이기
+- 카메라 스피드 설정하기
+- 화면 4개로 보기
+
+
+`1 - 2 Outliner`
+
+- Snap Viewport [화면 위치로 움직이기]
+- 객체 조종해서 위치에 가져다 놓기
+- 객체만 보여주기
+- 객체 화면 제어하기
+- Detail Panel
+

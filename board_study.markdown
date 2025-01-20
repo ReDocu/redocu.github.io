@@ -7,7 +7,7 @@ title : board_card
     <section>
         <div class="container">
             <div class="table-wrapper">
-                <h2>커스텀 카드 게임 개발 일지</h2>
+                <h2>개인 학습 공간</h2>
                 <table class="alt">
                 	<thead>
                 		<tr>
@@ -17,7 +17,7 @@ title : board_card
                 		</tr>
                 	</thead>
                 	<tbody>
-                		{% assign card_posts = site.posts | where_exp: "post", "post.path contains '/post_card/'" | sort: "index" %}
+                		{% assign card_posts = site.posts | where_exp: "post", "post.path contains '/post_stduy/'" | sort: "index" %}
                         {% for post in card_posts %}
                         <tr>
                             <td>{{ post.index }}</td>

@@ -1,7 +1,7 @@
 ---
 layout: main
-title:  "Image"
-date:   2025-01-07 22:40:16 +0900
+title:  "Welcome to Jekyll!"
+date:   2025-01-01 00:00:00 +0900
 categories: jekyll update
 post_layout: true
 ---

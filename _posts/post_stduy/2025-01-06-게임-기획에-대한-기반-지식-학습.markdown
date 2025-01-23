@@ -1,9 +1,9 @@
 ---
 layout: main  
 title:  "게임 기획에 대한 기반 지식 학습"
-date:   2025-01-18 22:40:16 +0900
-categories: 게임 기획
-index : 2
+date:   2025-01-06 00:00:00 +0900
+categories: 게임기획
+index : 6
 post_layout: true
 ---
 

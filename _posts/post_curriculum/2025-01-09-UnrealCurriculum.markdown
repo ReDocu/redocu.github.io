@@ -1,7 +1,7 @@
 ---
 layout: main
 title:  "언리얼 개발 강의 관련 커리큘럼 학습 노트 1주차"
-date:   2025-01-09 23:00:00 +0900
+date:   2025-01-01 00:00:00 +0900
 categories: 언리얼
 index : 1
 post_layout: true

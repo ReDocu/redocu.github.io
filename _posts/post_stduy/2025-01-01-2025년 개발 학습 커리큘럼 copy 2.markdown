@@ -1,7 +1,7 @@
 ---
 layout: main  
 title:  "2025년 게임 개발 학습 로드맵"
-date:   2025-01-18 22:40:16 +0900
+date:   2025-01-01 00:00:00 +0900
 categories: 로드맵
 index : 1
 post_layout: true
@@ -47,11 +47,11 @@ post_layout: true
   <li><a href="https://www.udemy.com/course/unreal-engine-5-niagara-vfx-korean/" class="button">나이아가라 스킬</a></li>
 </ul>
 
-<h4>3. 언리얼 게임 개발 기반 지식 학습 - 게임 개발 학습</h4>
+<h4>4. 언리얼 게임 개발 기반 지식 학습 - 게임 개발 학습</h4>
 <p></p>
 <ul class="actions">
-  <li><a href="https://www.udemy.com/course/unreal-engine-5-the-intermediate-course/" class="button">언리얼 중급</a></li>
-  <li><a href="https://www.udemy.com/course/unreal-engine-5-ui-design-advance-inventory-system-with-ue5/" class="button">인벤토리 Widget</a></li>
+  <li><a href="https://www.udemy.com/course/unreal-engine-5-the-intermediate-course/" class="button">VR 게임 콘텐츠츠</a></li>
+  <li><a href="https://www.udemy.com/course/unreal-engine-5-ui-design-advance-inventory-system-with-ue5/" class="button">음...</a></li>
   <li><a href="https://www.udemy.com/course/unreal-engine-5-dynamic-sky-weather-system-korean/" class="button">Dynamic Sky</a></li>
   <li><a href="https://www.udemy.com/course/unreal-engine5-material-korean/" class="button">Materials</a></li>
   <li><a href="https://www.udemy.com/course/unreal-engine-5-niagara-vfx-korean/" class="button">나이아가라 스킬</a></li>

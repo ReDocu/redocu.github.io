@@ -1,0 +1,19 @@
+---
+layout: main  
+title:  "[게임 기획서]"
+date:   2025-01-02 00:00:00 +0900
+categories: 언리얼
+index : 1
+post_layout: true
+---
+
+## `배경 에셋 리스트트`
+<div class="row">
+    <div class="col-6 col-12-xsmall">
+    <ol>
+      <li><a href="https://www.fab.com/ko/listings/881f6a80-ab70-4147-a513-55633fbd5f08">Vintage Room</a></li>
+      <li><a href="https://www.fab.com/ko/listings/c06d2cad-0d69-4b0d-8f54-b670f7ab2b6c">Loft Office</a></li>
+      <li><a href="https://www.fab.com/ko/listings/3340d712-649b-4788-bfc1-8137c1db4afa">Look Out Tower</a></li>
+    </ol>
+  </div>
+</div>

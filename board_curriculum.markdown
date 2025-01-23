@@ -7,7 +7,7 @@ title : board_curriculum
     <section>
         <div class="container">
             <div class="table-wrapper">
-                <h2>커스텀 카드 게임 개발 일지</h2>
+                <h2>학습 일지 탐구</h2>
                 <table class="alt">
                 	<thead>
                 		<tr>

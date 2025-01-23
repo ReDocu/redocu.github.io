@@ -47,6 +47,14 @@ post_layout: true
   <li><a href="https://www.udemy.com/course/unreal-engine-5-niagara-vfx-korean/" class="button">나이아가라 스킬</a></li>
 </ul>
 
-
+<h4>3. 언리얼 게임 개발 기반 지식 학습 - 게임 개발 학습</h4>
+<p></p>
+<ul class="actions">
+  <li><a href="https://www.udemy.com/course/unreal-engine-5-the-intermediate-course/" class="button">언리얼 중급</a></li>
+  <li><a href="https://www.udemy.com/course/unreal-engine-5-ui-design-advance-inventory-system-with-ue5/" class="button">인벤토리 Widget</a></li>
+  <li><a href="https://www.udemy.com/course/unreal-engine-5-dynamic-sky-weather-system-korean/" class="button">Dynamic Sky</a></li>
+  <li><a href="https://www.udemy.com/course/unreal-engine5-material-korean/" class="button">Materials</a></li>
+  <li><a href="https://www.udemy.com/course/unreal-engine-5-niagara-vfx-korean/" class="button">나이아가라 스킬</a></li>
+</ul>
 
 

@@ -47,7 +47,7 @@ title : main
 </section>
 
 <!-- Four -->
-<section id="One" class="wrapper style1 special fade-up">
+<section id="three" class="wrapper style1 special fade-up">
 	<div class="container">
 		<header class="major">
 			<h2>개발 노트</h2>

@@ -1,0 +1,23 @@
+---
+layout: main  
+title:  "언리얼 뱀서라이크 게임 개발"
+date:   2025-01-07 22:40:16 +0900
+categories: 언리얼
+index : 1
+post_layout: true
+---
+
+## `뱀파이어 서바이벌류, FPS 게임 구현하기`
+
+### `1. Player 구현하기 - 1차 총 쏘기`
+    - 사용하는 무기 선정 [검 / 마법 / 총 / 활]
+    - PlayerInfo 구조체 설정하기 
+        - HP / MaxHP
+        - MP / MaxMP
+        - SP / MaxSP
+    - 카메라 설정하기
+    - Input 동작 설정하기
+    - 총에 대한 탄환 발사 구현하기
+
+### `2. Enemy 구현하기 - 1차 다가오기`
+    - Enemy

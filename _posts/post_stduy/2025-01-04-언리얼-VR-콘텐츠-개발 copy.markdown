@@ -47,7 +47,7 @@ post_layout: true
     - LastTracedStartLocation : Vector
     - LasttracedEndLocation : Vector
     - Lerp
-    - For Loop[0~10] : index / 10 => lerp의 알파값으로 넣기
+    - For Loop [0~10] : index / 10 => lerp의 알파값으로 넣기
     - For Loop - Sphere Trace By Channel Socket으로 찾은 내용 Start 
     - For Loop - Sphere Trace By Channel 변수로 저장한 내용 End
     - For Loop - Radius = TraceStep 으로 세팅
@@ -66,8 +66,14 @@ post_layout: true
     - Destroy Actor
     
 ### `4부 FlyCube TriggerBox 추가하기`
-1. Level에 TriggerBox
-2. FlyCube - OnComponent Begin Overlap(StaticMesh) - other Actor - IsValid - [Actor Has Tag - Branch] - Dispatchers (OnGameOver) 생성 - Call OnGameOver
+1. Level에 TriggerBox 생성
+2. FlyCube 
+    - OnComponent Begin Overlap(StaticMesh) 
+    - other Actor 
+    - IsValid 
+    - [Actor Has Tag - Branch] 
+    - Dispatchers (OnGameOver) 생성 
+    - Call OnGameOver
 
 ### `5부 VRLazerGameMode`
 1. 변수 만들기

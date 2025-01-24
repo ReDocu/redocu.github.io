@@ -1,13 +1,18 @@
 ---
 layout: main
-title:  "언리얼 개발 강의 관련 커리큘럼 연구 노트"
+title:  "개인 연구 과정 및 잇슈"
 date:   2025-01-01 00:00:00 +0900
 categories: 언리얼
 index : 1
 post_layout: true
 ---
 
-<h4>Development Tools</h4>
-<ul class="actions">
-  <li><a href="https://www.unrealengine.com/ko/unreal-engine-5" class="button">Unreal Engine 5.5</a></li>
-</ul>
+## `커리큘럼이 완성되어 가는 과정`
+
+1. 직접 구현해보면서 순차 확인하고, 하나의 색션 나누기
+2. 색션에 따라 부분 나눠보기
+3. 나눠서 다시 부분 구현하기
+
+
+- 강의 대부분이 구현하는데 급급하므로, 복잡해진다.
+- 강의 내용을 먼저 구현한뒤, 색션 및 구성을 나누어 다시 구현한다.

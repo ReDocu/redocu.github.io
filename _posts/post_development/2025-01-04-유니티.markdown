@@ -1,0 +1,46 @@
+---
+layout: main  
+title:  "언리얼 뱀서라이크 게임 개발"
+date:   2025-01-07 22:40:16 +0900
+categories: 유니티
+index : 5
+post_layout: true
+---
+
+## `유니티 소녀전선 구현하기`
+- 1일 1시간만에 구현하기 프로젝트
+
+#### `목차`
+<div class="row">
+    <div class="col-6 col-12-xsmall">
+    <ol>
+      <li><a href="#1일-총을-쏴서-맞추는-게임-구현하기">총을 쏴서 맞추는 게임 구현하기</a></li>
+    </ol>
+  </div>
+</div>
+
+<hr/>
+
+### `1일 총을 쏴서 맞추는 게임 구현하기`
+
+<div class="col-12"><span class="image fit"><img src="/images/post_image/unity_1일차.png" alt="" /></span></div>
+
+`투자 시간 [1시간 6분]`
+
+`플레이어Player` : 플레이어 2D 움직임 구현 / 플레이어 2D 점프 구현 / 플레이어 2D 총 쏘기 구현
+
+`총알` : 트리거 구현 / 총알 맞추기 구현
+
+`적 (Enemy)` : 플레이어 바라보기 구현 / 플레이어 따라오기 구현
+
+`적 스폰 (EnemySpawn)` : 매 시간마다 적 스폰하기 구현
+
+<hr/>
+
+### `2일 미니 게임 완성 및 리소스 추출하기`
+
+`UI` : 점수 표현하는 UI 구현하기
+
+`적 (Enemy)` : 체력바 만들기 
+
+`리소스` : 맵 뽑을 수 있는 에셋 탐방하기/ 또는 Texture 가져오기 

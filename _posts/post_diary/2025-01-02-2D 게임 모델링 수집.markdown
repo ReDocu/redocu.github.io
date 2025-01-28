@@ -9,14 +9,65 @@ post_layout: true
 
 `※ 본 작업에서 수집한 내용물들은 학습용으로 다운로드 하는 것이므로, 내용 참고 시, 상업적 용도가 불가능 합니다.`
 
-<h4> 모델링 관련 툴 </h4>
-<ul class="actions">
-  <li><a href="https://ko.esotericsoftware.com/spine-unity-download" class="button">Spine</a></li>
-</ul>
+<div class="row">
+    <div class="col-6 col-12-xsmall">
+    <h4>1일차</h4>
+    <ol>
+      <li><a href="#소녀전선-리소스-추출하기">소녀전선 리소스 추출하기</a></li>
+    </ol>
+  </div>
+</div>
 
-<h4> Spine 사용 게임 </h4>
+## `소녀전선 리소스 추출하기`
 
-<ul class="actions">
-  <li><a href="" class="button">소녀전선</a></li>
-  <li><a href="" class="button">명일방주</a></li>
-</ul>
+1. Unity 모바일 - Nox로 파일 추출   
+2. AssetsStudio를 활용한 파일 추출   
+3. GFABExtractor(ACV) 파일 추출 (Github 오픈소스 사용)   
+4. HCA 파일 변환 파일 [HCA Decoder]   
+
+### `파이썬으로 사운드 자동 추출`
+
+```python
+import os
+import subprocess
+
+# 파일 경로 설정
+base_dir = "HCA Decoder v1.16"                    # 루트 디렉토리
+exe_file = os.path.join(base_dir, "hca.exe")      # 실행 파일 경로
+
+# 파일 경로 확인하기기
+input_dir_list_path = os.path.join(base_dir,"acb")
+
+print(os.listdir(input_dir_list_path))
+
+for input_dir in os.listdir(input_dir_list_path):    
+    try:
+        input_file_path = os.path.join(input_dir_list_path, input_dir)
+        print(input_file_path)
+        for input_file in os.listdir(input_file_path):
+            try:
+
+                file = os.path.join(input_file_path,input_file)  # 입력 파일
+                print(file)
+
+                # 입력 파일과 실행 파일 확인
+                if not os.path.exists(file):
+                    print(f"Input file not found: {file}")
+                elif not os.path.exists(exe_file):
+                    print(f"Executable file not found: {exe_file}")
+                else:
+                    command_args = [
+                        exe_file,     # 실행할 .exe 파일
+                        file    # 명령줄 인수로 입력 파일 전달
+                    ]
+
+                    print(f"Executing: {exe_file} with input {input_file}")
+                    
+                    # Window = cp932 인코딩 문제 
+                    result = subprocess.run(command_args, check=True, text=True, capture_output=True,encoding="cp932")
+            except:
+                print("실패 파일 : " , input_file_path)
+
+    except:
+        print("실패 디렉토리 : " , input_dir)
+```

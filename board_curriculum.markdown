@@ -7,13 +7,13 @@ title : board_curriculum
     <section>
         <div class="container">
             <div class="table-wrapper">
-                <h2>학습 일지 탐구</h2>
+                <h2>커리큘럼 연구</h2>
                 <table class="alt">
                 	<thead>
                 		<tr>
                 			<th>INDEX</th>
                 			<th>제목</th>
-                			<th>프로젝트</th>
+                			<th>카테고리</th>
                 		</tr>
                 	</thead>
                 	<tbody>

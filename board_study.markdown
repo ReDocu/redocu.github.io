@@ -13,7 +13,7 @@ title : board_card
                 		<tr>
                 			<th>INDEX</th>
                 			<th>제목</th>
-                			<th>프로젝트</th>
+                			<th>카테고리</th>
                 		</tr>
                 	</thead>
                 	<tbody>

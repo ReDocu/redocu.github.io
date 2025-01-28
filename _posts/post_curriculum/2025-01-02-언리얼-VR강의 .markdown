@@ -1,0 +1,307 @@
+---
+layout: main
+title:  "언리얼 - VR 강의"
+date:   2025-01-02 00:00:00 +0900
+categories: 언리얼
+index : 2
+post_layout: true
+---
+
+## `VR 강의 목차`
+
+### `VR FPS 게임 구현하기`
+<div class="row">
+    <div class="col-6 col-12-xsmall">
+    <h4>1일차</h4>
+    <ol>
+      <li><a href="#1교시-VR에-필요한-기능들-탐방하기">VR에 필요한 기능들 탐방하기</a></li>
+      <li><a href="#2교시-VR-Template">VR Template 탐방하고 관리하기</a></li>
+    </ol>
+  </div>
+  
+  <div class="col-6 col-12-xsmall">
+    <h4>2일차</h4>
+    <ol>
+      <li><a href="#">사물 던지기 디테일 작용하기</a></li>
+      <li><a href="#">총을 쏠때 손 동작 재료 구성하기</a></li>
+      <li><a href="#">총 쏘기 및 전방에 있는 사물 충돌 체크 하기</a></li>
+    </ol>
+  </div>
+</div>
+
+<div class="row">
+    <div class="col-6 col-12-xsmall">
+    <h4>3일차</h4>
+    <ol>
+      <li><a href="#">포스트 프로세싱을 활용한 윤곽선 구현하기</a></li>
+      <li><a href="#">사물 끌어 오기</a></li>
+      <li><a href="#">기존 수업에서 사용한 FPS 지식을 바탕으로 VR FPG 게임 만들기</a></li>
+    </ol>
+  </div>
+  <div class="col-6 col-12-xsmall">
+    <h4>4일차</h4>
+    <ol>
+      <li><a href="#">레벨 디자인 이후 프로젝트 발표하기</a></li>
+    </ol>
+  </div>
+</div>
+
+### `VR 방탈출 게임 구현하기`
+
+<hr/>
+
+## 1일차
+
+<span class="image fit"><img src="/images/post_image/VR_02_1일차_결과.png" alt="" /></span>
+
+### `1교시 VR에 필요한 기능들 탐방하기`
+
+<a href="https://youtu.be/wPQQ6vHlIN0">VR 하드웨어 튜토리얼 영상</a>
+
+1. 메타퀘스트 컨트롤러 설정하기
+2. 사용 언어 설정하기
+3. 렌즈 간격 조정하기 [헤드셋 안쪽 부분 설정하기]
+4. 뒤에 끈 조정하기
+5. PID 조정하기 - 눈동자의 길이 조정하기
+6. WIFI 연결하기
+7. 모바일 앱 설정하기 [설정하기 전에 업데이트로 시간 소모될 수 있음]
+8. 튜토리얼 탐험하기
+
+- ※ 7번에서 단체 관리 설정을 해야할 요소가 있음
+
+`메뉴를 활용하여 돌러보기기`
+1. 유니버설 메뉴 설정해보기
+2. 라이브러리
+3. Horizon 피드
+4. 스토어
+5. 카메라
+
+`빠른 설정메뉴`
+1. 디스플레이 발기
+2. 볼륨
+3. WI_FI
+
+`경계를 만들기`
+1. 룸을 볼 수 있는 환경
+2. 완전히 세로운 현실 [룸을 볼 수 없음]
+3. [룸으로 들어갈 수 있음]헤드셋 측면 두번 누르기
+
+`핸드 트래킹`
+- 헨드 트래킹 하기 [오므린 상태로 설정해보기]
+- 앱 라이브러리 도움말 및 팀 에서 다시 연습할 수 있음
+- 앱에 대한 기본적인 내용은 - 앱 - 도움말 팁을 한번 해보는 것을 추천드립니다.
+
+`VR로 촬영 및 설정하기`
+- 미러링에 대하여 설정하기
+- 카메라 찍기
+- 동영상 찍고 공유하기
+- 링크 사용설정
+
+`Link 연결 이후 사용자 설정하기`
+- PC Meta 설치하고 연결하기
+- 링크한 화면 둘러보기 [데스크톱 열어보기]
+- 언리얼 열어보기 [VR Template]을 열어 실행해보기
+- 컨텐츠 열고 기다리기 
+- 로컬로 미러링하기기
+- C:\Program Files\Oculus\Support\oculus-diagnostics 경로 들어가서 미러링 하기
+
+### `2교시 VR Template`
+
+- VR Template 들어가서 이것저것 파악해보기
+- VRPawn [플레이어]
+  - Begin Play 
+    - Tracking Origin 
+    - Head Mounted Display Enabled [머리 위치 및 컨트롤러 트래킹] [카메라의 높이를 조정하여 체험을 하는 값]
+    - Key Input / IMC_Default [VR의 기본적인 움직임] , IMC_Hands [손 움직임]
+  - 입력키
+    - IA_Turn : 회전
+    - IA_Move : 움직임
+    - IA_Grab_Left/Right_Pressed
+    - IA_Grab_Left/Right_Released
+    - IA_Menu_Toggle_Left/Right
+    - 4가지 입력 키 [ Grasp / IndexCurl / Point Point / ThumbUp]
+    - Enhance로 키를 일력하는 방식 알아보기
+  - 컴포넌트 탐색해보기
+    - MotionControllerRight/LeftAim [상호작용을 위한 에임]
+    - WidgetInteractionRight/Left [상호작용을 위한 에임 [UI 경로 보여주기]]
+    - MotionControllerRight/Left Grip [모션컨트롤의 위치 및 애니메이션]
+  - 함수 알아보기
+    - 텔레포트를 담당하는 함수
+    - 턴을 담당하는 함수
+    - UI 로 전환하는 함수
+    - 컨트롤러 근처에 있는 GrabComponent를 찾아내는 함수[이 친구를 통해 충돌 타입을 확인한다]
+- GrabComponent [사물] 
+  - Begin Play : 충돌시킨 사물 물리작용 설정하기
+  - Grab / Release : 사물을 집고 떨어뜨리는 과정을 구현 
+  - 왼쪽인지 오른쪽인지 알아보는 함수
+  - Grab을 보면 Free / Snap 이 표현
+  - 기본 사물 : Free
+  - 총기 같은 물체 : Snap
+- 언급만 하기 
+  - Menu / Widget Menu
+
+- 새로운 맵으로 넘어가기
+  - 새로운 맵 하나 만들기
+  - GameMode 설정하기
+  - Floor - Collision - BlockAll로 변경하기
+  - Direction Light - Stationary로 변경하기
+  - NavMeshBoundsVolumes 설정하기 [30/30/3]
+
+### `3교시 과제 주기`
+
+- 과제
+  - 새로운 맵에서 VR 환경 조성해보기
+  - VR에서 탐방할 맵들 [내부 X] 선정해서, 텔레포트로 맵을 탐방하는 맵을 구현해보자
+  - 마켓플레이스 및 기타 맵으로 전환하여, VR 환경을 조성해봅시다.
+
+<hr/>
+
+## 2일차
+
+### `1교시 캐릭터 움직임 및 GrabComponent를 통해, 사물 던지기 동적으로 바꾸기`
+
+- Enhance 에 대하여 탐구해보기 
+  - 캐릭터를 움직여보자
+  - VR Template에서 Input Action 을 하나 제작한다.
+  - IA_Controller_Move [IMC_Default - Thumbstick Left (Y)]
+  - !!![카메라 방향으로 가는 것은 연구가 필요할듯 함].
+
+- GrabComponent를 확장시켜보자.
+  - 사물을 던졌을 때, 움직임이 생각보다 매끄럽지 않는다는 것을 볼 수있다.
+  - 자연스럽게, 던져졌을 때의 물리 값을 저장하여, 매끄럽게 던져보자
+  - 몇 프레임동안 손동작으로 사물을 움직이는 것을 저장해, 목표지점을 예측하여 던지게 하는 방식식
+  - Tick에서 사물의 값을 저장한다.
+  - Component Tick 활성화 체크
+  - 4개의 변수
+    - LastFrameLocation(Vector)       : 위치 사이를 결정
+    - LastFrameForwardVector(Vector)  : 회전 차이를 확인
+    - LinearVelocities(Vector:Array)  : 프레임 저장하기
+    - AngularVelocities(Vector:Array) : 각도 저장하기
+  - Begin Play에 초기값 저장하기
+  <span class="image fit"><img src="/images/post_image/VR_02_2-1-0_Begin.png" alt="" /></span>
+    - LastFrameLocation : Get World Location
+    - LastFrameForwardVector : Get Forward Vector
+  - Event Tick 설정하기
+  <span class="image fit"><img src="/images/post_image/VR_02_2-1-1_Tick.png" alt="" /></span>
+    - Sequence 1 : 
+      - [LastFrameLocation - Get World Location]
+      - [Linear Velocities 에 Add 이후 LastFrameLocation 에 추가하기]\
+      - [Linear Velocities 10개 넘으면 0번 인덱스 삭제]
+    - Sequence 2 : 
+      - [LastFrameForwardVector / GetForwardVector - Find Quat Between Normals] - Get Rotation X Vector]
+      - [AngularVelocities  에 Add 이후 Get Forward Vector LastFrameForwardVector에 넣기]
+      - [AngularVelocities 10개 넘어가면 0번 인덱스 삭제]
+  - 평균 구하는 GetAverageVector 함수 만들어보기 [Pure 사용방법 익히기]
+  - SetPrimitiveCompPhysics 함수 물리 작용 추가하기
+  <span class="image fit"><img src="/images/post_image/VR_02_2-1-2_Simulate.png" alt="" /></span>
+    - Simulate - Branch
+    - Linear Velocities 평균 * 파워 [Add Impulse]
+    - Angular Velocities - Add Torque in Degress [회전 설정하기]
+
+### `2교시 소켓을 이용한 손동작 애니메이션 추가하기`
+
+- Anim 설정을 위한 애니메이션 추가하기
+  - Chararcters - MannequinsXR - Mesh 에서 ABP_MannequinsXR 관리하기 [한번씩 들어가보기]
+    - Idle
+    - Grasp
+    - Point Right
+    - ThumbUp Right
+    - Index Curl
+    - VR Pawn 에서 입력상태에 따라 확인하기
+  - ALI_VR_Hand_Interface
+    - Idle 에 4가지 동작 세팅 완료하기 [Idle / Grasp / Point / ThumbUp]
+    - ABP_MannequinsXR 인터페이스 적용하여, 부품화 하기
+  - ABP_VR_Hand_Pistol 구성하기
+    - Grasp / ThumbUp - Layer로 구성하기
+    - IndexCurl - Clamp 로 구성하기 - Output 연결하기
+    - VR Pawn에 Pistol 그랩했을 때, 숨기기 기능 해제하기
+    - VR Pawn에 Pistol 의 Shoot Right/Left IndexCurl과 연결하기
+- 소켓 구성하기
+  - FPWeapon - SM_Pistol - Convert To Skeletal Mesh 설정해주기
+  - SKM_Pistol에 Physics Asset 만들어주기 / Box로 전환
+  - Socket GripPoint 만들어주기
+  - Socket GripPoint에 손 위치 잡아주기
+- GrabComponent 세팅하기
+  - 변수 세팅
+    - 만든 2개를 설정하는 변수 세팅하기
+      - HandAnimLayer : AnimInstance(Class)
+      - HandSocket : Name
+    - 손 모양새를 보여줄지 안보여줄지를 설정하는 핸드
+      - bCaptureHand : boolean
+    - 손을 놓았을 때 손이 원래 위치로 돌아가도록 하는 손의 위치값 캐쉬
+      - CachedHandLocationTransform
+  - 함수 세팅
+    - TryFindHandMeshOnController
+      <span class="image fit"><img src="/images/post_image/VR_02_2-1_TryFindHandMeshOnController.png" alt="" /></span>
+      - Input [MotionController : Motion Controller Component]
+      - Output [Mesh : Skeletal Mesh Component]
+      - MotionController의 자식들중에서 Mesh 가져오기 : Get Children Components
+      - For Each 문으로 SkeletalMeshComponent찾아서 Mesh로 반환하기
+    - TryCaptureHandMesh
+      <span class="image fit"><img src="/images/post_image/VR_02_2-2-1_TryCaptureHandMesh.png" alt="" /></span>
+      - MotionControllerRef를 TryFindHandMeshOnController에 연결하여 찾은 Mesh , 변수 Mesh에 세팅하기
+      <span class="image fit"><img src="/images/post_image/VR_02_2-2-2_TryCaptureHandMesh.png" alt="" /></span>
+      - Sequence 1 : 애니메메이션 링크 연결해주기
+        - HandAnimLayer 
+        - IsValidClass 
+        - Branch 
+        - LinkAnimClassLayers
+      - Sequence 2 : 위치값 저장하기, 컴포넌트 연결해주기
+        - CaptureHand 
+        - Mesh - Get Relative Transform : Cached Hand Location Transform 에 넣어주기
+        - Attach Component To Component 연결해주기
+        - Mesh / Get Attach Parent
+        - HandSocket
+        - Sanp to Target / Snap To Target / Keep Relative
+    - TryReleaseHandMesh
+      <span class="image fit"><img src="/images/post_image/VR_02_2-3_TryReleaseHandMesh.png" alt="" /></span>
+      - Sequence 1 : 애니메이션 링크 풀어주기
+        - HandAnimLayer - IsValidClass - Branch - Unlink Anim Class Layers
+      - Sequence 2 : 
+        - CaptureHand - Attach Component To Component [Mesh / Motion Contorller Ref] 
+        - Keep World / Keep World / Keep World
+        - 위치값 돌려놓기
+  - 객체 설정
+    - 피스톨의 Static Mesh - Skeletal Mesh 로 전환
+    - GrabComponentSnap 에서 HandAnimLayer / HandSocket / Capture Hand 설정
+
+### `3교시 왼손 버전 추가하기`
+
+- 왼손 설정하기
+  - 왼손 버전 소켓 만들기 [GripPoint_Inverse]
+  <span class="image fit"><img src="/images/post_image/VR_02_2-3_1_HandSocket.png" alt="" /></span>
+  - HandSocket Attach 네임 설정 설정하기
+
+- [과제] 마켓 플레이스에서 총기 및 아이템을 들고와 원하는 모션을 구현해 봅시다.
+
+<hr/>
+
+## 3일차
+
+### `1교시`
+
+- Function Library 만들기
+  - 우선순위에 따라 전방에 있는 사물 인식하기
+  - GrabComponent 에서 priority : integer 추가하기
+  - VR_Function_Library 만들고 함수 추가하기
+  
+
+
+
+
+  - 포스트 프로세싱으로 전방에 잡을 수 있는 사물 윤곽선 만들기
+
+### `2교시`
+
+- 사물 끌어오기
+- 몬스터 만들어서 충돌체크하기
+
+### `3교시`
+
+- VR FPS 게임을 만들어보세요
+
+## 4일차
+
+- VR FPS 게임을 만들어보는 시간을 가지도록 하겠습니다.
+
+<hr/>

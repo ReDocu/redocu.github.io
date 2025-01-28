@@ -7,13 +7,13 @@ title : board_image
     <section>
         <div class="container">
             <div class="table-wrapper">
-                <h2>커스텀 카드 게임 개발 일지</h2>
+                <h2>AI 학습 노트</h2>
                 <table class="alt">
                 	<thead>
                 		<tr>
                 			<th>날짜</th>
                 			<th>제목</th>
-                			<th>프로젝트</th>
+                			<th>카테고리</th>
                 		</tr>
                 	</thead>
                 	<tbody>

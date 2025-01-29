@@ -67,7 +67,7 @@ title : main
 					<span class="icon solid alt major fa-comment"></span>
 					<h3>AI 학습 노트</h3>
 					<p>ConfyUI 학습 중..</p>
-					<a href="board_image" class="button">학습 일지로 들어가기</a>
+					<a href="board_roadmap" class="button">학습 일지로 들어가기</a>
 				</section>
 				<section class="col-4 col-6-medium col-12-xsmall">
 					<span class="icon solid alt major fa-flask"></span>

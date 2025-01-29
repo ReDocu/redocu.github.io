@@ -1,6 +1,6 @@
 ---
 layout: main
-title:  "언리얼 - VR 강의"
+title:  "언리얼 - VR 강의 [손을 활용한 사물 상호작용]"
 date:   2025-01-02 00:00:00 +0900
 categories: 언리얼
 index : 2
@@ -9,45 +9,19 @@ post_layout: true
 
 ## `VR 강의 목차`
 
-### `VR FPS 게임 구현하기`
-<div class="row">
-    <div class="col-6 col-12-xsmall">
-    <h4>1일차</h4>
-    <ol>
-      <li><a href="#1교시-VR에-필요한-기능들-탐방하기">VR에 필요한 기능들 탐방하기</a></li>
-      <li><a href="#2교시-VR-Template">VR Template 탐방하고 관리하기</a></li>
-    </ol>
-  </div>
-  
-  <div class="col-6 col-12-xsmall">
-    <h4>2일차</h4>
-    <ol>
-      <li><a href="#">사물 던지기 디테일 작용하기</a></li>
-      <li><a href="#">총을 쏠때 손 동작 재료 구성하기</a></li>
-      <li><a href="#">총 쏘기 및 전방에 있는 사물 충돌 체크 하기</a></li>
-    </ol>
-  </div>
-</div>
+### `VR 객체와 상호작용하기 위한 손동작 구현하기`
 
 <div class="row">
     <div class="col-6 col-12-xsmall">
-    <h4>3일차</h4>
     <ol>
-      <li><a href="#">포스트 프로세싱을 활용한 윤곽선 구현하기</a></li>
-      <li><a href="#">사물 끌어 오기</a></li>
-      <li><a href="#">기존 수업에서 사용한 FPS 지식을 바탕으로 VR FPG 게임 만들기</a></li>
-    </ol>
-  </div>
-  <div class="col-6 col-12-xsmall">
-    <h4>4일차</h4>
-    <ol>
-      <li><a href="#">레벨 디자인 이후 프로젝트 발표하기</a></li>
+      <li><a href="#1일차">메타퀘스트3 기본 기능 익혀보기</a></li>
+      <li><a href="#2일차">사물에 손동작 및 소켓 설정해보기</a></li>
+      <li><a href="#3일차">전방에 있는 물체 탐지, 윤곽선 만들고 끌어들이기</a></li>
+      <li><a href="#4일차">VR FPS 게임 구현 시간</a></li>
+      <li><a href="#5일차">VR FPS 게임 구현 내용 발표</a></li>
     </ol>
   </div>
 </div>
-
-### `VR 방탈출 게임 구현하기`
-
 <hr/>
 
 ## 1일차
@@ -106,7 +80,7 @@ post_layout: true
 - C:\Program Files\Oculus\Support\oculus-diagnostics 경로 들어가서 미러링 하기
 
 ### `2교시 VR Template`
-
+ 
 - VR Template 들어가서 이것저것 파악해보기
 - VRPawn [플레이어]
   - Begin Play 
@@ -280,30 +254,103 @@ post_layout: true
 
 ## 3일차
 
+<span class="image fit"><img src="/images/post_image/VR_02_3일차 결과.png" alt="" /></span>
+
 ### `1교시`
 
-- Function Library 만들기
+- 전방에 있는 물체 충돌체크하기
+  - Function Library 만들기
   - 우선순위에 따라 전방에 있는 사물 인식하기
   - GrabComponent 에서 priority : integer 추가하기
   - VR_Function_Library 만들고 함수 추가하기
-
-
-
-
-
-  - 포스트 프로세싱으로 전방에 잡을 수 있는 사물 윤곽선 만들기
+    - CanBePotentialTarget : 타겟을 잡을 수 있는 상태인지 확인하기
+    <span class="image fit"><img src="/images/post_image/VR_02_3-1.png" alt="" /></span>
+      - Actor를 불러와서 자식 Components들 중에서 Is Held 상태 확인하기
+      - Held 상태가 아닌 경우 잡을 수 있는 상태로 반환하기
+    - FindTopPrioGrabComponent : Grab Component 의 최 상위에 있는지 확인하기
+    <span class="image fit"><img src="/images/post_image/VR_02_3-2.png" alt="" /></span>
+    <span class="image fit"><img src="/images/post_image/VR_02_3-3.png" alt="" /></span>
+      - Actor를 불러와 자식 Components 들 중에서 GrabComponent가 있는지 확인하기
+      - 우선순위를 매겨서 우선순위가 높은 컴포넌트 반환하기
+  - VR Pawn 세팅하기
+    - IA_Grab_Left_Preesed 에서 가까운 Controller를 찾았을 경우의 모든 내용을 함수화 하기
+    - IA_Grab_Right_Preesed 에서 가까운 Controller를 찾았을 경우의 모든 내용을 함수화 하기
+    - TraceAim : 전방에 있는 물체 충돌체크하기
+    <span class="image fit"><img src="/images/post_image/VR_02_3-4.png" alt="" /></span>
+    - GetGrabComponentUnderAim : Aim으로 찾은 GrabComponent 상태 확인하기
+    <span class="image fit"><img src="/images/post_image/VR_02_3-5.png" alt="" /></span>
+    - Motion Controller Left Aim - Get GrabComponent Under Aim과 연결하기기
+  
+- 윤관선 만들기기
+  - M_Outline.uasset 다운로드 이후 Materials 인스턴스 만들기
+    - PostProcessVolume 연결하기
+    - PostProcessVolume - PostProcessMaterials 의 배열에 인스턴스 넣기
+    - GrabComponent에 있는 StaticMesh 및 Skeletal Mesh의 Render CustomDepth Pass 를 이용하여 동작해보기
+  - VR Pawn 윤곽선 관련 함수 빛 변수 추가하기
+    - AimTargetGrapComponentLeft : Grab Component
+    - AimTargetGramComponentRight : Grab Component
+    - Mark For Grab 함수 : 윤곽선 상태 만들기
+    <span class="image fit"><img src="/images/post_image/VR_02_3-6.png" alt="" /></span>
+    - UpdateTargetGrabComponent
+      - Sequence 설정하기기
+    <span class="image fit"><img src="/images/post_image/VR_02_3-7.png" alt="" /></span>
+      - 타겟 Grab Component 윤곽선 해제하기
+    <span class="image fit"><img src="/images/post_image/VR_02_3-8.png" alt="" /></span>
+      - 타겟 Grab Component 윤곽선 설정하기
+    <span class="image fit"><img src="/images/post_image/VR_02_3-9.png" alt="" /></span>
+    - UpdatePotentialTarget : 전방에 있는 물체를 찾아서, 윤곽선을 만들어주는 함수 설정
+    <span class="image fit"><img src="/images/post_image/VR_02_3-10.png" alt="" /></span>
+  - Tick 에 함수 적용하기
+    <span class="image fit"><img src="/images/post_image/VR_02_3-11.png" alt="" /></span>
 
 ### `2교시`
 
 - 사물 끌어오기
-- 몬스터 만들어서 충돌체크하기
+  - GrabComponent 설정하기
+    - bPulled : boolean 변수 만들기
+    - TryPull : 끌어들이기 함수
+    <span class="image fit"><img src="/images/post_image/VR_02_3-12.png" alt="" /></span>
+    - StopPull : 놓기 함수 - 
+      - pull 가져오기
+    <span class="image fit"><img src="/images/post_image/VR_02_3-13.png" alt="" /></span>
+      - Release 에서 물리작용 내용 가져오기
+    <span class="image fit"><img src="/images/post_image/VR_02_3-14.png" alt="" /></span>
+      - TryGrab - Sequence2 에서 세팅해주기기
+    <span class="image fit"><img src="/images/post_image/VR_02_3-15.png" alt="" /></span>
+
+  - VRPawn에서 세팅하기
+    - 두 변수 추가하기
+      - PulledGrabComponentLeft : GrabComponent
+      - PulledGrabComponentRight : GrabComponent
+
+    - 충돌체크 테스트 부분에서 변수에 끌어들일 객체 저장하기
+    <span class="image fit"><img src="/images/post_image/VR_02_3-16.png" alt="" /></span>
+
+    - Release 설정하기
+    <span class="image fit"><img src="/images/post_image/VR_02_3-17.png" alt="" /></span>
+
+    - UpdatePulledObject 구현하기
+    <span class="image fit"><img src="/images/post_image/VR_02_3-18.png" alt="" /></span>
+      - Actor (GetOwner - Actor Location)의 위치값과, 컨트롤러의 World Location을 Vinterp To 로 가까이 다가오게 하기
+      - Set Actor Location 으로 위치값 조정하기
+      - 거리 값 조정하여 특정 위치에서 잡을 수 있도록 세팅하기
+    <span class="image fit"><img src="/images/post_image/VR_02_3-19.png" alt="" /></span>
+      - TryGrabRight/Left 에서 Return Node 세팅해주기
+    <span class="image fit"><img src="/images/post_image/VR_02_3-20.png" alt="" /></span>
 
 ### `3교시`
 
-- VR FPS 게임을 만들어보세요
+- VR을 활용한 기획서 제작하기
+
+<hr/>
 
 ## 4일차
 
-- VR FPS 게임을 만들어보는 시간을 가지도록 하겠습니다.
+- FPS 제작을 복습하면서, VR FPS 게임을 제작해봅시다.
 
 <hr/>
+
+## 5일차
+
+- FPS 게임 제작 내용 발표 및 시현
+

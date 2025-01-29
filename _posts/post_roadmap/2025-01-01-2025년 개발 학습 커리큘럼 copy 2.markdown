@@ -7,7 +7,35 @@ index : 1
 post_layout: true
 ---
 
+## 목차
+
+<div class="row">
+    <div class="col-6 col-12-xsmall">
+    <ol>
+      <li><a href="#2025년-개발-계획-리스트">2025년 개발 계획 리스트</a></li>
+      <li><a href="#2025년-수강-목적-강의-리스트">2025년 수강 목적 강의 리스트</a></li>
+      <li><a href="#학습-완료-강의">학습 완료 강의</a></li>
+      <li><a href="#구현-콘텐츠">구현 콘텐츠</a></li>
+    </ol>
+  </div>
+</div>
+
+<hr/>
+
+
 ## `2025년 개발 계획 리스트`
+
+`단위 나누기`
+- 언리얼 VR 강의 [손동작 커리큘럼 제작하기]
+- 언리얼 VR 강의 [방탈출을 위한 Gimmick 만들기 제작하기]
+
+`D-Day - 2월 2일` 
+- [완] 1. 언리얼 - VR 강의 [손을 활용한 사물 상호작용] (남은과제 : 직접 FPS 게임 구현해보기)
+- [완] 2. 언리얼 - VR 강의 [방탈출 게임을 위한 Gimmick 만들기] (남은과제 : 직접 방탈출 게임 구현해보기)
+
+`D-Day - 2월 28일`
+- 직접 FPS 게임 구현해서 강의 자료 완료하기
+- 직접 방탈출 게임 구현해서 강의 자료 완료하기
 
 <h4> 과제 정리서 </h4>
 
@@ -50,11 +78,22 @@ post_layout: true
 <h4>4. 언리얼 게임 개발 기반 지식 학습 - 게임 개발 학습</h4>
 <p></p>
 <ul class="actions">
-  <li><a href="https://www.udemy.com/course/unreal-engine-5-the-intermediate-course/" class="button">VR 게임 콘텐츠츠</a></li>
+  <li><a href="https://www.udemy.com/course/unreal-engine-5-vr-blueprint-crash-course/" class="button">VR 게임 콘텐츠 강의</a></li>
   <li><a href="https://www.udemy.com/course/unreal-engine-5-ui-design-advance-inventory-system-with-ue5/" class="button">음...</a></li>
   <li><a href="https://www.udemy.com/course/unreal-engine-5-dynamic-sky-weather-system-korean/" class="button">Dynamic Sky</a></li>
   <li><a href="https://www.udemy.com/course/unreal-engine5-material-korean/" class="button">Materials</a></li>
   <li><a href="https://www.udemy.com/course/unreal-engine-5-niagara-vfx-korean/" class="button">나이아가라 스킬</a></li>
 </ul>
 
+<hr/>
 
+## `학습 완료 강의`
+- VR 게임 콘텐츠 강의 [ Unreal Engine 5 VR Blueprint Crash Course ]
+
+<div class="box alt">
+	<div class="row gtr-50 gtr-uniform">
+		<div class="col-4 col-6-xsmall"><span class="image fit"><img src="/images/completion/수료증_UDemy_UnrealEngine5VRBlueprintCrashCourse.jpg" alt="" /></span></div>
+	</div>
+</div>
+
+## `구현 콘텐츠`

@@ -1,9 +1,9 @@
 ---
 layout: main
-title:  "언리얼 시작하기 Ver 1"
+title:  "언리얼 시작하기 기초부터 FPS 게임 구현하기 [블루프린트]"
 date:   2025-01-02 00:00:00 +0900
 categories: 언리얼
-index : 2
+index : 11
 post_layout: true
 ---
 

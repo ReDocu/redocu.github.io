@@ -158,6 +158,8 @@ post_layout: true
 
 ## 2일차
 
+<span class="image fit"><img src="/images/post_image/VR_02_2일차 결과.png" alt="" /></span>
+
 ### `1교시 캐릭터 움직임 및 GrabComponent를 통해, 사물 던지기 동적으로 바꾸기`
 
 - Enhance 에 대하여 탐구해보기 
@@ -284,7 +286,7 @@ post_layout: true
   - 우선순위에 따라 전방에 있는 사물 인식하기
   - GrabComponent 에서 priority : integer 추가하기
   - VR_Function_Library 만들고 함수 추가하기
-  
+
 
 
 

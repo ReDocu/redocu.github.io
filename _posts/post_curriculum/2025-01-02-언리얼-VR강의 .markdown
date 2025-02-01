@@ -43,7 +43,7 @@ post_layout: true
 
 - ※ 7번에서 단체 관리 설정을 해야할 요소가 있음
 
-`메뉴를 활용하여 돌러보기기`
+`메뉴를 활용하여 돌러보기`
 1. 유니버설 메뉴 설정해보기
 2. 라이브러리
 3. Horizon 피드
@@ -76,7 +76,7 @@ post_layout: true
 - 링크한 화면 둘러보기 [데스크톱 열어보기]
 - 언리얼 열어보기 [VR Template]을 열어 실행해보기
 - 컨텐츠 열고 기다리기 
-- 로컬로 미러링하기기
+- 로컬로 미러링하기
 - C:\Program Files\Oculus\Support\oculus-diagnostics 경로 들어가서 미러링 하기
 
 ### `2교시 VR Template`
@@ -279,9 +279,9 @@ post_layout: true
     <span class="image fit"><img src="/images/post_image/VR_02_3-4.png" alt="" /></span>
     - GetGrabComponentUnderAim : Aim으로 찾은 GrabComponent 상태 확인하기
     <span class="image fit"><img src="/images/post_image/VR_02_3-5.png" alt="" /></span>
-    - Motion Controller Left Aim - Get GrabComponent Under Aim과 연결하기기
+    - Motion Controller Left Aim - Get GrabComponent Under Aim과 연결하기
   
-- 윤관선 만들기기
+- 윤관선 만들기
   - M_Outline.uasset 다운로드 이후 Materials 인스턴스 만들기
     - PostProcessVolume 연결하기
     - PostProcessVolume - PostProcessMaterials 의 배열에 인스턴스 넣기
@@ -292,7 +292,7 @@ post_layout: true
     - Mark For Grab 함수 : 윤곽선 상태 만들기
     <span class="image fit"><img src="/images/post_image/VR_02_3-6.png" alt="" /></span>
     - UpdateTargetGrabComponent
-      - Sequence 설정하기기
+      - Sequence 설정하기
     <span class="image fit"><img src="/images/post_image/VR_02_3-7.png" alt="" /></span>
       - 타겟 Grab Component 윤곽선 해제하기
     <span class="image fit"><img src="/images/post_image/VR_02_3-8.png" alt="" /></span>
@@ -315,7 +315,7 @@ post_layout: true
     <span class="image fit"><img src="/images/post_image/VR_02_3-13.png" alt="" /></span>
       - Release 에서 물리작용 내용 가져오기
     <span class="image fit"><img src="/images/post_image/VR_02_3-14.png" alt="" /></span>
-      - TryGrab - Sequence2 에서 세팅해주기기
+      - TryGrab - Sequence2 에서 세팅해주기
     <span class="image fit"><img src="/images/post_image/VR_02_3-15.png" alt="" /></span>
 
   - VRPawn에서 세팅하기
@@ -354,3 +354,4 @@ post_layout: true
 
 - FPS 게임 제작 내용 발표 및 시현
 
+## 참고 강의 

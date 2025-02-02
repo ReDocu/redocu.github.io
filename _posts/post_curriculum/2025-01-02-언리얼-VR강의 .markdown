@@ -1,6 +1,6 @@
 ---
 layout: main
-title:  "언리얼 - VR 강의 [손을 활용한 사물 상호작용]"
+title:  "언리얼 - VR 강의 [손을 활용한 사물 상호작용] - 1차"
 date:   2025-01-02 00:00:00 +0900
 categories: 언리얼
 index : 2

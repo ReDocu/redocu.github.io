@@ -25,10 +25,10 @@
 title: Redocu Home
 email: dlehrb103@gmail.com
 user_img : assets\img\logo_imsi.png
-user_intro : Re_Docu Page
+user_intro : Re_Docu
 description: >- # this means to ignore newlines until "baseurl:"
     ICT Convergence Engineering, Software Developer
-description_1: 글쟁이 개발자 (developer doodling)
+description_1: 글쟁이 개발자 (A Coding Scribbler)
 description_2: 프로그래밍 강사 지망생 (Aspiring Programming Instructor)
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com

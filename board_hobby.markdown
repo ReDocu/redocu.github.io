@@ -17,7 +17,7 @@ title : board_image
                 		</tr>
                 	</thead>
                 	<tbody>
-                		{% assign card_posts = site.posts | where_exp: "post", "post.path contains '/post_hobby/'" %}
+                		{% assign card_posts = site.posts | where_exp: "post", "post.path contains '/post_hobby/'" | sort: "index" %}
                         {% for post in card_posts %}
                         <tr>
                             <td>{{ post.date | date: "%Y-%m-%d" }}</td>

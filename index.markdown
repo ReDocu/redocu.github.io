@@ -10,7 +10,7 @@ title : main
 			<p>{{site.description_1}}</p>
 			<p>{{site.description_2}}</p>
 		</header>
-		<span class="image"><img src="images/pic01.jpg" alt="" /></span>
+		<span class="image"><img src="images/Profile.jpg" alt="" /></span>
 	</div>
 	<a href="#one" class="goto-next scrolly">Next</a>
 </section>
@@ -58,34 +58,34 @@ title : main
 		<div class="box alt">
 			<div class="row gtr-uniform">
 				<section class="col-4 col-6-medium col-12-xsmall">
-					<span class="icon solid alt major fa-chart-area"></span>
-					<h3>게임 개발 노트</h3>
-					<p>개발노트</p>
-					<a href="board_development" class="button">개발 일지로 들어가기</a>
-				</section>
-				<section class="col-4 col-6-medium col-12-xsmall">
-					<span class="icon solid alt major fa-comment"></span>
-					<h3>AI 학습 노트</h3>
-					<p>ConfyUI 학습 중..</p>
-					<a href="board_roadmap" class="button">학습 일지로 들어가기</a>
+					<span class="icon solid alt major fa-file"></span>
+					<h3>강의 학습 및 분석</h3>
+					<p>인터넷 강의 정리 및 개인 학습 공간</p>
+					<a href="board_study" class="button">학습 일지로 들어가기</a>
 				</section>
 				<section class="col-4 col-6-medium col-12-xsmall">
 					<span class="icon solid alt major fa-flask"></span>
 					<h3>커리큘럼 연구</h3>
-					<p>언리얼 커리큘럼 연구중...</p>
+					<p>VR 게임 개발 커리큘럼 연구중</p>
 					<a href="board_curriculum" class="button">연구 일지로 들어가기</a>
+				</section>
+				<section class="col-4 col-6-medium col-12-xsmall">
+					<span class="icon solid alt major fa-comment"></span>
+					<h3>개발 목적 및 로드맵</h3>
+					<p>연도별 로드맵 및 개발 리스트</p>
+					<a href="board_roadmap" class="button">학습 일지로 들어가기</a>
+				</section>
+				<section class="col-4 col-6-medium col-12-xsmall">
+					<span class="icon solid alt major fa-chart-area"></span>
+					<h3>개인 개발 일지</h3>
+					<p>개발노트</p>
+					<a href="board_development" class="button">개발 일지로 들어가기</a>
 				</section>
 				<section class="col-4 col-6-medium col-12-xsmall">
 					<span class="icon solid alt major fa-lock"></span>
 					<h3>개발 관련 취미 일기</h3>
 					<p>개발 및 중요 요소에 필요한 정보 공간</p>
 					<a href="board_diary" class="button">정보 공간으로 들어가기</a>
-				</section>
-				<section class="col-4 col-6-medium col-12-xsmall">
-					<span class="icon solid alt major fa-file"></span>
-					<h3>개인 학습 공간</h3>
-					<p>인터넷 강의 요약 및 개인 학습 공간</p>
-					<a href="board_study" class="button">학습 일지로 들어가기</a>
 				</section>
 				<section class="col-4 col-6-medium col-12-xsmall">
 					<span class="icon solid alt major fa-paper-plane"></span>

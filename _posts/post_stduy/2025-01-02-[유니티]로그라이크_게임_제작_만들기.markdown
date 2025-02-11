@@ -1,0 +1,41 @@
+---
+layout: main
+title:  "[유니티] 로그라이크 게임 제작 만들기"
+date:   2025-01-02 00:00:00 +0900
+categories: 유니티
+index : 2
+post_layout: true
+---
+
+### 강의 링크
+
+<a href="https://www.udemy.com/course/2d-rpg-alexdev/" class="button">유니티 로그라이크 게임 제작 만들기</a>
+
+<hr/>
+
+
+### `유니티 기본 기능`
+
+- 2 by 3 유니티 레이아웃 하나씩 설명하기
+- 물리작용 설명하기 [공 튀기기]
+    - Player
+        - RigidBody
+        - Collider
+        - Physics Material [0 / 1 = Bound]
+    - Platform
+        - Collider
+- Boundary를 이용하여 게임 구현해보기
+- 스크립트 확인해보기
+    - Debug.Log("Start was called.")
+    - Debug.Log("Update was Called")
+    - 입력키 학습하기
+        - Input.GetKeyDown(KeyCode.Space) : Holding
+        - Input.GetKey(KeyCode.Space)   : Pressed
+        - Input.GetKeyUp(KeyCode.Space) :   released
+        - Input.GetButtonDown("Jump")   : Unity Input Mapping
+        - Input.GetAxis("Horizontal")   : 서서히 [0 ~ 1 까지]
+        - Input.GetAxisRaw("Horizontal")    : 한번에 [0에서 1로]
+    - 움직이기 학습하기
+        - 
+
+- 

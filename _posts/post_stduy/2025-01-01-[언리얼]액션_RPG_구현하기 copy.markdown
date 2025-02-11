@@ -1,0 +1,23 @@
+---
+layout: main
+title:  "[언리얼] 메타휴먼먼 구현하기"
+date:   2025-01-01 00:00:00 +0900
+categories: 언리얼
+index : 1
+post_layout: true
+---
+
+## `메타 플러그인 설치하기`
+
+
+### `레퍼런스`
+<div class="box alt">
+	<div class="row gtr-50 gtr-uniform">
+		<div class="col-4 col-6-xsmall">
+            <a href="https://www.youtube.com/watch?v=cNdIttVNf38" target="_blank">
+                <span class="image fit">
+                <img src="https://img.youtube.com/vi/cNdIttVNf38/0.jpg" alt="" />
+                </span>
+            </a>
+        </div>
+</div>

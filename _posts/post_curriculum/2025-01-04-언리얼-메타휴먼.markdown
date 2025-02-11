@@ -1,0 +1,29 @@
+---
+layout: main
+title:  "언리얼 - 메타휴먼"
+date:   2025-01-03 00:00:00 +0900
+categories: 언리얼
+index : 3
+post_layout: true
+---
+
+## `기본구성`
+
+- Metahuman PlugIn 설치하기[#https://www.fab.com/listings/055a6486-ad17-4590-aa1e-261d47f7f041]
+
+
+
+
+## 참고 사이트
+
+<div class="row">
+    <div class="col-6 col-12-xsmall">
+    <ol>
+      <li><a href="#1일차">MetaHuman Animator Tutorial</a></li>
+      <li><a href="#2일차">사물에 손동작 및 소켓 설정해보기</a></li>
+      <li><a href="#3일차">전방에 있는 물체 탐지, 윤곽선 만들고 끌어들이기</a></li>
+      <li><a href="#4일차">VR FPS 게임 구현 시간</a></li>
+      <li><a href="#5일차">VR FPS 게임 구현 내용 발표</a></li>
+    </ol>
+  </div>
+</div>

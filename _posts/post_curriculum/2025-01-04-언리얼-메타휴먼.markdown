@@ -7,23 +7,36 @@ index : 3
 post_layout: true
 ---
 
-## `기본구성`
+### `기본구성`
 
-- Metahuman PlugIn 설치하기[#https://www.fab.com/listings/055a6486-ad17-4590-aa1e-261d47f7f041]
+<div class="box alt">
+	<div class="row gtr-50 gtr-uniform">
+    <div class="col-4 col-6-xsmall">
+       <a href="https://www.fab.com/listings/9fa88852-5711-42e1-94fa-2491498a64da" target="_blank">
+           <span class="image fit">
+           <img alt="" src="https://media.fab.com/image_previews/gallery_images/c922addf-da54-4fa1-a991-5d4d64048ccf/a88d4d47-4936-4dc9-b456-baaf1d31a4c7.jpg">
+           </span>
+           <h4>MetaHuman Plugin</h4>
+       </a>
+    </div>
+  </div>
+</div>
 
 
 
+### `목차`
 
-## 참고 사이트
+
+
+### `과정 요약`
 
 <div class="row">
     <div class="col-6 col-12-xsmall">
     <ol>
       <li><a href="#1일차">MetaHuman Animator Tutorial</a></li>
-      <li><a href="#2일차">사물에 손동작 및 소켓 설정해보기</a></li>
-      <li><a href="#3일차">전방에 있는 물체 탐지, 윤곽선 만들고 끌어들이기</a></li>
-      <li><a href="#4일차">VR FPS 게임 구현 시간</a></li>
-      <li><a href="#5일차">VR FPS 게임 구현 내용 발표</a></li>
     </ol>
   </div>
 </div>
+
+
+## 

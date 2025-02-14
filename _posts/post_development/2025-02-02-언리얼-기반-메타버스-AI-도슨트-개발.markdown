@@ -1,0 +1,30 @@
+---
+layout: main  
+title:  "2. 언리얼 기반 메타버스 AI 도슨트 개발"
+date:   2025-02-02 00:00:00 +0900
+categories: 언리얼
+index : 3
+post_layout: true
+---
+
+## `목차`
+
+<hr/>
+
+## `개요`
+
+- 미술관을 설명해주는 AI 도슨트 개발
+
+- 메인 엔진 : 언리얼5
+- AI 도슨트 : LLAMA vs Deep Fake 고민중
+- 도슨트 : 메타 휴먼
+- 미술작품 : ConfyUI
+
+## `기술 스택`
+
+
+<hr/>
+
+## `사용 에셋 리스트`
+
+<hr/>

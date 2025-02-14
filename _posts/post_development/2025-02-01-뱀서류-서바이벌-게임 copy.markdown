@@ -1,0 +1,122 @@
+---
+layout: main  
+title:  "1. 뱀서류 서바이벌 게임 구현"
+date:   2025-01-02 00:00:00 +0900
+categories: 언리얼
+index : 2
+post_layout: true
+---
+
+## `목차`
+
+<hr/>
+
+## `기술 스택`
+
+- 캐릭터 선택 창 구현하기
+    - 캐릭터 선택이후 레벨 전환
+
+- 스킬 셋 구현하기 [스킬 선택]
+
+- 인벤토리 구현하기 [아이템]
+
+<hr/>
+
+## `사용 에셋 리스트`
+
+<hr/>
+
+### 캐릭터 에셋
+<div class="box alt">
+	<div class="row gtr-50 gtr-uniform">
+         <div class="col-4 col-6-xsmall">
+            <a href="https://www.fab.com/listings/9fa88852-5711-42e1-94fa-2491498a64da" target="_blank">
+                <span class="image fit">
+                <img alt="" src="https://media.fab.com/image_previews/gallery_images/56d833f5-6b67-498f-b952-2be6f7db89d6/347d74fa-d5f5-4276-b000-ed09443f2f7e.jpg">
+                </span>
+                <h4>Paragon : Twinblast </h4>
+            </a>
+        </div>
+        <div class="col-4 col-6-xsmall">
+            <a href="https://www.fab.com/listings/122fd7bf-6f12-4304-a930-cccbbacdaebc" target="_blank">
+                <span class="image fit">
+                <img alt="" src="https://media.fab.com/image_previews/gallery_images/5b800b6b-09ab-41d2-8576-3885e30f7d5e/6a82c3b8-822b-462d-a0f8-8f95a16d6829.jpg">
+                </span>
+                <h4>Paragon : Greystone </h4>
+            </a>
+        </div>
+        <div class="col-4 col-6-xsmall">
+            <a href="https://www.fab.com/listings/a5f05f30-d6bd-48b4-9b41-5f3012c7e95d" target="_blank">
+                <span class="image fit">
+                <img alt="" src="https://media.fab.com/image_previews/gallery_images/8ac06f69-89fb-40d7-8baf-f3a4030aab82/1ad71d67-6e5b-4afc-a648-b090c50894a3.jpg">
+                </span>
+                <h4>Paragon : Revenant </h4>
+            </a>
+        </div>
+		<div class="col-4 col-6-xsmall">
+            <a href="https://www.fab.com/listings/e3b7b93c-2633-4f60-8cf1-8ee5bf7de4a9" target="_blank">
+                <span class="image fit">
+                <img alt="" src="https://media.fab.com/image_previews/gallery_images/d9391132-75ae-47f3-b214-d2649ad65be8/2fb8b480-ad99-4f94-b0d0-71b817f4e942.jpg">
+                </span>
+                <h4>Paragon : Shinbi </h4>
+            </a>
+        </div>
+        <div class="col-4 col-6-xsmall">
+            <a href="https://www.fab.com/listings/6f3a45fb-b5fe-4866-9a60-de315301f75b" target="_blank">
+                <span class="image fit">
+                <img alt="" src="https://media.fab.com/image_previews/gallery_images/0afb1c4d-3bb6-453e-8bab-6c8cb723373a/63ff737e-17c9-42ea-b9ba-f9908ad7c2d7.jpg">
+                </span>
+                <h4>Paragon : LT. Belica </h4>
+            </a>
+        </div>
+        <div class="col-4 col-6-xsmall">
+            <a href="https://www.fab.com/listings/918456eb-4c36-4346-9be2-8986e25c9a0b" target="_blank">
+                <span class="image fit">
+                <img alt="" src="https://media.fab.com/image_previews/gallery_images/dc1d875f-6b83-42cb-956c-a510cc134294/e5fde6ba-107a-4959-8474-78fd76fa8e96.jpg">
+                </span>
+                <h4>Paragon : Aurora </h4>
+            </a>
+        </div>
+    </div>
+</div>
+
+<hr/>
+
+### 기타 에셋
+
+<div class="box alt">
+	<div class="row gtr-50 gtr-uniform">
+         <div class="col-4 col-6-xsmall">
+            <a href="https://www.fab.com/listings/0ab8b490-0903-479e-ba78-41a5324a559f" target="_blank">
+                <span class="image fit">
+                <img alt="" src="https://media.fab.com/image_previews/gallery_images/d6820d16-73f3-4652-9de4-81fb070136c8/94939f1d-9b1d-46b8-9e91-906e8cdd03eb.jpg">
+                </span>
+                <h4>Zombie Movement and Modular Interaction Animations</h4>
+            </a>
+        </div>
+        <div class="col-4 col-6-xsmall">
+            <a href="https://www.fab.com/listings/547a0913-87b0-4e8e-8d38-f6e5bb8bacd9" target="_blank">
+                <span class="image fit">
+                <img alt="" src="https://media.fab.com/image_previews/gallery_images/d2ed3ed2-546a-48b9-bb2f-27cb928bee8b/6e52326a-e7a8-48b0-9a05-811895b670f3.jpg">
+                </span>
+                <h4>Ultimate Interaction Manager</h4>
+            </a>
+        </div>
+        <div class="col-4 col-6-xsmall">
+            <a href="https://www.fab.com/listings/b955ab23-f61e-44a6-8554-e730bc3af7f5" target="_blank">
+                <span class="image fit">
+                <img alt="" src="https://media.fab.com/image_previews/gallery_images/2acbc3db-08d4-4b16-9dce-2fe4162509ca/a2f2f987-18ee-4070-a636-bd92a0f356c1.jpg">
+                </span>
+                <h4>Advanced Photo Mode</h4>
+            </a>
+        </div>
+		<div class="col-4 col-6-xsmall">
+            <a href="https://www.fab.com/ko/listings/fc3a309a-a3eb-46de-bebe-dcb40dc31e48" target="_blank">
+                <span class="image fit">
+                <img alt="" src="https://media.fab.com/image_previews/gallery_images/23f584f6-24b9-40fa-b771-cd654afbcdcb/48eb754b-4deb-4dee-b465-771887da7e9e.jpg">
+                </span>
+                <h4>Skeleton Knight Modular</h4>
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,110 @@
+---
+layout: main
+title:  "[언리얼] 언리얼 인벤토리 구현하기"
+date:   2025-01-01 00:00:00 +0900
+categories: 언리얼
+index : 4
+post_layout: true
+---
+
+### 강의 링크
+
+<a href="https://www.udemy.com/course/unreal-engine-5-dynamic-sky-weather-system-korean/" class="button">언리얼 인벤토리 구현하기</a>
+
+<hr/>
+
+1. Dynamic Sky 에 필요한 것들
+- Meterial : HLSL
+- Niagara : HLSL
+- Blueprint
+
+2. Meterial 블루프린트 작성시 탄축키 정리
+- A : Add
+- B : BumpOffset
+- C : Comment
+- D : Divide
+- E : Power
+- F : MaterialFunctionCall
+- I : If
+- L : LinearInterpolate
+- M : Multiply
+- N : Normalize
+- O : OneMinus
+- P : Panner
+- R : ReflectionVector
+- S : ScalarParameter
+- T : TextureSample
+- U : TexCoord
+- V : VectorParameter
+- 1 : Constant
+- 2 : Constant2Vector
+- 3 : Constant3Vector
+- 4 : Constant4Vector
+- Shift + C : ComponentMask
+
+<hr/>
+
+1. Window - Env. Light Mixer : 필요한 Light 기능들을 볼 수 있다.
+2. 빈 프로젝트에서 필요한 5가지 Light 기능
+    - DirectionalLight
+    - ExponentialHeightFog
+    - SkyAtmosphere
+    - SkyLight
+    - VolumetricCloud
+    - Post Process Volume [추가적인 기능] 
+        - Infinite Extent 체크
+        - Auto Exposure 세팅하기
+        - MIN EV100 / MAX EV100 [밝기 조절] : 예제에서는 0.5/0.5
+
+3. BP_DynamicSky 블루프린트 생성하기
+    - DirectionalLight : For Shading - 1
+    - Sky Atmosphere
+    - Sky Light : real time Capture Check
+    - ExponetialHeightFog 
+    - PostProcess Volume : Auto Exposure 비활성화
+
+4. DirectionalLight 는 Rotation의 Y,Z 값으로 조정
+    - 일출 : 0
+    - 정오 : -90
+    - 일몰 : -180
+
+5. BP_DynamicSky에 변수 추가 
+    - TimeOfDay : float : 0~24시 조정
+    - DawnTime : float : 해가 뜨는 시간
+    - DuskTime : float : 해가 지는 시간
+
+
+
+- Shading Model : Unlit
+- Is Sky 체크
+
+
+<hr/>
+
+1. ECloudMode - Enum 만들기
+    - None
+    - 2D Clouds
+
+2. BP_DynamicSky에서 변수 만들기
+    - CurrentCloudMode : ECloudMode
+
+3. BP_DynamicSky에서 함수 만들기
+    - Handle Cloud Settings
+    - CurrentCloudMode - Switch
+
+4. Meterais설정하기
+    - 2D Cloud 가져와서 연결하기 : 2DCloudTexture
+    - VecterParameter : 2DCloudSettings
+        - Tiling
+        - PanningSpeed
+        - Brightness
+    - TexCoord[0] * 2DCloudSettings - Panner(Coordinate)
+    - TimeWithSpeedVariable - Time - Panner(Time)
+    - Speed 1,0
+
+
+
+<hr/>
+
+MaterialDomain : Volume
+Blend Mode : Additive

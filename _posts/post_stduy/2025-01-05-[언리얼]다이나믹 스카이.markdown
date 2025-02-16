@@ -44,6 +44,9 @@ post_layout: true
 
 <hr/>
 
+
+### `낮과 밤 사이클 관리하기`
+
 1. Window - Env. Light Mixer : 필요한 Light 기능들을 볼 수 있다.
 2. 빈 프로젝트에서 필요한 5가지 Light 기능
     - DirectionalLight
@@ -56,31 +59,91 @@ post_layout: true
         - Auto Exposure 세팅하기
         - MIN EV100 / MAX EV100 [밝기 조절] : 예제에서는 0.5/0.5
 
-3. BP_DynamicSky 블루프린트 생성하기
+3. [Sky 요소 블루프린트 생성하기] BP_DynamicSky 블루프린트 생성하기
     - DirectionalLight : For Shading - 1
     - Sky Atmosphere
     - Sky Light : real time Capture Check
     - ExponetialHeightFog 
     - PostProcess Volume : Auto Exposure 비활성화
 
-4. DirectionalLight 는 Rotation의 Y,Z 값으로 조정
+4. [해 위치 조정하기] DirectionalLight 는 Rotation의 Y,Z 값으로 조정
     - 일출 : 0
     - 정오 : -90
     - 일몰 : -180
 
-5. BP_DynamicSky에 변수 추가 
+5. [시간 조정하기] BP_DynamicSky에 변수 추가 
     - TimeOfDay : float : 0~24시 조정
     - DawnTime : float : 해가 뜨는 시간
     - DuskTime : float : 해가 지는 시간
 
+6. [시간 조정하기] Handle Sun Moon Rotation 
+    <span class="image fit"><img src="/images/study/4/UE_4_1.png" alt="" /></span>
+    - 함수 추가하기
+    - Map Range Clamped 연결하기
+        - Time of Day : value
+        - Dawn Time : In Range A
+        - Dusk Time : In Range B
+    - Sun Directional Light의 Y(Pitch) 회전하기
+    - Construction Script - Sequence 로 함수 연결하기
+    <span class="image fit"><img src="/images/study/4/UE_4_2.png" alt="" /></span>
+    - Slider Range 조정하기
+        
 
+7. Moon Rotation
+    - Before Dusk : -90 ~ 0
+    - Center Dusk : -90
+    - After Dusk : -180 ~ -90
+
+8. MoonDirectionalLight 추가하기
+    - Intencity : 1
+    <span class="image fit"><img src="/images/study/4/UE_4_3.png" alt="" /></span>    
+
+9. 함수 / 매크로 / 이벤트
+    - Function [return / Out Side Class]
+    - Macro [return]
+    - Event [Out Side Class / Time Line / Delay] 
+
+10. IsDayTime / Is Night Time / HandleVisibility 세팅하기
+    <span class="image fit"><img src="/images/study/4/UE_4_4.png" alt="" /></span>
+    <span class="image fit"><img src="/images/study/4/UE_4_5.png" alt="" /></span>
+    <span class="image fit"><img src="/images/study/4/UE_4_6.png" alt="" /></span>
+
+11. 환경 요소 확인하기
+    - DirectionalLight
+        - Intensity
+        - LightColor
+        - SourceAngle
+        - Temprature
+    - SkyAtmosphere
+        - GroundAlbedo
+        - MultiScattering
+        - RayleighScattering
+    - SkyLight
+        - Real Time Capture 확인
+
+12. 달을 세팅하는 함수 만들기 Handle Night Setting
+    <span class="image fit"><img src="/images/study/4/UE_4_7.png" alt="" /></span>
+    <span class="image fit"><img src="/images/study/4/UE_4_8.png" alt="" /></span>
+    <span class="image fit"><img src="/images/study/4/UE_4_9.png" alt="" /></span>
+    - 초기화 해주기
+    <span class="image fit"><img src="/images/study/4/UE_4_10.png" alt="" /></span>
+
+13. 하늘 관련 블루프린트
+    - EngineSky - BP_Sky_Sphere
+    - 커스텀 하기 위해 SM_SkySphere 가져오기
+    - BP_SkySphere 에 Static Mesh 추가 이후 1000000 사이즈로 확대하기
 
 - Shading Model : Unlit
 - Is Sky 체크
 
+14. Sky Material 만들기
+    - Shading Model : Unlit
+    - Is Sky : true
+    <span class="image fit"><img src="/images/study/4/UE_4_11.png" alt="" /></span>
+    - Instance 만들기기
 
 <hr/>
-
+    
 1. ECloudMode - Enum 만들기
     - None
     - 2D Clouds

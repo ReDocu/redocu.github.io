@@ -215,6 +215,7 @@ post_layout: true
     <span class="image fit"><img src="/images/post_image/VR_03_3-9.png" alt="" /></span>
 
 ### 2교시
+
 - 기믹과 연결하기
 
 

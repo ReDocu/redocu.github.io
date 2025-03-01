@@ -1,17 +1,21 @@
 ---
 layout: main
 title:  "취향음악리스트"
-date :   2025-01-02 00:00:00 +0900
-index : 2
+date :   2025-01-03 00:00:00 +0900
+index : 3
 categories: 음악감상
 post_layout: true
 ---
 
 ## `취향 음악 리스트`
+
+### `게임 & 애니 리스트`
+
 <div class="row">
 	<div class="col-6 col-12-xsmall">
     <ol>
       <li><a href="https://youtu.be/_PSjoVXFGAQ">Mili - Fly, My Wings [Limbus Company]</a></li>
+      <li><a href="https://youtu.be/Nw9ubZeil84">Mili - ENDER MAGNOLIA: Bloom in the Mist Original Soundtrack (full album)</a></li>
       <li><a href="https://youtu.be/UKU4B05fPck">茅原実里 - みちしるべ</a></li>
       <li><a href="https://youtu.be/fp2pW2FZy2c">「Regression」《붕괴3rd》 테마곡 (Performed by: 阿云嘎)</a></li>
       <li><a href="https://youtu.be/XX2gPs44fxg">Matryoshka - Sacred Play Secret Place</a></li>

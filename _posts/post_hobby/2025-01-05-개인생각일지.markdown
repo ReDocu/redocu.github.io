@@ -1,0 +1,37 @@
+---
+layout: main
+title:  "요가 트레이닝 일지"
+date :   2025-01-01 00:00:00 +0900
+index : 5
+categories: 운동
+post_layout: true
+---
+
+## `목차`
+<div class="row">
+	<div class="col-6 col-12-xsmall">
+    <ol>
+      <li><a href="#초보단계">3개월 트레이닝</a></li>
+    </ol>
+  </div>
+</div>
+
+<hr/>
+
+
+### 트레이닝 단계
+
+<a href="https://blog.naver.com/corebody/220676963092">기본 요가자세 10가지</a>
+
+3월 2일 - 6월 31일 꾸준히 하기
+
+1. Downward-Facing Dog
+2. Garland Pose
+3. Plank Pose 
+4. Forward Bend
+5. Seated Spinal Twist
+6. Crescent Lunge
+7. Child’s Pose
+8. Camel Pose
+9. Cat-Cow Pose
+10. Corpse Pose

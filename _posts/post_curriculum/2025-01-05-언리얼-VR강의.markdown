@@ -169,5 +169,58 @@ post_layout: true
     - Texture Coordinate [수평 U , 수직 V]
   
 #### `9. 밤하늘의 별을 구현하기` 
-  - Texture Sample - Star 추가하기 - Parameter : StarTexture로 바꾸기
-  - Sort Priority : 10
+<span class="image fit"><img src="/images/curriculum/UE_sky/UE_Sky_09-1.png" alt="" /></span>
+<span class="image fit"><img src="/images/curriculum/UE_sky/UE_Sky_09-2.png" alt="" /></span>
+<span class="image fit"><img src="/images/curriculum/UE_sky/UE_Sky_09-3.png" alt="" /></span>
+  - Texture Sample 
+    - Group : Star 추가하기 
+    - Parameter : StarTexture로 바꾸기
+    - Sort Priority : 10
+  - Vector Parameter : Stars Basic Settings
+    - r : StarsTiling
+    - g : StarsPanningSpeed
+    - Group : Star
+    - Sort Priority : 20
+    - R : 1 / G : 1
+  - Panner : Coordinate 
+    - Coordinate : StarsTiling * TexCoord
+    - Time (Time WithSpeed Variable) / StarsPanni ngSpeed
+    - Speed (1.0 / 0.0)
+  - Vector Parameter : StarsTint
+    - R : 1 G : 1 B : 1 / A : 1 (Brightness)
+  - StarTexture * StarsTint 
+  - CachedStarsFinalOutput :Name Route
+
+#### `10. Vertex Normal 세팅하기`
+<span class="image fit"><img src="/images/curriculum/UE_sky/UE_Sky_10.png" alt="" /></span>
+  - 머터리얼 노드에 대하여
+    - R : External Data : Data Coming from outside
+      - TexCoord
+      - CameraPosition
+      - Absolute World Position
+      - Reflection Vector
+      - Particle Color
+      - Object Orientation
+      - Object Position
+      - VertexNormalWS
+      - 기타 등등
+    - G : Native HLSL [Multiply] : Built in source code
+    - B : Material Function : Built in editor
+  - VertexNormal - Mask(B) - Multiply(-1) - Power - SkyMaskContrast - Saturate(0 ~ 1로 값 세팅)
+
+#### `11. 채널 마스크`
+ 
+  - StarTilingBreakNoise
+    - StarsTiling : R
+    - StarPanningSpeed : G
+    - StarsNoiseTiling : B
+    - StarNoiseTilingSpeed : A
+    - Sort Priority : 15
+  - StarsBasicSettings
+    - StarsNoiseTiling : B
+    - StarsNoisePanningSpeed : A
+    - Panner Connect
+  - TilingBreakNoiseUsedChannel : ChannelMaskParameter
+    - Sort Priority : 16
+  
+

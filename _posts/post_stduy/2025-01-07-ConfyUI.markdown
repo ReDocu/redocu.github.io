@@ -86,3 +86,5 @@ Layer를 사용하여 적용합니다
 
 - VAE : 미세 디테일 조정
     - https://huggingface.co/Kefasu/sd-vae-collection/tree/main
+    - https://civitai.com/models/260267?modelVersionId=293564
+    

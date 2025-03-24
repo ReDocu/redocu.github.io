@@ -1,0 +1,21 @@
+---
+layout: main  
+title:  "장래 계획 학습 로드맵"
+date:   2025-01-01 00:00:00 +0900
+categories: 로드맵
+index : 1
+post_layout: true
+---
+
+## 2025년 목표 리스트
+
+- 포트폴리오 게임 구현하기 [Unity]
+  - 슈퍼마리오 모작
+  - 뱀파이어 서바이버 모작
+- Itch.io 게임 개발 이후 등록하기
+  - Sqaure Project
+
+- 자격증
+  - 정보처리기사
+  - 한국사검정시험
+

@@ -16,6 +16,7 @@ title : main
 </section>
 
 <!-- one -->
+<!--
 <section id="one" class="spotlight style3 left">
 	<span class="image fit main bottom"><img src="images/pic04.jpg" alt="" /></span>
 	<div class="content">
@@ -45,6 +46,30 @@ title : main
 	</div>
 	<a href="#three" class="goto-next scrolly">Next</a>
 </section>
+-->
+<section id="two">
+	<div class="col-12"><span class="image fit"><img src="images/pic07.jpg" alt="" /></span></div>
+	<div class="container">
+		<div class="box alt">
+			<div class="row gtr-50 gtr-uniform">		
+				<div class="col-4 col-6-xsmall"><a href="web_game/tetris.html"><span class="image fit"><img src="images/pic02.jpg" alt="" /></span></a></div>
+				<div class="col-4 col-6-xsmall"><a href=""><span class="image fit"><img src="images/pic03.jpg" alt="" /></span></a></div>
+				<div class="col-4 col-6-xsmall"><a href=""><span class="image fit"><img src="images/pic04.jpg" alt="" /></span></a></div>
+				<!--<div class="col-4 col-6-xsmall"><a href=""><span class="image fit"><img src="images/pic04.jpg" alt="" /></span></a></div>
+				<div class="col-4 col-6-xsmall"><span class="image fit"><img src="images/pic02.jpg" alt="" /></span></div>
+				<div class="col-4 col-6-xsmall"><span class="image fit"><img src="images/pic03.jpg" alt="" /></span></div>
+				<div class="col-4 col-6-xsmall"><span class="image fit"><img src="images/pic03.jpg" alt="" /></span></div>
+				<div class="col-4 col-6-xsmall"><span class="image fit"><img src="images/pic04.jpg" alt="" /></span></div>
+				<div class="col-4 col-6-xsmall"><span class="image fit"><img src="images/pic02.jpg" alt="" /></span></div>
+				<div class="col-4 col-6-xsmall"><span class="image fit"><img src="images/pic02.jpg" alt="" /></span></div>
+				<div class="col-4 col-6-xsmall"><span class="image fit"><img src="images/pic03.jpg" alt="" /></span></div>
+				<div class="col-4 col-6-xsmall"><span class="image fit"><img src="images/pic04.jpg" alt="" /></span></div>-->
+			</div>
+		</div>
+	</div>
+</section>
+
+
 
 <!-- Four -->
 <section id="three" class="wrapper style1 special fade-up">

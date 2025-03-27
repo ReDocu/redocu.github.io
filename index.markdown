@@ -108,9 +108,9 @@ title : main
 				</section>
 				<section class="col-4 col-6-medium col-12-xsmall">
 					<span class="icon solid alt major fa-lock"></span>
-					<h3>개발 관련 취미 일기</h3>
-					<p>개발 및 중요 요소에 필요한 정보 공간</p>
-					<a href="board_diary" class="button">정보 공간으로 들어가기</a>
+					<h3>이론 학습 공간</h3>
+					<p>기초 이론 및 자격증 공부 공간입니다.</p>
+					<a href="board_theory" class="button">정보 공간으로 들어가기</a>
 				</section>
 				<section class="col-4 col-6-medium col-12-xsmall">
 					<span class="icon solid alt major fa-paper-plane"></span>

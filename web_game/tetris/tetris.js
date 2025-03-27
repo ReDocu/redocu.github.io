@@ -13,6 +13,14 @@ const COLORS = [
     'orange'        // 7: L
   ];
 
+  const sounds = {
+    clear: new Audio('Sounds/clear.wav'),
+    drop: new Audio('Sounds/drop.wav'),
+    rotate : new Audio('Sounds/rotate.wav'),
+    gameover: new Audio('Sounds/gameover.wav'),
+    // bgm: new Audio('sounds/bgm.mp3') // 배경음도 원하면
+  };
+
 
 const SHAPES = [
   // I
@@ -81,10 +89,24 @@ const board = Array.from({ length: rows }, () => Array(cols).fill(0));
 
 let score = 0;
 
+let level = 1;
+let linesClearedTotal = 0;
+let dropInterval = 500; // 초기 속도(ms)
+let dropTimer; // setInterval 핸들 저장용
+
 let piece = createRandomPiece();
+
+//dropTimer = setInterval(update, dropInterval); // 최초 시작
 
 function updateScoreDisplay() {
   document.getElementById('score').textContent = `Score: ${score}`;
+  document.getElementById('level').textContent = `Level: ${level}`;
+}
+
+function updateSpeedByLevel() {
+  dropInterval = Math.max(100, 500 - (level - 1) * 10); // 최소 100ms
+  clearInterval(dropTimer);
+  dropTimer = setInterval(update, dropInterval);
 }
 
 function createRandomPiece() {
@@ -193,26 +215,37 @@ document.addEventListener('keydown', (event) => {
         piece.shape = rotate(piece.shape);
         if (collide(board, piece)) piece.shape = prevShape;
         break;
+      case ' ': // ⏬ Spacebar = 하드 드롭
+        hardDrop();
+        break;
     }
     draw();
 });
 
 function clearLines() {
-    let linesCleared = 0;
+  let linesCleared = 0;
 
   for (let y = rows - 1; y >= 0; y--) {
     if (board[y].every(cell => cell !== 0)) {
-      board.splice(y, 1);                 // 줄 제거
-      board.unshift(Array(cols).fill(0)); // 위에 빈 줄 삽입
-      y++; // 같은 줄 다시 검사
+      board.splice(y, 1);
+      board.unshift(Array(cols).fill(0));
+      y++;
       linesCleared++;
     }
   }
 
-  // 점수 계산
   if (linesCleared > 0) {
     const points = [0, 100, 300, 500, 800];
     score += points[linesCleared];
+    linesClearedTotal += linesCleared;
+
+    // 레벨 증가: 5줄마다 1레벨 상승
+    const newLevel = Math.floor(linesClearedTotal / 5) + 1;
+    if (newLevel > level) {
+      level = newLevel;
+      updateSpeedByLevel();
+    }
+
     updateScoreDisplay();
   }
 }
@@ -232,6 +265,16 @@ function merge(board, piece) {
     });
   }
 
+  function hardDrop() {
+    while (!collide(board, piece)) {
+      piece.y++;
+    }
+    piece.y--;             // 충돌 직전까지 왔으니 한 칸 위로
+    merge(board, piece);   // 고정
+    clearLines();          // 줄 제거
+    resetPiece();          // 새 블록
+    draw();                // 화면 갱신
+  }
 
 function update() {
     piece.y++;

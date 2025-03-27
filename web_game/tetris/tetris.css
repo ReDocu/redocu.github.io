@@ -45,3 +45,10 @@
     background: #222;
     border: 2px solid #fff;
   }
+
+  #scoreboard {
+    display: flex;
+    justify-content: space-between;
+    width: 200px;
+    margin-bottom: 10px;
+  }

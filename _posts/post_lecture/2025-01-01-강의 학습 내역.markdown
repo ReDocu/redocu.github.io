@@ -1,0 +1,115 @@
+---
+layout: main  
+title:  "강의 학습 내역"
+date:   2025-01-01 00:00:00 +0900
+categories: 학습내역
+index : 1
+post_layout: true
+---
+
+
+## 유데미 강의
+
+### Unity3D [83일]
+
+`2025-04-28 - 2025-05-04 : 장애물 피하기 구현 - 1`   
+`2025-05-05 - 2025-05-11 : 로켓 부스트 - 1`   
+`2025-05-12 - 2025-05-18 : Galaxy Strike`   
+`2025-05-19 - 2025-05-25 : Royal Run`   
+`2025-05-26 - 2025-06-01 : Sharp Shooter`   
+`2025-06-02 - 2025-06-08 : 장애물 피하기 구현 - 2`   
+`2025-06-09 - 2025-06-15 : 로켓 부스트 - 2`   
+`2025-06-16 - 2025-06-22 : 아르곤 침공`   
+`2025-06-23 - 2025-06-29 : 레엄러쉬(Realm Rush)`   
+`2025-06-30 - 2025-07-06 : 좁비러너`   
+`2025-07-07 - 2025-07-13 : 휴식기 1`   
+`2025-07-14 - 2025-07-20 : 휴식기 2`   
+
+### Unity2D [41일]
+
+`2025-07-21 - 2025-07-27 : 배달드라이버`   
+`2025-07-28 - 2025-08-03 : 스노우 보더더`   
+`2025-08-04 - 2025-08-10 : 퀴즈 마스터`   
+`2025-08-11 - 2025-08-17 : 타일바니아`   
+`2025-08-18 - 2025-08-24 : 레이저 디펜더`   
+`2025-08-25 - 2025-08-31 : 휴식기 1`   
+
+--- 
+
+[일정 조율중]
+
+### Unity Core Combat
+
+### Unity Inventory System
+
+### Unity Dialog & Quest System
+
+### Unity Turn-Based Strategy Game
+
+### Unity 2D RPG Game 
+
+### Unity 2D Roguelike 
+
+### Unity 2D Farming Simulater
+
+### Unity Card Combat Game
+
+### Unity Tower Defense
+
+---
+
+### Unreal All in one Blueprint
+
+### Unreal Ultimate Developer Blueprinter
+
+### Unreal Beginner'Course
+
+### Unreal Intermediate Course
+
+### Unreal Dynamic Sky
+
+### Unreal Materials 
+
+### Unreal Niagara VFX
+
+### Unreal Cinematics & Trailers
+
+### Unreal Engine Widgets for UI
+
+### Unreal UI Design
+
+### Unreal VR Blueprint
+
+### Unreal 2D 게임 완벽 마스터
+
+### Unreal Top-Down 2D Servivors
+
+### Unreal Action Adventure Game
+
+### Unreal Ultimate Survival Horror
+
+### Unreal Gameplay Ability 
+
+---
+
+### Unreal C++ 비디오오 게임 개발
+
+### Unreal C++ Action RPG 
+
+### Unreal C++ Ultimate Game
+
+### Unreal C++ Multiplayer Shooter
+
+### Unreal C++ 멀티 플레이어 중급 게임 개발
+
+---
+
+### LLM
+
+### Vision Master
+
+### AI Influencer
+
+### Ultimate Stable Diffusion
+
+### ConfyUI

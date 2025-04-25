@@ -7,7 +7,7 @@ title : board_image
     <section>
         <div class="container">
             <div class="table-wrapper">
-                <h2>책 리스트</h2>
+                <h2>책 정리</h2>
                 <table class="alt">
                 	<thead>
                 		<tr>

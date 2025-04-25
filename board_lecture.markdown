@@ -1,26 +1,26 @@
 ---
 layout : main
-title : board_image
+title : board_card
 ---
 
 <div id="main" class="wrapper">
     <section>
         <div class="container">
             <div class="table-wrapper">
-                <h2>취미</h2>
+                <h2>강의 및 수업 내용 정리</h2>
                 <table class="alt">
                 	<thead>
                 		<tr>
-                			<th>날짜</th>
+                			<th>INDEX</th>
                 			<th>제목</th>
                 			<th>카테고리</th>
                 		</tr>
                 	</thead>
                 	<tbody>
-                		{% assign card_posts = site.posts | where_exp: "post", "post.path contains '/post_hobby/'" | sort: "index" %}
+                		{% assign card_posts = site.posts | where_exp: "post", "post.path contains '/post_lecture/'" | sort: "index" %}
                         {% for post in card_posts %}
                         <tr>
-                            <td>{{ post.date | date: "%Y-%m-%d" }}</td>
+                            <td>{{ post.index }}</td>
                             <td><a href="{{ post.url }}">{{ post.title }}</a></td>
                             <td>{{ post.categories | join: ", " }}</td>
                         </tr>

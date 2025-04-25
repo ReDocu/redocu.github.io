@@ -71,7 +71,7 @@ title : main
 					<div class="col-4 col-6-xsmall"><a href="board_book"><span class="image fit"><img src="images/Book.png" alt="" /></span></a></div>
 				</section>
 				<section class="col-4 col-6-medium col-12-xsmall">
-					<div class="col-4 col-6-xsmall"><a href="board_lecture"><span class="image fit"><img src="images/Lecture.png" alt="" /></span></a></div>
+					<div class="col-4 col-6-xsmall"><a href="board_lecture"><span class="image fit"><img src="images/lecture.png" alt="" /></span></a></div>
 				</section>
 				<section class="col-4 col-6-medium col-12-xsmall">
 					<div class="col-4 col-6-xsmall"><a href="board_research"><span class="image fit"><img src="images/Research.png" alt="" /></span></a></div>

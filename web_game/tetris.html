@@ -5,17 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="tetris/tetris.css" />
+
+    <style>
+        body {
+          background-color: #111;
+          color: white;
+          font-family: 'Segoe UI', sans-serif;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+        }
+      
+        #container {
+          display: flex;
+          gap: 40px;
+          align-items: center;
+          background: #222;
+          padding: 30px;
+          border-radius: 16px;
+          box-shadow: 0 0 20px rgba(0,0,0,0.6);
+        }
+      
+        canvas {
+          background-color: #1a1a1a;
+          border: 1px solid #555;
+          border-radius: 8px;
+        }
+      
+        #sidebar {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+          text-align: center;
+        }
+      
+        #score, #level {
+          font-size: 1.4em;
+          font-weight: bold;
+          color: #ffeb3b;
+        }
+      
+        #next {
+          width: 100px;
+          height: 100px;
+          background-color: #111;
+          border: 2px solid #666;
+          border-radius: 8px;
+          margin: 0 auto;
+        }
+      
+        h2 {
+          margin: 0;
+          font-size: 1.1em;
+          color: #bbb;
+        }
+      </style>
 </head>
 <body>
    
-    <div id="tetris">
-       
-        <canvas id="game" width="240" height="400"></canvas>
-        <div id="scoreboard">
-            <div id="score">Score: 0</div>
-            <div id="level">Level: 1</div>
+    <div id="title-screen">
+        <h1>TETRIS</h1>
+        <button id="start-button">Start Game</button>
+      </div>
+
+    <div id="outer-frame">
+        <div id="tetris">
+          <div id="game-wrapper">
+            <canvas id="game" width="240" height="400"></canvas>
           </div>
-    </div>
+      
+          <div id="sidebar">
+            <h2 class="title">TETRIS</h2> <!-- 요거 추가! -->
+            <div id="next-box">
+              <span class="label">Next</span>
+              <canvas id="next" width="100" height="100"></canvas>
+            </div>
+            <div class="stat-card" id="level">
+                <span>Level:</span><span id="level-value">1</span>
+              </div>
+            <div class="stat-card" id="score">
+                <span>Score:</span><span>0</span>
+              </div>
+              
+          </div>
+        </div>
+      </div>
 
     <script src="tetris/tetris.js"></script>
 </body>

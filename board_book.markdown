@@ -7,7 +7,7 @@ title : board_image
     <section>
         <div class="container">
             <div class="table-wrapper">
-                <h2>로드맵</h2>
+                <h2>책 리스트</h2>
                 <table class="alt">
                 	<thead>
                 		<tr>
@@ -17,7 +17,7 @@ title : board_image
                 		</tr>
                 	</thead>
                 	<tbody>
-                		{% assign card_posts = site.posts | where_exp: "post", "post.path contains '/post_roadmap/'" | sort: "index" %}
+                		{% assign card_posts = site.posts | where_exp: "post", "post.path contains '/post_book/'" | sort: "index" %}
                         {% for post in card_posts %}
                         <tr>
                             <td>{{ post.index }}</td>

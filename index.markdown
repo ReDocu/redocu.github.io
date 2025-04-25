@@ -12,7 +12,7 @@ title : main
 		</header>
 		<span class="image"><img src="images/Profile.jpg" alt="" /></span>
 	</div>
-	<a href="#one" class="goto-next scrolly">Next</a>
+	<a href="#two" class="goto-next scrolly">Next</a>
 </section>
 
 <!-- one -->
@@ -48,31 +48,24 @@ title : main
 </section>
 -->
 <section id="two">
-	<div class="col-12"><span class="image fit"><img src="images/pic07.jpg" alt="" /></span></div>
+	<div class="col-12"><span class="image fit"><img src="images/GameTitle.png" alt="" /></span></div>
 	<div class="container">
 		<div class="box alt">
 			<div class="row gtr-50 gtr-uniform">		
-				<div class="col-4 col-6-xsmall"><a href="web_game/tetris.html"><span class="image fit"><img src="images/pic02.jpg" alt="" /></span></a></div>
+				<div class="col-4 col-6-xsmall"><a href="web_game/tetris.html"><span class="image fit"><img src="images/Game/tetris_screenshot.png" alt="" /></span></a></div>
 				<div class="col-4 col-6-xsmall"><a href=""><span class="image fit"><img src="images/pic03.jpg" alt="" /></span></a></div>
 				<div class="col-4 col-6-xsmall"><a href=""><span class="image fit"><img src="images/pic04.jpg" alt="" /></span></a></div>
-				<!--<div class="col-4 col-6-xsmall"><a href=""><span class="image fit"><img src="images/pic04.jpg" alt="" /></span></a></div>
-				<div class="col-4 col-6-xsmall"><span class="image fit"><img src="images/pic02.jpg" alt="" /></span></div>
-				<div class="col-4 col-6-xsmall"><span class="image fit"><img src="images/pic03.jpg" alt="" /></span></div>
-				<div class="col-4 col-6-xsmall"><span class="image fit"><img src="images/pic03.jpg" alt="" /></span></div>
-				<div class="col-4 col-6-xsmall"><span class="image fit"><img src="images/pic04.jpg" alt="" /></span></div>
-				<div class="col-4 col-6-xsmall"><span class="image fit"><img src="images/pic02.jpg" alt="" /></span></div>
-				<div class="col-4 col-6-xsmall"><span class="image fit"><img src="images/pic02.jpg" alt="" /></span></div>
-				<div class="col-4 col-6-xsmall"><span class="image fit"><img src="images/pic03.jpg" alt="" /></span></div>
-				<div class="col-4 col-6-xsmall"><span class="image fit"><img src="images/pic04.jpg" alt="" /></span></div>-->
 			</div>
 		</div>
 	</div>
+	<a href="#three" class="goto-next scrolly">Next</a>
 </section>
 
 
 
 <!-- Four -->
 <section id="three" class="wrapper style1 special fade-up">
+<div class="col-12"><span class="image fit"><img src="images/NoteTitle.png" alt="" /></span></div>
 	<div class="container">
 		<header class="major">
 			<h2>개발 노트</h2>
@@ -98,7 +91,7 @@ title : main
 					<span class="icon solid alt major fa-comment"></span>
 					<h3>개발 목적 및 로드맵</h3>
 					<p>연도별 로드맵 및 개발 리스트</p>
-					<a href="board_roadmap" class="button">학습 일지로 들어가기</a>
+					<a href="board_book" class="button">학습 일지로 들어가기</a>
 				</section>
 				<section class="col-4 col-6-medium col-12-xsmall">
 					<span class="icon solid alt major fa-chart-area"></span>

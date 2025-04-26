@@ -1,0 +1,28 @@
+---
+layout: main  
+title:  "외부 아바타 VRPawn에 적용하기"
+date:   2025-01-02 00:00:00 +0900
+categories: 언리얼
+index : 1
+post_layout: true
+---
+
+### Mixamo 아바타 VR Pawn에 적용하기
+
+- Upper Body IK Plugin 적용
+    - Third Person을 활용하여 테스트한 결과물을 Mixamo로 적용한 결과, Avatar가 yaw 방향으로 90도 돌아가 있는 것으로 보임.
+
+`https://github.com/JonasMolgaard/UBIKSolver`
+`https://www.youtube.com/watch?v=6Xiq6w9mJaI`
+
+- 직접 FullBody IK를 적용하는 방법
+
+`https://youtu.be/917FLReU-EU`
+
+1. Pawn에 캐릭터 위치 조정하기 - offset 값 있음
+2. Animation Blueprint에서 캐릭터의 위치값 가져오기 [Scale은 가져오지 않음] - offset 값 있음
+3. Control Rig 조정하기
+
+- VR Body Component
+
+`https://youtu.be/xITLNyhLfYI`

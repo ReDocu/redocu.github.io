@@ -56,6 +56,11 @@ title : main
 <div class="col-12"><span class="image fit"><img src="images/PortFolioTitle.png" alt="" /></span></div>
 	<div class="container">
 		<div class="box alt">
+			<div class="row gtr-uniform">
+				<section class="col-4 col-6-medium col-12-xsmall">
+					<div class="col-4 col-6-xsmall"><a href="/portfolio/academy"><span class="image fit"><img src="images/Academy.png" alt="" /></span></a></div>
+				</section>
+			</div>
 		</div>
 	</div>
 	<a href="#three" class="goto-next scrolly">Next</a>
@@ -75,6 +80,9 @@ title : main
 				</section>
 				<section class="col-4 col-6-medium col-12-xsmall">
 					<div class="col-4 col-6-xsmall"><a href="board_research"><span class="image fit"><img src="images/Research.png" alt="" /></span></a></div>
+				</section>
+				<section class="col-4 col-6-medium col-12-xsmall">
+					<div class="col-4 col-6-xsmall"><a href="board_theory"><span class="image fit"><img src="images/Theory.png" alt="" /></span></a></div>
 				</section>
 				<!--<section class="col-4 col-6-medium col-12-xsmall">
 					<span class="icon solid alt major fa-lock"></span>

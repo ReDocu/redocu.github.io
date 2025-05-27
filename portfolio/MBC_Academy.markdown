@@ -6,7 +6,7 @@ content_layout: true
 
 <div class="card">
   <div class="card-top">
-    <div class="image"><a href="/data/파이썬 슈팅게임 - 몬스터를 찾아서.pdf"><img src="/images/PortFolio/몬스터를 찾아서.png"/></a></div>
+    <div class="image"><a href="/data/파이썬 슈팅게임 - 몬스터를 찾아서.pdf"><img src="/images/portfolio/몬스터를 찾아서.png"/></a></div>
     <div class="info">
       <h1>[팀프로젝트] 파이썬 슈팅게임 - 몬스터를 찾아서</h1>
       <p><strong>내용</strong> : 파이썬 문법 학습을 위한 팀 게임 프로젝트</p>
@@ -27,7 +27,7 @@ content_layout: true
 </div>
 <div class="card">
   <div class="card-top">
-    <div class="image"><a href="/data/카테고리 분석에 따른 여행지 추천.pdf"><img src="/images/PortFolio/카테고리 분석에 따른 여행지 추천.png"/></a></div>
+    <div class="image"><a href="/data/카테고리 분석에 따른 여행지 추천.pdf"><img src="/images/portfolio/카테고리 분석에 따른 여행지 추천.png"/></a></div>
     <div class="info">
       <h1>[팀프로젝트] 데이터 분석 - 여행지 추천</h1>
       <p><strong>내용</strong> : 데이터 분석 및 크롤링 연습을 위한 팀 프로젝트</p>
@@ -48,7 +48,7 @@ content_layout: true
 </div>
 <div class="card">
   <div class="card-top">
-    <div class="image"><a href="/data/늑대vs허스키 CNN 알고리즘 분석 테스트.pdf"><img src="/images/PortFolio/늑대vs허스키 CNN 알고리즘 분석 테스트.png"/></a></div>
+    <div class="image"><a href="/data/늑대vs허스키 CNN 알고리즘 분석 테스트.pdf"><img src="/images/portfolio/늑대vs허스키 CNN 알고리즘 분석 테스트.png"/></a></div>
     <div class="info">
       <h1>[팀프로젝트] 이미지 분류 - 늑대VS허스키</h1>
       <p><strong>내용</strong> : AI 모델 학습 및 적용</p>
@@ -70,7 +70,7 @@ content_layout: true
 </div>
 <div class="card">
   <div class="card-top">
-    <div class="image"><a href="/data/스팀의 세일 할인가격 예측.pdf"><img src="/images/PortFolio/스팀의 세일 할인가격 예측.png"/></a></div>
+    <div class="image"><a href="/data/스팀의 세일 할인가격 예측.pdf"><img src="/images/portfolio/스팀의 세일 할인가격 예측.png"/></a></div>
     <div class="info">
       <h1>[팀프로젝트] 머신러닝 - 스팀 세일 할인가격 예측</h1>
       <p><strong>내용</strong> : </p>
@@ -92,7 +92,7 @@ content_layout: true
 </div>
 <div class="card">
   <div class="card-top">
-    <div class="image"><a href="/data/인공지능모델적용웹사이트제작.pdf"><img src="/images/PortFolio/인공지능모델적용웹사이트제작.png"/></a></div>
+    <div class="image"><a href="/data/인공지능모델적용웹사이트제작.pdf"><img src="/images/portfolio/인공지능모델적용웹사이트제작.png"/></a></div>
     <div class="info">
       <h1>[팀프로젝트] 인공지능 모델 적용 웹사이트 제작</h1>
       <p><strong>내용</strong> : CCTV[라즈베리파이]를 활용한 학습시킨 모델을 웹사이트로 배포하기</p>

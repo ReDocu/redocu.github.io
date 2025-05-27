@@ -83,13 +83,13 @@ title : main
 		  	<div class="slider-track">
                 <div class="slider">
 		      		<a href="portfolio/MBC_Academy">
-		        	<img src="/images/PortFolio/MBC_Academy.png" alt="테트리스 1" />
+		        	<img src="/images/portfolio/MBC_Academy.png" alt="테트리스 1" />
 		        	<p>[2024년] 인공지능 아카데미</p>
 		      		</a>
 		    	</div>
 		    	<div class="slider">
 		      		<a href="portfolio/Kyungil_Academy">
-		        	<img src="/images/PortFolio/Kyungil_Academy.png" alt="테트리스 1" />
+		        	<img src="/images/portfolio/Kyungil_Academy.png" alt="테트리스 1" />
 		        	<p>[2019년] 경일 게임 아카데미</p>
 		      		</a>
 		    	</div>

@@ -6,7 +6,7 @@ content_layout: true
 
 <div class="card">
   <div class="card-top">
-    <div class="image"><a href="/data/동방플라이트.pdf"><img src="/images/PortFolio/동방플라이트.png"/></a></div>
+    <div class="image"><a href="/data/동방플라이트.pdf"><img src="/images/portfolio/동방플라이트.png"/></a></div>
     <div class="info">
       <h1> [팀프로젝트] 동방플라이트</h1>
       <p><strong>내용</strong> : 슈팅게임 프로젝트</p>
@@ -26,7 +26,7 @@ content_layout: true
 </div>
 <div class="card">
   <div class="card-top">
-    <div class="image"><a href="/data/트릭스터 택틱스 기술문서.pdf"><img src="/images/PortFolio/트릭스터 택틱스 기술문서.png"/></a></div>
+    <div class="image"><a href="/data/트릭스터 택틱스 기술문서.pdf"><img src="/images/portfolio/트릭스터 택틱스 기술문서.png"/></a></div>
     <div class="info">
       <h1>[개인프로젝트] 트릭스터 택틱스</h1>
       <p><strong>내용</strong> : 맵툴 및 택틱스 게임 구현</p>
@@ -47,7 +47,7 @@ content_layout: true
 </div>
 <div class="card">
   <div class="card-top">
-    <div class="image"><a href="/data/리그레션 기술문서.pdf"><img src="/images/PortFolio/리그레션 기술문서.png"/></a></div>
+    <div class="image"><a href="/data/리그레션 기술문서.pdf"><img src="/images/portfolio/리그레션 기술문서.png"/></a></div>
     <div class="info">
       <h1>[팀프로젝트] 리그레션</h1>
       <p><strong>내용</strong> : 테이블 RPG 게임 [보드게임] 기반 유니티 게임 프로젝트</p>
@@ -70,14 +70,14 @@ content_layout: true
     <div class="image">그림</div>
     <div class="info">
       <h1>[개인프로젝트]덕덕디펜스</h1>
-      <p><strong>내용</strong> : WINAPI 커리큘럼 및 학습 내용 교안 [참고 책 - <a href="https://product.kyobobook.co.kr/detail/S000001223357">윈도우즈 API 정복]</a></p>
+      <p><strong>내용</strong> : 명일방주 모작 디펜스게임</p>
       <p><strong>분류</strong> : UNITY 프로젝트</p>
       <p><strong>날짜</strong> : 2020</p>
-      <p><strong>다운로드</strong> : a b c</p>
+      <p><strong>플랫폼</strong> : UNITY - pc</p>
     </div>
   </div>
   <div class="card-bottom">
     <h2>부가설명</h2>
-    <p>내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용</p>
+    <p>명일방주 게임 모작으로 만든 오리 디펜스게임</p>
   </div>
 </div>

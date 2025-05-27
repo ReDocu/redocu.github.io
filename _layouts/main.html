@@ -5,38 +5,22 @@
 		<title>{{site.title}}</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="/assets/css/main.css" />
-        <noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
+		<link rel="stylesheet" href="/assets/css/style.css" />
 	</head>
-    <body class="is-preload landing">
+    <body>
 		<div id="page-wrapper">
             {% include nav.html %}
-            {% if page.post_layout %}
-            <div id="main" class="wrapper style1">
-                <div class="container">
-                    <header class="major">
-                        <h2>{{page.title}}</h2>
-                        <!--<p>{{page.date | date: "%Y-%m-%d"}}</p>-->
-                    </header>
+            {% if page.content_layout %}
+            <div style="max-width: 90%; margin: 0 auto; padding: 20px;">
             {% endif %}
 			{{content}}
             {% if page.post_layout %}
-                </div>
             </div>
             {% endif %}
-            {% include footer.html %}
-        </div>
-        
-		<!-- Scripts -->
-       
-        <script src="/assets/js/jquery.min.js"></script>
-        <script src="/assets/js/jquery.scrolly.min.js"></script>
-        <script src="/assets/js/jquery.dropotron.min.js"></script>
-        <script src="/assets/js/jquery.scrollex.min.js"></script>
-        <script src="/assets/js/browser.min.js"></script>
-        <script src="/assets/js/breakpoints.min.js"></script>
-        <script src="/assets/js/util.js"></script>
-        <script src="/assets/js/main.js"></script>
 
+        </div>
+            {% include footer.html %}        
+		<!-- Scripts -->
+        <script src="/assets/js/main.js"></script>
     </body>
 </html>

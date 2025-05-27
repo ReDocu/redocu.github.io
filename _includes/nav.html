@@ -1,23 +1,16 @@
-<header id="header">
-    <h1 id="logo"><a href="/">{{site.title}}</a></h1>
-    <nav id="nav">
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li>
-                <a href="#">Introduce</a>
-                <ul>
-                    <li><a href="/#WebGame">Web Game</a></li>
-                    <li><a href="/#PortFolio">PortFolio</a></li>
-                    <li>
-                        <a href="/#DevelopNote">Develop Node</a>
-                        <ul>
-                            <li><a href="board_book">Book</a></li>
-                            <li><a href="board_lecture">Lecture</a></li>
-                            <li><a href="board_research">Research</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </nav>
+<header class="navbar">
+    <div class="nav-left">
+  <a href="/" style="text-decoration: none; color: inherit;">Re_Docu</a>
+</div>
+    {% if page.url == "/" %}
+    <div class="nav-right">
+        <select onchange="location.href=this.value">
+            <option selected disabled>이동하기</option>
+            <option value="#profile">프로필</option>
+            <option value="#webgame">웹게임</option>
+            <option value="#portfolio">포트폴리오</option>
+            <option value="#blog">블로그</option>
+        </select>
+    </div>
+    {% endif %}
 </header>

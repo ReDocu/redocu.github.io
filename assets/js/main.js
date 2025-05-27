@@ -1,250 +1,78 @@
-/*
-	Landed by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-*/
-
-(function($) {
-
-	var	$window = $(window),
-		$body = $('body');
-
-	// Breakpoints.
-		breakpoints({
-			xlarge:   [ '1281px',  '1680px' ],
-			large:    [ '981px',   '1280px' ],
-			medium:   [ '737px',   '980px'  ],
-			small:    [ '481px',   '736px'  ],
-			xsmall:   [ null,      '480px'  ]
-		});
-
-	// Play initial animations on page load.
-		$window.on('load', function() {
-			window.setTimeout(function() {
-				$body.removeClass('is-preload');
-			}, 100);
-		});
-
-	// Touch mode.
-		if (browser.mobile)
-			$body.addClass('is-touch');
-
-	// Scrolly links.
-		$('.scrolly').scrolly({
-			speed: 2000
-		});
-
-	// Dropdowns.
-		$('#nav > ul').dropotron({
-			alignment: 'right',
-			hideDelay: 350
-		});
-
-	// Nav.
-
-		// Title Bar.
-			$(
-				'<div id="titleBar">' +
-					'<a href="#navPanel" class="toggle"></a>' +
-					'<span class="title">' + $('#logo').html() + '</span>' +
-				'</div>'
-			)
-				.appendTo($body);
-
-		// Panel.
-			$(
-				'<div id="navPanel">' +
-					'<nav>' +
-						$('#nav').navList() +
-					'</nav>' +
-				'</div>'
-			)
-				.appendTo($body)
-				.panel({
-					delay: 500,
-					hideOnClick: true,
-					hideOnSwipe: true,
-					resetScroll: true,
-					resetForms: true,
-					side: 'left',
-					target: $body,
-					visibleClass: 'navPanel-visible'
-				});
-
-	// Parallax.
-	// Disabled on IE (choppy scrolling) and mobile platforms (poor performance).
-		if (browser.name == 'ie'
-		||	browser.mobile) {
-
-			$.fn._parallax = function() {
-
-				return $(this);
-
-			};
-
-		}
-		else {
-
-			$.fn._parallax = function() {
-
-				$(this).each(function() {
-
-					var $this = $(this),
-						on, off;
-
-					on = function() {
-
-						$this
-							.css('background-position', 'center 0px');
-
-						$window
-							.on('scroll._parallax', function() {
-
-								var pos = parseInt($window.scrollTop()) - parseInt($this.position().top);
-
-								$this.css('background-position', 'center ' + (pos * -0.15) + 'px');
-
-							});
-
-					};
-
-					off = function() {
-
-						$this
-							.css('background-position', '');
-
-						$window
-							.off('scroll._parallax');
-
-					};
-
-					breakpoints.on('<=medium', off);
-					breakpoints.on('>medium', on);
-
-				});
-
-				return $(this);
-
-			};
-
-			$window
-				.on('load resize', function() {
-					$window.trigger('scroll');
-				});
-
-		}
-
-	// Spotlights.
-		var $spotlights = $('.spotlight');
-
-		$spotlights
-			._parallax()
-			.each(function() {
-
-				var $this = $(this),
-					on, off;
-
-				on = function() {
-
-					var top, bottom, mode;
-
-					// Use main <img>'s src as this spotlight's background.
-						$this.css('background-image', 'url("' + $this.find('.image.main > img').attr('src') + '")');
-
-					// Side-specific scrollex tweaks.
-						if ($this.hasClass('top')) {
-
-							mode = 'top';
-							top = '-20%';
-							bottom = 0;
-
-						}
-						else if ($this.hasClass('bottom')) {
-
-							mode = 'bottom-only';
-							top = 0;
-							bottom = '20%';
-
-						}
-						else {
-
-							mode = 'middle';
-							top = 0;
-							bottom = 0;
-
-						}
-
-					// Add scrollex.
-						$this.scrollex({
-							mode:		mode,
-							top:		top,
-							bottom:		bottom,
-							initialize:	function(t) { $this.addClass('inactive'); },
-							terminate:	function(t) { $this.removeClass('inactive'); },
-							enter:		function(t) { $this.removeClass('inactive'); },
-
-							// Uncomment the line below to "rewind" when this spotlight scrolls out of view.
-
-							//leave:	function(t) { $this.addClass('inactive'); },
-
-						});
-
-				};
-
-				off = function() {
-
-					// Clear spotlight's background.
-						$this.css('background-image', '');
-
-					// Remove scrollex.
-						$this.unscrollex();
-
-				};
-
-				breakpoints.on('<=medium', off);
-				breakpoints.on('>medium', on);
-
-			});
-
-	// Wrappers.
-		var $wrappers = $('.wrapper');
-
-		$wrappers
-			.each(function() {
-
-				var $this = $(this),
-					on, off;
-
-				on = function() {
-
-					$this.scrollex({
-						top:		250,
-						bottom:		0,
-						initialize:	function(t) { $this.addClass('inactive'); },
-						terminate:	function(t) { $this.removeClass('inactive'); },
-						enter:		function(t) { $this.removeClass('inactive'); },
-
-						// Uncomment the line below to "rewind" when this wrapper scrolls out of view.
-
-						//leave:	function(t) { $this.addClass('inactive'); },
-
-					});
-
-				};
-
-				off = function() {
-					$this.unscrollex();
-				};
-
-				breakpoints.on('<=medium', off);
-				breakpoints.on('>medium', on);
-
-			});
-
-	// Banner.
-		var $banner = $('#banner');
-
-		$banner
-			._parallax();
-
-})(jQuery);
+document.addEventListener("DOMContentLoaded", () => {
+  const sliders = document.querySelectorAll(".slider-container");
+
+  sliders.forEach((container) => {
+    const wrapper = container.querySelector(".slider-wrapper");
+    const track = container.querySelector(".slider-track");
+    const prevBtn = container.querySelector(".slider-btn.left");
+    const nextBtn = container.querySelector(".slider-btn.right");
+    const dotsContainer = container.querySelector(".slider-dots");
+    const slides = container.querySelectorAll(".slider");
+    const slideWidth = 360 + 32; // 슬라이드 + gap
+    let scrollPos = 0;
+    let currentIndex = 0;
+
+    // 🔁 자동 슬라이드
+    const autoScroll = () => {
+      currentIndex = (currentIndex + 1) % slides.length;
+      scrollPos = slideWidth * currentIndex;
+      wrapper.scrollTo({ left: scrollPos, behavior: "smooth" });
+      updateDots(currentIndex);
+    };
+    setInterval(autoScroll, 3000);
+
+    // ◀️▶️ 버튼 이동
+    prevBtn.addEventListener("click", () => {
+      currentIndex = Math.max(0, currentIndex - 1);
+      scrollPos = slideWidth * currentIndex;
+      wrapper.scrollTo({ left: scrollPos, behavior: "smooth" });
+      updateDots(currentIndex);
+    });
+
+    nextBtn.addEventListener("click", () => {
+      currentIndex = Math.min(slides.length - 1, currentIndex + 1);
+      scrollPos = slideWidth * currentIndex;
+      wrapper.scrollTo({ left: scrollPos, behavior: "smooth" });
+      updateDots(currentIndex);
+    });
+
+    // 👀 버튼 표시 여부
+    const updateArrowVisibility = () => {
+      if (track.scrollWidth > wrapper.clientWidth) {
+        prevBtn.style.display = "block";
+        nextBtn.style.display = "block";
+      } else {
+        prevBtn.style.display = "none";
+        nextBtn.style.display = "none";
+      }
+    };
+
+    updateArrowVisibility();
+    window.addEventListener("resize", updateArrowVisibility);
+
+    // ⭕ DOT 생성 및 클릭 이벤트 연결
+    const updateDots = (activeIndex) => {
+      if (!dotsContainer) return;
+      dotsContainer.querySelectorAll(".dot").forEach((dot, idx) => {
+        dot.classList.toggle("active", idx === activeIndex);
+      });
+    };
+
+    if (dotsContainer) {
+      slides.forEach((_, index) => {
+        const dot = document.createElement("span");
+        dot.classList.add("dot");
+        if (index === 0) dot.classList.add("active");
+
+        dot.addEventListener("click", () => {
+          currentIndex = index;
+          scrollPos = slideWidth * index;
+          wrapper.scrollTo({ left: scrollPos, behavior: "smooth" });
+          updateDots(index);
+        });
+
+        dotsContainer.appendChild(dot);
+      });
+    }
+  });
+});

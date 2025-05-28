@@ -1,0 +1,99 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  text-align: center;
+  background-color: #faf8ef;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+  color: #776e65;
+}
+
+#game-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#grid {
+  position: relative;
+  width: 430px;
+  height: 430px;
+  display: grid;
+  grid-template-columns: repeat(4, 100px);
+  grid-template-rows: repeat(4, 100px);
+  gap: 10px;
+  background-color: #bbada0;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.tile-container {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  transition: transform 0.15s ease-in-out;
+}
+
+.tile {
+  width: 100px;
+  height: 100px;
+  font-size: 32px;
+  font-weight: bold;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #cdc1b4;
+  color: #776e65;
+  transition: all 0.2s ease;
+}
+
+#score {
+  margin-top: 20px;
+  font-size: 24px;
+}
+
+#game-over {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(238, 228, 218, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+#game-over.hidden {
+  display: none;
+}
+
+#game-over .message {
+  background: #f2b179;
+  padding: 40px;
+  border-radius: 10px;
+  font-size: 24px;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+#game-over button {
+  margin-top: 20px;
+  font-size: 18px;
+  padding: 10px 20px;
+  border: none;
+  background: #8f7a66;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}

@@ -67,13 +67,13 @@ content_layout: true
 </div>
 <div class="card">
   <div class="card-top">
-    <div class="image">그림</div>
+    <div class="image"><a href="/data/덕덕 디펜스 기술문서.pdf"><img src="/images/portfolio/덕덕 디펜스 기술문서.png"/></a></div>
     <div class="info">
       <h1>[개인프로젝트]덕덕디펜스</h1>
       <p><strong>내용</strong> : 명일방주 모작 디펜스게임</p>
       <p><strong>분류</strong> : UNITY 프로젝트</p>
       <p><strong>날짜</strong> : 2020</p>
-      <p><strong>플랫폼</strong> : UNITY - pc</p>
+      <p><strong>플랫폼</strong> : UNITY - PC</p>
     </div>
   </div>
   <div class="card-bottom">

@@ -29,6 +29,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
     WndClass.cbClsExtra = 0;
     WndClass.cbWndExtra = 0;
     WndClass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
+    WndClass.hbrBackground = CreateSolidBrush(RGB(0,0,255));
+    WndClass.hbrBackground = CreateHatchBrush(HS_DIAGCROSS,RGB(255,0,0));
     WndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
     WndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
     WndClass.hInstance = hInstance;

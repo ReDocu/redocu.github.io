@@ -65,7 +65,7 @@ title : main
           			</a>
         		</div>
                 <div class="slider">
-          			<a href="web_game/tetris.html" target="_blank">
+          			<a href="web_game/2048.html" target="_blank">
             			<img src="/images/Game/2048_screenshot.png" alt="테트리스" />
             			<p>2048 게임</p>
           			</a>
@@ -96,13 +96,13 @@ title : main
                 <div class="slider">
 		      		<a href="portfolio/MBC_Academy">
 		        	<img src="/images/portfolio/MBC_Academy.png" alt="인공지능" />
-		        	<p>[2024년] 인공지능 아카데미 (7개월)</p>
+		        	<p>[2024년] 인공지능 아카데미 교육생(7개월)</p>
 		      		</a>
 		    	</div>
 		    	<div class="slider">
 		      		<a href="portfolio/Kyungil_Academy">
 		        	<img src="/images/portfolio/Kyungil_Academy.png" alt="게임아카데미" />
-		        	<p>[2019년] 게임 아카데미 (6개월)</p>
+		        	<p>[2019년] 게임 아카데미 교육생(6개월)</p>
 		      		</a>
 		    	</div>
 			</div>

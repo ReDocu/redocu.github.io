@@ -51,3 +51,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 
     return (int)Message.wParam;
 }
+
+
+git clone https://huggingface.co/Kefasu/sd-vae-collection
+git clone https://huggingface.co/lllyasviel/ControlNet-v1-1

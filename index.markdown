@@ -86,20 +86,21 @@ title : main
 	<h2>포트폴리오</h2>
  	<div class="slider-container" id="sliderWrapper">
 		<div class="slider-wrapper" id="sliderTrack">
+      <!--
 		  	<div class="slider-track">
                 <div class="slider">
 		      		<a href="portfolio/Single_Development">
 		        	<img src="/images/portfolio/Single_Development.png" alt="테트리스 1" />
-		        	<p>[2025년] 개인프로젝트 (3개월)</p>
+		        	<p>[2025년 7월] 개인프로젝트 - 진행중</p>
 		      		</a>
 		    	</div>
-                <div class="slider">
+          -->
+            <div class="slider">
 		      		<a href="portfolio/MBC_Academy">
 		        	<img src="/images/portfolio/MBC_Academy.png" alt="인공지능" />
 		        	<p>[2024년] 인공지능 아카데미 교육생(7개월)</p>
 		      		</a>
-		    	</div>
-		    	<div class="slider">
+		    	</div>  		    	<div class="slider">
 		      		<a href="portfolio/Kyungil_Academy">
 		        	<img src="/images/portfolio/Kyungil_Academy.png" alt="게임아카데미" />
 		        	<p>[2019년] 게임 아카데미 교육생(6개월)</p>
@@ -117,6 +118,7 @@ title : main
 	</div>
 </section>
 <!-- 개인학습 -->
+<!--
 <section id="blog"> 
 <h2>개인학습</h2>
  	<div class="slider-container">
@@ -136,12 +138,11 @@ title : main
         </div>
       </div>
     </div>
-	<!-- dot 네비게이션 -->
     <div class="slider-dots"></div>
-    <!-- 좌우 화살표 버튼 -->
     <div class="slider-controls">
       <button class="slider-btn left">←</button>
       <button class="slider-btn right">→</button>
     </div>
   </div>
 </section>
+-->

@@ -13,7 +13,7 @@ title : main
             <p class="desc">프로그래밍 강사 지망생 <em>(Aspiring Instructor)</em></p>
 			<br/>
             <p class="contact">
-                <a href="https://github.com/ReDocu" target="_blank">GitHub: ReDocu</a><br/>
+                <!--<a href="https://github.com/ReDocu" target="_blank">GitHub: ReDocu</a><br/>-->
 				<br/>
                 <a href="mailto:dlehrb103@gmail.com">dlehrb103@gmail.com</a>
             </p>
@@ -24,7 +24,7 @@ title : main
     </div>
     <!-- 하단: 스킬 바 전체 너비로 -->
     <div class="skills">
-        <h3>루팡 경력 : 3년</h3>
+        <h3>경력 : 3년</h3>
         <div class="skill"><span>Unity & C#</span>
             <div class="bar">
                 <div class="fill" style="width: 80%;"></div>

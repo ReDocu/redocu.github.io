@@ -10,13 +10,15 @@ title : main
             <h2>안녕하세요, 저는 <span class="highlight">Re_Docu</span>입니다!</h2>
             <p class="role">ICT 융합공학을 전공한 <strong>게임 클라이언트 개발자</strong></p>
             <p class="desc">글쟁이 개발자 <em>(A Coding Scribbler)</em></p>
-            <p class="desc">프로그래밍 강사 지망생 <em>(Aspiring Instructor)</em></p>
-			<br/>
+            <p class="desc">프로그래밍 강사 지망생 <em>(Aspiring Instructor)</em></p><br/>
             <p class="contact">
-                <!--<a href="https://github.com/ReDocu" target="_blank">GitHub: ReDocu</a><br/>-->
-				<br/>
+                <!--<a href="https://github.com/ReDocu" target="_blank">GitHub: ReDocu</a><br/>--><br/>
                 <a href="mailto:dlehrb103@gmail.com">dlehrb103@gmail.com</a>
             </p>
+            <h2>메인 포트폴리오 - LMS 프로젝트</h2>
+            <p class="contact"><a href="https://github.com/ReDocu/LMS_Python">LMS Python</a></p>
+            <p class="contact"><a href="https://github.com/ReDocu/LMS_Unity">LMS Unity</a></p>
+            <p class="role">LMS Unreal(개발계획)</p>
         </div>
         <div class="profile-image">
             <img src="images/Profile.jpg" alt="Re_Docu 프로필 이미지">
@@ -54,7 +56,7 @@ title : main
 </section>
 <!-- 웹게임 -->
 <section id="webgame">
-  	<h2>웹게임</h2>
+  	<h2>웹게임 - 바이브코딩 테스트</h2>
   	<div class="slider-container">
     	<div class="slider-wrapper">
       		<div class="slider-track">
@@ -64,11 +66,23 @@ title : main
             			<p>테트리스</p>
           			</a>
         		</div>
-                <div class="slider">
-          			<a href="web_game/2048.html" target="_blank">
-            			<img src="/images/Game/2048_screenshot.png" alt="테트리스" />
-            			<p>2048 게임</p>
-          			</a>
+            <div class="slider">
+          		<a href="web_game/2048.html" target="_blank">
+            		<img src="/images/Game/2048_screenshot.png" alt="2048" />
+            		<p>2048 게임</p>
+          		</a>
+        		</div>
+            <div class="slider">
+          		<a href="web_game/alcanoid.html" target="_blank">
+            		<img src="/images/Game/acanoid_screenshot.png" alt="알카노이드" />
+            		<p>알카노이드</p>
+          		</a>
+        		</div>
+            <div class="slider">
+          		<a href="web_game/shooting.html" target="_blank">
+            		<img src="/images/Game/shooting_screenshot.png" alt="슈팅게임" />
+            		<p>슈팅게임</p>
+          		</a>
         		</div>
         	</div>
     	</div>
@@ -83,39 +97,32 @@ title : main
 </section>
 <!-- 포트폴리오 -->
 <section id="portfolio">
-	<h2>포트폴리오</h2>
- 	<div class="slider-container" id="sliderWrapper">
-		<div class="slider-wrapper" id="sliderTrack">
-      <!--
-		  	<div class="slider-track">
-                <div class="slider">
-		      		<a href="portfolio/Single_Development">
-		        	<img src="/images/portfolio/Single_Development.png" alt="테트리스 1" />
-		        	<p>[2025년 7월] 개인프로젝트 - 진행중</p>
-		      		</a>
-		    	</div>
-          -->
-            <div class="slider">
+  	<h2>포트폴리오 요약</h2>
+  	<div class="slider-container">
+    	<div class="slider-wrapper">
+      		<div class="slider-track">
+        		<div class="slider">
 		      		<a href="portfolio/MBC_Academy">
 		        	<img src="/images/portfolio/MBC_Academy.png" alt="인공지능" />
 		        	<p>[2024년] 인공지능 아카데미 교육생(7개월)</p>
 		      		</a>
-		    	</div>  		    	<div class="slider">
+		    	  </div>
+            <div class="slider">
 		      		<a href="portfolio/Kyungil_Academy">
 		        	<img src="/images/portfolio/Kyungil_Academy.png" alt="게임아카데미" />
 		        	<p>[2019년] 게임 아카데미 교육생(6개월)</p>
 		      		</a>
-		    	</div>
-			</div>
-		</div>
+		    	  </div>
+        	</div>
+    	</div>
 		<!-- dot 네비게이션 -->
-    <div class="slider-dots"></div>
-		<!-- 좌우 화살표 버튼 -->
-    <div class="slider-controls">
-      <button class="slider-btn left">←</button>
-      <button class="slider-btn right">→</button>
-    </div>
-	</div>
+    	<div class="slider-dots"></div>
+    	<!-- 좌우 화살표 버튼 -->
+    	<div class="slider-controls">
+      		<button class="slider-btn left">←</button>
+      		<button class="slider-btn right">→</button>
+    	</div>
+  	</div>
 </section>
 <!-- 개인학습 -->
 <!--

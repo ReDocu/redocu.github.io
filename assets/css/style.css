@@ -189,17 +189,15 @@ section {
 }
 
 .slider-wrapper {
-  display: flex;         /* ✅ 추가 */
-  justify-content: center; /* ✅ 추가 */
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
-  padding: 1rem 0;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
   width: 100%;
+  padding: 0 calc(50% - 180px);
 }
 
 .slider-wrapper::-webkit-scrollbar {
@@ -207,9 +205,10 @@ section {
 }
 
 .slider-track {
-  display: flex;
+  display: flex;          /* 여기서만 flex 처리 */
   gap: 2rem;
   padding: 1rem;
+   justify-content: center;   /* 아이템들을 가운데 정렬 */
 }
 
 .slider {
@@ -288,10 +287,27 @@ section {
   background-color: #ff9800;
 }
 
-/* 📱 모바일 대응 */
+/* 모바일 대응 */
 @media (max-width: 768px) {
+  .slider-wrapper {
+    padding: 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;   /* 스냅 유지 */
+    scroll-padding-inline: 0;        /* 좌우 패딩 스냅 기준 제거 */
+  }
+
+  .slider-track {
+    display: flex;
+    justify-content: flex-start;      /* 가운데 정렬 금지! (이게 반 갈라 보이게 함) */
+    gap: 1rem;                           /* 카드 사이 여백 제거(원하면 조정) */
+  }
+
   .slider {
-    width: 100%;
+    flex: 0 0 100%;                   /* 한 카드 = 랩퍼 너비 100% */
+    max-width: 100%;
+    margin: 0 auto;
+    scroll-snap-align: center;        /* 항상 중앙에 안착 */
+    scroll-snap-stop: always;         /* 건너뛰기 방지 */
   }
 }
 

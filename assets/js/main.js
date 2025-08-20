@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentIndex = 0;
 
     // 🔁 자동 슬라이드
+    /*
     const autoScroll = () => {
       currentIndex = (currentIndex + 1) % slides.length;
       scrollPos = slideWidth * currentIndex;
@@ -20,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
       updateDots(currentIndex);
     };
     setInterval(autoScroll, 3000);
-
+*/
     // ◀️▶️ 버튼 이동
     prevBtn.addEventListener("click", () => {
       currentIndex = Math.max(0, currentIndex - 1);

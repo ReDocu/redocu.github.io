@@ -1,79 +1,139 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const sliders = document.querySelectorAll(".slider-container");
 
-  sliders.forEach((container) => {
-    const wrapper = container.querySelector(".slider-wrapper");
-    const track = container.querySelector(".slider-track");
-    const prevBtn = container.querySelector(".slider-btn.left");
-    const nextBtn = container.querySelector(".slider-btn.right");
-    const dotsContainer = container.querySelector(".slider-dots");
-    const slides = container.querySelectorAll(".slider");
-    const slideWidth = 360 + 32; // 슬라이드 + gap
-    let scrollPos = 0;
-    let currentIndex = 0;
+const body = document.body;
+const themeToggle = document.getElementById('themeToggle');
+const mobileNavToggle = document.getElementById('mobileNavToggle');
+const mobileNavPanel = document.getElementById('mobileNavPanel');
+const moreMenuToggle = document.getElementById('moreMenuToggle');
+const moreMenuPanel = document.getElementById('moreMenuPanel');
 
-    // 🔁 자동 슬라이드
-    /*
-    const autoScroll = () => {
-      currentIndex = (currentIndex + 1) % slides.length;
-      scrollPos = slideWidth * currentIndex;
-      wrapper.scrollTo({ left: scrollPos, behavior: "smooth" });
-      updateDots(currentIndex);
-    };
-    setInterval(autoScroll, 3000);
-*/
-    // ◀️▶️ 버튼 이동
-    prevBtn.addEventListener("click", () => {
-      currentIndex = Math.max(0, currentIndex - 1);
-      scrollPos = slideWidth * currentIndex;
-      wrapper.scrollTo({ left: scrollPos, behavior: "smooth" });
-      updateDots(currentIndex);
-    });
+const STORAGE_KEY = 'portfolio-theme';
 
-    nextBtn.addEventListener("click", () => {
-      currentIndex = Math.min(slides.length - 1, currentIndex + 1);
-      scrollPos = slideWidth * currentIndex;
-      wrapper.scrollTo({ left: scrollPos, behavior: "smooth" });
-      updateDots(currentIndex);
-    });
+function applyTheme(theme) {
+  const isDark = theme === 'dark';
+  body.classList.toggle('dark-mode', isDark);
+  themeToggle.setAttribute('aria-pressed', String(isDark));
+  const icon = themeToggle.querySelector('.theme-toggle__icon');
+  if (icon) icon.textContent = isDark ? '☀' : '☾';
+}
 
-    // 👀 버튼 표시 여부
-    const updateArrowVisibility = () => {
-      if (track.scrollWidth > wrapper.clientWidth) {
-        prevBtn.style.display = "block";
-        nextBtn.style.display = "block";
-      } else {
-        prevBtn.style.display = "none";
-        nextBtn.style.display = "none";
-      }
-    };
+function initTheme() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  applyTheme(saved === 'dark' ? 'dark' : 'light');
+}
 
-    updateArrowVisibility();
-    window.addEventListener("resize", updateArrowVisibility);
+function closeMoreMenu() {
+  if (!moreMenuToggle || !moreMenuPanel) return;
+  moreMenuToggle.setAttribute('aria-expanded', 'false');
+  moreMenuPanel.hidden = true;
+}
 
-    // ⭕ DOT 생성 및 클릭 이벤트 연결
-    const updateDots = (activeIndex) => {
-      if (!dotsContainer) return;
-      dotsContainer.querySelectorAll(".dot").forEach((dot, idx) => {
-        dot.classList.toggle("active", idx === activeIndex);
-      });
-    };
+function openMoreMenu() {
+  if (!moreMenuToggle || !moreMenuPanel) return;
+  moreMenuToggle.setAttribute('aria-expanded', 'true');
+  moreMenuPanel.hidden = false;
+}
 
-    if (dotsContainer) {
-      slides.forEach((_, index) => {
-        const dot = document.createElement("span");
-        dot.classList.add("dot");
-        if (index === 0) dot.classList.add("active");
+function toggleMoreMenu() {
+  const isOpen = moreMenuToggle.getAttribute('aria-expanded') === 'true';
+  if (isOpen) closeMoreMenu();
+  else openMoreMenu();
+}
 
-        dot.addEventListener("click", () => {
-          currentIndex = index;
-          scrollPos = slideWidth * index;
-          wrapper.scrollTo({ left: scrollPos, behavior: "smooth" });
-          updateDots(index);
-        });
+function closeMobileNav() {
+  if (!mobileNavToggle || !mobileNavPanel) return;
+  mobileNavToggle.setAttribute('aria-expanded', 'false');
+  mobileNavPanel.hidden = true;
+}
 
-        dotsContainer.appendChild(dot);
-      });
-    }
+function toggleMobileNav() {
+  const isOpen = mobileNavToggle.getAttribute('aria-expanded') === 'true';
+  mobileNavToggle.setAttribute('aria-expanded', String(!isOpen));
+  mobileNavPanel.hidden = isOpen;
+}
+
+themeToggle?.addEventListener('click', () => {
+  const next = body.classList.contains('dark-mode') ? 'light' : 'dark';
+  localStorage.setItem(STORAGE_KEY, next);
+  applyTheme(next);
+});
+
+mobileNavToggle?.addEventListener('click', (event) => {
+  event.stopPropagation();
+  toggleMobileNav();
+});
+
+moreMenuToggle?.addEventListener('click', (event) => {
+  event.stopPropagation();
+  toggleMoreMenu();
+});
+
+moreMenuPanel?.querySelectorAll('a').forEach((link) => {
+  link.addEventListener('click', () => {
+    closeMoreMenu();
   });
 });
+
+document.querySelectorAll('.mobile-nav a, .main-nav a').forEach((link) => {
+  link.addEventListener('click', () => {
+    closeMobileNav();
+    closeMoreMenu();
+  });
+});
+
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 1080) {
+    closeMobileNav();
+  }
+  closeMoreMenu();
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    closeMoreMenu();
+    closeMobileNav();
+  }
+});
+
+document.addEventListener('click', (event) => {
+  if (!event.target.closest('.more-menu')) {
+    closeMoreMenu();
+  }
+  if (window.innerWidth <= 1080 && !event.target.closest('.site-header')) {
+    closeMobileNav();
+  }
+});
+
+document.querySelectorAll('[data-slider]').forEach((slider) => {
+  const track = slider.querySelector('.slider-track');
+  const leftArrow = slider.querySelector('.slider-arrow--left');
+  const rightArrow = slider.querySelector('.slider-arrow--right');
+  if (!track || !leftArrow || !rightArrow) return;
+
+  const scrollAmount = () => Math.min(track.clientWidth * 0.9, 420);
+
+  leftArrow.addEventListener('click', () => {
+    track.scrollBy({ left: -scrollAmount(), behavior: 'smooth' });
+  });
+
+  rightArrow.addEventListener('click', () => {
+    track.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
+  });
+
+  slider.addEventListener('mousemove', (event) => {
+    const rect = slider.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const edgeZone = Math.min(120, rect.width * 0.18);
+    const nearLeft = x <= edgeZone;
+    const nearRight = x >= rect.width - edgeZone;
+
+    leftArrow.classList.toggle('is-visible', nearLeft);
+    rightArrow.classList.toggle('is-visible', nearRight);
+  });
+
+  slider.addEventListener('mouseleave', () => {
+    leftArrow.classList.remove('is-visible');
+    rightArrow.classList.remove('is-visible');
+  });
+});
+
+initTheme();

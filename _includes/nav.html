@@ -1,16 +1,50 @@
-<header class="navbar">
-    <div class="nav-left">
-  <a href="/" style="text-decoration: none; color: inherit;">Re_Docu</a>
-</div>
-    {% if page.url == "/" %}
-    <div class="nav-right">
-        <select onchange="location.href=this.value">
-            <option selected disabled>이동하기</option>
-            <option value="#profile">프로필</option>
-            <option value="#webgame">웹게임</option>
-            <option value="#portfolio">포트폴리오</option>
-            <option value="#blog">블로그</option>
-        </select>
+<a class="skip-link" href="#main">본문 바로가기</a>
+
+<header class="site-header" id="top">
+  <div class="container nav-wrap">
+    <a href="#hero" class="logo" aria-label="홈으로 이동">
+      <span class="logo-mark">D</span>
+      <span class="logo-text">DOCU PORTFOLIO</span>
+    </a>
+    <nav class="main-nav" aria-label="주요 메뉴">
+      <a href="#hero">Home</a>
+      <a href="#profile">Profile</a>
+      <a href="#ebooks">전자책</a>
+      <a href="#learning">학습 웹사이트</a>
+      <a href="#games">게임</a>
+      <a href="#projects">프로젝트</a>
+      <a href="#others">기타</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn theme-toggle" id="themeToggle" type="button" aria-label="다크모드 전환" aria-pressed="false">
+        <span class="theme-toggle__icon" aria-hidden="true">☾</span>
+      </button>
+      <div class="more-menu">
+        <button class="icon-btn menu-toggle" id="moreMenuToggle" type="button" aria-expanded="false" aria-controls="moreMenuPanel" aria-label="기타 웹페이지 링크 열기">
+          <span aria-hidden="true">☰</span>
+        </button>
+        <div class="more-menu__panel" id="moreMenuPanel" hidden>
+          <a href="https://example.com/page-1" target="_blank" rel="noopener">기타 페이지 01</a>
+          <a href="https://example.com/page-2" target="_blank" rel="noopener">기타 페이지 02</a>
+          <a href="https://example.com/page-3" target="_blank" rel="noopener">기타 페이지 03</a>
+        </div>
+      </div>
+      <button class="icon-btn mobile-nav-toggle" id="mobileNavToggle" type="button" aria-expanded="false" aria-controls="mobileNavPanel" aria-label="모바일 메뉴 열기">
+        <span aria-hidden="true">≡</span>
+      </button>
     </div>
-    {% endif %}
+  </div>
+  <div class="mobile-nav" id="mobileNavPanel" hidden>
+    <div class="container mobile-nav__inner">
+      <a href="#hero">Home</a>
+      <a href="#profile">Profile</a>
+      <a href="#ebooks">전자책</a>
+      <a href="#learning">학습 웹사이트</a>
+      <a href="#games">게임</a>
+      <a href="#projects">프로젝트</a>
+      <a href="#others">기타</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
 </header>

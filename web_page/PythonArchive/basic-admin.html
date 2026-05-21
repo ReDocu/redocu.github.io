@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>기초 개념 관리 - Python Algorithm Archive</title>
+  <script>
+    document.documentElement.dataset.theme =
+      localStorage.getItem("algoArchive.theme") ||
+      (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="js/data.js"></script>
+  <script defer src="js/basicConcepts.js"></script>
+  <script defer src="js/basicAdmin.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="메인으로 이동">
+      <span class="brand-mark">Py</span>
+      <span>
+        <strong>Python Archive</strong>
+        <small>concept admin</small>
+      </span>
+    </a>
+    <nav class="nav">
+      <a href="index.html">문제</a>
+      <a href="basics.html">기초 개념</a>
+      <a href="contest.html">대회</a>
+      <a class="active" href="admin.html">관리</a>
+    </nav>
+    <button class="icon-button" id="themeToggle" type="button" aria-label="다크모드 전환" title="다크모드 전환">
+      <span data-theme-icon>☾</span>
+    </button>
+  </header>
+
+  <main class="shell">
+    <section class="page-head">
+      <div>
+        <p class="eyebrow">기초 개념 관리자</p>
+        <h1>기초 개념 페이지 전체 수정</h1>
+        <p class="lead">목록 카드, 상세 설명, 참고 코드, 예제 코드, 체크 포인트를 모두 수정할 수 있습니다.</p>
+      </div>
+      <div class="admin-actions">
+        <a class="button secondary" href="basics.html">기초 개념 보기</a>
+        <button class="button secondary" type="button" id="resetBasicButton">기본값 복원</button>
+        <button class="button primary" type="button" id="saveBasicButton">전체 저장</button>
+      </div>
+    </section>
+
+    <p id="basicMessage" class="notice" hidden></p>
+
+    <section class="form-panel">
+      <div class="section-line compact">
+        <h2>페이지 문구</h2>
+      </div>
+      <div class="form-grid two">
+        <label class="field">
+          <span>상단 라벨</span>
+          <input id="pageEyebrow">
+        </label>
+        <label class="field">
+          <span>개념 목록 제목</span>
+          <input id="conceptsTitleInput">
+        </label>
+        <label class="field wide">
+          <span>큰 제목</span>
+          <input id="pageTitle">
+        </label>
+        <label class="field wide">
+          <span>설명</span>
+          <textarea id="pageLead" rows="3"></textarea>
+        </label>
+        <label class="field">
+          <span>예제 영역 제목</span>
+          <input id="examplesTitleInput">
+        </label>
+        <label class="field">
+          <span>템플릿 영역 제목</span>
+          <input id="templateTitleInput">
+        </label>
+        <label class="field">
+          <span>체크 영역 제목</span>
+          <input id="checklistTitleInput">
+        </label>
+        <label class="field">
+          <span>통계 라벨 1</span>
+          <input id="statLabel0">
+        </label>
+        <label class="field">
+          <span>통계 라벨 2</span>
+          <input id="statLabel1">
+        </label>
+        <label class="field">
+          <span>통계 라벨 3</span>
+          <input id="statLabel2">
+        </label>
+      </div>
+    </section>
+
+    <section class="manager-layout">
+      <aside class="list-panel">
+        <div class="section-line compact">
+          <h2>개념 목록</h2>
+          <button class="button ghost" type="button" id="newConceptButton">새 개념</button>
+        </div>
+        <div id="conceptAdminList" class="concept-select-list"></div>
+      </aside>
+
+      <form id="conceptForm" class="form-panel">
+        <div class="section-line compact">
+          <h2>선택한 개념 수정</h2>
+          <button class="button danger" type="button" id="deleteConceptButton">삭제</button>
+        </div>
+        <div id="conceptEditorBody">
+          <div class="form-grid two">
+            <label class="field">
+              <span>ID</span>
+              <input id="conceptId" readonly>
+            </label>
+            <label class="field">
+              <span>배지</span>
+              <input id="conceptBadge">
+            </label>
+            <label class="field wide">
+              <span>목록 카드 제목</span>
+              <input id="conceptCardTitle">
+            </label>
+            <label class="field wide">
+              <span>목록 카드 설명</span>
+              <textarea id="conceptCardSummary" rows="3"></textarea>
+            </label>
+            <label class="field">
+              <span>상세 라벨</span>
+              <input id="detailEyebrow">
+            </label>
+            <label class="field">
+              <span>상세 제목</span>
+              <input id="detailTitle">
+            </label>
+            <label class="field wide">
+              <span>상세 요약</span>
+              <textarea id="detailSummary" rows="3"></textarea>
+            </label>
+          </div>
+
+          <div class="nested-editor">
+            <div class="section-line compact">
+              <h2>상세 설명 섹션</h2>
+              <button class="button ghost" type="button" id="addSectionButton">섹션 추가</button>
+            </div>
+            <div id="sectionList" class="repeat-list"></div>
+          </div>
+
+          <div class="nested-editor">
+            <div class="section-line compact">
+              <h2>상세 참고 코드</h2>
+              <button class="button ghost" type="button" id="addCodeButton">코드 추가</button>
+            </div>
+            <div id="codeList" class="repeat-list"></div>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <section class="form-panel admin-panel">
+      <div class="section-line compact">
+        <h2>목록 페이지 예제 코드</h2>
+        <button class="button ghost" type="button" id="addExampleButton">예제 추가</button>
+      </div>
+      <div id="examplesList" class="repeat-list"></div>
+    </section>
+
+    <section class="form-panel admin-panel">
+      <div class="section-line compact">
+        <h2>문제 풀이 템플릿</h2>
+      </div>
+      <div class="form-grid">
+        <label class="field">
+          <span>파일명</span>
+          <input id="templateFilename">
+        </label>
+        <label class="field">
+          <span>코드</span>
+          <textarea id="templateCode" rows="12" class="code-input"></textarea>
+        </label>
+      </div>
+    </section>
+
+    <section class="form-panel admin-panel">
+      <div class="section-line compact">
+        <h2>복습 체크 포인트</h2>
+        <button class="button ghost" type="button" id="addCheckButton">체크 추가</button>
+      </div>
+      <div id="checklistEditor" class="repeat-list"></div>
+    </section>
+  </main>
+</body>
+</html>

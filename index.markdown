@@ -9,7 +9,7 @@ title : main
       <img src="assets/images/Profile.jpg" alt="대표 캐릭터 또는 프로필 이미지" class="hero__image" />
     </div>
     <div class="hero__content">
-      <p class="eyebrow">Frontend Developer · UI/UX Designer</p>
+      <p class="eyebrow">콘텐츠 개발자 / 메타버스 개발자</p>
       <h1>DOCU</h1>
       <p class="hero__desc">
         여러가지 콘텐츠 개발자
@@ -21,13 +21,14 @@ title : main
         <span class="chip">다크모드</span>
       </div>
       <div class="hero__actions">
-        <a class="btn" href="#ebooks">포트폴리오 보기</a>
+        <a class="btn" href="/data/_포트폴리오.pdf">포트폴리오 보기</a>
         <a class="btn btn--ghost" href="#contact">Contact Us 이동</a>
       </div>
     </div>
   </div>
 </section>
 
+<!--
 <section class="section" id="profile">
   <div class="container">
     <div class="section-head">
@@ -44,7 +45,6 @@ title : main
       </article>
       <article class="panel">
         <h3>License</h3>
-        <!--
         <div class="license-grid">
           <div class="license-card">
             <strong>정보처리기사</strong>
@@ -62,11 +62,9 @@ title : main
             <span>한국생산성본부</span>
           </div>
         </div>
-        -->
       </article>
       <article class="panel">
         <h3>Skill</h3>
-        <!--
         <div class="skill-group">
           <h4>Frontend</h4>
           <div class="tag-list">
@@ -100,12 +98,62 @@ title : main
             <span class="tag">Java</span>
           </div>
         </div>
-        -->
       </article>
     </div>
   </div>
 </section>
+-->
 
+<section class="section portfolio-section" id="ebooks">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-label">Section 03</p>
+      <h2>전자책 제작</h2>
+      <p class="section-copy">카드 hover와 슬라이드 이동이 가능한 공통 포트폴리오 섹션입니다.</p>
+    </div>
+    <div class="portfolio-slider" data-slider>
+      <button class="slider-arrow slider-arrow--left" type="button" aria-label="이전 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="slider-track" tabindex="0">
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="assets/thumb-ebook-1.svg" alt="전자책 프로젝트 A 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>전자책 프로젝트 A</h3>
+            <p>학습 콘텐츠를 한눈에 읽히도록 정리한 전자책 제작 예시입니다.</p>
+            <div class="tag-list"><span class="tag">Layout</span><span class="tag">Typography</span><span class="tag">Editorial</span></div>
+            <a class="btn" href="https://example.com/ebook-1" target="_blank" rel="noopener">바로가기</a>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="assets/thumb-ebook-2.svg" alt="전자책 프로젝트 B 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>전자책 프로젝트 B</h3>
+            <p>챕터 흐름과 카드형 목차를 활용한 정보 전달형 전자책 구성입니다.</p>
+            <div class="tag-list"><span class="tag">UI</span><span class="tag">Card Layout</span><span class="tag">Guide</span></div>
+            <a class="btn" href="https://example.com/ebook-2" target="_blank" rel="noopener">바로가기</a>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="assets/thumb-ebook-3.svg" alt="전자책 프로젝트 C 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>전자책 프로젝트 C</h3>
+            <p>학습 주제를 빠르게 훑을 수 있도록 구조를 단순화한 작업입니다.</p>
+            <div class="tag-list"><span class="tag">Grid</span><span class="tag">UX</span><span class="tag">Content</span></div>
+            <a class="btn" href="https://example.com/ebook-3" target="_blank" rel="noopener">바로가기</a>
+          </div>
+        </article>
+      </div>
+      <button class="slider-arrow slider-arrow--right" type="button" aria-label="다음 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5L16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!--
 <section class="section portfolio-section" id="ebooks">
   <div class="container">
     <div class="section-head">
@@ -167,34 +215,34 @@ title : main
       <div class="slider-track" tabindex="0">
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
-            <img src="assets/thumb-learning-1.svg" alt="알고리즘 풀이 아카이브 썸네일" />
+            <img src="assets/images/PythonProblemSolver.png" alt="Python 알고리즘 풀이 아카이브" />
           </div>
           <div class="portfolio-card__body">
-            <h3>알고리즘 풀이 아카이브</h3>
-            <p>문제, 해설, 개념을 정적 페이지 구조로 정리한 학습형 웹사이트입니다.</p>
-            <div class="tag-list"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">Vanilla JS</span></div>
-            <a class="btn" href="https://example.com/learning-1" target="_blank" rel="noopener">바로가기</a>
+            <h3>Python 알고리즘 풀이 아카이브</h3>
+            <p>파이썬 알고리즘 문제와 풀이를 저장하는 개인 아카이브 웹사이트</p>
+            <div class="tag-list"><span class="tag">Python</span><span class="tag">데이터분석</span><span class="tag">개발자</span></div>
+            <a class="btn" href="\web_page\PythonArchive\index.html" target="_blank" rel="noopener">바로가기</a>
           </div>
         </article>
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
-            <img src="assets/thumb-learning-2.svg" alt="정보처리기사 학습 사이트 썸네일" />
+            <img src="assets/images/HistorySite.png" alt="한국사능력검정시험 학습 사이트" />
           </div>
           <div class="portfolio-card__body">
-            <h3>정보처리기사 학습 사이트</h3>
-            <p>실기 학습을 위한 섹션 구조와 카드형 콘텐츠 흐름을 설계한 예시입니다.</p>
-            <div class="tag-list"><span class="tag">Planning</span><span class="tag">UX Flow</span><span class="tag">Static</span></div>
+            <h3>한국사능력검정시험 학습 사이트</h3>
+            <p>한국사</p>
+            <div class="tag-list"><span class="tag">한국사</span><span class="tag">데이터분석</span><span class="tag">교양</span></div>
             <a class="btn" href="https://example.com/learning-2" target="_blank" rel="noopener">바로가기</a>
           </div>
         </article>
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
-            <img src="assets/thumb-learning-3.svg" alt="개념 학습 모듈 페이지 썸네일" />
+            <img src="assets/images/InfoProcessing.png" alt="정보처리기사 학습 사이트" />
           </div>
           <div class="portfolio-card__body">
-            <h3>개념 학습 모듈 페이지</h3>
-            <p>개념 중심 탐색과 문제 연계를 함께 보여주는 학습 UI 샘플입니다.</p>
-            <div class="tag-list"><span class="tag">Concept UI</span><span class="tag">Education</span><span class="tag">Grid</span></div>
+            <h3>정보처리기사 학습 사이트</h3>
+            <p>정보처리기사 학습 사이트</p>
+            <div class="tag-list"><span class="tag">개념</span><span class="tag">데이터분석</span><span class="tag">컴퓨터공학</span></div>
             <a class="btn" href="https://example.com/learning-3" target="_blank" rel="noopener">바로가기</a>
           </div>
         </article>
@@ -350,6 +398,7 @@ title : main
     </div>
   </div>
 </section>
+-->
 
 <section class="section section--contact" id="contact">
   <div class="container">

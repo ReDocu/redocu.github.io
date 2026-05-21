@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Python Algorithm Archive</title>
+  <script>
+    document.documentElement.dataset.theme =
+      localStorage.getItem("algoArchive.theme") ||
+      (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="js/data.js"></script>
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="메인으로 이동">
+      <span class="brand-mark">Py</span>
+      <span>
+        <strong>Python Archive</strong>
+        <small>algorithm study notes</small>
+      </span>
+    </a>
+    <nav class="nav">
+      <a class="active" href="index.html">문제</a>
+      <a href="basics.html">기초 개념</a>
+      <a href="contest.html">대회</a>
+      <a href="admin.html">관리</a>
+    </nav>
+    <button class="icon-button" id="themeToggle" type="button" aria-label="다크모드 전환" title="다크모드 전환">
+      <span data-theme-icon>☾</span>
+    </button>
+  </header>
+
+  <main class="shell">
+    <section class="page-head">
+      <div>
+        <p class="eyebrow">개인 풀이 아카이브</p>
+        <h1>다시 볼 파이썬 알고리즘 풀이</h1>
+        <p class="lead">공부한 문제, 풀이 아이디어, 코드, 배운 점을 한 곳에 정리합니다.</p>
+      </div>
+      <div class="stat-strip" aria-label="문제 통계">
+        <div>
+          <strong id="totalCount">0</strong>
+          <span>전체 문제</span>
+        </div>
+        <div>
+          <strong id="algorithmCount">0</strong>
+          <span>알고리즘</span>
+        </div>
+        <div>
+          <strong id="recentDate">-</strong>
+          <span>최근 수정</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="toolbar" aria-label="문제 검색과 필터">
+      <label class="field search-field">
+        <span>검색</span>
+        <input id="searchInput" type="search" placeholder="제목, 요약, 태그 검색">
+      </label>
+      <label class="field">
+        <span>알고리즘</span>
+        <select id="algorithmFilter">
+          <option value="">전체</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>난이도</span>
+        <select id="difficultyFilter">
+          <option value="">전체</option>
+        </select>
+      </label>
+    </section>
+
+    <section>
+      <div class="section-line">
+        <h2>문제 목록</h2>
+        <span id="resultCount" class="muted">0개</span>
+      </div>
+      <div id="problemGrid" class="card-grid"></div>
+      <p id="emptyState" class="empty-state" hidden>조건에 맞는 문제가 없습니다.</p>
+    </section>
+  </main>
+</body>
+</html>

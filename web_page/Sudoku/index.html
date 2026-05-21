@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>스도쿠 자동 생성</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Vanilla Sudoku</p>
+        <h1>스도쿠 자동 생성</h1>
+      </div>
+      <div class="header-actions">
+        <button id="themeToggle" class="soft-button" type="button">다크모드</button>
+        <button id="clearStorageBtn" class="soft-button danger" type="button">기록 초기화</button>
+      </div>
+    </header>
+
+    <main class="app-layout">
+      <section class="board-card" aria-labelledby="boardTitle">
+        <div class="board-top">
+          <div>
+            <h2 id="boardTitle">퍼즐</h2>
+            <span id="difficultyBadge" class="badge">쉬움</span>
+          </div>
+          <div class="stats" aria-label="게임 상태">
+            <span>시간 <strong id="timerValue">00:00</strong></span>
+            <span>빈칸 <strong id="emptyCount">0</strong></span>
+            <span>실수 <strong id="mistakeCount">0</strong></span>
+          </div>
+        </div>
+
+        <div id="sudokuBoard" class="sudoku-board" role="grid" aria-label="스도쿠 보드"></div>
+
+        <div id="numberPad" class="number-pad" aria-label="숫자 입력">
+          <button type="button" class="number-key" data-number="1">1</button>
+          <button type="button" class="number-key" data-number="2">2</button>
+          <button type="button" class="number-key" data-number="3">3</button>
+          <button type="button" class="number-key" data-number="4">4</button>
+          <button type="button" class="number-key" data-number="5">5</button>
+          <button type="button" class="number-key" data-number="6">6</button>
+          <button type="button" class="number-key" data-number="7">7</button>
+          <button type="button" class="number-key" data-number="8">8</button>
+          <button type="button" class="number-key" data-number="9">9</button>
+          <button type="button" class="number-key erase" data-action="erase">지우기</button>
+        </div>
+
+        <p id="statusMessage" class="status-message" aria-live="polite">퍼즐을 준비했습니다.</p>
+      </section>
+
+      <aside class="control-card" aria-label="게임 메뉴">
+        <div class="control-field">
+          <label for="difficultySelect">난이도</label>
+          <select id="difficultySelect">
+            <option value="easy">쉬움</option>
+            <option value="medium">보통</option>
+            <option value="hard">어려움</option>
+            <option value="expert">전문가</option>
+          </select>
+        </div>
+
+        <div class="button-grid">
+          <button id="newPuzzleBtn" class="primary-button" type="button">새 퍼즐</button>
+          <button id="resetInputBtn" type="button">입력 초기화</button>
+          <button id="checkBtn" type="button">검증</button>
+          <button id="hintBtn" type="button">힌트</button>
+          <button id="noteModeBtn" type="button" aria-pressed="false">메모 모드</button>
+          <button id="answerBtn" type="button">정답 보기</button>
+        </div>
+
+        <fieldset class="print-options">
+          <legend>인쇄</legend>
+          <div class="print-group">
+            <span class="print-group-title">출력 범위</span>
+            <label>
+              <input id="printPuzzleOnly" type="radio" name="printMode" value="puzzle" checked>
+              문제만 인쇄
+            </label>
+            <label>
+              <input id="printWithAnswer" type="radio" name="printMode" value="answer">
+              문제 + 정답 인쇄
+            </label>
+          </div>
+          <div class="print-group">
+            <span class="print-group-title">페이지당 문제 수</span>
+            <label>
+              <input id="printOnePerPage" type="radio" name="printPerPage" value="1" checked>
+              1문제
+            </label>
+            <label>
+              <input id="printTwoPerPage" type="radio" name="printPerPage" value="2">
+              2문제
+            </label>
+          </div>
+        </fieldset>
+
+        <button id="printBtn" class="primary-button print-button" type="button">프린트하기</button>
+      </aside>
+    </main>
+  </div>
+
+  <section id="printRoot" class="print-root" aria-hidden="true"></section>
+
+  <script src="js/sudokuSolver.js" defer></script>
+  <script src="js/sudokuGenerator.js" defer></script>
+  <script src="js/ui.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>

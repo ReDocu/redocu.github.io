@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>관리자 - Python Algorithm Archive</title>
+  <script>
+    document.documentElement.dataset.theme =
+      localStorage.getItem("algoArchive.theme") ||
+      (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="js/data.js"></script>
+  <script defer src="js/admin.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="메인으로 이동">
+      <span class="brand-mark">Py</span>
+      <span>
+        <strong>Python Archive</strong>
+        <small>admin console</small>
+      </span>
+    </a>
+    <nav class="nav">
+      <a href="index.html">문제</a>
+      <a href="basics.html">기초 개념</a>
+      <a href="contest.html">대회</a>
+      <a class="active" href="admin.html">관리</a>
+    </nav>
+    <button class="icon-button" id="themeToggle" type="button" aria-label="다크모드 전환" title="다크모드 전환">
+      <span data-theme-icon>☾</span>
+    </button>
+  </header>
+
+  <main class="shell">
+    <section class="page-head">
+      <div>
+        <p class="eyebrow">LocalStorage 관리자</p>
+        <h1>문제와 대회 데이터 관리</h1>
+        <p class="lead">기본 `data.js`와 브라우저 저장 데이터를 병합해 사용합니다.</p>
+      </div>
+      <div class="admin-actions">
+        <button class="button secondary" type="button" data-admin-tab="problems">문제 관리</button>
+        <button class="button secondary" type="button" data-admin-tab="contests">대회 관리</button>
+        <button class="button secondary" type="button" data-admin-tab="json">JSON 관리</button>
+        <a class="button secondary" href="basic-admin.html">기초 개념 관리</a>
+      </div>
+    </section>
+
+    <p id="adminMessage" class="notice" hidden></p>
+
+    <section id="problemsPanel" class="admin-panel">
+      <div class="admin-layout">
+        <form id="problemForm" class="form-panel">
+          <div class="section-line compact">
+            <h2>문제 추가 / 수정</h2>
+            <button class="button ghost" type="button" id="newProblemButton">새 문제</button>
+          </div>
+          <div class="form-grid two">
+            <label class="field">
+              <span>ID</span>
+              <input id="problemId" name="id" placeholder="비워두면 자동 생성">
+            </label>
+            <label class="field">
+              <span>언어</span>
+              <input id="problemLanguage" name="language" value="python">
+            </label>
+            <label class="field wide">
+              <span>제목</span>
+              <input id="problemTitle" name="title" required>
+            </label>
+            <label class="field wide">
+              <span>요약</span>
+              <input id="problemSummary" name="summary">
+            </label>
+            <label class="field">
+              <span>분류</span>
+              <select id="problemCategory" name="category"></select>
+            </label>
+            <label class="field">
+              <span>난이도</span>
+              <select id="problemDifficulty" name="difficulty"></select>
+            </label>
+            <label class="field wide">
+              <span>알고리즘</span>
+              <input id="problemAlgorithm" name="algorithm" placeholder="쉼표로 구분">
+            </label>
+            <label class="field wide">
+              <span>태그</span>
+              <input id="problemTags" name="tags" placeholder="쉼표로 구분">
+            </label>
+            <label class="field wide">
+              <span>문제 상세 설명</span>
+              <textarea id="problemDescription" name="description" rows="4"></textarea>
+            </label>
+            <label class="field">
+              <span>입력 설명</span>
+              <textarea id="problemInput" name="input" rows="3"></textarea>
+            </label>
+            <label class="field">
+              <span>출력 설명</span>
+              <textarea id="problemOutput" name="output" rows="3"></textarea>
+            </label>
+            <label class="field">
+              <span>예제 입력</span>
+              <textarea id="problemExampleInput" name="exampleInput" rows="4" class="code-input"></textarea>
+            </label>
+            <label class="field">
+              <span>예제 출력</span>
+              <textarea id="problemExampleOutput" name="exampleOutput" rows="4" class="code-input"></textarea>
+            </label>
+            <label class="field wide">
+              <span>풀이 아이디어</span>
+              <textarea id="problemIdea" name="idea" rows="4"></textarea>
+            </label>
+            <label class="field wide">
+              <span>파이썬 코드</span>
+              <textarea id="problemCode" name="code" rows="12" class="code-input"></textarea>
+            </label>
+            <label class="field">
+              <span>시간복잡도</span>
+              <input id="problemTime" name="timeComplexity" placeholder="O(N)">
+            </label>
+            <label class="field">
+              <span>공간복잡도</span>
+              <input id="problemSpace" name="spaceComplexity" placeholder="O(N)">
+            </label>
+            <label class="field wide">
+              <span>배운 점</span>
+              <textarea id="problemLearned" name="learned" rows="4"></textarea>
+            </label>
+            <label class="field">
+              <span>생성일</span>
+              <input id="problemCreatedAt" name="createdAt" type="date">
+            </label>
+            <label class="field">
+              <span>수정일</span>
+              <input id="problemUpdatedAt" name="updatedAt" type="date">
+            </label>
+          </div>
+          <div class="form-actions">
+            <button class="button primary" type="submit">저장</button>
+            <button class="button danger" type="button" id="deleteProblemButton">삭제</button>
+          </div>
+        </form>
+
+        <aside class="list-panel">
+          <label class="field">
+            <span>문제 검색</span>
+            <input id="adminProblemSearch" type="search" placeholder="제목, 알고리즘, 태그">
+          </label>
+          <div id="adminProblemList" class="admin-list"></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="contestsPanel" class="admin-panel" hidden>
+      <div class="admin-layout">
+        <form id="contestForm" class="form-panel">
+          <div class="section-line compact">
+            <h2>대회 추가 / 수정</h2>
+            <button class="button ghost" type="button" id="newContestButton">새 대회</button>
+          </div>
+          <div class="form-grid two">
+            <label class="field">
+              <span>ID</span>
+              <input id="contestId" name="id" placeholder="비워두면 자동 생성">
+            </label>
+            <label class="field">
+              <span>플랫폼</span>
+              <input id="contestPlatform" name="platform" placeholder="Baekjoon">
+            </label>
+            <label class="field wide">
+              <span>대회명</span>
+              <input id="contestTitle" name="title" required>
+            </label>
+            <label class="field">
+              <span>날짜</span>
+              <input id="contestDate" name="date" type="date">
+            </label>
+            <label class="field wide">
+              <span>태그</span>
+              <input id="contestTags" name="tags" placeholder="쉼표로 구분">
+            </label>
+            <label class="field wide">
+              <span>설명</span>
+              <textarea id="contestDescription" name="description" rows="4"></textarea>
+            </label>
+          </div>
+          <div class="form-actions">
+            <button class="button primary" type="submit">대회 저장</button>
+            <button class="button danger" type="button" id="deleteContestButton">대회 삭제</button>
+          </div>
+
+          <hr class="divider">
+
+          <div class="section-line compact">
+            <h2>대회 문제 추가 / 수정</h2>
+            <button class="button ghost" type="button" id="newContestProblemButton">새 대회 문제</button>
+          </div>
+          <div class="form-grid two">
+            <label class="field">
+              <span>문제 ID</span>
+              <input id="contestProblemId" placeholder="비워두면 자동 생성">
+            </label>
+            <label class="field">
+              <span>번호</span>
+              <input id="contestProblemNumber" placeholder="A">
+            </label>
+            <label class="field wide">
+              <span>제목</span>
+              <input id="contestProblemTitle">
+            </label>
+            <label class="field wide">
+              <span>요약</span>
+              <input id="contestProblemSummary">
+            </label>
+            <label class="field wide">
+              <span>문제 상세 설명</span>
+              <textarea id="contestProblemDescription" rows="4"></textarea>
+            </label>
+            <label class="field">
+              <span>난이도</span>
+              <select id="contestProblemDifficulty"></select>
+            </label>
+            <label class="field">
+              <span>분류</span>
+              <select id="contestProblemCategory"></select>
+            </label>
+            <label class="field wide">
+              <span>알고리즘</span>
+              <input id="contestProblemAlgorithm" placeholder="쉼표로 구분">
+            </label>
+            <label class="field">
+              <span>입력 설명</span>
+              <textarea id="contestProblemInput" rows="3"></textarea>
+            </label>
+            <label class="field">
+              <span>출력 설명</span>
+              <textarea id="contestProblemOutput" rows="3"></textarea>
+            </label>
+            <label class="field">
+              <span>예제 입력</span>
+              <textarea id="contestProblemExampleInput" rows="4" class="code-input"></textarea>
+            </label>
+            <label class="field">
+              <span>예제 출력</span>
+              <textarea id="contestProblemExampleOutput" rows="4" class="code-input"></textarea>
+            </label>
+            <label class="field">
+              <span>상태</span>
+              <select id="contestProblemStatus"></select>
+            </label>
+            <label class="field">
+              <span>제출 결과</span>
+              <select id="contestProblemResult"></select>
+            </label>
+            <label class="field">
+              <span>풀이 시간</span>
+              <input id="contestProblemSolveTime" placeholder="20분">
+            </label>
+            <label class="field checkbox-field">
+              <input id="contestProblemReviewNeeded" type="checkbox">
+              <span>복습 필요</span>
+            </label>
+            <label class="field wide">
+              <span>풀이 아이디어</span>
+              <textarea id="contestProblemIdea" rows="4"></textarea>
+            </label>
+            <label class="field wide">
+              <span>코드</span>
+              <textarea id="contestProblemCode" rows="9" class="code-input"></textarea>
+            </label>
+            <label class="field">
+              <span>시간복잡도</span>
+              <input id="contestProblemTime" placeholder="O(N)">
+            </label>
+            <label class="field">
+              <span>공간복잡도</span>
+              <input id="contestProblemSpace" placeholder="O(N)">
+            </label>
+            <label class="field wide">
+              <span>배운 점</span>
+              <textarea id="contestProblemLearned" rows="4"></textarea>
+            </label>
+            <label class="field">
+              <span>실패 원인</span>
+              <textarea id="contestProblemFailReason" rows="4"></textarea>
+            </label>
+            <label class="field">
+              <span>개선 포인트</span>
+              <textarea id="contestProblemImprovement" rows="4"></textarea>
+            </label>
+            <label class="field wide">
+              <span>메모</span>
+              <textarea id="contestProblemMemo" rows="4"></textarea>
+            </label>
+          </div>
+          <div class="form-actions">
+            <button class="button primary" type="button" id="saveContestProblemButton">대회 문제 저장</button>
+            <button class="button danger" type="button" id="deleteContestProblemButton">대회 문제 삭제</button>
+          </div>
+          <div id="contestProblemList" class="admin-list compact-list"></div>
+        </form>
+
+        <aside class="list-panel">
+          <label class="field">
+            <span>대회 검색</span>
+            <input id="adminContestSearch" type="search" placeholder="대회명, 플랫폼, 태그">
+          </label>
+          <div id="adminContestList" class="admin-list"></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="jsonPanel" class="admin-panel" hidden>
+      <div class="admin-layout single">
+        <div class="form-panel">
+          <div class="section-line compact">
+            <h2>JSON import / export</h2>
+            <label class="button secondary file-button">
+              파일 선택
+              <input id="jsonFileInput" type="file" accept="application/json,.json">
+            </label>
+          </div>
+          <label class="field">
+            <span>JSON</span>
+            <textarea id="jsonTextarea" rows="18" class="code-input" placeholder='{"problems": [], "contests": []}'></textarea>
+          </label>
+          <div class="form-actions wrap">
+            <button class="button primary" type="button" id="importJsonButton">JSON 가져오기</button>
+            <button class="button secondary" type="button" id="exportAllButton">전체 내보내기</button>
+            <button class="button secondary" type="button" id="exportProblemsButton">문제 내보내기</button>
+            <button class="button secondary" type="button" id="exportContestsButton">대회 내보내기</button>
+            <button class="button danger" type="button" id="resetAllButton">전체 초기화</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

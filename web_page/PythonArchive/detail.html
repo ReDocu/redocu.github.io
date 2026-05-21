@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>문제 상세 - Python Algorithm Archive</title>
+  <script>
+    document.documentElement.dataset.theme =
+      localStorage.getItem("algoArchive.theme") ||
+      (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="js/data.js"></script>
+  <script defer src="js/detail.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="메인으로 이동">
+      <span class="brand-mark">Py</span>
+      <span>
+        <strong>Python Archive</strong>
+        <small>problem detail</small>
+      </span>
+    </a>
+    <nav class="nav">
+      <a href="index.html">문제</a>
+      <a href="basics.html">기초 개념</a>
+      <a href="contest.html">대회</a>
+      <a href="admin.html">관리</a>
+    </nav>
+    <button class="icon-button" id="themeToggle" type="button" aria-label="다크모드 전환" title="다크모드 전환">
+      <span data-theme-icon>☾</span>
+    </button>
+  </header>
+
+  <main class="shell detail-shell">
+    <a class="back-link" id="backLink" href="index.html">← 목록으로</a>
+    <article id="detailRoot"></article>
+  </main>
+</body>
+</html>

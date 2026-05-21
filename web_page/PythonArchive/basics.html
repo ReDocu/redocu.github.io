@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Python 기초 개념 - Python Algorithm Archive</title>
+  <script>
+    document.documentElement.dataset.theme =
+      localStorage.getItem("algoArchive.theme") ||
+      (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="js/data.js"></script>
+  <script defer src="js/basicConcepts.js"></script>
+  <script defer src="js/basics.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="메인으로 이동">
+      <span class="brand-mark">Py</span>
+      <span>
+        <strong>Python Archive</strong>
+        <small>basic concepts</small>
+      </span>
+    </a>
+    <nav class="nav">
+      <a href="index.html">문제</a>
+      <a class="active" href="basics.html">기초 개념</a>
+      <a href="contest.html">대회</a>
+      <a href="admin.html">관리</a>
+    </nav>
+    <button class="icon-button" id="themeToggle" type="button" aria-label="다크모드 전환" title="다크모드 전환">
+      <span data-theme-icon>☾</span>
+    </button>
+  </header>
+
+  <main class="shell concept-shell">
+    <section class="page-head">
+      <div>
+        <p class="eyebrow" id="basicEyebrow">Python 기본기</p>
+        <h1 id="basicTitle">처음 볼 때 꼭 잡아야 할 파이썬 개념</h1>
+        <p class="lead" id="basicLead">문제 풀이 전에 자주 쓰이는 문법과 자료구조를 짧은 설명, 예제 코드, 체크 포인트로 정리했습니다.</p>
+        <div class="form-actions">
+          <a class="button secondary" href="basic-admin.html">기초 개념 수정</a>
+        </div>
+      </div>
+      <div class="stat-strip" id="basicStats" aria-label="기초 개념 요약"></div>
+    </section>
+
+    <section class="concept-section">
+      <div class="section-line">
+        <h2 id="conceptsTitle">한눈에 보는 기본 개념</h2>
+      </div>
+      <div class="concept-grid" id="conceptGrid"></div>
+    </section>
+
+    <section class="concept-section">
+      <div class="section-line">
+        <h2 id="examplesTitle">자주 쓰는 문법 예제</h2>
+      </div>
+      <div class="code-stack" id="exampleStack"></div>
+    </section>
+
+    <section class="concept-section">
+      <div class="section-line">
+        <h2 id="templateTitle">문제 풀이용 기본 템플릿</h2>
+      </div>
+      <div id="templateRoot"></div>
+    </section>
+
+    <section class="concept-section">
+      <div class="section-line">
+        <h2 id="checklistTitle">복습 체크 포인트</h2>
+      </div>
+      <div class="checklist-grid" id="checklistGrid"></div>
+    </section>
+  </main>
+</body>
+</html>

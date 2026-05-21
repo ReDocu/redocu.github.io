@@ -120,7 +120,7 @@ title : main
           <div class="portfolio-card__body">
             <h3>경일게임아카데미</h3>
             <p>Unity를 활용한 게임 콘텐츠 개발 </p>
-            <div class="tag-list"><span class="tag">Layout</span><span class="tag">Typography</span><span class="tag">Editorial</span></div>
+            <div class="tag-list"><span class="tag">WinAPI</span><span class="tag">Unity</span><span class="tag">Game</span></div>
             <a class="btn" href="/portfolio/Kyungil_Academy" target="_blank" rel="noopener">바로가기</a>
           </div>
         </article>
@@ -131,7 +131,7 @@ title : main
           <div class="portfolio-card__body">
             <h3>MBC 컴퓨터 아카데미</h3>
             <p>AI 모델 학습을 통한 CCTV 이미지 처리</p>
-            <div class="tag-list"><span class="tag">UI</span><span class="tag">Card Layout</span><span class="tag">Guide</span></div>
+            <div class="tag-list"><span class="tag">데이터분석</span><span class="tag">웹캠</span><span class="tag">YOLO</span></div>
             <a class="btn" href="/portfolio/MBC_Academy" target="_blank" rel="noopener">바로가기</a>
           </div>
         </article>

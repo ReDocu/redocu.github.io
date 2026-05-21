@@ -12,16 +12,15 @@ title : main
       <p class="eyebrow">콘텐츠 개발자 / 메타버스 개발자</p>
       <h1>DOCU</h1>
       <p class="hero__desc">
-        여러가지 콘텐츠 개발자
       </p>
       <div class="hero__tags" aria-label="핵심 키워드">
-        <span class="chip">정적 웹사이트</span>
-        <span class="chip">UI 구조 설계</span>
-        <span class="chip">반응형</span>
-        <span class="chip">다크모드</span>
+        <span class="chip">UNITY</span>
+        <span class="chip">Unreal Engine</span>
+        <span class="chip">Python</span>
+        <span class="chip">ETC</span>
       </div>
       <div class="hero__actions">
-        <a class="btn" href="/data/_포트폴리오.pdf">포트폴리오 보기</a>
+        <a class="btn" href="/data/포트폴리오.pdf">포트폴리오 보기</a>
         <a class="btn btn--ghost" href="#contact">Contact Us 이동</a>
       </div>
     </div>
@@ -107,6 +106,44 @@ title : main
 <section class="section portfolio-section" id="ebooks">
   <div class="container">
     <div class="section-head">
+      <p class="section-label">Section 01</p>
+      <h2>학원 포트폴리오 정리</h2>
+      <p class="section-copy">포트폴리오 정리내역입니다.</p>
+    </div>
+    <div class="portfolio-slider" data-slider>
+      <button class="slider-arrow slider-arrow--left" type="button" aria-label="이전 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="slider-track" tabindex="0">
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="assets/images/portfolio/Kyungil_Academy.png" alt="전자책 프로젝트 A 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>경일게임아카데미</h3>
+            <p>Unity를 활용한 게임 콘텐츠 개발 </p>
+            <div class="tag-list"><span class="tag">Layout</span><span class="tag">Typography</span><span class="tag">Editorial</span></div>
+            <a class="btn" href="/portfolio/Kyungil_Academy" target="_blank" rel="noopener">바로가기</a>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="assets/images/portfolio/MBC_Academy.png" alt="전자책 프로젝트 B 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>MBC 컴퓨터 아카데미</h3>
+            <p>AI 모델 학습을 통한 CCTV 이미지 처리</p>
+            <div class="tag-list"><span class="tag">UI</span><span class="tag">Card Layout</span><span class="tag">Guide</span></div>
+            <a class="btn" href="/portfolio/MBC_Academy" target="_blank" rel="noopener">바로가기</a>
+          </div>
+        </article>
+      </div>
+      <button class="slider-arrow slider-arrow--right" type="button" aria-label="다음 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5L16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+</section>
+<!--
+<section class="section portfolio-section" id="ebooks">
+  <div class="container">
+    <div class="section-head">
       <p class="section-label">Section 03</p>
       <h2>전자책 제작</h2>
       <p class="section-copy">카드 hover와 슬라이드 이동이 가능한 공통 포트폴리오 섹션입니다.</p>
@@ -152,7 +189,7 @@ title : main
     </div>
   </div>
 </section>
-
+-->
 <!--
 <section class="section portfolio-section" id="ebooks">
   <div class="container">
@@ -405,13 +442,13 @@ title : main
     <div class="section-head">
       <p class="section-label">Section 08</p>
       <h2>Contact Us</h2>
-      <p class="section-copy">연락 경로는 짧고 직관적으로 정리합니다.</p>
+      <p class="section-copy"><!--연락 경로는 짧고 직관적으로 정리합니다.--></p>
     </div>
     <div class="contact-box">
       <p><strong>Email</strong></p>
-      <a href="mailto:your-email@example.com">your-email@example.com</a>
+      <a href="mailto:dlehrb103@google.com">dlehrb103@google.com</a>
       <div class="contact-links">
-        <a class="btn" href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="https://github.com/redocu" target="_blank" rel="noopener">GitHub</a>
         <a class="btn btn--ghost" href="https://example.com/blog" target="_blank" rel="noopener">Blog</a>
       </div>
     </div>

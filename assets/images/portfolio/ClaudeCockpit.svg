@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600">
+  <rect width="900" height="600" rx="24" fill="#ffeee0"/>
+  <rect x="42" y="42" width="816" height="516" rx="22" fill="rgba(255,255,255,0.72)"/>
+  <rect x="88" y="98" width="220" height="150" rx="18" fill="rgba(15,17,21,0.12)"/>
+  <rect x="336" y="110" width="372" height="30" rx="15" fill="rgba(15,17,21,0.2)"/>
+  <rect x="336" y="162" width="280" height="24" rx="12" fill="rgba(15,17,21,0.14)"/>
+  <rect x="88" y="292" width="620" height="22" rx="11" fill="rgba(15,17,21,0.16)"/>
+  <rect x="88" y="334" width="540" height="22" rx="11" fill="rgba(15,17,21,0.12)"/>
+  <rect x="88" y="390" width="150" height="44" rx="22" fill="#FF9D5C"/>
+  <text x="88" y="495" font-size="42" font-family="Arial, sans-serif" font-weight="700" fill="#0f1115">CLAUDECOCKPIT</text>
+  <text x="88" y="535" font-size="24" font-family="Arial, sans-serif" fill="#233039">Claude Code Template</text>
+</svg>

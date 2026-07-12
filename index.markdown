@@ -140,6 +140,59 @@ title : main
     </div>
   </div>
 </section>
+
+<section class="section portfolio-section" id="projects">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-label">Section 02</p>
+      <h2>현재 개발중인 프로젝트</h2>
+      <p class="section-copy">현재 개발을 진행하고 있는 프로젝트입니다.</p>
+    </div>
+    <div class="portfolio-slider" data-slider>
+      <button class="slider-arrow slider-arrow--left" type="button" aria-label="이전 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="slider-track" tabindex="0">
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="project/CSGP/banner.png" alt="CSGP 프로젝트 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>CSGP</h3>
+            <p>Win32 API 기반 C++ 콘솔 게임 프레임워크. 엔진과 콘텐츠를 분리한 구조로 9종의 콘솔 게임을 단계적으로 개발하며 학습하는 프로젝트입니다.</p>
+            <div class="tag-list"><span class="tag">C++</span><span class="tag">Win32 API</span><span class="tag">콘솔게임</span></div>
+            <div class="card-actions">
+              <a class="btn" href="project/CSGP/CSGP.zip" target="_blank" rel="noopener">다운로드</a>
+              <a class="btn" href="https://github.com/ReDocu/CSGPProject" target="_blank" rel="noopener">GitHub</a>
+              <a class="btn" href="project/CSGP/CSGP_Architecture.pdf" target="_blank" rel="noopener">기술문서</a>
+            </div>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="assets/images/portfolio/ClaudeCockpit.svg" alt="ClaudeCockpit 프로젝트 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>ClaudeCockpit</h3>
+            <p>Claude Code 기반 개발 템플릿 프로젝트입니다.</p>
+            <div class="tag-list"><span class="tag">개발중</span><span class="tag">Claude Code</span><span class="tag">Template</span></div>
+            <a class="btn" href="https://github.com/ReDocu/ClaudeCodeTemplate" target="_blank" rel="noopener">GitHub 바로가기</a>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="assets/images/portfolio/EduCraft.svg" alt="Educraft 프로젝트 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>Educraft</h3>
+            <p>현재 개발이 진행 중인 프로젝트입니다.</p>
+            <div class="tag-list"><span class="tag">개발중</span><span class="tag">GitHub</span></div>
+            <a class="btn" href="https://github.com/ReDocu/EduCraft" target="_blank" rel="noopener">GitHub 바로가기</a>
+          </div>
+        </article>
+      </div>
+      <button class="slider-arrow slider-arrow--right" type="button" aria-label="다음 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5L16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+</section>
 <!--
 <section class="section portfolio-section" id="ebooks">
   <div class="container">

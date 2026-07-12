@@ -164,6 +164,8 @@ body.dark-mode .eyebrow { color: #90d9c5; }
 .portfolio-card__body { display: grid; gap: 12px; padding: 18px; }
 .portfolio-card__body h3 { margin: 0; }
 .portfolio-card__body p { margin: 0; color: var(--muted); min-height: 3.2em; }
+.card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.card-actions .btn { flex: 1; text-align: center; }
 
  .slider-arrow {
   position: absolute;

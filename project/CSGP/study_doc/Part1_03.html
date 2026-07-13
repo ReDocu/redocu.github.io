@@ -1,0 +1,870 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C 모듈 · 7–8장 — 배열과 문자열: 회사에 사람과 이름을
+채우다</title>
+<script>try{var _t=localStorage.getItem('csgp-theme');if(_t)document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
+<style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<link rel="stylesheet" href="book.css">
+
+</head>
+<body>
+<div class="topbar">
+  <button class="drawer-toggle" id="drawerToggle" type="button" aria-label="목차 열기/닫기" aria-expanded="false">☰ 목차</button>
+  <a class="home" href="index.html">📘 CSGP</a>
+  <span class="crumb">콘솔 게임으로 배우는 C · C++</span>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="라이트/다크 전환">🌙</button>
+</div>
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" aria-label="책 목차">
+  <div class="drawer-dash">
+    <div class="dash-title">콘솔 게임으로 배우는 C · C++</div>
+    <div class="dash-sub">학습 목차 · 대시보드</div>
+    <div class="dash-progress"><div class="dash-bar"><i id="dashBar"></i></div><span class="dash-pct" id="dashPct"></span></div>
+    <input class="drawer-search" id="drawerSearch" type="search" placeholder="🔍 챕터 검색…" aria-label="챕터 검색">
+  </div>
+  <nav class="booknav" aria-label="책 목차"><a class="booknav-home" href="index.html">📘 전체 목차</a><ul class="booknav-list"><li class="grp">1부 · C 기본 문법</li><li><a href="Part1_00.html" title="1부 — C 기본 문법: 회사를 키우며 배우는 언어">1부 개요</a></li><li><a href="Part1_01.html" title="A 모듈 · 1–4장 — 값·계산·분기: 회사에 숫자를 세우다">A · 값·계산·분기</a></li><li><a href="Part1_02.html" title="B 모듈 · 5–6장 — 반복문과 함수: 회사에 심장을 달다">B · 반복문·함수</a></li><li class="active"><a href="Part1_03.html" title="C 모듈 · 7–8장 — 배열과 문자열: 회사에 사람과 이름을 채우다">C · 배열·문자열</a><ul class="sections">
+<li><a href="#이-모듈의-학습-목표" id="toc-이-모듈의-학습-목표">이
+모듈의 학습 목표</a></li>
+<li><a href="#왜-지금-배열과-문자열인가"
+id="toc-왜-지금-배열과-문자열인가">왜 지금, 배열과 문자열인가</a></li>
+<li><a href="#7장--배열--직원-여럿을-한-이름으로"
+id="toc-7장--배열--직원-여럿을-한-이름으로">7장 · 배열 — 직원 여럿을 한
+이름으로</a></li>
+<li><a href="#8장--문자열--회사에-이름을-주다"
+id="toc-8장--문자열--회사에-이름을-주다">8장 · 문자열 — 회사에 이름을
+주다</a></li>
+<li><a href="#코드-워크스루--실제-소스에서-보는-배열과-문자열"
+id="toc-코드-워크스루--실제-소스에서-보는-배열과-문자열">코드 워크스루 —
+실제 소스에서 보는 배열과 문자열</a></li>
+<li><a href="#그림으로-정리--병렬-배열과-문자열"
+id="toc-그림으로-정리--병렬-배열과-문자열">그림으로 정리 — 병렬 배열과
+문자열</a></li>
+<li><a href="#체크포인트--스스로-점검하기"
+id="toc-체크포인트--스스로-점검하기">체크포인트 — 스스로
+점검하기</a></li>
+<li><a href="#실습-미션--3목틱택토-tictactoec-star"
+id="toc-실습-미션--3목틱택토-tictactoec-star">실습 미션 — 3목(틱택토)
+<code>tictactoe.c</code> ⭐</a></li>
+<li><a href="#이-모듈을-마치며" id="toc-이-모듈을-마치며">이 모듈을
+마치며</a></li>
+</ul></li><li><a href="Part1_04.html" title="D 모듈 · 9–10장 — 구조체와 포인터: 데이터에 모양을 주다">D · 구조체·포인터</a></li><li><a href="Part1_05.html" title="E 모듈 · 11–12장 — 동적 메모리와 랜덤: 회사가 자라고, 시장이 살아난다">E · 메모리·랜덤</a></li><li><a href="Part1_06.html" title="F 모듈 · 13–15장 — 파일·모듈·캡스톤: 회사를 저장하고, 게임을 출시하다">F · 파일·모듈·캡스톤</a></li><li class="grp">2부 · C++ 프레임워크</li><li><a href="Part2_00.html" title="2부 — C++ 콘솔 게임 프레임워크: 7개의 게임으로 오르기">2부 개요</a></li><li><a href="Part2_01.html" title="1단계 · Snake — 자료구조·충돌·상태머신">1단계 · Snake</a></li><li><a href="Part2_02.html" title="2단계 · Tetris — 알고리즘과 그리드">2단계 · Tetris</a></li><li><a href="Part2_03.html" title="3단계 · Dino — 물리와 스크롤">3단계 · Dino</a></li><li><a href="Part2_04.html" title="4단계 · Road Fighter — 엔티티 시스템과 리소스">4단계 · Road Fighter</a></li><li><a href="Part2_05.html" title="번외 · GameDevTycoon 이식 — C에서 C++로">번외 · Tycoon 이식</a></li><li><a href="Part2_06.html" title="5단계 · Galaga — 오브젝트 풀링">5단계 · Galaga</a></li><li><a href="Part2_07.html" title="6단계 · Maze — 알고리즘 심화 (생성 + 탐색)">6단계 · Maze</a></li><li><a href="Part2_08.html" title="7단계 · Battle City — 종합 캡스톤 (맵 생성 + 풀링)">7단계 · Battle City</a></li><li><a href="Part2_09.html" title="확장 · Pac-Man — 유령 AI와 상태머신">확장 · Pac-Man</a></li><li class="grp">부록</li><li><a href="Appendix.html" title="부록 — 용어집 · 핵심 이슈 · 요약">부록</a></li></ul></nav>
+</aside>
+<main class="reader">
+  <article class="page">
+<h1 id="c-모듈--78장--배열과-문자열-회사에-사람과-이름을-채우다">C 모듈
+· 7–8장 — 배열과 문자열: 회사에 사람과 이름을 채우다</h1>
+<div class="chapter-badge">
+
+<p><strong>모듈 C</strong> · 7–8장 · 게임 버전 <strong>v0.3 →
+v0.4</strong> · 예상 학습 시간 <strong>3–5시간</strong> <strong>처음
+배우는 기술</strong> — <code>배열 선언·인덱스</code>
+<code>배열 초기화</code> <code>배열 순회</code> <code>2차원 배열</code>
+<code>고정 크기의 한계</code> <code>char 문자열</code>
+<code>널 종료('\0')</code> <code>string.h (strcpy·strlen·strcmp)</code>
+<code>문자열 배열</code> <code>fgets 입력</code>
+<code>입력 버퍼 비우기</code></p>
+</div>
+
+<blockquote>
+<p>지금까지 우리 회사는 사장 혼자였고 이름도 없었다. 이 모듈에서
+<strong>배열</strong>로 직원 여럿을 한 목록에 담고,
+<strong>문자열</strong>로 회사와 게임에 이름을 준다. 그런데 아직
+구조체(9장)가 없어서, 직원 한 명의 정보를 <strong>여러 배열에
+나눠</strong> 담아야 한다 — 이 방식은 곧 손이 아파 온다. 그 아픔이 바로
+다음 D 모듈에서 구조체를 반갑게 만드는 준비운동이다.</p>
+</blockquote>
+<h2 id="이-모듈의-학습-목표">이 모듈의 학습 목표</h2>
+<p>이 모듈을 마치면 다음을 할 수 있다.</p>
+<ol type="1">
+<li>같은 자료형 여럿을 <strong>배열</strong>에 담고, 인덱스로 접근하며,
+<code>for</code> 로 순회할 수 있다.</li>
+<li><strong>2차원 배열</strong>의 구조를 이해하고, 월별 매출 기록·문자열
+목록에 쓸 수 있다.</li>
+<li>고정 크기 배열의 <strong>한계</strong>(정해진 칸 수)를 설명하고, 왜
+그것이 11장 동적 메모리로 이어지는지 안다.</li>
+<li>C의 문자열이 <strong><code>char</code> 배열 + 널
+종료(<code>'\0'</code>)</strong> 라는 사실을 이해하고,
+<code>string.h</code>
+함수(<code>strcpy</code>·<code>strlen</code>·<code>strcmp</code>)를 쓸
+수 있다.</li>
+<li><code>fgets</code> 로 공백 포함 문자열을 안전하게 입력받고,
+<code>scanf</code> 뒤에 남는 <strong>입력 버퍼 문제</strong>를 해결할 수
+있다.</li>
+<li>직원 정보를 <strong>병렬 배열</strong>로 관리하는 방식의 불편함을
+몸으로 느끼고, 그것이 구조체(D 모듈)의 필요성으로 이어짐을 안다.</li>
+</ol>
+<h2 id="왜-지금-배열과-문자열인가">왜 지금, 배열과 문자열인가</h2>
+<p>B 모듈에서 우리 회사는 "돌기" 시작했다. 매달 정산이 반복되고, 파산
+엔딩까지 있다. 그런데 이 회사엔 아직 두 가지가 없다 —
+<strong>사람</strong>과 <strong>이름</strong>이다.</p>
+<p>직원을 한 명 두려면 변수 몇 개(이름·개발력·창의력·월급·근속)가
+필요하다. 그런데 직원은 한 명이 아니라 <strong>여럿</strong>이다. 변수를
+<code>dev1, dev2, dev3, dev4</code> 처럼 번호를 붙여 만들 순 없다 —
+직원이 늘 때마다 코드를 고쳐야 하고, "모든 직원의 월급을 더하라" 같은
+일을 반복문으로 처리할 수도 없다. <strong>같은 종류의 값 여럿을 하나의
+이름으로, 번호(인덱스)로 다루는 도구</strong> — 그것이 배열이다.</p>
+<p>이름은 또 다른 문제다. 지금까지 우리가 다룬 값은 숫자뿐이었다. 회사
+이름 "EQMENT STUDIO", 게임 제목 "던전 앤 라면" 같은 <strong>글자의
+나열</strong>을 담으려면 새로운 그릇이 필요하다. C에는 문자열 전용
+자료형이 따로 없다 — 문자열은 <strong>글자(<code>char</code>)를 담은
+배열</strong>이다. 그래서 문자열은 배열을 배운 바로 다음에 온다.</p>
+<blockquote>
+<p><strong>이 모듈에서 만드는 것.</strong> 회사에 이름을 붙이고(문자열
+입력), 직원을 최대 4명까지 고용해 목록으로 관리하며(배열), 매달 직원
+월급 합계를 지출에 반영하는 — GDD 마일스톤 <strong>v0.4 "첫
+직원"</strong> 이다. 5번째 직원을 뽑으려 하면 "사무실이 좁습니다"라며
+거절당하는데, 이 답답함이 11장(동적 메모리)에서 풀린다.</p>
+</blockquote>
+<hr />
+<h2 id="7장--배열--직원-여럿을-한-이름으로">7장 · 배열 — 직원 여럿을 한
+이름으로</h2>
+<h3 id="71-배열이란--같은-자료형-여럿을-한-묶음으로">7.1 배열이란 — 같은
+자료형 여럿을 한 묶음으로</h3>
+<p><strong>배열(array)</strong> 은 같은 자료형의 값 여러 개를 연속된
+칸에 담고, <strong>인덱스(번호)</strong> 로 각 칸에 접근하는 자료구조다.
+직원 4명의 개발력을 담아 보자.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> staffDev<span class="op">[</span><span class="dv">4</span><span class="op">];</span>       <span class="co">/* int 4칸짜리 배열 — staffDev[0] ~ staffDev[3] */</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>staffDev<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="dv">7</span><span class="op">;</span>       <span class="co">/* 첫 번째 직원의 개발력 */</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>staffDev<span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>staffDev<span class="op">[</span><span class="dv">2</span><span class="op">]</span> <span class="op">=</span> <span class="dv">8</span><span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>staffDev<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">=</span> <span class="dv">6</span><span class="op">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> staffDev<span class="op">[</span><span class="dv">2</span><span class="op">]);</span>   <span class="co">/* 8 — 세 번째 직원 */</span></span></code></pre></div>
+<p>핵심 규칙 하나 — <strong>인덱스는 0부터 시작한다.</strong> 4칸 배열의
+유효한 인덱스는 <code>0, 1, 2, 3</code> 이다. <code>staffDev[4]</code>
+는 존재하지 않는 다섯 번째 칸으로, 접근하면 프로그램이 엉뚱하게
+동작하거나 죽는다(이를 "배열 범위 벗어남"이라 한다). "칸이 4개면
+인덱스는 0~3" 을 몸에 새기자.</p>
+<h3 id="72-초기화와-순회--for-와-배열은-단짝">7.2 초기화와 순회 —
+<code>for</code> 와 배열은 단짝</h3>
+<p>배열은 선언과 동시에 값을 채울 수 있고(초기화), <code>for</code> 로
+전체를 훑을 수 있다(순회). 배열과 반복문(B 모듈)은 단짝이다.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sales<span class="op">[</span><span class="dv">4</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="dv">820</span><span class="op">,</span> <span class="dv">640</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">1200</span> <span class="op">};</span>   <span class="co">/* 선언과 동시에 초기화 */</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i<span class="op">,</span> total <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">4</span><span class="op">;</span> i<span class="op">++)</span>      <span class="co">/* 0,1,2,3 — 모든 칸을 순회 */</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    total <span class="op">+=</span> sales<span class="op">[</span>i<span class="op">];</span>       <span class="co">/* 각 칸의 값을 더한다 */</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;합계 </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> total<span class="op">);</span>   <span class="co">/* 2660 */</span></span></code></pre></div>
+<p><code>for (i = 0; i &lt; 4; i++)</code> — 인덱스 <code>i</code> 를
+0부터 3까지 돌리며 <code>sales[i]</code> 로 각 칸에 닿는다. "모든 직원의
+월급을 더하라", "모든 매출을 합하라" 같은 일이 전부 이 한 줄짜리
+패턴이다. 배열이 없었다면 <code>sales1 + sales2 + sales3 + sales4</code>
+처럼 손으로 다 써야 했을 것이다.</p>
+<blockquote>
+<p><strong><code>4</code> 를 여기저기 쓰지 말자.</strong> 배열 크기를
+<code>#define MAX_STAFF 4</code> 같은 상수로 두면, 나중에 슬롯을 늘릴 때
+한 줄만 고치면 된다. A 모듈의 <code>const RENT</code> 와 같은 정신이다.
+우리 게임도 <code>START_STAFF_CAP</code> 이라는 상수로 이 크기를
+관리한다.</p>
+</blockquote>
+<h3 id="73-2차원-배열--표처럼-생긴-배열">7.3 2차원 배열 — 표처럼 생긴
+배열</h3>
+<p>배열의 각 칸이 다시 배열이면 <strong>2차원 배열</strong>이 된다. 행과
+열이 있는 표를 생각하면 된다. 우리 게임에선 두 곳에 쓰인다 —
+<strong>월별 매출 12칸</strong>(1차원이면 충분하지만 연도별로 쌓으면
+2차원)과, 곧 볼 <strong>직원 이름 목록</strong>(문자열이 곧 char
+배열이라, 이름 여럿은 2차원 char 배열)이다.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> monthSales<span class="op">[</span><span class="dv">3</span><span class="op">][</span><span class="dv">12</span><span class="op">];</span>        <span class="co">/* 3년 × 12개월 매출표 */</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>monthSales<span class="op">[</span><span class="dv">0</span><span class="op">][</span><span class="dv">2</span><span class="op">]</span> <span class="op">=</span> <span class="dv">820</span><span class="op">;</span>       <span class="co">/* 1년차 3월 매출 (행 0, 열 2) */</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">/* 표 전체 순회 — 이중 for */</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> y<span class="op">,</span> m<span class="op">;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>y <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> y <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> y<span class="op">++)</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>m <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> m <span class="op">&lt;</span> <span class="dv">12</span><span class="op">;</span> m<span class="op">++)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        monthSales<span class="op">[</span>y<span class="op">][</span>m<span class="op">]</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> <span class="co">/* 전부 0으로 초기화 */</span></span></code></pre></div>
+<p>2차원 배열의 순회는 <code>for</code> 안에 <code>for</code> 를 넣는
+<strong>이중 반복문</strong>이다. 바깥 <code>for</code> 가 행(년)을,
+안쪽 <code>for</code> 가 열(월)을 훑는다. 이 이중 순회 패턴은 2부에서
+테트리스 보드(<code>board[20][10]</code>)나 미로 격자를 다룰 때 그대로
+다시 쓰인다.</p>
+<h3 id="74-고정-크기의-한계--4명이-꽉-차면">7.4 고정 크기의 한계 — 4명이
+꽉 차면</h3>
+<p>배열의 크기는 <strong>선언할 때 정해지고, 실행 중에는 바꿀 수
+없다.</strong> <code>int staffDev[4]</code> 는 영원히 4칸이다. 우리
+회사는 처음에 직원을 4명까지만 둘 수 있는데, 이 한계가 곧 게임의 벽이
+된다.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MAX_STAFF </span><span class="dv">4</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> staffCount <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">/* 현재 직원 수 */</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">/* 고용 시도 */</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>staffCount <span class="op">&gt;=</span> MAX_STAFF<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;  ! 사무실이 좁습니다. 더는 고용할 수 없어요.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* staffCount 번째 칸에 새 직원을 넣고 staffCount++ */</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>5번째 직원을 뽑으려 하면 거절당한다. 회사는 계속 커져야 하는데 배열은
+4칸에 못 박혀 있다 — 이 답답함이 <strong>11장 동적
+메모리(<code>malloc</code>/<code>realloc</code>)</strong> 의 동기다.
+그때 우리는 "필요한 만큼 배열을 키우는" 법을 배워 이 벽을 허문다. 지금은
+벽에 부딪히는 경험 자체가 학습이다.</p>
+<blockquote>
+<p><strong>⚠️ 고정 배열 → 동적 배열, 커리큘럼의 복선.</strong> "정해진
+크기의 배열이 부족하다"는 이 불편함을 지금 확실히 느껴 두자. 11장에서
+<code>realloc</code> 으로 배열을 2배씩 늘려 이 한계를 푸는데,
+<strong>불편을 먼저 겪은 사람만이 그 해법의 고마움을 안다.</strong>
+참고로 2부의 Galaga(오브젝트 풀)는 정반대 방향 — "동적 할당이 너무 잦아
+느려지니, 고정 배열을 재활용하자"는 이야기다. 같은 배열이라도 상황에
+따라 고정과 동적을 오간다.</p>
+</blockquote>
+<h3 id="75-게임에-적용--직원-목록을-병렬-배열로">7.5 게임에 적용 — 직원
+목록을 "병렬 배열"로</h3>
+<p>이제 직원 목록을 만든다. 직원 한 명은 이름·개발력·창의력·월급·근속
+다섯 가지 정보를 가진다. 그런데 아직 구조체가 없으니(9장), 이 다섯
+가지를 <strong>각각 별도의 배열</strong>로 만들어 인덱스로 짝을 맞춘다.
+이것을 <strong>병렬 배열(parallel array)</strong> 이라 한다.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MAX_STAFF </span><span class="dv">4</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#define SALARY_RATE </span><span class="dv">30</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> staffName<span class="op">[</span>MAX_STAFF<span class="op">][</span><span class="dv">20</span><span class="op">];</span>  <span class="co">/* 이름 4명분 (2차원 char = 문자열 4개) */</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span>  staffDev<span class="op">[</span>MAX_STAFF<span class="op">];</span>       <span class="co">/* 개발력 4명분 */</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span>  staffCre<span class="op">[</span>MAX_STAFF<span class="op">];</span>       <span class="co">/* 창의력 4명분 */</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span>  staffSalary<span class="op">[</span>MAX_STAFF<span class="op">];</span>    <span class="co">/* 월급 4명분 */</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span>  staffMonths<span class="op">[</span>MAX_STAFF<span class="op">];</span>    <span class="co">/* 근속 4명분 */</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span>  staffCount <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>            <span class="co">/* 현재 직원 수 */</span></span></code></pre></div>
+<p><code>staffName[2]</code>, <code>staffDev[2]</code>,
+<code>staffCre[2]</code> … <strong>인덱스 2가 곧 "세 번째 직원"</strong>
+이다. 다섯 배열이 인덱스로 손을 잡고 한 직원을 표현한다. 고용은
+<code>staffCount</code> 번째 칸을 채우고 수를 늘린다.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* 고용: 이름·능력치를 받아 다음 빈 칸에 넣는다 */</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> HireStaff<span class="op">(</span><span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>name<span class="op">,</span> <span class="dt">int</span> dev<span class="op">,</span> <span class="dt">int</span> cre<span class="op">)</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>staffCount <span class="op">&gt;=</span> MAX_STAFF<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;  ! 사무실이 좁습니다. (최대 </span><span class="sc">%d</span><span class="st">명)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> MAX_STAFF<span class="op">);</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    strcpy<span class="op">(</span>staffName<span class="op">[</span>staffCount<span class="op">],</span> name<span class="op">);</span>          <span class="co">/* 문자열은 strcpy 로 (8장) */</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    staffDev<span class="op">[</span>staffCount<span class="op">]</span>    <span class="op">=</span> dev<span class="op">;</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    staffCre<span class="op">[</span>staffCount<span class="op">]</span>    <span class="op">=</span> cre<span class="op">;</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    staffSalary<span class="op">[</span>staffCount<span class="op">]</span> <span class="op">=</span> <span class="op">(</span>dev <span class="op">+</span> cre<span class="op">)</span> <span class="op">*</span> SALARY_RATE<span class="op">;</span>  <span class="co">/* 월급 = (개발+창의)*30 */</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    staffMonths<span class="op">[</span>staffCount<span class="op">]</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    staffCount<span class="op">++;</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;  * [</span><span class="sc">%s</span><span class="st">] 고용! (월급 </span><span class="sc">%d</span><span class="st">만원)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> name<span class="op">,</span> staffSalary<span class="op">[</span>staffCount <span class="op">-</span> <span class="dv">1</span><span class="op">]);</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>월급 합계는 배열 순회 한 번이다(7.2 패턴 그대로).</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> TotalSalary<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> i<span class="op">,</span> sum <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> staffCount<span class="op">;</span> i<span class="op">++)</span>   <span class="co">/* staffCount 명만 순회 */</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        sum <span class="op">+=</span> staffSalary<span class="op">[</span>i<span class="op">];</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sum<span class="op">;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>문제는 <strong>해고</strong>다. 가운데 직원 한 명을 빼면, 뒤 직원들을
+한 칸씩 앞으로 당겨야 한다. 그런데 배열이 다섯 개니, <strong>다섯 배열을
+전부 당겨야</strong> 한다.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* idx 번 직원 해고: 뒤 직원들을 한 칸씩 앞으로 — 다섯 배열 모두! */</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> FireStaff<span class="op">(</span><span class="dt">int</span> idx<span class="op">)</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> idx<span class="op">;</span> i <span class="op">&lt;</span> staffCount <span class="op">-</span> <span class="dv">1</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        strcpy<span class="op">(</span>staffName<span class="op">[</span>i<span class="op">],</span> staffName<span class="op">[</span>i <span class="op">+</span> <span class="dv">1</span><span class="op">]);</span>  <span class="co">/* ① 이름 당기기 */</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        staffDev<span class="op">[</span>i<span class="op">]</span>    <span class="op">=</span> staffDev<span class="op">[</span>i <span class="op">+</span> <span class="dv">1</span><span class="op">];</span>        <span class="co">/* ② 개발력 당기기 */</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        staffCre<span class="op">[</span>i<span class="op">]</span>    <span class="op">=</span> staffCre<span class="op">[</span>i <span class="op">+</span> <span class="dv">1</span><span class="op">];</span>        <span class="co">/* ③ 창의력 당기기 */</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        staffSalary<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> staffSalary<span class="op">[</span>i <span class="op">+</span> <span class="dv">1</span><span class="op">];</span>     <span class="co">/* ④ 월급 당기기 */</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        staffMonths<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> staffMonths<span class="op">[</span>i <span class="op">+</span> <span class="dv">1</span><span class="op">];</span>     <span class="co">/* ⑤ 근속 당기기 */</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    staffCount<span class="op">--;</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>바로 이것이 병렬 배열의 아픔이다. <strong>직원 하나를 옮기는 데 다섯
+줄이 필요하고, 하나라도 빠뜨리면</strong> 이름과 능력치가
+어긋난다(김개발의 이름 자리에 이서버의 월급이 붙는 식으로). 직원에게
+속성 하나(예: 사기)를 추가하면? 배열 선언·고용·해고·순회를
+<strong>전부</strong> 손봐야 한다.</p>
+<blockquote>
+<p><strong>⚠️ 이 불편함을 기억하라 — D 모듈이 이걸 고친다.</strong> 다섯
+배열을 나란히 당기는 이 코드는 다음 D 모듈(구조체)의 도입부에
+<strong>그대로 다시 등장</strong>한다. 구조체로 직원을 하나로 묶으면, 이
+다섯 줄이 <code>staff[i] = staff[i+1];</code> <strong>한 줄</strong>로
+접힌다. 지금의 아픔이 클수록, 그때의 후련함도 크다. 이건 우연이 아니라
+이 책이 문법을 배우는 순서 — <strong>"왜 필요한가를 몸으로 겪은 뒤에
+도구를 쥔다"</strong> — 그 자체다.</p>
+</blockquote>
+<hr />
+<h2 id="8장--문자열--회사에-이름을-주다">8장 · 문자열 — 회사에 이름을
+주다</h2>
+<p>숫자만 다루던 우리 게임에 <strong>글자</strong>를 들인다. 회사 이름,
+게임 제목, 직원 이름 — 전부 문자열이다.</p>
+<h3 id="81-문자열은-char-배열--널-종료">8.1 문자열은 <code>char</code>
+배열 + 널 종료</h3>
+<p>C에는 문자열 전용 자료형이 없다. 문자열은
+<strong>글자(<code>char</code>)를 담은 배열</strong>이고, 그 끝에는
+반드시 <strong>널 문자 <code>'\0'</code></strong> 이 붙는다. 이 널
+문자가 "문자열이 여기서 끝난다"는 표시다.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> name<span class="op">[</span><span class="dv">6</span><span class="op">]</span> <span class="op">=</span> <span class="st">&quot;CSGP&quot;</span><span class="op">;</span></span></code></pre></div>
+<p>메모리에는 이렇게 담긴다 — 글자 4개 뒤에 자동으로 <code>'\0'</code>
+이 붙는다.</p>
+<pre><code>  인덱스:  0    1    2    3    4     5
+          &#39;C&#39;  &#39;S&#39;  &#39;G&#39;  &#39;P&#39; &#39;\0&#39;  (미사용)
+                                ▲
+                       여기서 문자열 끝. printf 는 &#39;\0&#39; 을 만나면 멈춘다.</code></pre>
+<p>그래서 배열 크기는 <strong>글자 수 + 1</strong>(널 문자 자리)이어야
+한다. "CSGP"(4글자)를 담으려면 최소 <code>char[5]</code> 가 필요하다.
+회사명을 <code>char companyName[20]</code> 으로 잡으면, 널 문자를 빼고
+최대 19글자까지 담을 수 있다.</p>
+<blockquote>
+<p><strong>왜 <code>'\0'</code> 이 중요한가.</strong>
+<code>printf("%s", name)</code> 은 배열의 시작부터 글자를 찍다가
+<code>'\0'</code> 을 만나면 멈춘다. 만약 널 문자가 없으면,
+<code>printf</code> 는 배열 경계를 넘어 엉뚱한 메모리를 계속 읽으며
+쓰레기 값을 쏟아낸다. 문자열을 직접 조작할 때 널 문자를 챙기는 것은 C
+문자열의 철칙이다.</p>
+</blockquote>
+<h3 id="82-stringh--문자열-도구-상자">8.2 <code>string.h</code> — 문자열
+도구 상자</h3>
+<p>문자열은 배열이라, <code>name = "CSGP";</code> 같은 대입이 <strong>안
+된다</strong>(배열 이름은 통째로 대입할 수 없다). 대신
+<code>string.h</code> 의 함수들을 쓴다.</p>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>하는 일</th>
+<th>예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>strcpy(dst, src)</code></td>
+<td>src 를 dst 로 <strong>복사</strong></td>
+<td><code>strcpy(name, "CSGP");</code></td>
+</tr>
+<tr>
+<td><code>strlen(s)</code></td>
+<td>글자 수 (<code>'\0'</code> 제외)</td>
+<td><code>strlen("CSGP")</code> → <code>4</code></td>
+</tr>
+<tr>
+<td><code>strcmp(a, b)</code></td>
+<td>두 문자열 <strong>비교</strong> (같으면 0)</td>
+<td><code>strcmp(a, "exit") == 0</code></td>
+</tr>
+<tr>
+<td><code>strcat(dst, src)</code></td>
+<td>dst 뒤에 src 를 <strong>이어붙임</strong></td>
+<td><code>strcat(path, ".txt");</code></td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb11"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> company<span class="op">[</span><span class="dv">20</span><span class="op">];</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>strcpy<span class="op">(</span>company<span class="op">,</span> <span class="st">&quot;EQMENT STUDIO&quot;</span><span class="op">);</span>     <span class="co">/* 대입 대신 복사 */</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;이름 길이: </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span>strlen<span class="op">(</span>company<span class="op">));</span>  <span class="co">/* 13 */</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>strcmp<span class="op">(</span>company<span class="op">,</span> <span class="st">&quot;EQMENT STUDIO&quot;</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span>   <span class="co">/* == 이 아니라 strcmp! */</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;우리 회사가 맞다</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<blockquote>
+<p><strong>⚠️ 문자열 비교는 <code>==</code> 가 아니라
+<code>strcmp</code>.</strong> <code>if (name == "CSGP")</code> 는 문자열
+내용이 아니라 <strong>주소</strong>를 비교하므로 거의 항상 거짓이다.
+내용이 같은지 물으려면 <code>strcmp(name, "CSGP") == 0</code> 이다.
+<code>strcmp</code> 는 같으면 0을 돌려주므로 <code>== 0</code> 을 붙이는
+걸 잊지 말자(이 0의 의미는 헷갈리기 쉬우니 "다른 정도를 재는데, 다름이
+0이면 같다"로 외우자).</p>
+</blockquote>
+<h3 id="83-문자열-입력의-함정--scanf-와-버퍼">8.3 문자열 입력의 함정 —
+<code>scanf</code> 와 버퍼</h3>
+<p>문자열을 입력받는 건 숫자보다 까다롭다.
+<code>scanf("%s", name)</code> 은 <strong>공백에서 잘린다</strong> —
+"던전 앤 라면"을 입력하면 "던전"만 담긴다. 공백을 포함한 한 줄을 통째로
+받으려면 <code>fgets</code> 를 쓴다.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> title<span class="op">[</span><span class="dv">30</span><span class="op">];</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>fgets<span class="op">(</span>title<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>title<span class="op">),</span> stdin<span class="op">);</span>      <span class="co">/* 한 줄 전체 (공백 포함) */</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>title<span class="op">[</span>strcspn<span class="op">(</span>title<span class="op">,</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">)]</span> <span class="op">=</span> <span class="ch">&#39;</span><span class="sc">\0</span><span class="ch">&#39;</span><span class="op">;</span>      <span class="co">/* 끝의 개행 문자를 널로 바꿔 제거 */</span></span></code></pre></div>
+<p><code>fgets</code> 는 개행(<code>\n</code>)까지 함께 읽어 오므로,
+<code>strcspn(title, "\n")</code> 으로 개행 위치를 찾아
+<code>'\0'</code> 으로 덮어 제거한다. 이 두 줄이 문자열 한 줄을 안전하게
+받는 표준 패턴이다.</p>
+<p>그런데 여기 C 입문의 <strong>가장 악명 높은 함정</strong>이 있다.
+<code>scanf("%d")</code> 로 숫자를 받은 <strong>직후에</strong>
+<code>fgets</code> 를 부르면, <code>fgets</code> 가 빈 줄을 읽고 지나가
+버린다.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sel<span class="op">;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> name<span class="op">[</span><span class="dv">20</span><span class="op">];</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>scanf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>sel<span class="op">);</span>              <span class="co">/* 숫자 입력: 사용자가 &quot;3⏎&quot; 입력 */</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>fgets<span class="op">(</span>name<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>name<span class="op">),</span> stdin<span class="op">);</span> <span class="co">/* ← &quot;3&quot; 뒤에 남은 &#39;\n&#39; 을 읽고 즉시 끝나 버림! */</span></span></code></pre></div>
+<p>왜일까? <code>scanf("%d")</code> 는 숫자 <code>3</code> 만 읽고,
+사용자가 누른 Enter(<code>'\n'</code>)를 <strong>입력 버퍼에 남겨
+둔다.</strong> 그 직후 <code>fgets</code> 는 버퍼에 남은 그
+<code>'\n'</code> 을 "빈 줄"로 읽어 버린다. 해결책은 <code>scanf</code>
+다음에 <strong>버퍼에 남은 개행을 비워 주는 것</strong>이다.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> ch<span class="op">;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">((</span>ch <span class="op">=</span> getchar<span class="op">())</span> <span class="op">!=</span> <span class="ch">&#39;</span><span class="sc">\n</span><span class="ch">&#39;</span> <span class="op">&amp;&amp;</span> ch <span class="op">!=</span> EOF<span class="op">)</span>   <span class="co">/* 남은 문자를 개행까지 다 버린다 */</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">;</span>                                            <span class="co">/* 비어 있는 몸통 (버리기만) */</span></span></code></pre></div>
+<p>이 <code>while (getchar() != '\n');</code> 패턴은 "입력 버퍼
+비우기"의 상투어다. 실제 게임의 <code>ui.c</code> 는 이걸
+<code>FlushLine()</code> 이라는 함수로 묶어, 모든 입력 함수가
+공유한다(워크스루에서 본다).</p>
+<h3 id="84-게임에-적용--회사명과-게임-제목">8.4 게임에 적용 — 회사명과
+게임 제목</h3>
+<p>이제 회사에 이름을 붙인다. 타이틀 화면에서 회사명을, 게임 기획에서
+제목을 입력받는다. 8.3의 안전한 입력 패턴을 함수로 묶어 재사용한다.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define _CRT_SECURE_NO_WARNINGS</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> companyName<span class="op">[</span><span class="dv">20</span><span class="op">];</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> gameTitle<span class="op">[</span><span class="dv">30</span><span class="op">];</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">/* 한 줄 입력 (공백 포함, 개행 제거) — 8.3 패턴을 함수로 */</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> ReadLine<span class="op">(</span><span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>prompt<span class="op">,</span> <span class="dt">char</span> <span class="op">*</span>buf<span class="op">,</span> <span class="dt">int</span> size<span class="op">)</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s</span><span class="st">&quot;</span><span class="op">,</span> prompt<span class="op">);</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>buf<span class="op">,</span> size<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    buf<span class="op">[</span>strcspn<span class="op">(</span>buf<span class="op">,</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">)]</span> <span class="op">=</span> <span class="ch">&#39;</span><span class="sc">\0</span><span class="ch">&#39;</span><span class="op">;</span>   <span class="co">/* 개행 제거 → 깔끔한 문자열 */</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    ReadLine<span class="op">(</span><span class="st">&quot;회사 이름: &quot;</span><span class="op">,</span> companyName<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>companyName<span class="op">));</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    ReadLine<span class="op">(</span><span class="st">&quot;첫 게임 제목: &quot;</span><span class="op">,</span> gameTitle<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>gameTitle<span class="op">));</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">[</span><span class="sc">%s</span><span class="st">] 창업! 첫 작품 </span><span class="sc">\&quot;%s\&quot;</span><span class="st"> 개발을 시작합니다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>           companyName<span class="op">,</span> gameTitle<span class="op">);</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;회사명 </span><span class="sc">%d</span><span class="st">글자 / 제목 </span><span class="sc">%d</span><span class="st">글자</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span><span class="dt">int</span><span class="op">)</span>strlen<span class="op">(</span>companyName<span class="op">),</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span>strlen<span class="op">(</span>gameTitle<span class="op">));</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>실행하면 공백이 든 이름도 온전히 담긴다.</p>
+<pre><code>회사 이름: EQMENT STUDIO
+첫 게임 제목: 던전 앤 라면
+[EQMENT STUDIO] 창업! 첫 작품 &quot;던전 앤 라면&quot; 개발을 시작합니다.
+회사명 13글자 / 제목 ... (한글은 글자당 여러 바이트라 strlen 값이 눈에 보이는 글자 수와 다르다)</code></pre>
+<blockquote>
+<p><strong>한글과 <code>strlen</code> — 인코딩의 그림자.</strong>
+<code>strlen</code> 은 <strong>바이트 수</strong>를 센다. CP949에서 한글
+한 글자는 2바이트라, "던전 앤 라면"의 <code>strlen</code> 은 눈에 보이는
+글자 수보다 크다. 지금은 "한글은 한 글자가 여러 바이트"라는 사실만 알아
+두자. 이 바이트-글자 불일치가 2부에서 <strong>전각 문자가 콘솔 2칸을
+차지하는 문제</strong>(<code>x * 2</code> 좌표 변환)로 다시 나타난다.
+인코딩은 1부와 2부를 관통하는 그림자 주제다.</p>
+</blockquote>
+<hr />
+<h2 id="코드-워크스루--실제-소스에서-보는-배열과-문자열">코드 워크스루 —
+실제 소스에서 보는 배열과 문자열</h2>
+<p>우리가 병렬 배열로 만든 직원 목록이, <code>Study/Tycoon/</code>
+완성본에서는 어떻게 나타나는지 보자. 완성본은 이미 구조체(D 모듈)로
+넘어가 있어서, <strong>병렬 배열이 하나의 구조체 배열로 접혀
+있다</strong> — 우리가 다음 모듈에서 할 바로 그 개선이 완성본엔 이미
+되어 있다.</p>
+<blockquote>
+<p><strong>실제 파일:</strong> <code>Study/Tycoon/employee.c</code>(직원
+목록) · <code>Study/Tycoon/ui.c</code>(문자열 입력)</p>
+</blockquote>
+<p><strong>① 월급 합계 (<code>employee.c</code> ·
+<code>TotalSalary</code>)</strong> — 우리 7.5의 <code>TotalSalary</code>
+와 판박이다. 배열을 <code>for</code> 로 순회하며 더한다. 다른 점은 다섯
+배열이 아니라 <strong>하나의
+배열</strong>(<code>c-&gt;staff[i]</code>)에서 <code>.salary</code> 를
+꺼낸다는 것뿐.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> TotalSalary<span class="op">(</span><span class="dt">const</span> Company <span class="op">*</span>c<span class="op">)</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> sum <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> i<span class="op">;</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> c<span class="op">-&gt;</span>staffCount<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>        sum <span class="op">+=</span> c<span class="op">-&gt;</span>staff<span class="op">[</span>i<span class="op">].</span>salary<span class="op">;</span>      <span class="co">/* 우리의 staffSalary[i] 에 해당 */</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sum<span class="op">;</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>우리는 <code>staffSalary[i]</code>(다섯 배열 중 하나), 완성본은
+<code>c-&gt;staff[i].salary</code>(한 배열 안의 멤버). <strong>순회
+패턴은 똑같고, 데이터를 묶는 방식만 다르다.</strong> 그 "묶는 방식"의
+차이가 바로 D 모듈이다.</p>
+<p><strong>② 해고 (<code>employee.c</code> ·
+<code>QuitEmployee</code>)</strong> — 우리 7.5의 <code>FireStaff</code>
+는 다섯 배열을 각각 당기느라 다섯 줄이었다. 완성본은 구조체 덕분에
+<strong>단 한 줄</strong>이다. 이 대비를 꼭 눈에 새기자.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> QuitEmployee<span class="op">(</span>Company <span class="op">*</span>c<span class="op">,</span> <span class="dt">int</span> idx<span class="op">)</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> idx<span class="op">;</span> i <span class="op">&lt;</span> c<span class="op">-&gt;</span>staffCount <span class="op">-</span> <span class="dv">1</span><span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>        c<span class="op">-&gt;</span>staff<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> c<span class="op">-&gt;</span>staff<span class="op">[</span>i <span class="op">+</span> <span class="dv">1</span><span class="op">];</span>   <span class="co">/* 구조체 통째 복사 — 우리의 5줄이 1줄로! */</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    c<span class="op">-&gt;</span>staffCount<span class="op">--;</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>우리의 다섯 줄(이름·개발·창의·월급·근속을 따로따로 당기기)이, 여기선
+<code>c-&gt;staff[i] = c-&gt;staff[i + 1];</code> 한 줄로 끝난다.
+구조체가 다섯 값을 하나로 묶었기 때문이다. <strong>7.5에서 느낀 그
+아픔의 해답이 이 한 줄에 있다.</strong></p>
+<p><strong>③ 문자열 입력 (<code>ui.c</code> ·
+<code>ReadLine</code>)</strong> — 우리 8.4의 <code>ReadLine</code> 을 더
+튼튼하게 만든 실전 버전이다. 8.3에서 배운 개행 제거와 버퍼 처리가 모두
+들어 있다.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> ReadLine<span class="op">(</span><span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>prompt<span class="op">,</span> <span class="dt">char</span> <span class="op">*</span>buf<span class="op">,</span> <span class="dt">int</span> size<span class="op">)</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* ... fgets 로 한 줄 읽기 ... */</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>len <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">&amp;&amp;</span> buf<span class="op">[</span>len <span class="op">-</span> <span class="dv">1</span><span class="op">]</span> <span class="op">!=</span> <span class="ch">&#39;</span><span class="sc">\n</span><span class="ch">&#39;</span><span class="op">)</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>        FlushLine<span class="op">();</span>                     <span class="co">/* 줄이 너무 길면 버퍼에 남은 걸 비운다 */</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    buf<span class="op">[</span>strcspn<span class="op">(</span>buf<span class="op">,</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">)]</span> <span class="op">=</span> <span class="ch">&#39;</span><span class="sc">\0</span><span class="ch">&#39;</span><span class="op">;</span>      <span class="co">/* 개행 제거 (우리 8.3 그대로) */</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>buf<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">!=</span> <span class="ch">&#39;</span><span class="sc">\0</span><span class="ch">&#39;</span><span class="op">)</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span>                          <span class="co">/* 빈 줄이면 다시 입력받는다 */</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>FlushLine()</code> 이 8.3에서 배운
+<code>while (getchar() != '\n');</code> 를 함수로 묶은 것이다. 완성본은
+여기에 "입력이 너무 길 때"와 "빈 줄일 때"까지 방어를 더했다 —
+<strong>실전 입력 처리는 이렇게 예외를 하나씩 챙기는
+일</strong>이다.</p>
+<hr />
+<h2 id="그림으로-정리--병렬-배열과-문자열">그림으로 정리 — 병렬 배열과
+문자열</h2>
+<blockquote>
+<p>📊 <strong>웹 교육문서에서는 병렬 배열의 해고 과정이
+애니메이션(V-P1-C)으로 재생된다.</strong> 다섯 배열이 나란히 한 칸씩
+밀리는 모습을, 하나만 어긋나면 데이터가 뒤섞이는 위험과 함께 보여 준다.
+책에서는 아래 도식으로 대신한다.</p>
+</blockquote>
+<p><strong>병렬 배열 — 한 직원이 다섯 배열에 흩어져 있다</strong></p>
+<pre><code>  인덱스:      [0]      [1]      [2]      [3]
+  staffName:  김개발   이서버   박퍼즈   (빈칸)
+  staffDev:     7        5        8       0
+  staffCre:     5        6        4       0
+  staffSalary: 360      330      360      0
+  staffMonths:  3        1        0       0
+               └── 한 직원 ──┘
+   ⚠ [1] 이서버를 해고하면 [2][3]을 다섯 배열 모두 한 칸씩 당겨야 한다.
+      하나라도 빠뜨리면 이름과 능력치가 어긋난다.
+   → D 모듈: 이 다섯 배열을 struct Employee staff[4] 하나로 묶는다.</code></pre>
+<p><strong>문자열 — <code>char</code> 배열 끝의
+<code>'\0'</code></strong></p>
+<pre><code>  char title[8] = &quot;CSGP&quot;;
+  ┌────┬────┬────┬────┬────┬────┬────┬────┐
+  │ &#39;C&#39;│ &#39;S&#39;│ &#39;G&#39;│ &#39;P&#39;│&#39;\0&#39;│ ?  │ ?  │ ?  │
+  └────┴────┴────┴────┴────┴────┴────┴────┘
+    0    1    2    3    4    5    6    7
+                        ▲
+             널 문자 = &quot;여기서 끝&quot;. strlen 은 4, 배열은 8칸.
+             printf(&quot;%s&quot;) 는 &#39;\0&#39; 을 만날 때까지만 찍는다.</code></pre>
+<p>한 문장으로: <strong>배열은 같은 것을 번호로 줄 세운 것이고, 문자열은
+글자를 줄 세운 뒤 끝에 <code>'\0'</code> 이라는 마침표를 찍은
+것이다.</strong></p>
+<hr />
+<h2 id="체크포인트--스스로-점검하기">체크포인트 — 스스로 점검하기</h2>
+<p><strong>Q1.</strong> <code>int a[4];</code> 에서 유효한 인덱스는?
+<code>a[4]</code> 에 값을 넣으면 왜 위험한가?</p>
+<p><strong>Q2.</strong> <code>char s[4] = "CSGP";</code> 는 왜 문제가
+되는가? (힌트: 널 문자)</p>
+<p><strong>Q3.</strong> 두 문자열이 같은지 검사하려는데
+<code>if (name == "kim")</code> 이 항상 거짓이다. 왜이고, 어떻게
+고치나?</p>
+<p><strong>Q4.</strong> <code>scanf("%d", &amp;n);</code> 바로 뒤에
+<code>fgets(buf, ...)</code> 를 부르면 <code>buf</code> 가 빈 줄이 된다.
+왜인가?</p>
+<p><strong>Q5.</strong> 직원을 병렬 배열 5개로 관리할 때, 가운데 직원 한
+명을 해고하는 코드가 하기 번거로운 이유는? 이 문제를 어떻게 풀 수
+있을까?</p>
+<details><summary><b>해설 펼치기</b></summary>
+
+<p><strong>A1.</strong> 유효한 인덱스는 <code>0, 1, 2, 3</code>(0부터
+크기−1까지). <code>a[4]</code> 는 배열의 다섯 번째 칸으로
+<strong>존재하지 않는 메모리</strong>다. 거기에 쓰면 다른 변수를
+덮어쓰거나 프로그램이 죽는 "배열 범위 벗어남" 버그가 된다.</p>
+<p><strong>A2.</strong> "CSGP"는 4글자지만 끝에 널 문자
+<code>'\0'</code> 이 붙어 <strong>5바이트</strong>가 필요하다.
+<code>char s[4]</code> 는 4칸뿐이라 널 문자를 담을 자리가 없다.
+<code>char s[5]</code>(또는 크기를 비워
+<code>char s[] = "CSGP";</code>)로 해야 안전하다.</p>
+<p><strong>A3.</strong> <code>==</code> 는 문자열 내용이 아니라
+<strong>주소</strong>(포인터 값)를 비교한다. 내용이 같아도 주소가 다르면
+거짓이다. <code>strcmp(name, "kim") == 0</code> 으로 내용을 비교해야
+한다(<code>strcmp</code> 는 같으면 0을 반환).</p>
+<p><strong>A4.</strong> <code>scanf("%d")</code> 는 숫자만 읽고,
+사용자가 누른 Enter(<code>'\n'</code>)를 입력 버퍼에 <strong>남겨
+둔다.</strong> 그 직후 <code>fgets</code> 가 버퍼에 남은 그 개행을 읽어
+"빈 줄"로 처리해 버린다. <code>scanf</code> 다음에
+<code>while (getchar() != '\n');</code> 로 버퍼를 비워야 한다.</p>
+<p><strong>A5.</strong> 직원 하나의 정보가 다섯 배열에 흩어져 있어서, 한
+명을 당기려면 다섯 배열을 <strong>모두</strong> 한 칸씩 당겨야 하고,
+하나라도 빠뜨리면 이름과 능력치가 어긋난다. 속성을 추가하면 손볼 곳이 또
+늘어난다. <strong>해법은 다섯 값을 하나로 묶는 것</strong> — 그것이 다음
+D 모듈의 구조체다. 구조체를 쓰면 <code>staff[i] = staff[i+1];</code> 한
+줄로 해결된다.</p>
+</details>
+
+<hr />
+<h2 id="실습-미션--3목틱택토-tictactoec-star">실습 미션 — 3목(틱택토)
+<code>tictactoe.c</code> ⭐</h2>
+<blockquote>
+<p>본편(타이쿤)이 "한 게임을 계속 키우는 세로 축"이라면, 실습 미션은
+<strong>이 모듈의 새 문법만 콕 집어 연습하는 독립 미니게임(가로
+축)</strong> 이다. 먼저 직접 짜 보고, 막히면 힌트를, 그래도 막히면
+정답을 펼쳐 대조하자.</p>
+</blockquote>
+<p><strong>드릴 문법</strong> — <strong>2차원 배열</strong>
+<code>char board[3][3]</code> · 배열 초기화·순회(이중 for) · 문자열
+배열(플레이어 이름) · 인덱스 접근 <strong>만드는 것</strong> — 두 사람이
+번갈아 O/X를 놓는 3×3 틱택토. 한 줄을 먼저 완성하면 승리. <strong>클리어
+조건</strong> — 매 턴 좌표를 입력받아 말을 놓고, 승리/무승부를 판정해
+출력한다. <strong>규모</strong> — 약 60줄, 파일 1개. 표준 C만. B 모듈의
+반복문과 이 모듈의 2차원 배열이 만나는 미션이다.</p>
+<h3 id="문제-정의">문제 정의</h3>
+<p>이 게임의 메인 자료구조는 <strong>2차원 배열
+<code>char board[3][3]</code></strong> 하나다. 빈칸은 <code>' '</code>,
+놓인 말은 <code>'O'</code>/<code>'X'</code> 로 담는다. 보드를 그리는
+것도(이중 for 순회), 말을 놓는 것도(인덱스 접근), 승리를 확인하는
+것도(줄마다 세 칸 비교) 전부 이 배열을 다루는 일이다. 2부의 테트리스
+보드(<code>board[20][10]</code>)를 미리 맛보는 미션이기도 하다.</p>
+<h3 id="목표--클리어-조건">목표 / 클리어 조건</h3>
+<ol type="1">
+<li><code>char board[3][3]</code> 를 <code>' '</code> 로 초기화한다(이중
+for).</li>
+<li>두 플레이어 이름을 문자열 배열 <code>char names[2][20]</code> 에
+입력받는다.</li>
+<li>번갈아 좌표(행·열)를 입력받아 말을 놓는다. 이미 찬 칸이면 다시.</li>
+<li>매 턴 후 승리(가로·세로·대각선 세 칸이 같은지)를 판정한다.</li>
+<li>승자가 나오거나 9칸이 다 차면(무승부) 게임 종료.</li>
+</ol>
+<h3 id="힌트">힌트</h3>
+<details><summary><b>힌트 1 — 보드 초기화와 출력</b></summary>
+
+<div class="sourceCode" id="cb22"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> board<span class="op">[</span><span class="dv">3</span><span class="op">][</span><span class="dv">3</span><span class="op">];</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> r<span class="op">,</span> c<span class="op">;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>r <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> r <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> r<span class="op">++)</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>c <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> c <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> c<span class="op">++)</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>        board<span class="op">[</span>r<span class="op">][</span>c<span class="op">]</span> <span class="op">=</span> <span class="ch">&#39; &#39;</span><span class="op">;</span>        <span class="co">/* 이중 for 로 전부 빈칸 */</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co">/* 출력 */</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>r <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> r <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> r<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>c <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> c <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> c<span class="op">++)</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot; </span><span class="sc">%c</span><span class="st"> &quot;</span><span class="op">,</span> board<span class="op">[</span>r<span class="op">][</span>c<span class="op">]);</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+
+<details><summary><b>힌트 2 — 승리 판정 함수</b></summary>
+
+<p>세 칸이 같고 빈칸이 아니면 승리. 8줄(가로3·세로3·대각2)을
+검사한다.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> CheckWin<span class="op">(</span><span class="dt">char</span> b<span class="op">[</span><span class="dv">3</span><span class="op">][</span><span class="dv">3</span><span class="op">],</span> <span class="dt">char</span> mark<span class="op">)</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>b<span class="op">[</span>i<span class="op">][</span><span class="dv">0</span><span class="op">]==</span>mark <span class="op">&amp;&amp;</span> b<span class="op">[</span>i<span class="op">][</span><span class="dv">1</span><span class="op">]==</span>mark <span class="op">&amp;&amp;</span> b<span class="op">[</span>i<span class="op">][</span><span class="dv">2</span><span class="op">]==</span>mark<span class="op">)</span> <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span> <span class="co">/* 가로 */</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>b<span class="op">[</span><span class="dv">0</span><span class="op">][</span>i<span class="op">]==</span>mark <span class="op">&amp;&amp;</span> b<span class="op">[</span><span class="dv">1</span><span class="op">][</span>i<span class="op">]==</span>mark <span class="op">&amp;&amp;</span> b<span class="op">[</span><span class="dv">2</span><span class="op">][</span>i<span class="op">]==</span>mark<span class="op">)</span> <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span> <span class="co">/* 세로 */</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>b<span class="op">[</span><span class="dv">0</span><span class="op">][</span><span class="dv">0</span><span class="op">]==</span>mark <span class="op">&amp;&amp;</span> b<span class="op">[</span><span class="dv">1</span><span class="op">][</span><span class="dv">1</span><span class="op">]==</span>mark <span class="op">&amp;&amp;</span> b<span class="op">[</span><span class="dv">2</span><span class="op">][</span><span class="dv">2</span><span class="op">]==</span>mark<span class="op">)</span> <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span>     <span class="co">/* 대각 ↘ */</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>b<span class="op">[</span><span class="dv">0</span><span class="op">][</span><span class="dv">2</span><span class="op">]==</span>mark <span class="op">&amp;&amp;</span> b<span class="op">[</span><span class="dv">1</span><span class="op">][</span><span class="dv">1</span><span class="op">]==</span>mark <span class="op">&amp;&amp;</span> b<span class="op">[</span><span class="dv">2</span><span class="op">][</span><span class="dv">0</span><span class="op">]==</span>mark<span class="op">)</span> <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span>     <span class="co">/* 대각 ↙ */</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>(배열을 함수에 넘길 때 <code>char b[3][3]</code> 로 받는다 — 배열은
+사실상 주소로 전달되므로 함수 안에서 원본이 바뀐다. 이 "배열=주소"
+감각이 D 모듈 포인터의 예고편이다.)</p>
+</details>
+
+<details><summary><b>힌트 3 — 턴 루프</b></summary>
+
+<p><code>for (turn = 0; turn &lt; 9; turn++)</code> 로 최대 9턴.
+<code>turn % 2</code> 로 현재 플레이어(0/1)를 정하고, 놓은 뒤
+<code>CheckWin</code> 으로 승리를 확인해 승리면 <code>break</code>.</p>
+</details>
+
+<h3 id="정답-코드">정답 코드</h3>
+<details><summary><b>정답 펼치기 — <code>tictactoe.c</code></b></summary>
+
+<div class="sourceCode" id="cb24"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define _CRT_SECURE_NO_WARNINGS</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> FlushLine<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span> <span class="dt">int</span> ch<span class="op">;</span> <span class="cf">while</span> <span class="op">((</span>ch <span class="op">=</span> getchar<span class="op">())</span> <span class="op">!=</span> <span class="ch">&#39;</span><span class="sc">\n</span><span class="ch">&#39;</span> <span class="op">&amp;&amp;</span> ch <span class="op">!=</span> EOF<span class="op">)</span> <span class="op">;</span> <span class="op">}</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> PrintBoard<span class="op">(</span><span class="dt">char</span> b<span class="op">[</span><span class="dv">3</span><span class="op">][</span><span class="dv">3</span><span class="op">])</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> r<span class="op">,</span> c<span class="op">;</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>r <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> r <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> r<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span>c <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> c <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> c<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot; </span><span class="sc">%c</span><span class="st"> &quot;</span><span class="op">,</span> b<span class="op">[</span>r<span class="op">][</span>c<span class="op">]);</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>c <span class="op">&lt;</span> <span class="dv">2</span><span class="op">)</span> printf<span class="op">(</span><span class="st">&quot;|&quot;</span><span class="op">);</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span>r <span class="op">&lt;</span> <span class="dv">2</span> <span class="op">?</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">---+---+---</span><span class="sc">\n</span><span class="st">&quot;</span> <span class="op">:</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> CheckWin<span class="op">(</span><span class="dt">char</span> b<span class="op">[</span><span class="dv">3</span><span class="op">][</span><span class="dv">3</span><span class="op">],</span> <span class="dt">char</span> mark<span class="op">)</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>b<span class="op">[</span>i<span class="op">][</span><span class="dv">0</span><span class="op">]==</span>mark <span class="op">&amp;&amp;</span> b<span class="op">[</span>i<span class="op">][</span><span class="dv">1</span><span class="op">]==</span>mark <span class="op">&amp;&amp;</span> b<span class="op">[</span>i<span class="op">][</span><span class="dv">2</span><span class="op">]==</span>mark<span class="op">)</span> <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>b<span class="op">[</span><span class="dv">0</span><span class="op">][</span>i<span class="op">]==</span>mark <span class="op">&amp;&amp;</span> b<span class="op">[</span><span class="dv">1</span><span class="op">][</span>i<span class="op">]==</span>mark <span class="op">&amp;&amp;</span> b<span class="op">[</span><span class="dv">2</span><span class="op">][</span>i<span class="op">]==</span>mark<span class="op">)</span> <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>b<span class="op">[</span><span class="dv">0</span><span class="op">][</span><span class="dv">0</span><span class="op">]==</span>mark <span class="op">&amp;&amp;</span> b<span class="op">[</span><span class="dv">1</span><span class="op">][</span><span class="dv">1</span><span class="op">]==</span>mark <span class="op">&amp;&amp;</span> b<span class="op">[</span><span class="dv">2</span><span class="op">][</span><span class="dv">2</span><span class="op">]==</span>mark<span class="op">)</span> <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>b<span class="op">[</span><span class="dv">0</span><span class="op">][</span><span class="dv">2</span><span class="op">]==</span>mark <span class="op">&amp;&amp;</span> b<span class="op">[</span><span class="dv">1</span><span class="op">][</span><span class="dv">1</span><span class="op">]==</span>mark <span class="op">&amp;&amp;</span> b<span class="op">[</span><span class="dv">2</span><span class="op">][</span><span class="dv">0</span><span class="op">]==</span>mark<span class="op">)</span> <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> board<span class="op">[</span><span class="dv">3</span><span class="op">][</span><span class="dv">3</span><span class="op">];</span></span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> names<span class="op">[</span><span class="dv">2</span><span class="op">][</span><span class="dv">20</span><span class="op">];</span>              <span class="co">/* 문자열 배열 — 두 플레이어 이름 */</span></span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> marks<span class="op">[</span><span class="dv">2</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="ch">&#39;O&#39;</span><span class="op">,</span> <span class="ch">&#39;X&#39;</span> <span class="op">};</span></span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> r<span class="op">,</span> c<span class="op">,</span> turn<span class="op">,</span> p<span class="op">,</span> won <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>r <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> r <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> r<span class="op">++)</span></span>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span>c <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> c <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> c<span class="op">++)</span></span>
+<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a>            board<span class="op">[</span>r<span class="op">][</span>c<span class="op">]</span> <span class="op">=</span> <span class="ch">&#39; &#39;</span><span class="op">;</span>      <span class="co">/* 2차원 배열 초기화 */</span></span>
+<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;1P(O) 이름: &quot;</span><span class="op">);</span>  fgets<span class="op">(</span>names<span class="op">[</span><span class="dv">0</span><span class="op">],</span> <span class="dv">20</span><span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;2P(X) 이름: &quot;</span><span class="op">);</span>  fgets<span class="op">(</span>names<span class="op">[</span><span class="dv">1</span><span class="op">],</span> <span class="dv">20</span><span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>turn <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> turn <span class="op">&lt;</span> <span class="dv">9</span><span class="op">;</span> turn<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a>        p <span class="op">=</span> turn <span class="op">%</span> <span class="dv">2</span><span class="op">;</span>               <span class="co">/* 0 = 1P, 1 = 2P */</span></span>
+<span id="cb24-47"><a href="#cb24-47" aria-hidden="true" tabindex="-1"></a>        PrintBoard<span class="op">(</span>board<span class="op">);</span></span>
+<span id="cb24-48"><a href="#cb24-48" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;[</span><span class="sc">%c</span><span class="st">] 차례. 행 열 (0~2): &quot;</span><span class="op">,</span> marks<span class="op">[</span>p<span class="op">]);</span></span>
+<span id="cb24-49"><a href="#cb24-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-50"><a href="#cb24-50" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>scanf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>r<span class="op">,</span> <span class="op">&amp;</span>c<span class="op">)</span> <span class="op">!=</span> <span class="dv">2</span><span class="op">)</span> <span class="op">{</span> FlushLine<span class="op">();</span> <span class="cf">continue</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb24-51"><a href="#cb24-51" aria-hidden="true" tabindex="-1"></a>        FlushLine<span class="op">();</span></span>
+<span id="cb24-52"><a href="#cb24-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-53"><a href="#cb24-53" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>r <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">||</span> r <span class="op">&gt;</span> <span class="dv">2</span> <span class="op">||</span> c <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">||</span> c <span class="op">&gt;</span> <span class="dv">2</span> <span class="op">||</span> board<span class="op">[</span>r<span class="op">][</span>c<span class="op">]</span> <span class="op">!=</span> <span class="ch">&#39; &#39;</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb24-54"><a href="#cb24-54" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;  ! 놓을 수 없는 칸입니다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb24-55"><a href="#cb24-55" aria-hidden="true" tabindex="-1"></a>            turn<span class="op">--;</span>                 <span class="co">/* 이번 턴 무효 → 같은 사람 다시 */</span></span>
+<span id="cb24-56"><a href="#cb24-56" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb24-57"><a href="#cb24-57" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb24-58"><a href="#cb24-58" aria-hidden="true" tabindex="-1"></a>        board<span class="op">[</span>r<span class="op">][</span>c<span class="op">]</span> <span class="op">=</span> marks<span class="op">[</span>p<span class="op">];</span>     <span class="co">/* 말을 놓는다 */</span></span>
+<span id="cb24-59"><a href="#cb24-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-60"><a href="#cb24-60" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>CheckWin<span class="op">(</span>board<span class="op">,</span> marks<span class="op">[</span>p<span class="op">]))</span> <span class="op">{</span></span>
+<span id="cb24-61"><a href="#cb24-61" aria-hidden="true" tabindex="-1"></a>            PrintBoard<span class="op">(</span>board<span class="op">);</span></span>
+<span id="cb24-62"><a href="#cb24-62" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;&gt;&gt; [</span><span class="sc">%c</span><span class="st">] 승리!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> marks<span class="op">[</span>p<span class="op">]);</span></span>
+<span id="cb24-63"><a href="#cb24-63" aria-hidden="true" tabindex="-1"></a>            won <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb24-64"><a href="#cb24-64" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb24-65"><a href="#cb24-65" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb24-66"><a href="#cb24-66" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb24-67"><a href="#cb24-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-68"><a href="#cb24-68" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>won<span class="op">)</span> <span class="op">{</span> PrintBoard<span class="op">(</span>board<span class="op">);</span> printf<span class="op">(</span><span class="st">&quot;&gt;&gt; 무승부!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span> <span class="op">}</span></span>
+<span id="cb24-69"><a href="#cb24-69" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb24-70"><a href="#cb24-70" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>빌드:</strong> <code>cl tictactoe.c</code> (MSVC) 또는
+<code>gcc tictactoe.c -o tictactoe</code></p>
+<p><strong>함정/체크포인트</strong></p>
+<ul>
+<li><strong>2차원 배열 초기화</strong>를 빠뜨리면 <code>board</code> 에
+쓰레기 값이 들어 있어, 빈칸 검사(<code>board[r][c] != ' '</code>)가
+엉뚱하게 동작한다. 이중 for 로 반드시 <code>' '</code> 로 채우고
+시작한다.</li>
+<li><code>char b[3][3]</code> 로 배열을 함수에 넘겨도 함수 안에서 놓은
+말이 <code>main</code> 의 원본에 반영된다 — <strong>배열은 값이 아니라
+주소로 전달</strong>되기 때문이다. 이 사실이 D 모듈 "포인터"의 핵심
+감각으로 이어진다.</li>
+<li><code>scanf</code> 와 이름 입력을 섞으면 8.3의 버퍼 문제가 나온다.
+<code>FlushLine()</code> 으로 개행을 비워 주는 이유를 코드에서
+확인하자.</li>
+</ul>
+<p><strong>확장 과제</strong></p>
+<ul>
+<li><strong>E 모듈(난수)</strong> 에서 2P를 컴퓨터로 바꿔, 빈칸 중
+하나를 <code>rand</code> 로 골라 두게 한다.</li>
+<li>보드를 <code>board[N][N]</code> 과 승리 조건 <code>K</code> 로
+일반화해 "N목"으로 확장(2부 미로의 격자 좌표계 감각).</li>
+</ul>
+</details>
+
+<hr />
+<h2 id="이-모듈을-마치며">이 모듈을 마치며</h2>
+<table>
+<thead>
+<tr>
+<th>얻은 것</th>
+<th>다음에 쓰는 곳</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>배열로 같은 것 여럿 담기</td>
+<td>직원 목록, 출시작 목록, 2부 테트리스 보드</td>
+</tr>
+<tr>
+<td>배열 순회(for)로 합계·검색</td>
+<td>월급 합계, 능력치 합산(D 모듈), 판매 정산</td>
+</tr>
+<tr>
+<td>문자열(char 배열 + <code>'\0'</code>)</td>
+<td>회사명·게임 제목·직원 이름, 세이브 파일(F 모듈)</td>
+</tr>
+<tr>
+<td>병렬 배열의 불편함</td>
+<td><strong>D 모듈</strong> 구조체 — 다섯 배열을 하나로 묶는 동기</td>
+</tr>
+</tbody>
+</table>
+<p>우리는 회사에 사람(직원 배열)과 이름(문자열)을 채웠다. 하지만 직원
+하나를 표현하려 배열 다섯 개를 나란히 끌고 다니는 지금 방식은, 손이
+아프고 실수가 잦다. 다음 D 모듈에서 이 다섯 배열을
+<strong>구조체</strong> 하나로 묶고, 그것을 함수에
+<strong>포인터</strong>로 넘겨 직접 고치게 만든다. 1부의 가장 큰
+고비이자, 게임의 뼈대가 완성되는 지점이다.</p>
+<blockquote>
+<p><strong>← 이전:</strong> <a href="Part1_02.html">B 모듈 · 5–6장 —
+반복문과 함수</a> | <strong>다음 →</strong> <a href="Part1_04.html">D 모듈
+· 9–10장 — 구조체와 포인터</a></p>
+</blockquote>
+  </article>
+</main>
+<footer class="site-footer">
+  <a href="index.html">← 목차로 돌아가기</a>
+  <span>CSGP Learn · 표시용 원고 (코드는 UTF-8 사본)</span>
+</footer>
+<script src="book-nav.js"></script>
+</body>
+</html>

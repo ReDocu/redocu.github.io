@@ -1,0 +1,828 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3단계 · Dino — 물리와 스크롤</title>
+<script>try{var _t=localStorage.getItem('csgp-theme');if(_t)document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
+<style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<link rel="stylesheet" href="book.css">
+
+</head>
+<body>
+<div class="topbar">
+  <button class="drawer-toggle" id="drawerToggle" type="button" aria-label="목차 열기/닫기" aria-expanded="false">☰ 목차</button>
+  <a class="home" href="index.html">📘 CSGP</a>
+  <span class="crumb">콘솔 게임으로 배우는 C · C++</span>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="라이트/다크 전환">🌙</button>
+</div>
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" aria-label="책 목차">
+  <div class="drawer-dash">
+    <div class="dash-title">콘솔 게임으로 배우는 C · C++</div>
+    <div class="dash-sub">학습 목차 · 대시보드</div>
+    <div class="dash-progress"><div class="dash-bar"><i id="dashBar"></i></div><span class="dash-pct" id="dashPct"></span></div>
+    <input class="drawer-search" id="drawerSearch" type="search" placeholder="🔍 챕터 검색…" aria-label="챕터 검색">
+  </div>
+  <nav class="booknav" aria-label="책 목차"><a class="booknav-home" href="index.html">📘 전체 목차</a><ul class="booknav-list"><li class="grp">1부 · C 기본 문법</li><li><a href="Part1_00.html" title="1부 — C 기본 문법: 회사를 키우며 배우는 언어">1부 개요</a></li><li><a href="Part1_01.html" title="A 모듈 · 1–4장 — 값·계산·분기: 회사에 숫자를 세우다">A · 값·계산·분기</a></li><li><a href="Part1_02.html" title="B 모듈 · 5–6장 — 반복문과 함수: 회사에 심장을 달다">B · 반복문·함수</a></li><li><a href="Part1_03.html" title="C 모듈 · 7–8장 — 배열과 문자열: 회사에 사람과 이름을 채우다">C · 배열·문자열</a></li><li><a href="Part1_04.html" title="D 모듈 · 9–10장 — 구조체와 포인터: 데이터에 모양을 주다">D · 구조체·포인터</a></li><li><a href="Part1_05.html" title="E 모듈 · 11–12장 — 동적 메모리와 랜덤: 회사가 자라고, 시장이 살아난다">E · 메모리·랜덤</a></li><li><a href="Part1_06.html" title="F 모듈 · 13–15장 — 파일·모듈·캡스톤: 회사를 저장하고, 게임을 출시하다">F · 파일·모듈·캡스톤</a></li><li class="grp">2부 · C++ 프레임워크</li><li><a href="Part2_00.html" title="2부 — C++ 콘솔 게임 프레임워크: 7개의 게임으로 오르기">2부 개요</a></li><li><a href="Part2_01.html" title="1단계 · Snake — 자료구조·충돌·상태머신">1단계 · Snake</a></li><li><a href="Part2_02.html" title="2단계 · Tetris — 알고리즘과 그리드">2단계 · Tetris</a></li><li class="active"><a href="Part2_03.html" title="3단계 · Dino — 물리와 스크롤">3단계 · Dino</a><ul class="sections">
+<li><a href="#이-단계의-학습-목표" id="toc-이-단계의-학습-목표">이
+단계의 학습 목표</a></li>
+<li><a href="#왜-dino가-이-자리인가" id="toc-왜-dino가-이-자리인가">왜
+Dino가 이 자리인가</a></li>
+<li><a href="#개념-1--float-물리--정수를-넘어-연속-운동으로"
+id="toc-개념-1--float-물리--정수를-넘어-연속-운동으로">개념 1 · float
+물리 — 정수를 넘어 연속 운동으로</a></li>
+<li><a href="#개념-2--프레임-기반-고정-스텝-vs-틱-타이머"
+id="toc-개념-2--프레임-기반-고정-스텝-vs-틱-타이머">개념 2 · 프레임 기반
+고정 스텝 vs 틱 타이머</a></li>
+<li><a href="#개념-3--월드-스크롤--공룡은-제자리-세계가-흐른다"
+id="toc-개념-3--월드-스크롤--공룡은-제자리-세계가-흐른다">개념 3 · 월드
+스크롤 — 공룡은 제자리, 세계가 흐른다</a></li>
+<li><a href="#개념-4--절차적-스폰--거리에-맞춰-저절로-생겨나기"
+id="toc-개념-4--절차적-스폰--거리에-맞춰-저절로-생겨나기">개념 4 ·
+절차적 스폰 — 거리에 맞춰 저절로 생겨나기</a></li>
+<li><a href="#개념-5--aabb-충돌--점에서-면으로"
+id="toc-개념-5--aabb-충돌--점에서-면으로">개념 5 · AABB 충돌 — 점에서
+면으로</a></li>
+<li><a href="#개념-6--스프라이트-애니메이션--여러-줄-그림에-생명을"
+id="toc-개념-6--스프라이트-애니메이션--여러-줄-그림에-생명을">개념 6 ·
+스프라이트 애니메이션 — 여러 줄 그림에 생명을</a></li>
+<li><a href="#코드-워크스루--oningameupdate-와-updatedino"
+id="toc-코드-워크스루--oningameupdate-와-updatedino">코드 워크스루 —
+<code>OnInGameUpdate</code> 와 <code>UpdateDino</code></a></li>
+<li><a href="#그림으로-정리--점프-포물선과-aabb"
+id="toc-그림으로-정리--점프-포물선과-aabb">그림으로 정리 — 점프 포물선과
+AABB</a></li>
+<li><a href="#알려진-이슈에서-배우기-as-built"
+id="toc-알려진-이슈에서-배우기-as-built">알려진 이슈에서 배우기
+(as-built)</a></li>
+<li><a href="#체크포인트--스스로-점검하기"
+id="toc-체크포인트--스스로-점검하기">체크포인트 — 스스로
+점검하기</a></li>
+<li><a href="#실습-미션--점프로-장애물-넘기-jumpc-star"
+id="toc-실습-미션--점프로-장애물-넘기-jumpc-star">실습 미션 — 점프로
+장애물 넘기 <code>jump.c</code> ⭐</a></li>
+<li><a href="#이-단계를-마치며" id="toc-이-단계를-마치며">이 단계를
+마치며</a></li>
+</ul></li><li><a href="Part2_04.html" title="4단계 · Road Fighter — 엔티티 시스템과 리소스">4단계 · Road Fighter</a></li><li><a href="Part2_05.html" title="번외 · GameDevTycoon 이식 — C에서 C++로">번외 · Tycoon 이식</a></li><li><a href="Part2_06.html" title="5단계 · Galaga — 오브젝트 풀링">5단계 · Galaga</a></li><li><a href="Part2_07.html" title="6단계 · Maze — 알고리즘 심화 (생성 + 탐색)">6단계 · Maze</a></li><li><a href="Part2_08.html" title="7단계 · Battle City — 종합 캡스톤 (맵 생성 + 풀링)">7단계 · Battle City</a></li><li><a href="Part2_09.html" title="확장 · Pac-Man — 유령 AI와 상태머신">확장 · Pac-Man</a></li><li class="grp">부록</li><li><a href="Appendix.html" title="부록 — 용어집 · 핵심 이슈 · 요약">부록</a></li></ul></nav>
+</aside>
+<main class="reader">
+  <article class="page">
+<h1 id="3단계--dino--물리와-스크롤">3단계 · Dino — 물리와 스크롤</h1>
+<div class="chapter-badge">
+
+<p><strong>단계 3</strong> · 게임 <code>Dino Run</code> · 씬 클래스
+<code>DinoContent : public IGameContent</code> <strong>처음 배우는
+기술</strong> — <code>float 물리(중력·속도)</code>
+<code>프레임 기반 고정 스텝</code> <code>점프 포물선(오일러 적분)</code>
+<code>월드 스크롤·시차(parallax)</code>
+<code>절차적 스폰(거리 기반·점수 게이팅)</code> <code>AABB 충돌</code>
+<code>여러 줄 스프라이트 애니메이션</code> <code>값 타입 vector</code>
+<strong>예상 학습 시간</strong> — 4–6시간</p>
+</div>
+
+<blockquote>
+<p>Tetris가 "정지된 보드 위의 규칙"이었다면, Dino는 <strong>시간과
+물리로 스스로 흐르는 세계</strong>다. 공룡은 중력을 받아 포물선을 그리며
+점프하고, 세계는 왼쪽으로 흘러 달리는 착각을 만들며, 장애물은 거리에
+맞춰 저절로 생겨난다. 여기서 우리는 정수 격자를 떠나
+<strong><code>float</code> 로 표현하는 연속 운동</strong>의 세계로
+들어간다. 크롬 공룡 게임의 그 단순한 재미 — 한 버튼으로 점프해 선인장을
+넘는 — 뒤에 물리·스크롤·절차적 생성이 맞물려 돈다.</p>
+</blockquote>
+<h2 id="이-단계의-학습-목표">이 단계의 학습 목표</h2>
+<p>이 단계를 마치면 다음을 할 수 있다.</p>
+<ol type="1">
+<li><code>float</code> 속도·중력으로 <strong>부드러운 점프
+포물선</strong>을 만들고, 왜 정수 격자로는 안 되는지 설명할 수
+있다.</li>
+<li><strong>프레임 기반 고정 스텝</strong>(매 프레임 물리 갱신)과
+<strong>틱 타이머</strong>(애니메이션)를 구분해 쓸 수 있다.</li>
+<li><strong>월드 스크롤</strong> — 플레이어를 고정하고 세계를 흘려
+달리는 느낌을 내고, <strong>시차(parallax)</strong> 로 원근을 표현할 수
+있다.</li>
+<li><strong>거리 기반 절차적 스폰</strong>과 <strong>점수
+게이팅</strong>으로 난이도가 오르는 장애물 생성을 짤 수 있다.</li>
+<li><strong>AABB 충돌</strong>(축 정렬 사각형 겹침)을 구현하고, 점
+충돌과의 차이를 안다.</li>
+<li>여러 줄 <strong>스프라이트</strong>를 프레임 토글로 애니메이션할 수
+있다.</li>
+</ol>
+<h2 id="왜-dino가-이-자리인가">왜 Dino가 이 자리인가</h2>
+<p>Snake와 Tetris의 세계는 <strong>정수 격자</strong> 위에 있었다. 뱀은
+칸에서 칸으로 순간이동했고, 블록은 한 칸씩 딱딱 떨어졌다. 그 세계에는
+"0.5칸"이 없었다.</p>
+<p>Dino는 이 격자를 떠난다. 공룡이 점프하면 위로 솟았다가 서서히
+느려지고, 정점에서 멈칫한 뒤, 점점 빨라지며 떨어진다 — 이
+<strong>부드러운 포물선</strong>은 정수로는 표현할 수 없다. 그래서
+우리는 <code>float</code> 로 위치와 속도를 다루고, 매 프레임
+<strong>중력을 속도에 더하고, 속도를 위치에 더한다.</strong> 이것이 물리
+시뮬레이션의 시작이다.</p>
+<p>그리고 세계가 움직인다. Snake·Tetris의 화면은 고정된 무대였지만,
+Dino의 공룡은 <strong>제자리에 있고 세계가 흐른다.</strong> 카메라가
+공룡을 따라간다고 봐도 좋다. 이 "월드 스크롤" 감각은
+러너·슈터·플랫포머로 확장되는 모든 게임의 핵심이다.</p>
+<ul>
+<li>정수 격자(Tetris) → <strong>연속 운동</strong>(float 물리),</li>
+<li>고정된 화면 → <strong>흐르는 세계</strong>(스크롤),</li>
+<li>정해진 배치 → <strong>저절로 생겨나는</strong> 장애물(절차적
+생성),</li>
+<li>칸 일치 충돌 → <strong>사각형 겹침</strong>(AABB).</li>
+</ul>
+<p>네 가지가 모두 한 계단씩 오른다. Snake·Tetris에서 "규칙과 알고리즘"을
+배웠다면, Dino에서 배우는 것은 <strong>"살아 움직이는 세계"</strong>
+다.</p>
+<blockquote>
+<p><strong>자료구조는 계속 값 타입으로.</strong> Tetris에서 시작한 "값
+타입·고정 배열/벡터" 설계가 Dino에서도 이어진다. 장애물·구름을
+<code>std::vector&lt;Obstacle&gt;</code>,
+<code>std::vector&lt;Cloud&gt;</code> 로 관리하되 <strong>포인터가
+아니라 값</strong>을 담는다 — Snake의 <code>vector&lt;Snake*&gt;</code>
+와 <code>new/delete</code> 를 벗어난 것이다. 이 흐름이 Road Fighter를
+지나 Galaga의 오브젝트 풀로 완성된다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-1--float-물리--정수를-넘어-연속-운동으로">개념 1 · float
+물리 — 정수를 넘어 연속 운동으로</h2>
+<p>공룡의 점프는 물리 법칙 하나로 요약된다 — <strong>중력이 매 순간
+속도를 아래로 당기고, 속도가 매 순간 위치를 바꾼다.</strong> 공룡의 발
+높이 <code>dinoY</code> 와 수직 속도 <code>dinoVelY</code> 를
+<code>float</code> 로 두고, 매 프레임 이렇게 갱신한다.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="at">const</span> <span class="dt">float</span> G       <span class="op">=</span> <span class="fl">0.06</span><span class="bu">f</span><span class="op">;</span>   <span class="co">// 중력 (매 프레임 속도에 더해짐)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="at">const</span> <span class="dt">float</span> JUMP_V  <span class="op">=</span> <span class="op">-</span><span class="fl">0.95</span><span class="bu">f</span><span class="op">;</span>  <span class="co">// 점프 초기 속도 (위로 = 음수, y는 아래로 증가)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 매 프레임:</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>dinoVelY <span class="op">+=</span> G<span class="op">;</span>          <span class="co">// ① 중력이 속도를 아래로 (속도가 점점 커짐)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>dinoY    <span class="op">+=</span> dinoVelY<span class="op">;</span>   <span class="co">// ② 속도만큼 위치가 바뀜</span></span></code></pre></div>
+<p>이 두 줄이 포물선을 만든다. 점프 순간 <code>dinoVelY</code> 는 큰
+음수(위로 빠름)라 공룡이 솟구치고, 중력이 매 프레임 속도를 조금씩 키워
+상승이 느려지다가, 정점에서 속도가 0을 지나 양수가 되며 떨어지기
+시작한다 — 점점 빠르게. <strong>일정한 힘(중력)이 속도를 바꾸고, 속도가
+위치를 바꾸는</strong> 이 연쇄가 자연스러운 낙하 운동이다. (수학적으로는
+미분방정식의 오일러 적분이지만, 코드로는 그저 "매 프레임 두
+줄"이다.)</p>
+<p>점프와 착지는 상태를 살핀다.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>onGround <span class="op">&amp;&amp;</span> jumpEdge<span class="op">)</span> <span class="op">{</span>           <span class="co">// 땅에 있을 때만 점프 가능</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    dinoVelY <span class="op">=</span> JUMP_V<span class="op">;</span>                <span class="co">// 위로 튀어오르는 초기 속도</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    onGround <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(!</span>onGround<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> g <span class="op">=</span> G<span class="op">;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>downStay<span class="op">)</span> g <span class="op">*=</span> FASTFALL<span class="op">;</span>      <span class="co">// 체공 중 ↓ = 빠른 착지 (중력 3배)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    dinoVelY <span class="op">+=</span> g<span class="op">;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    dinoY    <span class="op">+=</span> dinoVelY<span class="op">;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>dinoY <span class="op">&gt;=</span> DINO_FOOT<span class="op">)</span> <span class="op">{</span>         <span class="co">// 발이 지면에 닿으면</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        dinoY <span class="op">=</span> DINO_FOOT<span class="op">;</span>            <span class="co">// 정확히 지면에 맞추고</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        dinoVelY <span class="op">=</span> <span class="fl">0.0</span><span class="bu">f</span><span class="op">;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        onGround <span class="op">=</span> <span class="kw">true</span><span class="op">;</span>              <span class="co">// 착지</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<blockquote>
+<p><strong>왜 <code>float</code> 인가.</strong> 정수라면
+<code>dinoVelY</code> 를 0.06씩 더할 수 없다 — 소수가 잘려 늘 0이 되니
+중력이 안 걸린다. 부드러운 가감속은 소수의 누적으로만 표현된다. 1부
+1장에서 "평점만 <code>double</code> 을 쓴다"고 했던 그 실수형이, 여기서
+물리의 언어가 된다. <strong>연속적으로 변하는 값은 실수로
+다룬다</strong> — 이것이 정수 격자 게임과 물리 게임을 가르는 선이다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-2--프레임-기반-고정-스텝-vs-틱-타이머">개념 2 · 프레임 기반
+고정 스텝 vs 틱 타이머</h2>
+<p>Snake·Tetris에서 이동은 <code>GetTickTimer(0.1f)</code> 안에서만
+일어났다. 그런데 Dino의 물리는 <strong>매 프레임</strong> 갱신된다. 왜
+다를까?</p>
+<p>물리는 부드러워야 한다. 0.1초마다 뚝뚝 끊어 갱신하면 점프가 계단처럼
+보인다. 그래서 물리·스크롤은 게임 루프가 도는 <strong>매 프레임(초당
+60번) 고정 스텝</strong>으로 갱신한다. 속도의 단위가 "칸/프레임"인
+이유다. 반면 애니메이션(다리 교차, 날개 짓)은 매 프레임 바뀌면 너무 빨라
+보이니, 여전히 틱 타이머로 제어한다.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> DinoContent<span class="op">::</span>OnInGameUpdate<span class="op">()</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... 일시정지·게임오버 처리 ...</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>TIMER<span class="op">-&gt;</span>GetTickTimer<span class="op">(</span><span class="fl">0.1</span><span class="bu">f</span><span class="op">))</span>  legFrame <span class="op">^=</span> <span class="dv">1</span><span class="op">;</span>   <span class="co">// 다리 애니: 0.1초마다 토글</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>TIMER<span class="op">-&gt;</span>GetTickTimer<span class="op">(</span><span class="fl">0.15</span><span class="bu">f</span><span class="op">))</span> wingFrame <span class="op">^=</span> <span class="dv">1</span><span class="op">;</span>  <span class="co">// 익룡 날개: 0.15초마다</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    UpdateDino<span class="op">();</span>     <span class="co">// ★ 물리: 매 프레임 (틱 밖!)</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    UpdateWorld<span class="op">();</span>    <span class="co">// ★ 스크롤·스폰: 매 프레임</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    UpdateScore<span class="op">();</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>CheckCollision<span class="op">())</span> <span class="op">{</span> <span class="co">/* 게임 오버 */</span> <span class="op">}</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>legFrame ^= 1</code> 은 0↔︎1을 토글하는 관용구다(XOR 1).
+<strong>"부드러워야 할 것(물리)은 매 프레임, 띄엄띄엄이어도 될
+것(애니메이션)은 틱 타이머"</strong> — 0단계에서 배운 "입력 주기 ≠ 상태
+변화 주기"가, 이제 "물리 주기 ≠ 애니메이션 주기"로 확장된다.</p>
+<blockquote>
+<p><strong>프레임 기반의 한계와 타협.</strong> 매 프레임 고정 스텝은
+"프레임률이 일정하다"고 가정한다(엔진이 <code>SetFrame</code> 으로
+60fps를 맞춰 주니 콘솔에선 충분하다). 프레임률이 출렁이면 물리도
+출렁이는데, 그걸 막으려면 "실제 흐른 시간(delta time)을 곱하는" 방식을
+쓴다 — 하지만 콘솔 MVP엔 과하다. <strong>환경이 단순하면 단순한 해법이
+옳다.</strong></p>
+</blockquote>
+<hr />
+<h2 id="개념-3--월드-스크롤--공룡은-제자리-세계가-흐른다">개념 3 · 월드
+스크롤 — 공룡은 제자리, 세계가 흐른다</h2>
+<p>공룡의 x좌표(<code>DINO_X = 6</code>)는 <strong>절대 안
+변한다.</strong> 대신 장애물과 배경이 매 프레임 왼쪽으로 흐른다. 그래서
+공룡이 오른쪽으로 달리는 것처럼 보인다 — 러닝머신 위를 뛰는 것과 같은
+착시다.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> DinoContent<span class="op">::</span>UpdateWorld<span class="op">()</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    gameSpeed <span class="op">=</span> SPEED_0 <span class="op">+</span> score <span class="op">*</span> SPEED_ACCEL<span class="op">;</span>   <span class="co">// 점수가 오를수록 빨라짐</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>gameSpeed <span class="op">&gt;</span> SPEED_MAX<span class="op">)</span> gameSpeed <span class="op">=</span> SPEED_MAX<span class="op">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">size_t</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> obstacles<span class="op">.</span>size<span class="op">();</span> i<span class="op">++)</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        obstacles<span class="op">[</span>i<span class="op">].</span>x <span class="op">-=</span> gameSpeed<span class="op">;</span>             <span class="co">// 장애물: 왼쪽으로</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">size_t</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> clouds<span class="op">.</span>size<span class="op">();</span> i<span class="op">++)</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        clouds<span class="op">[</span>i<span class="op">].</span>x <span class="op">-=</span> gameSpeed <span class="op">*</span> <span class="fl">0.3</span><span class="bu">f</span><span class="op">;</span>         <span class="co">// ★ 구름: 더 느리게 (시차)</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 화면 왼쪽을 벗어난 장애물 제거</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>Obstacle<span class="op">&gt;</span> kept<span class="op">;</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">size_t</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> obstacles<span class="op">.</span>size<span class="op">();</span> i<span class="op">++)</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>obstacles<span class="op">[</span>i<span class="op">].</span>x <span class="op">+</span> obstacles<span class="op">[</span>i<span class="op">].</span>w <span class="op">&gt;=</span> <span class="fl">0.0</span><span class="bu">f</span><span class="op">)</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>            kept<span class="op">.</span>push_back<span class="op">(</span>obstacles<span class="op">[</span>i<span class="op">]);</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    obstacles <span class="op">=</span> kept<span class="op">;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>두 가지를 눈여겨보자.</p>
+<ul>
+<li><strong>시차(parallax).</strong> 구름은 장애물의 0.3배 속도로만
+흐른다(<code>gameSpeed * 0.3f</code>). 멀리 있는 것은 느리게, 가까운
+것은 빠르게 흐르는 이 속도 차가 <strong>깊이감(원근)</strong> 을 만든다.
+창밖으로 보이는 먼 산과 가까운 가로수의 차이다.</li>
+<li><strong>벗어난 것 제거.</strong> 화면 왼쪽으로 사라진 장애물은
+<code>kept</code> 벡터에 담지 않는 방식으로 지운다. 안 지우면 벡터가
+무한히 커지며 x가 한없이 작아진다. <strong>생성한 것은 언젠가
+정리한다</strong>(1부 메모리 관리의 정신).</li>
+</ul>
+<p><code>gameSpeed = SPEED_0 + score * SPEED_ACCEL</code> — 점수(=달린
+거리)에 비례해 속도가 오르니, 오래 살수록 세계가 빨라진다. 이 단순한 한
+줄이 크롬 공룡 게임의 그 조여드는 긴장감을 만든다.</p>
+<hr />
+<h2 id="개념-4--절차적-스폰--거리에-맞춰-저절로-생겨나기">개념 4 ·
+절차적 스폰 — 거리에 맞춰 저절로 생겨나기</h2>
+<p>장애물을 미리 배치하지 않는다. <strong>거리 기반</strong>으로 저절로
+생성한다. "다음 스폰까지 남은 거리" <code>spawnGap</code> 을 매 프레임
+<code>gameSpeed</code> 만큼 줄이고, 0 이하가 되면 오른쪽 끝에 장애물을
+하나 만들고 <code>spawnGap</code> 을 새로 뽑는다.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>spawnGap <span class="op">-=</span> gameSpeed<span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>spawnGap <span class="op">&lt;=</span> <span class="fl">0.0</span><span class="bu">f</span><span class="op">)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    SpawnObstacle<span class="op">();</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> DinoContent<span class="op">::</span>SpawnObstacle<span class="op">()</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    Obstacle o<span class="op">;</span>  o<span class="op">.</span>x <span class="op">=</span> <span class="fl">38.0</span><span class="bu">f</span><span class="op">;</span>                      <span class="co">// 오른쪽 끝에서 등장</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> roll <span class="op">=</span> rand<span class="op">()</span> <span class="op">%</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>score <span class="op">&lt;</span> <span class="dv">200</span> <span class="op">||</span> roll <span class="op">&lt;</span> <span class="dv">70</span><span class="op">)</span> <span class="op">{</span>               <span class="co">// ★ 점수 게이팅</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 선인장 (200점 전에는 선인장만)</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>rand<span class="op">()</span> <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> o<span class="op">.</span>type <span class="op">=</span> CACTUS_SMALL<span class="op">;</span> o<span class="op">.</span>w <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> o<span class="op">.</span>h <span class="op">=</span> <span class="dv">2</span><span class="op">;</span> o<span class="op">.</span>topY <span class="op">=</span> GROUND_Y <span class="op">-</span> <span class="dv">2</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>                 <span class="op">{</span> o<span class="op">.</span>type <span class="op">=</span> CACTUS_LARGE<span class="op">;</span> o<span class="op">.</span>w <span class="op">=</span> <span class="dv">3</span><span class="op">;</span> o<span class="op">.</span>h <span class="op">=</span> <span class="dv">3</span><span class="op">;</span> o<span class="op">.</span>topY <span class="op">=</span> GROUND_Y <span class="op">-</span> <span class="dv">3</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 익룡 (200점 이후 30%, 3가지 높이)</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> lvl <span class="op">=</span> rand<span class="op">()</span> <span class="op">%</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        o<span class="op">.</span>w <span class="op">=</span> <span class="dv">3</span><span class="op">;</span> o<span class="op">.</span>h <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>      <span class="op">(</span>lvl <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> o<span class="op">.</span>type <span class="op">=</span> PTERO_LOW<span class="op">;</span>  o<span class="op">.</span>topY <span class="op">=</span> <span class="dv">17</span><span class="op">;</span> <span class="op">}</span>  <span class="co">// 점프 필수</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>lvl <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span> o<span class="op">.</span>type <span class="op">=</span> PTERO_MID<span class="op">;</span>  o<span class="op">.</span>topY <span class="op">=</span> <span class="dv">15</span><span class="op">;</span> <span class="op">}</span>  <span class="co">// 숙이기/점프</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>               <span class="op">{</span> o<span class="op">.</span>type <span class="op">=</span> PTERO_HIGH<span class="op">;</span> o<span class="op">.</span>topY <span class="op">=</span> <span class="dv">13</span><span class="op">;</span> <span class="op">}</span>  <span class="co">// 서서 통과</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    obstacles<span class="op">.</span>push_back<span class="op">(</span>o<span class="op">);</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 다음 스폰까지 최소 간격 (속도에 비례 — 빠를수록 멀리) + 랜덤</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> gapMin <span class="op">=</span> <span class="fl">14.0</span><span class="bu">f</span> <span class="op">+</span> <span class="fl">18.0</span><span class="bu">f</span> <span class="op">*</span> gameSpeed<span class="op">;</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    spawnGap <span class="op">=</span> gapMin <span class="op">+</span> <span class="op">(</span><span class="dt">float</span><span class="op">)(</span>rand<span class="op">()</span> <span class="op">%</span> <span class="dv">10</span><span class="op">);</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>두 가지 설계가 게임을 공정하게 만든다.</p>
+<ul>
+<li><strong>점수 게이팅(난이도 곡선).</strong>
+<code>score &lt; 200</code> 이면 선인장만, 그 이후엔 30% 확률로 익룡이
+섞인다. 초반엔 쉽게, 갈수록 복잡하게 — 원작의 난이도 진행을 재현한다.
+1부 E 모듈의 확률 분기(<code>rand()%100</code>)가 여기서 "난이도
+게이트"로 쓰인다.</li>
+<li><strong>속도 비례 최소 간격.</strong>
+<code>gapMin = 14 + 18 * gameSpeed</code> — 빠를수록 장애물 사이가
+멀어진다. 안 그러면 고속에서 점프로 넘을 수 없는 간격이 나와
+<strong>불가능한 상황</strong>이 생긴다. "플레이 가능성"을 수치로
+보장하는 것이다.</li>
+</ul>
+<blockquote>
+<p><strong>절차적 생성의 씨앗.</strong> "미리 만들지 않고, 규칙과 난수로
+그때그때 생성"하는 이 발상이 절차적 생성(procedural generation)이다.
+Dino의 거리 기반 스폰은 그 가장 단순한 형태다. 이것이 Maze의 미로 생성
+알고리즘, Battle City의 절차적 전장으로 자란다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-5--aabb-충돌--점에서-면으로">개념 5 · AABB 충돌 — 점에서
+면으로</h2>
+<p>Snake의 충돌은 "머리와 같은 칸인가"라는 <strong>점 일치</strong>였다.
+Dino의 공룡과 장애물은 여러 칸을 차지하는 <strong>사각형</strong>이라,
+두 사각형이 겹치는지를 봐야 한다. 이것이 <strong>AABB(Axis-Aligned
+Bounding Box, 축 정렬 경계 상자) 충돌</strong>이다.</p>
+<p>두 사각형이 겹치지 <strong>않는</strong> 경우는 딱 네 가지다 — 하나가
+다른 하나의 완전히 왼쪽·오른쪽·위·아래에 있을 때. 그 네 경우가 모두
+아니면 겹친 것이다.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> DinoContent<span class="op">::</span>CheckCollision<span class="op">()</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> footY <span class="op">=</span> <span class="op">(</span><span class="dt">int</span><span class="op">)(</span>dinoY <span class="op">+</span> <span class="fl">0.5</span><span class="bu">f</span><span class="op">);</span>   <span class="co">// float 발 높이를 반올림해 정수 칸으로</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 공룡 히트박스 (상태에 따라 다름)</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> dl<span class="op">,</span> dr<span class="op">,</span> dt<span class="op">,</span> db<span class="op">;</span>                <span class="co">// left, right, top, bottom</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>dinoState <span class="op">==</span> DUCK<span class="op">)</span> <span class="op">{</span> dl <span class="op">=</span> DINO_X<span class="op">;</span> dr <span class="op">=</span> DINO_X <span class="op">+</span> <span class="dv">3</span><span class="op">;</span> dt <span class="op">=</span> footY <span class="op">-</span> <span class="dv">1</span><span class="op">;</span> db <span class="op">=</span> footY<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>                   <span class="op">{</span> dl <span class="op">=</span> DINO_X<span class="op">;</span> dr <span class="op">=</span> DINO_X <span class="op">+</span> <span class="dv">2</span><span class="op">;</span> dt <span class="op">=</span> footY <span class="op">-</span> <span class="dv">2</span><span class="op">;</span> db <span class="op">=</span> footY<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    dl <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span>                           <span class="co">// 왼쪽을 한 칸 관대하게 (플레이어에게 유리)</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">size_t</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> obstacles<span class="op">.</span>size<span class="op">();</span> i<span class="op">++)</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> oLeft <span class="op">=</span> <span class="op">(</span><span class="dt">int</span><span class="op">)(</span>obstacles<span class="op">[</span>i<span class="op">].</span>x <span class="op">+</span> <span class="fl">0.5</span><span class="bu">f</span><span class="op">);</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> oRight <span class="op">=</span> oLeft <span class="op">+</span> obstacles<span class="op">[</span>i<span class="op">].</span>w <span class="op">-</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> oTop <span class="op">=</span> obstacles<span class="op">[</span>i<span class="op">].</span>topY<span class="op">;</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> oBottom <span class="op">=</span> obstacles<span class="op">[</span>i<span class="op">].</span>topY <span class="op">+</span> obstacles<span class="op">[</span>i<span class="op">].</span>h <span class="op">-</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 겹치지 않는 네 경우가 모두 아니면 → 충돌</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(!(</span>dr <span class="op">&lt;</span> oLeft <span class="op">||</span> dl <span class="op">&gt;</span> oRight <span class="op">||</span> db <span class="op">&lt;</span> oTop <span class="op">||</span> dt <span class="op">&gt;</span> oBottom<span class="op">))</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>핵심은 그 한 줄이다.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="op">!(</span>dr <span class="op">&lt;</span> oLeft <span class="op">||</span> dl <span class="op">&gt;</span> oRight <span class="op">||</span> db <span class="op">&lt;</span> oTop <span class="op">||</span> dt <span class="op">&gt;</span> oBottom<span class="op">)</span></span></code></pre></div>
+<ul>
+<li><code>dr &lt; oLeft</code> — 공룡이 장애물보다 완전히
+<strong>왼쪽</strong>에 (안 닿음)</li>
+<li><code>dl &gt; oRight</code> — 완전히 <strong>오른쪽</strong>에</li>
+<li><code>db &lt; oTop</code> — 완전히 <strong>위</strong>에 (점프로
+넘음!)</li>
+<li><code>dt &gt; oBottom</code> — 완전히 <strong>아래</strong>에</li>
+</ul>
+<p>이 넷 중 하나라도 참이면 안 겹친 것. <code>!(...)</code> 로 뒤집으면
+"넷 다 아니다 = 겹쳤다". <strong>점프가 장애물을 넘는다는 것</strong>은
+<code>db &lt; oTop</code>(공룡 밑바닥이 장애물 꼭대기보다 위) 조건이
+참이 되는 순간이다 — 물리가 만든 높이가 충돌 판정을 바꾼다.</p>
+<blockquote>
+<p><strong>관대한 히트박스.</strong> <code>dl += 1</code> 로 공룡의 충돌
+상자를 그림보다 한 칸 작게 잡는다. 픽셀이 살짝 스쳐도 죽지 않게 해
+<strong>억울한 죽음</strong>을 줄이는 것이다. 좋은 충돌 판정은
+물리적으로 정확한 게 아니라 <strong>플레이어가 납득할 수 있게</strong>
+설계된다 — 게임 느낌(game feel)의 한 축이다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-6--스프라이트-애니메이션--여러-줄-그림에-생명을">개념 6 ·
+스프라이트 애니메이션 — 여러 줄 그림에 생명을</h2>
+<p>공룡·선인장·익룡은 한 글자가 아니라 <strong>여러 줄짜리
+그림(스프라이트)</strong> 이다. 문자열 배열로 모양을 정의하고,
+<code>'X'</code> 는 블록, <code>' '</code> 는 빈칸으로 해석해
+그린다.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 스프라이트: &#39;X&#39; = 블록, &#39; &#39; = 빈칸</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="at">const</span> <span class="dt">char</span><span class="op">*</span> DINO_RUN0<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="st">&quot; XX&quot;</span><span class="op">,</span> <span class="st">&quot;XXX&quot;</span><span class="op">,</span> <span class="st">&quot;X X&quot;</span> <span class="op">};</span>   <span class="co">// 달리기 프레임 0</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="at">const</span> <span class="dt">char</span><span class="op">*</span> DINO_RUN1<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="st">&quot; XX&quot;</span><span class="op">,</span> <span class="st">&quot;XXX&quot;</span><span class="op">,</span> <span class="st">&quot;XX &quot;</span> <span class="op">};</span>   <span class="co">// 달리기 프레임 1 (다리 반대)</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="at">const</span> <span class="dt">char</span><span class="op">*</span> DINO_JUMP<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="st">&quot; XX&quot;</span><span class="op">,</span> <span class="st">&quot;XXX&quot;</span><span class="op">,</span> <span class="st">&quot;X X&quot;</span> <span class="op">};</span>   <span class="co">// 점프 (고정)</span></span></code></pre></div>
+<p><code>DrawSpriteRows(cx, cy, rows, h, color)</code> 헬퍼가 이 배열을
+훑어 <code>'X'</code> 자리에만 블록을 그린다(내부는 결국
+<code>OnDrawColor((cx+col)*2, cy+row, "■", color)</code>). 애니메이션은
+프레임을 토글하는 것뿐이다.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> DinoContent<span class="op">::</span>DrawDino<span class="op">()</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> footY <span class="op">=</span> <span class="op">(</span><span class="dt">int</span><span class="op">)(</span>dinoY <span class="op">+</span> <span class="fl">0.5</span><span class="bu">f</span><span class="op">);</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>dinoState <span class="op">==</span> DUCK<span class="op">)</span>      DrawSpriteRows<span class="op">(</span>DINO_X<span class="op">,</span> footY<span class="op">-</span><span class="dv">1</span><span class="op">,</span> DINO_DUCK<span class="op">,</span> <span class="dv">2</span><span class="op">,</span> color<span class="op">);</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>dinoState <span class="op">==</span> JUMP<span class="op">)</span> DrawSpriteRows<span class="op">(</span>DINO_X<span class="op">,</span> footY<span class="op">-</span><span class="dv">2</span><span class="op">,</span> DINO_JUMP<span class="op">,</span> <span class="dv">3</span><span class="op">,</span> color<span class="op">);</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>dinoState <span class="op">==</span> DEAD<span class="op">)</span> DrawSpriteRows<span class="op">(</span>DINO_X<span class="op">,</span> footY<span class="op">-</span><span class="dv">2</span><span class="op">,</span> DINO_DEAD<span class="op">,</span> <span class="dv">3</span><span class="op">,</span> color<span class="op">);</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>  <span class="co">// RUN — 다리 프레임 토글</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        DrawSpriteRows<span class="op">(</span>DINO_X<span class="op">,</span> footY<span class="op">-</span><span class="dv">2</span><span class="op">,</span> legFrame <span class="op">?</span> DINO_RUN1 <span class="op">:</span> DINO_RUN0<span class="op">,</span> <span class="dv">3</span><span class="op">,</span> color<span class="op">);</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>달리는 공룡의 다리가 교차하는 것은 <code>legFrame</code>(0↔︎1, 개념
+2에서 0.1초마다 토글)에 따라
+<code>DINO_RUN0</code>/<code>DINO_RUN1</code> 을 번갈아 그리는 것뿐이다.
+<strong>두 장의 그림을 빠르게 번갈아 = 애니메이션</strong> — 플립북과
+같은 원리다. 밤/낮에 따라 색만 바꾸면(<code>nightPhase</code>) 같은
+스프라이트가 다른 분위기를 낸다.</p>
+<hr />
+<h2 id="코드-워크스루--oningameupdate-와-updatedino">코드 워크스루 —
+<code>OnInGameUpdate</code> 와 <code>UpdateDino</code></h2>
+<p>한 프레임에서 물리·세계·충돌이 어떻게 맞물리는지 따라가자.</p>
+<blockquote>
+<p><strong>실제 파일:</strong> <code>Main/Content/DinoContent.cpp</code>
+— <code>OnInGameUpdate()</code>, <code>UpdateDino()</code></p>
+</blockquote>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> DinoContent<span class="op">::</span>OnInGameUpdate<span class="op">()</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_ESCAPE<span class="op">))</span> <span class="op">{</span> currentPhase <span class="op">=</span> _EPhase<span class="op">::</span>TITLE<span class="op">;</span> <span class="cf">return</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span><span class="ch">&#39;P&#39;</span><span class="op">))</span> <span class="op">{</span> <span class="co">/* PLAYING ↔ PAUSE */</span> <span class="op">}</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>gameState <span class="op">==</span> PAUSE<span class="op">)</span>    <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>gameState <span class="op">==</span> GAMEOVER<span class="op">)</span> <span class="op">{</span> <span class="cf">if</span> <span class="op">(</span>SPACE<span class="op">/</span>ENTER<span class="op">)</span> StartGame<span class="op">();</span> <span class="cf">return</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ── PLAYING ── (매 프레임)</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>TIMER<span class="op">-&gt;</span>GetTickTimer<span class="op">(</span><span class="fl">0.1</span><span class="bu">f</span><span class="op">))</span>  legFrame <span class="op">^=</span> <span class="dv">1</span><span class="op">;</span>    <span class="co">// 애니메이션 (틱)</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>TIMER<span class="op">-&gt;</span>GetTickTimer<span class="op">(</span><span class="fl">0.15</span><span class="bu">f</span><span class="op">))</span> wingFrame <span class="op">^=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    UpdateDino<span class="op">();</span>     <span class="co">// ① 물리: 점프/중력/착지 (개념 1)</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    UpdateWorld<span class="op">();</span>    <span class="co">// ② 스크롤·스폰·제거·속도 (개념 3·4)</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    UpdateScore<span class="op">();</span>    <span class="co">// ③ 점수·마일스톤·밤낮</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>CheckCollision<span class="op">())</span> <span class="op">{</span>              <span class="co">// ④ AABB (개념 5)</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>        dinoState <span class="op">=</span> DEAD<span class="op">;</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>        gameState <span class="op">=</span> GAMEOVER<span class="op">;</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>score <span class="op">&gt;</span> hiScore<span class="op">)</span> hiScore <span class="op">=</span> score<span class="op">;</span>   <span class="co">// 최고 점수 갱신</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>한 프레임의 순서가 곧 인과다 — <strong>입력을 물리에 반영(①) → 세계를
+흘리고 장애물을 만들고(②) → 점수를 매기고(③) → 그 결과로 충돌을
+검사(④).</strong> 물리로 공룡을 움직인 뒤, 세계를 흘린 뒤에 충돌을 보는
+순서라, "지금 이 순간 공룡과 장애물이 겹쳤는가"를 정확히 판정한다.</p>
+<p><code>UpdateDino</code> 안이 개념 1의 물리 그대로다 — 땅에 있으면
+점프 입력을 받고, 공중이면 중력을 속도에 더하고 속도를 위치에 더하며,
+지면에 닿으면 착지한다. <strong>"매 프레임 두
+줄"(<code>v+=g; y+=v;</code>)이 크롬 공룡의 그 점프감을 통째로
+만든다.</strong></p>
+<p>렌더(<code>OnInGameRender</code>)는 이 상태를 그리기만 한다 —
+배경(구름·별·달) → 지면(스크롤 질감) → 장애물 → 공룡(상태별 스프라이트)
+→ 점수(HI·현재). 밤/낮은 <code>nightPhase</code> 로 색 팔레트만
+바꾼다.</p>
+<hr />
+<h2 id="그림으로-정리--점프-포물선과-aabb">그림으로 정리 — 점프 포물선과
+AABB</h2>
+<blockquote>
+<p>📊 <strong>웹 교육문서에서는 점프 포물선과 AABB 겹침이
+애니메이션(V-P2-3)으로 재생된다.</strong> 책에서는 아래 도식으로
+대신한다.</p>
+</blockquote>
+<p><strong>점프 포물선 — 매 프레임
+<code>v += g; y += v</code></strong></p>
+<pre><code>  속도(v):  -0.95  -0.89  ...  -0.05  +0.01  ...  +0.89  +0.95   (중력 G가 매 프레임 +0.06)
+  높이(y):   솟구침 ──────▶ 정점(v≈0) ──────▶ 낙하 (점점 빠르게)
+            ●
+           ╱ ╲          중력이 속도를 꾸준히 아래로 당겨
+          ╱   ╲         상승→정점→가속 낙하의 부드러운 곡선.
+    ─────●─────●─────   float 이라서 이 곡선이 매끄럽다.</code></pre>
+<p><strong>AABB — 두 사각형이 겹치는가</strong></p>
+<pre><code>  안 겹침(넘김):              겹침(충돌):
+   공룡                        공룡
+   ┌──┐                        ┌──┐
+   │  │  ← db &lt; oTop           │ ┌┼─┐
+   └──┘     (완전히 위)         └─┼┘ │  ← 네 분리 조건이 모두 거짓
+      ┌───┐                      └──┘     → 겹쳤다 → 충돌
+      │장 │                    ┌───┐
+      └───┘                    │장 │
+  !(dr&lt;oL || dl&gt;oR || db&lt;oT || dt&gt;oB)  ← 이 식이 참이면 충돌</code></pre>
+<p>한 문장으로: <strong>float 물리가 부드러운 움직임을 만들고, 스크롤이
+세계를 흐르게 하며, 절차적 스폰이 세계를 채우고, AABB가 그 세계의
+부딪힘을 판정한다.</strong></p>
+<hr />
+<h2 id="알려진-이슈에서-배우기-as-built">알려진 이슈에서 배우기
+(as-built)</h2>
+<p>Dino도 완벽한 시뮬레이터가 아니라 <strong>동작하는 러너</strong>로
+구현됐다. 몇 가지 타협을 들여다보면, 실전 게임 개발의 판단이 보인다.</p>
+<table>
+<thead>
+<tr>
+<th>이슈</th>
+<th>as-built 상태</th>
+<th>무엇을 배우나</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>Beep()</code> 블로킹</strong></td>
+<td>100점 마일스톤에 <code>Beep(1200, 20)</code> — 20ms 동안 프레임이
+멈춤</td>
+<td>소리를 짧게(≤20ms)만. 콘솔 사운드는 게임 루프를 막는 대가가
+있다</td>
+</tr>
+<tr>
+<td><strong>despawn 시 벡터 재생성</strong></td>
+<td>매 프레임 <code>kept</code> 벡터를 새로 만들어 교체</td>
+<td>간단하지만 매 프레임 복사 비용. 장애물이 적어 문제없음("측정 후
+최적화")</td>
+</tr>
+<tr>
+<td><strong>프레임 기반 물리</strong></td>
+<td>delta time 없이 "칸/프레임" 고정</td>
+<td>60fps 가정. 프레임률이 흔들리면 물리도 흔들림 — 콘솔엔 충분</td>
+</tr>
+<tr>
+<td><strong>정수 반올림 충돌</strong></td>
+<td>float 위치를 <code>(int)(x+0.5f)</code> 로 반올림해 AABB</td>
+<td>물리는 연속, 충돌은 격자. 이 변환 지점을 의식해야 함</td>
+</tr>
+<tr>
+<td><strong>최고 점수 세션 한정</strong></td>
+<td><code>hiScore</code> 는 멤버 변수 — 프로그램 끄면 사라짐</td>
+<td>파일 저장(1부 F 모듈!)은 향후 확장. "이어지는 기록"은 파일이
+필요</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>"최고 점수 세션 한정"이 눈에 띈다 — 1부 F 모듈에서 배운 파일 I/O를
+여기 붙이면 세션을 넘어 기록이 남는다. <strong>1부의 지식이 2부의 게임을
+개선하는 재료가 된다.</strong> 커리큘럼은 앞으로만 흐르지 않는다.</p>
+</blockquote>
+<hr />
+<h2 id="체크포인트--스스로-점검하기">체크포인트 — 스스로 점검하기</h2>
+<p><strong>Q1.</strong> 공룡의 높이·속도를 <code>int</code> 가 아니라
+<code>float</code> 로 두는 이유는? <code>int</code> 로 하면 점프가
+어떻게 되나?</p>
+<p><strong>Q2.</strong> 물리(<code>UpdateDino</code>)는 매 프레임
+갱신하는데, 다리 애니메이션은 <code>GetTickTimer(0.1f)</code> 로
+제어한다. 왜 다르게 다루나?</p>
+<p><strong>Q3.</strong> 공룡의 x는 고정(<code>DINO_X=6</code>)인데
+어떻게 "달리는" 것처럼 보이나? 구름이 장애물보다 느리게 흐르는 건 무엇을
+표현하나?</p>
+<p><strong>Q4.</strong> AABB 충돌식
+<code>!(dr &lt; oLeft || dl &gt; oRight || db &lt; oTop || dt &gt; oBottom)</code>
+에서, 점프로 장애물을 넘는 순간 참이 되는 부분 조건은 어느 것인가?</p>
+<p><strong>Q5.</strong> 장애물 스폰에서 <code>gapMin</code> 을
+<code>gameSpeed</code> 에 비례시키는 이유는? 고정값으로 두면 무슨 문제가
+생기나?</p>
+<details><summary><b>해설 펼치기</b></summary>
+
+<p><strong>A1.</strong> 중력(0.06)·점프 속도(-0.95) 같은 <strong>소수
+값을 누적</strong>해야 부드러운 포물선이 나오기 때문이다.
+<code>int</code> 면 <code>dinoVelY += 0.06</code> 이 소수점이 잘려 늘
+0이 되어 중력이 안 걸리고, 점프가 계단처럼 뚝뚝 끊긴다. 연속적으로
+변하는 값은 실수로 다룬다.</p>
+<p><strong>A2.</strong> 물리는 <strong>부드러워야</strong> 하므로 매
+프레임(초당 60번) 갱신해 매끄러운 곡선을 만든다. 애니메이션은 매 프레임
+바꾸면 너무 빨라 보이므로 0.1초마다(초당 10번) 토글한다. "부드러워야 할
+것은 매 프레임, 띄엄띄엄이어도 될 것은 틱 타이머".</p>
+<p><strong>A3.</strong> 공룡은 제자리에 있고 <strong>장애물·배경이 매
+프레임 왼쪽으로 흐른다</strong>(월드 스크롤). 러닝머신처럼 세계가 지나가
+달리는 착시를 만든다. 구름이 더 느리게 흐르는 것은
+<strong>시차(parallax)</strong> — 멀리 있는 것은 느리게 보여
+원근(깊이)을 표현한다.</p>
+<p><strong>A4.</strong> <code>db &lt; oTop</code> — 공룡의
+밑바닥(<code>db</code>)이 장애물 꼭대기(<code>oTop</code>)보다 위에 있는
+것. 즉 공룡이 장애물보다 높이 떠서 "완전히 위"에 있으면 이 조건이 참이
+되어 <code>!(...)</code> 가 거짓 → 충돌 아님(넘김). 점프 물리가 만든
+높이가 이 조건을 참으로 만든다.</p>
+<p><strong>A5.</strong> 속도가 빠를수록 장애물이 빨리 다가오므로, 간격이
+좁으면 점프로 넘을 수 없는 <strong>불가능한 배치</strong>가 생긴다.
+<code>gapMin = 14 + 18*gameSpeed</code> 로 속도에 비례해 간격을 벌리면,
+어떤 속도에서도 "넘을 수 있는" 배치가 보장된다. 게임의 공정성(플레이
+가능성)을 수치로 지키는 것이다.</p>
+</details>
+
+<hr />
+<h2 id="실습-미션--점프로-장애물-넘기-jumpc-star">실습 미션 — 점프로
+장애물 넘기 <code>jump.c</code> ⭐</h2>
+<blockquote>
+<p>Tetris의 미션이 "2D 배열 알고리즘"이었다면, 이 미션은 <strong>중력
+물리 + AABB 충돌</strong>을 콕 집어 연습한다. 다가오는 장애물을 점프
+물리로 넘길 수 있는지, 두 개념을 한자리에서 시뮬레이션한다.</p>
+</blockquote>
+<p><strong>드릴 문법</strong> — <code>float</code>(또는 정수)
+물리(속도·중력 적분) · 프레임 루프 · <strong>AABB 겹침
+판정</strong>(개념 5) · 조건 분기 <strong>만드는 것</strong> — 장애물이
+다가오는 동안, 정한 시점에 점프해 넘길 수 있는지 판정하고 궤적을
+출력하는 시뮬레이터. <strong>클리어 조건</strong> — 점프 타이밍에 따라
+공룡의 포물선이 장애물을 넘는지(AABB) 정확히 판정한다.
+<strong>규모</strong> — 약 50줄, 파일 1개. 표준 C만. 실시간 입력
+없이(결정론적) 물리와 충돌을 눈으로 확인한다.</p>
+<h3 id="문제-정의">문제 정의</h3>
+<p>이 미션의 심장은 두 가지다. <strong>① 매 프레임
+<code>v += G; h += v;</code> 로 점프 포물선을 만들고, ② 매 프레임 공룡
+상자와 장애물 상자의 AABB 겹침을 검사한다.</strong> 실시간 입력은 콘솔
+표준 C에선 까다로우니, "몇 프레임째에 점프할지"를 미리 입력받아
+결정론적으로 시뮬레이션한다 — 물리와 충돌의 인과를 또렷이 볼 수
+있다.</p>
+<h3 id="목표--클리어-조건">목표 / 클리어 조건</h3>
+<ol type="1">
+<li>장애물 시작 거리와 "점프할 프레임"을 입력받는다.</li>
+<li>매 프레임: 장애물을 1칸 왼쪽으로, 점프 중이면
+<code>v += G; h += v;</code> 로 공룡 높이 갱신, 착지 처리.</li>
+<li>매 프레임 공룡 상자 vs 장애물 상자를 <strong>AABB</strong> 로 검사.
+겹치면 충돌.</li>
+<li>장애물이 공룡을 완전히 지나가면 "통과", 도중에 겹치면 "충돌".</li>
+<li>(선택) 각 프레임의 공룡 높이를 한 줄씩 출력해 포물선을 눈으로
+본다.</li>
+</ol>
+<h3 id="힌트">힌트</h3>
+<details><summary><b>힌트 1 — 점프 물리 (정수 버전으로 크게)</b></summary>
+
+<p>실제 게임은 <code>G=0.06</code> 처럼 작지만, 눈에 보이게 정수로 키워
+쓴다.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> h <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> v <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> onGround <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="dt">const</span> <span class="dt">int</span> JUMP <span class="op">=</span> <span class="dv">5</span><span class="op">,</span> G <span class="op">=</span> <span class="dv">1</span><span class="op">;</span>      <span class="co">/* 점프 초속 +5, 중력 -1 */</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">/* 점프 순간: */</span>  v <span class="op">=</span> JUMP<span class="op">;</span> onGround <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">/* 매 프레임 공중: */</span>  h <span class="op">+=</span> v<span class="op">;</span> v <span class="op">-=</span> G<span class="op">;</span>  <span class="cf">if</span> <span class="op">(</span>h <span class="op">&lt;=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> h <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> v <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> onGround <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> <span class="op">}</span></span></code></pre></div>
+<p>높이 h는 0→5→9→12→14→15→15→14→12→9→5→0 의 포물선을 그린다.</p>
+</details>
+
+<details><summary><b>힌트 2 — AABB 겹침 함수</b></summary>
+
+<p>두 사각형 [ax1,ay1~ax2,ay2], [bx1,by1~bx2,by2] 의 겹침.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> overlap<span class="op">(</span><span class="dt">int</span> ax1<span class="op">,</span><span class="dt">int</span> ay1<span class="op">,</span><span class="dt">int</span> ax2<span class="op">,</span><span class="dt">int</span> ay2<span class="op">,</span> <span class="dt">int</span> bx1<span class="op">,</span><span class="dt">int</span> by1<span class="op">,</span><span class="dt">int</span> bx2<span class="op">,</span><span class="dt">int</span> by2<span class="op">)</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">!(</span>ax2 <span class="op">&lt;</span> bx1 <span class="op">||</span> ax1 <span class="op">&gt;</span> bx2 <span class="op">||</span> ay2 <span class="op">&lt;</span> by1 <span class="op">||</span> ay1 <span class="op">&gt;</span> by2<span class="op">);</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>공룡 상자: x[0,2], y[h, h+2] (높이 h에서 3칸). 장애물 상자: x[obsX,
+obsX+1], y[0, 2] (지면 높이 3).</p>
+</details>
+
+<h3 id="정답-코드">정답 코드</h3>
+<details><summary><b>정답 펼치기 — <code>jump.c</code></b></summary>
+
+<div class="sourceCode" id="cb16"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define _CRT_SECURE_NO_WARNINGS</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">/* 두 축정렬 사각형의 겹침 (개념 5의 AABB) */</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> overlap<span class="op">(</span><span class="dt">int</span> ax1<span class="op">,</span> <span class="dt">int</span> ay1<span class="op">,</span> <span class="dt">int</span> ax2<span class="op">,</span> <span class="dt">int</span> ay2<span class="op">,</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>            <span class="dt">int</span> bx1<span class="op">,</span> <span class="dt">int</span> by1<span class="op">,</span> <span class="dt">int</span> bx2<span class="op">,</span> <span class="dt">int</span> by2<span class="op">)</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">!(</span>ax2 <span class="op">&lt;</span> bx1 <span class="op">||</span> ax1 <span class="op">&gt;</span> bx2 <span class="op">||</span> ay2 <span class="op">&lt;</span> by1 <span class="op">||</span> ay1 <span class="op">&gt;</span> by2<span class="op">);</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> obsDist<span class="op">,</span> jumpAt<span class="op">;</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">const</span> <span class="dt">int</span> JUMP <span class="op">=</span> <span class="dv">5</span><span class="op">,</span> G <span class="op">=</span> <span class="dv">1</span><span class="op">;</span>      <span class="co">/* 점프 초속 / 중력 (눈에 보이게 정수) */</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">const</span> <span class="dt">int</span> OBS_W <span class="op">=</span> <span class="dv">2</span><span class="op">,</span> OBS_H <span class="op">=</span> <span class="dv">3</span><span class="op">;</span> <span class="co">/* 장애물 크기 */</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">const</span> <span class="dt">int</span> DINO_W <span class="op">=</span> <span class="dv">3</span><span class="op">,</span> DINO_H <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;=== 점프로 장애물 넘기 ===</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;장애물까지 거리(프레임): &quot;</span><span class="op">);</span>  scanf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>obsDist<span class="op">);</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;몇 프레임째에 점프?     : &quot;</span><span class="op">);</span> scanf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>jumpAt<span class="op">);</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> h <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> v <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> onGround <span class="op">=</span> <span class="dv">1</span><span class="op">,</span> hit <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> f <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> f <span class="op">&lt;=</span> obsDist<span class="op">;</span> f<span class="op">++)</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>        <span class="co">/* 점프 입력 */</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>f <span class="op">==</span> jumpAt <span class="op">&amp;&amp;</span> onGround<span class="op">)</span> <span class="op">{</span> v <span class="op">=</span> JUMP<span class="op">;</span> onGround <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>        <span class="co">/* 물리 (한 프레임 고정 스텝) */</span></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(!</span>onGround<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>            h <span class="op">+=</span> v<span class="op">;</span> v <span class="op">-=</span> G<span class="op">;</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>h <span class="op">&lt;=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> h <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> v <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> onGround <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>        <span class="co">/* 장애물 위치: 매 프레임 1칸씩 다가옴 (공룡은 x=0 고정) */</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> obsX <span class="op">=</span> obsDist <span class="op">-</span> f<span class="op">;</span></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>        <span class="co">/* AABB: 공룡[0..2, h..h+2] vs 장애물[obsX.., 0..OBS_H-1] */</span></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>overlap<span class="op">(</span><span class="dv">0</span><span class="op">,</span> h<span class="op">,</span> DINO_W <span class="op">-</span> <span class="dv">1</span><span class="op">,</span> h <span class="op">+</span> DINO_H <span class="op">-</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>                    obsX<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> obsX <span class="op">+</span> OBS_W <span class="op">-</span> <span class="dv">1</span><span class="op">,</span> OBS_H <span class="op">-</span> <span class="dv">1</span><span class="op">))</span></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>            hit <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>        <span class="co">/* 궤적 출력: 공룡 높이를 막대로 */</span></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;f</span><span class="sc">%2d</span><span class="st"> | 장애물 x=</span><span class="sc">%2d</span><span class="st"> | 공룡 h=</span><span class="sc">%d</span><span class="st"> &quot;</span><span class="op">,</span> f<span class="op">,</span> obsX<span class="op">,</span> h<span class="op">);</span></span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> h<span class="op">;</span> i<span class="op">++)</span> printf<span class="op">(</span><span class="st">&quot;^&quot;</span><span class="op">);</span></span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span>hit <span class="op">?</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&gt;&gt; 충돌! 타이밍을 놓쳤습니다.</span><span class="sc">\n</span><span class="st">&quot;</span></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>               <span class="op">:</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&gt;&gt; 통과! 멋지게 넘었습니다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>빌드:</strong> <code>cl jump.c</code> (MSVC) 또는
+<code>gcc jump.c -o jump</code></p>
+<p><strong>함정/체크포인트</strong></p>
+<ul>
+<li><strong>점프 타이밍이 핵심.</strong> 너무 일찍 점프하면 장애물이
+오기 전에 착지해 버리고, 너무 늦으면 이미 겹친다. 여러
+<code>jumpAt</code> 값을 넣어 "넘는 구간"을 찾아보자 — 이것이 리듬
+게임의 타이밍 창(window)이다.</li>
+<li><strong>AABB의 y 조건.</strong> 공룡이 충분히
+높이(<code>h ≥ OBS_H</code>) 떠 있으면 <code>ay1 &gt; by2</code>(공룡
+밑바닥이 장애물 꼭대기보다 위)가 되어 안 겹친다. 개념 5의 "점프로 넘음 =
+<code>db &lt; oTop</code>"이 여기선 이 조건이다.</li>
+<li><strong><code>v += G</code> 가 아니라 <code>v -= G</code></strong>
+인 이유: 이 미션은 높이 <code>h</code> 를 위로 양수로 뒀다(실제 게임은
+y가 아래로 증가해 부호가 반대). 좌표계의 방향을 먼저 정하고 부호를
+맞추는 습관.</li>
+</ul>
+<p><strong>확장 과제</strong></p>
+<ul>
+<li><code>G</code> 를 <code>0.5</code>(float)로 줄이고 <code>JUMP</code>
+를 키워, 실제 게임처럼 더 부드러운 긴 포물선으로.</li>
+<li>장애물을 여러 개 배열로 두고, 각각 AABB 검사하면 진짜 러너에
+가까워진다.</li>
+</ul>
+</details>
+
+<hr />
+<h2 id="이-단계를-마치며">이 단계를 마치며</h2>
+<table>
+<thead>
+<tr>
+<th>얻은 것</th>
+<th>다음에 쓰는 곳</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>float 물리(중력·속도)</td>
+<td>Road Fighter의 차량 운동, 모든 연속 움직임</td>
+</tr>
+<tr>
+<td>월드 스크롤·시차</td>
+<td>Road Fighter의 도로 스크롤, 세계가 흐르는 모든 게임</td>
+</tr>
+<tr>
+<td>절차적 스폰·점수 게이팅</td>
+<td>Road Fighter·Maze·Battle City의 생성</td>
+</tr>
+<tr>
+<td>AABB 충돌</td>
+<td>Road Fighter·Battle City의 사각형/타일 충돌</td>
+</tr>
+<tr>
+<td>스프라이트 애니메이션</td>
+<td>전 게임의 캐릭터·이펙트</td>
+</tr>
+</tbody>
+</table>
+<p>Dino로 우리는 "시간과 물리로 스스로 흐르는 세계"를 만들었다. 공룡은
+중력으로 점프하고, 세계는 흐르며, 장애물은 저절로 생겨나 사각형으로
+부딪힌다. 다음 4단계 Road Fighter는 여기에 <strong>여러 시스템을
+동시에</strong> 얹는다 — 한 리스트에 적·트럭·아이템·장애물을 함께 담는
+엔티티 시스템, 연료·목숨이라는 자원, 무적 상태, 시간 기반 스테이지.
+하나의 게임 안에서 여러 시스템이 물려 도는 <strong>시스템
+설계</strong>를 경험한다.</p>
+<blockquote>
+<p><strong>← 이전:</strong> <a href="Part2_02.html">2단계 · Tetris —
+알고리즘과 그리드</a> | <strong>다음 →</strong> <a
+href="Part2_04.html">4단계 · Road Fighter — 엔티티 시스템과 리소스</a></p>
+</blockquote>
+  </article>
+</main>
+<footer class="site-footer">
+  <a href="index.html">← 목차로 돌아가기</a>
+  <span>CSGP Learn · 표시용 원고 (코드는 UTF-8 사본)</span>
+</footer>
+<script src="book-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,1001 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6단계 · Maze — 알고리즘 심화 (생성 + 탐색)</title>
+<script>try{var _t=localStorage.getItem('csgp-theme');if(_t)document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
+<style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<link rel="stylesheet" href="book.css">
+
+</head>
+<body>
+<div class="topbar">
+  <button class="drawer-toggle" id="drawerToggle" type="button" aria-label="목차 열기/닫기" aria-expanded="false">☰ 목차</button>
+  <a class="home" href="index.html">📘 CSGP</a>
+  <span class="crumb">콘솔 게임으로 배우는 C · C++</span>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="라이트/다크 전환">🌙</button>
+</div>
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" aria-label="책 목차">
+  <div class="drawer-dash">
+    <div class="dash-title">콘솔 게임으로 배우는 C · C++</div>
+    <div class="dash-sub">학습 목차 · 대시보드</div>
+    <div class="dash-progress"><div class="dash-bar"><i id="dashBar"></i></div><span class="dash-pct" id="dashPct"></span></div>
+    <input class="drawer-search" id="drawerSearch" type="search" placeholder="🔍 챕터 검색…" aria-label="챕터 검색">
+  </div>
+  <nav class="booknav" aria-label="책 목차"><a class="booknav-home" href="index.html">📘 전체 목차</a><ul class="booknav-list"><li class="grp">1부 · C 기본 문법</li><li><a href="Part1_00.html" title="1부 — C 기본 문법: 회사를 키우며 배우는 언어">1부 개요</a></li><li><a href="Part1_01.html" title="A 모듈 · 1–4장 — 값·계산·분기: 회사에 숫자를 세우다">A · 값·계산·분기</a></li><li><a href="Part1_02.html" title="B 모듈 · 5–6장 — 반복문과 함수: 회사에 심장을 달다">B · 반복문·함수</a></li><li><a href="Part1_03.html" title="C 모듈 · 7–8장 — 배열과 문자열: 회사에 사람과 이름을 채우다">C · 배열·문자열</a></li><li><a href="Part1_04.html" title="D 모듈 · 9–10장 — 구조체와 포인터: 데이터에 모양을 주다">D · 구조체·포인터</a></li><li><a href="Part1_05.html" title="E 모듈 · 11–12장 — 동적 메모리와 랜덤: 회사가 자라고, 시장이 살아난다">E · 메모리·랜덤</a></li><li><a href="Part1_06.html" title="F 모듈 · 13–15장 — 파일·모듈·캡스톤: 회사를 저장하고, 게임을 출시하다">F · 파일·모듈·캡스톤</a></li><li class="grp">2부 · C++ 프레임워크</li><li><a href="Part2_00.html" title="2부 — C++ 콘솔 게임 프레임워크: 7개의 게임으로 오르기">2부 개요</a></li><li><a href="Part2_01.html" title="1단계 · Snake — 자료구조·충돌·상태머신">1단계 · Snake</a></li><li><a href="Part2_02.html" title="2단계 · Tetris — 알고리즘과 그리드">2단계 · Tetris</a></li><li><a href="Part2_03.html" title="3단계 · Dino — 물리와 스크롤">3단계 · Dino</a></li><li><a href="Part2_04.html" title="4단계 · Road Fighter — 엔티티 시스템과 리소스">4단계 · Road Fighter</a></li><li><a href="Part2_05.html" title="번외 · GameDevTycoon 이식 — C에서 C++로">번외 · Tycoon 이식</a></li><li><a href="Part2_06.html" title="5단계 · Galaga — 오브젝트 풀링">5단계 · Galaga</a></li><li class="active"><a href="Part2_07.html" title="6단계 · Maze — 알고리즘 심화 (생성 + 탐색)">6단계 · Maze</a><ul class="sections">
+<li><a href="#이-단계의-학습-목표" id="toc-이-단계의-학습-목표">이
+단계의 학습 목표</a></li>
+<li><a href="#왜-maze가-이-자리인가" id="toc-왜-maze가-이-자리인가">왜
+Maze가 이 자리인가</a></li>
+<li><a href="#개념-1--격자-모델--셀과-벽"
+id="toc-개념-1--격자-모델--셀과-벽">개념 1 · 격자 모델 — 셀과
+벽</a></li>
+<li><a href="#개념-2--생성-알고리즘-5종--스테이지가-곧-알고리즘"
+id="toc-개념-2--생성-알고리즘-5종--스테이지가-곧-알고리즘">개념 2 · 생성
+알고리즘 5종 — 스테이지가 곧 알고리즘</a></li>
+<li><a href="#개념-3--union-find--kruskal-미로의-심장"
+id="toc-개념-3--union-find--kruskal-미로의-심장">개념 3 · union-find —
+Kruskal 미로의 심장</a></li>
+<li><a href="#개념-4--분할정복--recursive-division"
+id="toc-개념-4--분할정복--recursive-division">개념 4 · 분할정복 —
+Recursive Division</a></li>
+<li><a href="#개념-5--경로탐색-4종--같은-문제-네-가지-태도"
+id="toc-개념-5--경로탐색-4종--같은-문제-네-가지-태도">개념 5 · 경로탐색
+4종 — 같은 문제, 네 가지 태도</a></li>
+<li><a href="#개념-6--bfs-최단경로-복원과-채점"
+id="toc-개념-6--bfs-최단경로-복원과-채점">개념 6 · BFS 최단경로 복원과
+채점</a></li>
+<li><a href="#코드-워크스루--생성-디스패치와-스테이지-흐름"
+id="toc-코드-워크스루--생성-디스패치와-스테이지-흐름">코드 워크스루 —
+생성 디스패치와 스테이지 흐름</a></li>
+<li><a href="#그림으로-정리--알고리즘마다-다른-미로-여러-태도의-탐색"
+id="toc-그림으로-정리--알고리즘마다-다른-미로-여러-태도의-탐색">그림으로
+정리 — 알고리즘마다 다른 미로, 여러 태도의 탐색</a></li>
+<li><a href="#알려진-이슈에서-배우기-as-built"
+id="toc-알려진-이슈에서-배우기-as-built">알려진 이슈에서 배우기
+(as-built)</a></li>
+<li><a href="#체크포인트--스스로-점검하기"
+id="toc-체크포인트--스스로-점검하기">체크포인트 — 스스로
+점검하기</a></li>
+<li><a href="#실습-미션--bfs-최단경로-bfsc-star"
+id="toc-실습-미션--bfs-최단경로-bfsc-star">실습 미션 — BFS 최단경로
+<code>bfs.c</code> ⭐</a></li>
+<li><a href="#이-단계를-마치며" id="toc-이-단계를-마치며">이 단계를
+마치며</a></li>
+</ul></li><li><a href="Part2_08.html" title="7단계 · Battle City — 종합 캡스톤 (맵 생성 + 풀링)">7단계 · Battle City</a></li><li><a href="Part2_09.html" title="확장 · Pac-Man — 유령 AI와 상태머신">확장 · Pac-Man</a></li><li class="grp">부록</li><li><a href="Appendix.html" title="부록 — 용어집 · 핵심 이슈 · 요약">부록</a></li></ul></nav>
+</aside>
+<main class="reader">
+  <article class="page">
+<h1 id="6단계--maze--알고리즘-심화-생성--탐색">6단계 · Maze — 알고리즘
+심화 (생성 + 탐색)</h1>
+<div class="chapter-badge">
+
+<p><strong>단계 6</strong> ⭐ · 게임 <code>Algo Maze</code> · 씬 클래스
+<code>MazeContent : public IGameContent</code> <strong>처음 배우는
+기술</strong> — <code>격자 좌표계(2·셀+1)</code>
+<code>미로 생성 5종</code> <code>Binary Tree(편향)</code>
+<code>Recursive Backtracker(스택·DFS)</code>
+<code>Randomized Prim(프론티어)</code>
+<code>Kruskal + union-find(분리집합·MST)</code>
+<code>Recursive Division(분할정복)</code>
+<code>경로탐색 4종(BFS·DFS·A*·벽 따라가기)</code>
+<code>BFS 최단경로 복원</code> <strong>예상 학습 시간</strong> —
+6–8시간</p>
+</div>
+
+<blockquote>
+<p>Tetris에서 "자료구조 위의 알고리즘"을 맛봤다면, Maze는
+<strong>알고리즘을 주제 그 자체로</strong> 끌어올린 심화 단계다. 이
+게임은 스테이지마다 <strong>다른 알고리즘으로 미로를 짓는다</strong> —
+그래서 미로의 생김새가 스테이지마다 확연히 달라진다. 편향된 대각선,
+구불구불한 강줄기, 잔가지 덤불, 균일한 격자, 방과 복도. 그리고 어느
+미로에서든 <em><em>BFS·DFS·A</em>·벽 따라가기</em>*가 길을 찾는 과정을
+눈으로 본다. 생성 5종 + 탐색 4종, 아홉 가지 알고리즘을 한 게임에서 보고
+겪는다. 여기서 배우는 <strong>절차적 생성과 경로탐색</strong>은 곧바로
+마지막 캡스톤 Battle City에서 다시 쓰인다.</p>
+</blockquote>
+<h2 id="이-단계의-학습-목표">이 단계의 학습 목표</h2>
+<p>이 단계를 마치면 다음을 할 수 있다.</p>
+<ol type="1">
+<li><strong>(2·셀+1) 격자 모델</strong>로 미로를 표현하고, 셀 좌표와 벽
+좌표를 구분할 수 있다.</li>
+<li>다섯 가지 <strong>생성 알고리즘</strong>의
+아이디어·자료구조·시그니처(생김새)를 설명할 수 있다.</li>
+<li><strong>union-find(분리집합)</strong> 로 사이클을 피하며 미로를
+만드는 Kruskal을 이해한다.</li>
+<li><strong>분할정복</strong>으로 미로를 재귀적으로 나누는 Recursive
+Division을 짤 수 있다.</li>
+<li><em><em>BFS·DFS·A</em>·벽 따라가기</em>*의 차이를 알고, 왜 BFS가
+무가중 격자에서 최단인지 설명할 수 있다.</li>
+<li>BFS의 <strong>prev 배열로 최단경로를 복원</strong>하고, 걸음 효율로
+채점할 수 있다.</li>
+</ol>
+<h2 id="왜-maze가-이-자리인가">왜 Maze가 이 자리인가</h2>
+<p>Snake~Galaga까지, 우리는 게임을 만드는 <strong>기법</strong>을 배웠다
+— 자료구조, 물리, 시스템, 성능. Maze의 임무는 다르다. 게임은 이제
+<strong>알고리즘을 가르치는 무대</strong>가 된다.</p>
+<p>핵심 통찰 하나 — <strong>"미로를 어떻게 만드느냐"에 따라 미로의
+성격이 완전히 달라진다.</strong> 같은 격자, 같은 규칙(완전연결
+미로)인데도, Binary Tree로 만들면 대각선으로 편향되고, DFS로 만들면
+강줄기처럼 구불거리고, Kruskal로 만들면 균일하게 흩어진다.
+<strong>알고리즘이 곧 미로의 얼굴이다.</strong> 그래서 이 게임은
+스테이지를 생성 알고리즘으로 나눈다 — 스테이지가 바뀌면 미로의 생김새가
+통째로 바뀐다.</p>
+<p>그 위에 두 번째 알고리즘 계열 — <strong>경로탐색</strong> — 을
+얹는다. 어느 미로에서든 "이 미로를 어떻게 푸느냐"를 BFS·DFS·A*·벽
+따라가기로 시각화해 비교한다. BFS는 물결처럼 균등하게 퍼지고, A*는 출구
+쪽으로 편향돼 적게 탐색하며, DFS는 한 방향으로 파고들다 헤매고, 벽
+따라가기는 오른손을 벽에 대고 우회한다. <strong>같은 문제를 푸는 네 가지
+태도</strong>를 눈으로 본다.</p>
+<ul>
+<li><strong>생성 알고리즘</strong> — Binary Tree(편향) →
+DFS(스택·백트래킹) → Prim(프론티어) →
+Kruskal(<strong>union-find</strong>·MST) →
+Division(<strong>분할정복</strong>).</li>
+<li><strong>탐색 알고리즘</strong> — BFS(큐·최단) · DFS(스택) ·
+A*(휴리스틱) · 벽 따라가기(무메모리).</li>
+</ul>
+<blockquote>
+<p><strong>커리큘럼의 수렴 지점.</strong> 여기서 익힌 <strong>절차적
+생성</strong>은 마지막 캡스톤 Battle City의 전장 생성으로, <strong>BFS
+경로탐색</strong>은 그 적 탱크의 추적 AI로 곧바로 재사용된다. Maze를
+캡스톤 직전에 두는 이유다 — <strong>"배우고 즉시 응용"</strong>. 그리고
+1부의 씨앗들이 여기서 열매를 맺는다: E 모듈의 Fisher-Yates 셔플이
+Kruskal에, 재귀·스택 개념이 Backtracker와 Division에.</p>
+</blockquote>
+<hr />
+<h2 id="개념-1--격자-모델--셀과-벽">개념 1 · 격자 모델 — 셀과 벽</h2>
+<p>미로를 배열로 표현하는 방법이 핵심이다. <strong>방(셀) 사이에 벽이
+놓인다.</strong> 그래서 셀이 13×10이면, 벽까지 담는 격자는 그 2배+1
+크기다.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="at">const</span> <span class="dt">int</span> CELL_COLS <span class="op">=</span> <span class="dv">13</span><span class="op">,</span> CELL_ROWS <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="at">const</span> <span class="dt">int</span> GRID_W <span class="op">=</span> CELL_COLS <span class="op">*</span> <span class="dv">2</span> <span class="op">+</span> <span class="dv">1</span><span class="op">;</span>   <span class="co">// 27 (셀 + 사이 벽)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="at">const</span> <span class="dt">int</span> GRID_H <span class="op">=</span> CELL_ROWS <span class="op">*</span> <span class="dv">2</span> <span class="op">+</span> <span class="dv">1</span><span class="op">;</span>   <span class="co">// 21</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> wall<span class="op">[</span>GRID_H<span class="op">][</span>GRID_W<span class="op">];</span>   <span class="co">// true = 벽, false = 통로</span></span></code></pre></div>
+<p>규칙은 좌표의 홀짝으로 나뉜다.</p>
+<ul>
+<li><strong>셀(방)</strong> — 홀수 좌표. 셀 <code>(cx, cy)</code> ↔︎ 격자
+<code>(2cx+1, 2cy+1)</code>. 항상 통로.</li>
+<li><strong>벽</strong> — 짝수 좌표. 두 인접 셀 <strong>사이</strong>에
+놓인다.</li>
+</ul>
+<p>미로 만들기는 이렇게 시작한다 — <strong>모든 칸을 벽으로 채우고, 생성
+알고리즘이 셀 사이 벽을 뚫어(carve) 통로를 낸다.</strong></p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> ResetWallsAll<span class="op">(</span><span class="dt">bool</span> val<span class="op">)</span> <span class="op">{</span> <span class="co">/* 전부 벽으로 */</span> <span class="op">}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> OpenAllCells<span class="op">()</span> <span class="op">{</span>                       <span class="co">// 모든 셀(방)을 통로로 열기</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> cy <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> cy <span class="op">&lt;</span> CELL_ROWS<span class="op">;</span> cy<span class="op">++)</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> cx <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> cx <span class="op">&lt;</span> CELL_COLS<span class="op">;</span> cx<span class="op">++)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>            wall<span class="op">[</span><span class="dv">2</span><span class="op">*</span>cy<span class="op">+</span><span class="dv">1</span><span class="op">][</span><span class="dv">2</span><span class="op">*</span>cx<span class="op">+</span><span class="dv">1</span><span class="op">]</span> <span class="op">=</span> <span class="kw">false</span><span class="op">;</span>    <span class="co">// 홀수 좌표 = 방</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>방향은 단위 벡터로 다룬다(0=북, 1=동, 2=남, 3=서). 이
+<code>DX/DY</code> 는 생성(셀 이동)과 탐색(격자 이동) 양쪽에 쓰인다.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="at">const</span> <span class="dt">int</span> DX<span class="op">[</span><span class="dv">4</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="op">-</span><span class="dv">1</span> <span class="op">};</span>   <span class="co">// 북 동 남 서</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="at">const</span> <span class="dt">int</span> DY<span class="op">[</span><span class="dv">4</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">0</span> <span class="op">};</span></span></code></pre></div>
+<p>두 셀 <code>(cx,cy)</code> 와 방향 <code>d</code> 의 이웃 사이 벽을
+뚫는 것은, 그 중간 격자칸을 <code>false</code> 로 만드는 것이다.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>wall<span class="op">[</span><span class="dv">2</span><span class="op">*</span>cy <span class="op">+</span> <span class="dv">1</span> <span class="op">+</span> DY<span class="op">[</span>d<span class="op">]][</span><span class="dv">2</span><span class="op">*</span>cx <span class="op">+</span> <span class="dv">1</span> <span class="op">+</span> DX<span class="op">[</span>d<span class="op">]]</span> <span class="op">=</span> <span class="kw">false</span><span class="op">;</span>   <span class="co">// 셀과 이웃 사이 벽 제거</span></span></code></pre></div>
+<blockquote>
+<p><strong>격자 좌표와 화면 좌표를 구분하라.</strong> 게임 로직은
+<code>wall[gy][gx]</code> 격자 인덱스로만 계산하고, 그릴 때만
+<code>((MAZE_X0+gx)*2, MAZE_Y0+gy)</code> 로 변환한다(전각 x*2). 격자
+인덱스와 콘솔 좌표를 혼동하지 않는 것 — Tetris·Road Fighter에서 계속
+강조한 그 규율이다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-2--생성-알고리즘-5종--스테이지가-곧-알고리즘">개념 2 · 생성
+알고리즘 5종 — 스테이지가 곧 알고리즘</h2>
+<p>다섯 스테이지는 각각 하나의 생성 알고리즘이다. 같은 격자에서
+시작하지만 결과의 얼굴이 전혀 다르다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">스테이지</th>
+<th>알고리즘</th>
+<th>자료구조</th>
+<th>시그니처(생김새)</th>
+<th>배우는 핵심</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>1</strong></td>
+<td>Binary Tree</td>
+<td>없음</td>
+<td>우상단 대각선 편향, 위 행·오른쪽 열이 뻥 뚫림</td>
+<td>"편향(bias)"이란</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>2</strong></td>
+<td>Recursive Backtracker</td>
+<td>스택+방문</td>
+<td>길고 구불구불한 강줄기 통로</td>
+<td>스택·백트래킹·DFS</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>3</strong></td>
+<td>Randomized Prim</td>
+<td>프론티어</td>
+<td>짧은 통로 + 잔가지 덤불</td>
+<td>프론티어·그리디 성장</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>4</strong></td>
+<td>Kruskal</td>
+<td><strong>union-find</strong></td>
+<td>편향 없이 균일</td>
+<td>분리집합·MST·사이클 회피</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>5</strong></td>
+<td>Recursive Division</td>
+<td>재귀</td>
+<td>방과 좁은 문의 격자형</td>
+<td><strong>분할정복</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>① Binary Tree — 가장 단순한 생성.</strong> 모든 셀을 훑으며
+각 셀에서 "북 또는 동" 중 하나를 랜덤으로 골라 벽을 뚫는다.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> MazeContent<span class="op">::</span>GenBinaryTree<span class="op">()</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    ResetWallsAll<span class="op">(</span><span class="kw">true</span><span class="op">);</span>  OpenAllCells<span class="op">();</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> cy <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> cy <span class="op">&lt;</span> CELL_ROWS<span class="op">;</span> cy<span class="op">++)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> cx <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> cx <span class="op">&lt;</span> CELL_COLS<span class="op">;</span> cx<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>            <span class="dt">bool</span> canN <span class="op">=</span> <span class="op">(</span>cy <span class="op">&gt;</span> <span class="dv">0</span><span class="op">),</span> canE <span class="op">=</span> <span class="op">(</span>cx <span class="op">&lt;</span> CELL_COLS <span class="op">-</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(!</span>canN <span class="op">&amp;&amp;</span> <span class="op">!</span>canE<span class="op">)</span> <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            <span class="dt">bool</span> carveEast <span class="op">=</span> canE<span class="op">;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>canN <span class="op">&amp;&amp;</span> canE<span class="op">)</span> carveEast <span class="op">=</span> <span class="op">(</span>rand<span class="op">()</span> <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span><span class="op">);</span>   <span class="co">// 둘 다 되면 동전 던지기</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>carveEast<span class="op">)</span> wall<span class="op">[</span><span class="dv">2</span><span class="op">*</span>cy<span class="op">+</span><span class="dv">1</span><span class="op">][</span><span class="dv">2</span><span class="op">*</span>cx<span class="op">+</span><span class="dv">2</span><span class="op">]</span> <span class="op">=</span> <span class="kw">false</span><span class="op">;</span>       <span class="co">// 동쪽 벽 뚫기</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>           wall<span class="op">[</span><span class="dv">2</span><span class="op">*</span>cy<span class="op">][</span><span class="dv">2</span><span class="op">*</span>cx<span class="op">+</span><span class="dv">1</span><span class="op">]</span>   <span class="op">=</span> <span class="kw">false</span><span class="op">;</span>       <span class="co">// 북쪽 벽 뚫기</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>이 단순함이 <strong>편향</strong>을 낳는다 — 맨 위 행의 셀은 "북"이
+없어 항상 "동"만 뚫리고(위 행이 일자 통로), 맨 오른쪽 열은 항상 "북"만
+뚫린다. 그래서 미로가 우상단으로 쏠린다. <strong>"가장 단순한 알고리즘은
+가장 편향된 결과를 낸다"</strong> — 편향이 무엇인지 눈으로 배우는
+튜토리얼 스테이지다.</p>
+<p><strong>② Recursive Backtracker (DFS) — 스택으로 파고들기.</strong>
+한 셀에서 미방문 이웃으로 벽을 뚫고 전진하다(스택 push), 막다른 곳이면
+되돌아온다(스택 pop). 깊은 재귀 대신 <strong>명시적 스택</strong>을
+쓴다.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> MazeContent<span class="op">::</span>GenBacktracker<span class="op">()</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    ResetWallsAll<span class="op">(</span><span class="kw">true</span><span class="op">);</span>  OpenAllCells<span class="op">();</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> visited<span class="op">[</span>NUM_CELLS<span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="kw">false</span> <span class="op">};</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;</span> st<span class="op">;</span>                       <span class="co">// 명시적 스택</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    visited<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="kw">true</span><span class="op">;</span>  st<span class="op">.</span>push_back<span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(!</span>st<span class="op">.</span>empty<span class="op">())</span> <span class="op">{</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> cur <span class="op">=</span> st<span class="op">.</span>back<span class="op">();</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> cx <span class="op">=</span> cur <span class="op">%</span> CELL_COLS<span class="op">,</span> cy <span class="op">=</span> cur <span class="op">/</span> CELL_COLS<span class="op">;</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> cand<span class="op">[</span><span class="dv">4</span><span class="op">],</span> nc <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>                   <span class="co">// 미방문 이웃 후보 수집</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> d <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> d <span class="op">&lt;</span> <span class="dv">4</span><span class="op">;</span> d<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>            <span class="dt">int</span> nx <span class="op">=</span> cx <span class="op">+</span> DX<span class="op">[</span>d<span class="op">],</span> ny <span class="op">=</span> cy <span class="op">+</span> DY<span class="op">[</span>d<span class="op">];</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>nx<span class="op">&lt;</span><span class="dv">0</span><span class="op">||</span>nx<span class="op">&gt;=</span>CELL_COLS<span class="op">||</span>ny<span class="op">&lt;</span><span class="dv">0</span><span class="op">||</span>ny<span class="op">&gt;=</span>CELL_ROWS<span class="op">)</span> <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(!</span>visited<span class="op">[</span>ny<span class="op">*</span>CELL_COLS <span class="op">+</span> nx<span class="op">])</span> cand<span class="op">[</span>nc<span class="op">++]</span> <span class="op">=</span> d<span class="op">;</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>nc <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> st<span class="op">.</span>pop_back<span class="op">();</span> <span class="cf">continue</span><span class="op">;</span> <span class="op">}</span>   <span class="co">// 막다름 → 백트래킹</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> d <span class="op">=</span> cand<span class="op">[</span>rand<span class="op">()</span> <span class="op">%</span> nc<span class="op">];</span>             <span class="co">// 랜덤 이웃 선택</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> nx <span class="op">=</span> cx <span class="op">+</span> DX<span class="op">[</span>d<span class="op">],</span> ny <span class="op">=</span> cy <span class="op">+</span> DY<span class="op">[</span>d<span class="op">];</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>        wall<span class="op">[</span><span class="dv">2</span><span class="op">*</span>cy<span class="op">+</span><span class="dv">1</span><span class="op">+</span>DY<span class="op">[</span>d<span class="op">]][</span><span class="dv">2</span><span class="op">*</span>cx<span class="op">+</span><span class="dv">1</span><span class="op">+</span>DX<span class="op">[</span>d<span class="op">]]</span> <span class="op">=</span> <span class="kw">false</span><span class="op">;</span>   <span class="co">// 벽 뚫고 전진</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>        visited<span class="op">[</span>ny<span class="op">*</span>CELL_COLS <span class="op">+</span> nx<span class="op">]</span> <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>        st<span class="op">.</span>push_back<span class="op">(</span>ny<span class="op">*</span>CELL_COLS <span class="op">+</span> nx<span class="op">);</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>한 방향으로 끝까지 파고들다 막히면 되돌아오는 이 <strong>깊이
+우선(DFS)</strong> 성격이, 길고 구불구불한 강줄기 통로를 만든다. 스택이
+"지금까지 온 길"을 기억하고, <code>pop</code> 이 "갈림길로
+되돌아가기"다. <strong>스택 = 되돌아갈 길의 기억</strong> — 이 감각이 곧
+탐색의 DFS로 이어진다.</p>
+<p><strong>③ Randomized Prim — 프론티어에서 자라기.</strong> 시작 셀을
+미로에 편입하고, 그 인접 벽들을 <strong>프론티어(경계 후보)</strong> 에
+넣는다. 프론티어에서 랜덤으로 하나 골라 미로에 연결하고, 새로 편입된
+셀의 이웃을 다시 프론티어에 넣는다. 미로 안 셀에서 사방으로 조금씩
+자라니, 짧은 통로와 잔가지가 많은 덤불형이 된다.</p>
+<p><strong>④ Kruskal + union-find, ⑤ Recursive Division</strong> 은 각각
+개념 3·4에서 깊이 본다.</p>
+<p>각 스테이지의 벽 색을 알고리즘마다 다르게
+해(회색·남색·초록·보라·빨강), 시그니처를 색으로도 구분한다.</p>
+<hr />
+<h2 id="개념-3--union-find--kruskal-미로의-심장">개념 3 · union-find —
+Kruskal 미로의 심장</h2>
+<p>Kruskal 미로는 아름답다. <strong>모든 벽(간선)을 섞어 하나씩 꺼내며,
+그 벽이 서로 다른 두 영역을 잇는다면 뚫는다.</strong> 이미 연결된 두
+영역 사이 벽은 뚫지 않는다(그러면 순환이 생겨 완전연결 미로가 깨진다).
+문제는 "두 셀이 이미 같은 영역인가?"를 어떻게 빨리 아느냐다. 그 답이
+<strong>union-find(분리집합, disjoint set)</strong> 다.</p>
+<p>union-find는 두 연산만 제공한다.</p>
+<ul>
+<li><strong><code>Find(x)</code></strong> — x가 속한 집합의 대표를
+찾는다.</li>
+<li><strong><code>Union(a, b)</code></strong> — 두 집합을 합친다.</li>
+</ul>
+<p>각 원소는 "부모"를 가리키고, 부모를 따라 올라가면 대표(자기 자신이
+부모인 원소)가 나온다. <code>Find</code> 는 그 사슬을 타고 올라가되,
+올라가며 <strong>경로 압축</strong>으로 사슬을 짧게 만든다(다음 조회가
+빨라진다).</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="dt">int</span> uf_find<span class="op">(</span><span class="dt">int</span><span class="op">*</span> parent<span class="op">,</span> <span class="dt">int</span> a<span class="op">)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>parent<span class="op">[</span>a<span class="op">]</span> <span class="op">!=</span> a<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        parent<span class="op">[</span>a<span class="op">]</span> <span class="op">=</span> parent<span class="op">[</span>parent<span class="op">[</span>a<span class="op">]];</span>   <span class="co">// 경로 압축 — 할아버지를 부모로 (사슬 단축)</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        a <span class="op">=</span> parent<span class="op">[</span>a<span class="op">];</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a<span class="op">;</span>                            <span class="co">// 대표(뿌리) 반환</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>이제 Kruskal은 단순해진다.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> MazeContent<span class="op">::</span>GenKruskal<span class="op">()</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    ResetWallsAll<span class="op">(</span><span class="kw">true</span><span class="op">);</span>  OpenAllCells<span class="op">();</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> parent<span class="op">[</span>NUM_CELLS<span class="op">];</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> NUM_CELLS<span class="op">;</span> i<span class="op">++)</span> parent<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> i<span class="op">;</span>   <span class="co">// 처음엔 각자 자기 집합</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 셀 사이 모든 벽을 간선으로 수집</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> Edge <span class="op">{</span> <span class="dt">int</span> a<span class="op">,</span> b<span class="op">,</span> wx<span class="op">,</span> wy<span class="op">;</span> <span class="op">};</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>Edge<span class="op">&gt;</span> edges<span class="op">;</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* ... 인접 셀 쌍마다 Edge{셀a, 셀b, 사이벽좌표} 추가 ... */</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Fisher-Yates 셔플 (1부 E 모듈!)</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span>edges<span class="op">.</span>size<span class="op">()-</span><span class="dv">1</span><span class="op">;</span> i <span class="op">&gt;</span> <span class="dv">0</span><span class="op">;</span> i<span class="op">--)</span> <span class="op">{</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> j <span class="op">=</span> rand<span class="op">()</span> <span class="op">%</span> <span class="op">(</span>i<span class="op">+</span><span class="dv">1</span><span class="op">);</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        Edge t <span class="op">=</span> edges<span class="op">[</span>i<span class="op">];</span> edges<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> edges<span class="op">[</span>j<span class="op">];</span> edges<span class="op">[</span>j<span class="op">]</span> <span class="op">=</span> t<span class="op">;</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">size_t</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> edges<span class="op">.</span>size<span class="op">();</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> ra <span class="op">=</span> uf_find<span class="op">(</span>parent<span class="op">,</span> edges<span class="op">[</span>i<span class="op">].</span>a<span class="op">);</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> rb <span class="op">=</span> uf_find<span class="op">(</span>parent<span class="op">,</span> edges<span class="op">[</span>i<span class="op">].</span>b<span class="op">);</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>ra <span class="op">!=</span> rb<span class="op">)</span> <span class="op">{</span>                         <span class="co">// ★ 다른 집합이면 → 벽 뚫고 합치기</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>            wall<span class="op">[</span>edges<span class="op">[</span>i<span class="op">].</span>wy<span class="op">][</span>edges<span class="op">[</span>i<span class="op">].</span>wx<span class="op">]</span> <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>            parent<span class="op">[</span>ra<span class="op">]</span> <span class="op">=</span> rb<span class="op">;</span>                    <span class="co">// Union</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 같은 집합이면 아무것도 안 함 (순환 방지)</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>핵심은 <code>if (ra != rb)</code> 한 줄이다 — 두 셀의 <strong>대표가
+다르면</strong>(아직 안 이어진 별개 영역이면) 벽을 뚫고 두 집합을
+합친다. 대표가 같으면(이미 연결됐으면) 건너뛴다. 모든 간선을 처리하면
+전체가 한 집합이 되어, 순환 없이 모든 방이 연결된 <strong>완전연결
+미로</strong>가 된다.</p>
+<blockquote>
+<p><strong>이것이 최소 신장 트리(MST)다.</strong> "모든 정점을 순환 없이
+잇는 최소 간선 집합"이 신장 트리이고, Kruskal은 그걸 만드는 고전
+알고리즘이다. 미로 = 격자 그래프의 신장 트리 — 그래서 Kruskal 미로는
+편향 없이 균일하다. union-find는 이 MST뿐 아니라 "연결 요소 판정"이
+필요한 모든 곳(네트워크 연결성, 이미지 분할, 게임의 지형 그룹)에 쓰이는
+근본 자료구조다. 여기서 손으로 만들어 본 것이 두고두고 재산이 된다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-4--분할정복--recursive-division">개념 4 · 분할정복 —
+Recursive Division</h2>
+<p>Recursive Division은 앞의 넷과 정반대로 간다. 다른 알고리즘은 "다
+막힌 데서 통로를 뚫지만", 이건 <strong>다 뚫린 빈 방에서 벽을
+세운다.</strong> 영역을 벽 하나로 나누되 <strong>문(통로) 하나를
+남기고</strong>, 나뉜 두 하위 영역을 <strong>재귀적으로</strong> 또
+나눈다.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> MazeContent<span class="op">::</span>GenDivision<span class="op">(</span><span class="dt">int</span> gx0<span class="op">,</span> <span class="dt">int</span> gy0<span class="op">,</span> <span class="dt">int</span> gx1<span class="op">,</span> <span class="dt">int</span> gy1<span class="op">)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> w <span class="op">=</span> gx1 <span class="op">-</span> gx0<span class="op">,</span> h <span class="op">=</span> gy1 <span class="op">-</span> gy0<span class="op">;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>w <span class="op">&lt;</span> <span class="dv">4</span> <span class="op">&amp;&amp;</span> h <span class="op">&lt;</span> <span class="dv">4</span><span class="op">)</span> <span class="cf">return</span><span class="op">;</span>              <span class="co">// 최소 크기면 종료 (재귀의 바닥)</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> horizontal <span class="op">=</span> <span class="op">(</span>h <span class="op">&gt;</span> w<span class="op">);</span>               <span class="co">// 긴 쪽을 가로지르는 벽 (정사각형이면 랜덤)</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>horizontal<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> wy <span class="op">=</span> <span class="co">/* 영역 안 랜덤한 짝수 행 */</span><span class="op">;</span>   <span class="co">// 벽을 세울 행</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> hx <span class="op">=</span> <span class="co">/* 영역 안 랜덤한 홀수 열 */</span><span class="op">;</span>   <span class="co">// 문을 낼 자리</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> x <span class="op">=</span> gx0<span class="op">+</span><span class="dv">1</span><span class="op">;</span> x <span class="op">&lt;=</span> gx1<span class="op">-</span><span class="dv">1</span><span class="op">;</span> x<span class="op">++)</span> wall<span class="op">[</span>wy<span class="op">][</span>x<span class="op">]</span> <span class="op">=</span> <span class="kw">true</span><span class="op">;</span>   <span class="co">// 벽 세우기</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        wall<span class="op">[</span>wy<span class="op">][</span>hx<span class="op">]</span> <span class="op">=</span> <span class="kw">false</span><span class="op">;</span>                                       <span class="co">// 문 하나 뚫기</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>        GenDivision<span class="op">(</span>gx0<span class="op">,</span> gy0<span class="op">,</span> gx1<span class="op">,</span> wy<span class="op">);</span>      <span class="co">// ↑ 위 영역 재귀</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>        GenDivision<span class="op">(</span>gx0<span class="op">,</span> wy<span class="op">,</span> gx1<span class="op">,</span> gy1<span class="op">);</span>      <span class="co">// ↓ 아래 영역 재귀</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>        <span class="co">/* 세로 벽 + 문, 좌/우 영역 재귀 (대칭) */</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>이것이 <strong>분할정복(divide and conquer)</strong> 이다 — 큰
+문제(전체 영역)를 벽 하나로 두 작은 문제(하위 영역)로 나누고, 각각을
+같은 방법으로 재귀적으로 푼다. 영역이 충분히 작아지면(재귀의
+<strong>바닥 조건</strong> <code>w&lt;4 &amp;&amp; h&lt;4</code>)
+멈춘다. 벽마다 문을 남기니 완전연결이 유지되고, "큰 방 + 좁은 문"이
+반복되는 격자형 미로가 된다.</p>
+<blockquote>
+<p><strong>재귀의 두 얼굴.</strong> Backtracker(개념 2)는 재귀적 발상을
+<strong>명시적 스택</strong>으로 풀었고(깊은 재귀 회피), Division은
+<strong>진짜 재귀 함수</strong>로 풀었다. 같은 "분할과 되돌아옴"의
+발상을, 문제의 성격과 깊이에 따라 스택 또는 재귀로 구현한다. 분할정복은
+정렬(퀵/머지), 이진 탐색, 트리 순회 등 CS 전반의 뼈대다 — 미로는 그 눈에
+보이는 실습이다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-5--경로탐색-4종--같은-문제-네-가지-태도">개념 5 · 경로탐색
+4종 — 같은 문제, 네 가지 태도</h2>
+<p>미로를 다 만들었으면, 이제 <strong>푼다.</strong> 어느 미로에서든
+<code>Tab</code> 으로 알고리즘을 바꾸고 <code>F</code> 로 푸는 과정을
+시각화한다. 네 알고리즘의 성격이 뚜렷이 다르다.</p>
+<table>
+<thead>
+<tr>
+<th>알고리즘</th>
+<th>자료구조</th>
+<th style="text-align: center;">최단 보장</th>
+<th>탐색 모양</th>
+<th>배우는 것</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>BFS</strong></td>
+<td>큐</td>
+<td style="text-align: center;"><strong>O</strong> (무가중)</td>
+<td>물결처럼 균등 확장</td>
+<td>너비 우선·최단경로</td>
+</tr>
+<tr>
+<td><strong>DFS</strong></td>
+<td>스택</td>
+<td style="text-align: center;">X</td>
+<td>한 방향 깊이 파고들다 백트랙</td>
+<td>깊이 우선 (BFS와 대비)</td>
+</tr>
+<tr>
+<td><strong>A</strong>*</td>
+<td>우선순위</td>
+<td style="text-align: center;">O (허용 휴리스틱)</td>
+<td>출구 쪽으로 편향 (적게 탐색)</td>
+<td>휴리스틱 탐색</td>
+</tr>
+<tr>
+<td><strong>벽 따라가기</strong></td>
+<td>없음(방향만)</td>
+<td style="text-align: center;">X</td>
+<td>오른손을 벽에 대고 우회</td>
+<td>무메모리 탐색</td>
+</tr>
+</tbody>
+</table>
+<p><strong>BFS가 기준이다.</strong> 시작점에서 가까운 칸부터 물결처럼
+균등하게 퍼지므로, 목표에 처음 도달한 경로가 <strong>반드시
+최단</strong>이다(무가중 격자에서). 그래서 채점용 최단 걸음수도 BFS로
+잰다.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// BFS — 큐로 가까운 것부터 확장, prev 로 경로 기억</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;</span> q<span class="op">;</span>  <span class="dt">size_t</span> head <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>      <span class="co">// 배열 큐 (head가 앞)</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>vis<span class="op">[</span>start<span class="op">]</span> <span class="op">=</span> <span class="kw">true</span><span class="op">;</span>   q<span class="op">.</span>push_back<span class="op">(</span>start<span class="op">);</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span>head <span class="op">&lt;</span> q<span class="op">.</span>size<span class="op">())</span> <span class="op">{</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> cur <span class="op">=</span> q<span class="op">[</span>head<span class="op">++];</span>                   <span class="co">// 큐에서 꺼내기 (dequeue)</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>cur <span class="op">==</span> goal<span class="op">)</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> gx <span class="op">=</span> cur <span class="op">%</span> GRID_W<span class="op">,</span> gy <span class="op">=</span> cur <span class="op">/</span> GRID_W<span class="op">;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> d <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> d <span class="op">&lt;</span> <span class="dv">4</span><span class="op">;</span> d<span class="op">++)</span> <span class="op">{</span>          <span class="co">// 네 방향 이웃</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(!</span>GridOpen<span class="op">(</span>gx<span class="op">,</span> gy<span class="op">,</span> d<span class="op">))</span> <span class="cf">continue</span><span class="op">;</span>    <span class="co">// 벽이면 건너뜀</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> ni <span class="op">=</span> <span class="op">(</span>gy<span class="op">+</span>DY<span class="op">[</span>d<span class="op">])*</span>GRID_W <span class="op">+</span> <span class="op">(</span>gx<span class="op">+</span>DX<span class="op">[</span>d<span class="op">]);</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(!</span>vis<span class="op">[</span>ni<span class="op">])</span> <span class="op">{</span> vis<span class="op">[</span>ni<span class="op">]</span> <span class="op">=</span> <span class="kw">true</span><span class="op">;</span> prev<span class="op">[</span>ni<span class="op">]</span> <span class="op">=</span> cur<span class="op">;</span> q<span class="op">.</span>push_back<span class="op">(</span>ni<span class="op">);</span> <span class="op">}</span>  <span class="co">// 큐에 넣기</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>DFS는 큐 대신 스택</strong>을 쓴다 — 한 방향으로 끝까지
+파고들다 막히면 되돌아온다. 코드는 BFS와 거의 같지만
+<code>q[head++]</code>(앞에서 꺼냄)가
+<code>stk.back()/pop_back()</code>(뒤에서 꺼냄)으로 바뀔 뿐이다.
+<strong>자료구조 하나(큐↔︎스택)가 알고리즘의 성격을 통째로
+바꾼다</strong> — BFS는 넓게, DFS는 깊게. DFS는 최단을 보장하지 않아,
+BFS와 나란히 보면 그 차이가 극명하다.</p>
+<p><strong>A*는 "출구 쪽으로 편향된 BFS"</strong> 다. 각 칸의 "지금까지
+온 거리 <code>g</code>"에 "출구까지 예상 거리 <code>h</code>(맨해튼
+거리)"를 더한 <code>f = g + h</code> 가 작은 칸부터 확장한다. 그래서
+BFS처럼 사방으로 퍼지지 않고 <strong>출구 방향으로 쏠려</strong> 훨씬
+적은 칸만 탐색하고도 최단을 찾는다(허용 휴리스틱이라 최단 보장).</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> h <span class="op">=</span> abs<span class="op">(</span>gx <span class="op">-</span> goalX<span class="op">)</span> <span class="op">+</span> abs<span class="op">(</span>gy <span class="op">-</span> goalY<span class="op">);</span>   <span class="co">// 맨해튼 휴리스틱 (남은 거리 추정)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> f <span class="op">=</span> g<span class="op">[</span>c<span class="op">]</span> <span class="op">+</span> h<span class="op">;</span>                             <span class="co">// f 작은 것부터 확장 → 목표 편향</span></span></code></pre></div>
+<p><strong>벽 따라가기는 기억이 없다</strong> — 오른손을 벽에 대고 계속
+따라가면(우수법), 단순연결 미로에서는 언젠가 출구에 닿는다. 큐도 스택도
+방문 배열도 필요 없이 <strong>현재 방향만</strong> 안다. 우아하지만
+최단은 아니고, 루프가 있는 미로에선 실패할 수 있다.</p>
+<p><strong>같은 미로에서 네 알고리즘을 바꿔 보면</strong> — BFS의 균등한
+물결, A*의 목표를 향한 화살, DFS의 헤맴, 벽 따라가기의 우회가 한눈에
+비교된다. <strong>하나의 문제에 여러 알고리즘이 있고, 각각
+트레이드오프가 다르다</strong> — 이 감각이 알고리즘을 배우는 이유다.</p>
+<hr />
+<h2 id="개념-6--bfs-최단경로-복원과-채점">개념 6 · BFS 최단경로 복원과
+채점</h2>
+<p>BFS가 목표에 닿았을 때, 경로는 어디 있을까? <strong><code>prev</code>
+배열</strong>에 있다. 각 칸이 "누구로부터
+왔는지"(<code>prev[ni] = cur</code>)를 기록해 뒀으므로, 목표에서
+시작점까지 <code>prev</code> 를 거꾸로 따라가면 경로가 복원된다.</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 목표에서 prev 를 거꾸로 따라 경로 복원 (역순 → 뒤집기)</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> c <span class="op">=</span> goalCell<span class="op">;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span>c <span class="op">!=</span> <span class="op">-</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span> pathOut<span class="op">.</span>push_back<span class="op">(</span>c<span class="op">);</span> c <span class="op">=</span> prev<span class="op">[</span>c<span class="op">];</span> <span class="op">}</span>   <span class="co">// goal → ... → start (역순)</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">// pathOut 을 뒤집으면 start → ... → goal</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span>pathOut<span class="op">.</span>size<span class="op">()</span> <span class="op">-</span> <span class="dv">1</span><span class="op">;</span>   <span class="co">// 걸음 수 = 칸 수 - 1 (= 최단)</span></span></code></pre></div>
+<p>이 <code>prev</code> 되짚기는 <strong>모든 경로탐색의 공통
+마무리</strong>다 — 탐색은 "닿았다"만 알려 주고, "어떻게 왔는지"는
+<code>prev</code> 사슬을 역추적해 복원한다. Battle City의 적 탱크가
+플레이어를 추적할 때도 이 방식으로 다음 한 칸을 정한다.</p>
+<p>채점은 걸음 효율로 한다 — 플레이어의 걸음 <code>steps</code> 를 BFS
+최단 <code>optimalSteps</code> 와 비교한다.</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> ratio <span class="op">=</span> <span class="op">(</span><span class="dt">float</span><span class="op">)</span>optimalSteps <span class="op">/</span> <span class="op">(</span><span class="dt">float</span><span class="op">)</span>steps<span class="op">;</span>   <span class="co">// 1.0 = 완벽한 최단</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>usedSolve<span class="op">)</span>          stars <span class="op">=</span> <span class="dv">1</span><span class="op">;</span>                    <span class="co">// 자동 풀이를 봤으면 1★</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>ratio <span class="op">&gt;=</span> <span class="fl">0.9</span><span class="bu">f</span><span class="op">)</span> stars <span class="op">=</span> <span class="dv">3</span><span class="op">;</span>                   <span class="co">// 최단의 90%+ → 3★</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>ratio <span class="op">&gt;=</span> <span class="fl">0.7</span><span class="bu">f</span><span class="op">)</span> stars <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>                    stars <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span></code></pre></div>
+<p>최단으로 갈수록 별점이 높다. "네가 걸은 길이 최선에 얼마나
+가까운가"를 BFS가 재는 것 — <strong>알고리즘이 채점관이
+된다.</strong></p>
+<hr />
+<h2 id="코드-워크스루--생성-디스패치와-스테이지-흐름">코드 워크스루 —
+생성 디스패치와 스테이지 흐름</h2>
+<p>미로 게임의 한 스테이지가 어떻게 짜이는지 따라가자.</p>
+<blockquote>
+<p><strong>실제 파일:</strong> <code>Main/Content/MazeContent.cpp</code>
+— <code>StartStage</code>, <code>GenerateMaze</code></p>
+</blockquote>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> MazeContent<span class="op">::</span>StartStage<span class="op">(</span><span class="dt">int</span> stageIndex<span class="op">)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    stage <span class="op">=</span> stageIndex<span class="op">;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    genAlgo <span class="op">=</span> <span class="op">(</span>_EGenAlgo<span class="op">)</span>stageIndex<span class="op">;</span>         <span class="co">// ★ 스테이지 = 생성 알고리즘</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    seed <span class="op">=</span> <span class="op">(</span><span class="dt">unsigned</span><span class="op">)</span>rand<span class="op">()</span> <span class="op">^</span> <span class="op">((</span><span class="dt">unsigned</span><span class="op">)</span>rand<span class="op">()</span> <span class="op">&lt;&lt;</span> <span class="dv">15</span><span class="op">);</span>   <span class="co">// 재현 가능한 시드</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    srand<span class="op">(</span>seed<span class="op">);</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 생성 → 도달성 검증 → 안 되면 재생성 (안전망, 최대 6번)</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> attempt <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> attempt <span class="op">&lt;</span> <span class="dv">6</span><span class="op">;</span> attempt<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>        GenerateMaze<span class="op">(</span>genAlgo<span class="op">);</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        optimalSteps <span class="op">=</span> ShortestPath<span class="op">(</span>startCell<span class="op">,</span> goalCell<span class="op">,</span> tmp<span class="op">);</span>   <span class="co">// BFS로 검증 + 최단 산출</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>optimalSteps <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="cf">break</span><span class="op">;</span>         <span class="co">// 도달 가능하면 확정</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    pgx <span class="op">=</span> sgx<span class="op">;</span> pgy <span class="op">=</span> sgy<span class="op">;</span>  steps <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>  gameState <span class="op">=</span> _EGameState<span class="op">::</span>PLAYING<span class="op">;</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> MazeContent<span class="op">::</span>GenerateMaze<span class="op">(</span>_EGenAlgo algo<span class="op">)</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span> <span class="op">(</span>algo<span class="op">)</span> <span class="op">{</span>                          <span class="co">// enum으로 알고리즘 디스패치</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> _EGenAlgo<span class="op">::</span>BINARY_TREE<span class="op">:</span> GenBinaryTree<span class="op">();</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> _EGenAlgo<span class="op">::</span>BACKTRACKER<span class="op">:</span> GenBacktracker<span class="op">();</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> _EGenAlgo<span class="op">::</span>PRIM<span class="op">:</span>        GenPrim<span class="op">();</span>        <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> _EGenAlgo<span class="op">::</span>KRUSKAL<span class="op">:</span>     GenKruskal<span class="op">();</span>     <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> _EGenAlgo<span class="op">::</span>DIVISION<span class="op">:</span>    <span class="co">/* 경계 세팅 후 */</span> GenDivision<span class="op">(...);</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>세 가지가 설계의 핵심이다.</p>
+<ul>
+<li><strong><code>enum</code> 으로 알고리즘 디스패치.</strong>
+<code>switch(genAlgo)</code> 하나가 다섯 생성 함수로 갈라진다. 1부 F
+모듈의 <code>enum</code> + <code>switch</code> 가, 여기선 "알고리즘을
+값으로 고르는" 도구가 된다. 스테이지 = enum 인덱스라, "다음 스테이지"는
+<code>StartStage(stage+1)</code> 로 다음 알고리즘을 부른다.</li>
+<li><strong>BFS가 검증관 겸 채점관.</strong> 생성 직후
+<code>ShortestPath</code>(BFS)로 시작→출구가 이어지는지
+검증하고(완전연결 알고리즘이라 이론상 늘 통과하지만, 인덱싱 실수 방어),
+그 결과인 최단 걸음을 채점에 쓴다. <strong>하나의 BFS가
+검증·최단·힌트·풀이 시각화에 모두 재사용</strong>된다.</li>
+<li><strong>시드로 재현.</strong> 미로 시드를 저장·표시해,
+<code>R</code> 키로 새 시드 미로를 뽑거나 같은 시드를 재현할 수 있다(1부
+E 모듈 "재현 가능한 랜덤").</li>
+</ul>
+<p><code>OnInGameUpdate</code> 는
+상태(GENERATING/PLAYING/SOLVING/CLEAR/PAUSE)에 따라 갈라진다 —
+PLAYING에선 방향키로 한 칸씩(DAS 반복, Tetris식) 이동하고 벽이면
+무시하며, <code>H</code>(힌트)·<code>F</code>(풀이
+시각화)·<code>Tab</code>(알고리즘 전환)을 처리한다. 이동은
+<code>GridOpen</code> 으로 벽을 검사한다.</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> MazeContent<span class="op">::</span>MovePlayer<span class="op">(</span><span class="dt">int</span> dir<span class="op">)</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>GridOpen<span class="op">(</span>pgx<span class="op">,</span> pgy<span class="op">,</span> dir<span class="op">))</span> <span class="cf">return</span><span class="op">;</span>   <span class="co">// 벽이면 이동 무시</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    pgx <span class="op">+=</span> DX<span class="op">[</span>dir<span class="op">];</span>  pgy <span class="op">+=</span> DY<span class="op">[</span>dir<span class="op">];</span>  steps<span class="op">++;</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>pgx <span class="op">==</span> egx <span class="op">&amp;&amp;</span> pgy <span class="op">==</span> egy<span class="op">)</span> FinishStage<span class="op">();</span>   <span class="co">// 출구 도달 → 채점</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<hr />
+<h2 id="그림으로-정리--알고리즘마다-다른-미로-여러-태도의-탐색">그림으로
+정리 — 알고리즘마다 다른 미로, 여러 태도의 탐색</h2>
+<blockquote>
+<p>📊 <strong>웹 교육문서에서는 5종 생성 과정과 4종 탐색 확장이 나란히
+애니메이션(V-P2-6)으로 비교된다.</strong> 책에서는 아래 도식으로
+대신한다.</p>
+</blockquote>
+<p><strong>같은 격자, 다른 얼굴 — 생성 알고리즘의 시그니처</strong></p>
+<pre><code>  Binary Tree      Backtracker(DFS)   Kruskal(union-find)   Recursive Division
+  대각선 편향        긴 강줄기           균일하게 흩어짐         방 + 좁은 문
+  ┌─────────┐       ┌─────────┐         ┌─────────┐          ┌─────────┐
+  │ _ _ _ _ │       │ ┌───┐   │         │ ╷ ╶┐╷╶┐ │          │ ┌──┬──┐ │
+  │┌┘┌┘┌┘   │       │ │ ┌─┘─┐ │         │ ╵┌╴╵╵ ╵ │          │ │  ╵  │ │
+  │┌┘┌┘     │       │ └─┘ ┌─┘ │         │ ╶┤╶┐┌╴┐ │          │ ├─╴╶─┤ │
+  └─────────┘       └─────────┘         └─────────┘          └─────────┘
+     편향             스택·백트래킹        분리집합·MST          분할정복</code></pre>
+<p><strong>같은 미로, 다른 탐색 — 확장 모양의 차이</strong></p>
+<pre><code>  BFS: 물결처럼 균등         A*: 출구 쪽으로 편향
+   S · · ·                    S → → →
+   · ○ ○ ○ ·                  · · ○ → →
+   ○ ○ ○ ○ ○ ·                · · · ○ → E   ← 훨씬 적게 탐색하고 최단
+   · ○ ○ ○ · E                (h = 남은 거리 추정이 화살표를 목표로 당긴다)
+   최단 보장, 많이 탐색        최단 보장, 적게 탐색</code></pre>
+<p>한 문장으로: <strong>생성 알고리즘은 미로의 얼굴을
+정하고(편향·스택·프론티어·분리집합·분할정복), 탐색 알고리즘은 그 미로를
+푸는 태도를 정한다(넓게·깊게·목표 편향·무메모리) — 하나의 게임이 아홉
+알고리즘의 실습장이다.</strong></p>
+<hr />
+<h2 id="알려진-이슈에서-배우기-as-built">알려진 이슈에서 배우기
+(as-built)</h2>
+<p>Maze는 알고리즘 학습이 목적이라, 성능보다 <strong>명료함</strong>을
+택한 부분들이 있다.</p>
+<table>
+<thead>
+<tr>
+<th>이슈</th>
+<th>as-built 상태</th>
+<th>무엇을 배우나</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em><em>A</em> 오픈리스트 선형 탐색</em>*</td>
+<td>우선순위 큐 대신 매번 최소 f를 선형 탐색</td>
+<td>격자가 작아 충분. 진짜 우선순위 큐(힙)는 심화</td>
+</tr>
+<tr>
+<td><strong>DFS는 최단 아님</strong></td>
+<td>일부러 최단 안 나오게 둠</td>
+<td>BFS와 <strong>대비</strong>해 "왜 BFS가 최단인가"를 가르치는
+장치</td>
+</tr>
+<tr>
+<td><strong>벽 따라가기 실패 가능</strong></td>
+<td>루프 있는 미로(braided)면 못 풀 수 있음</td>
+<td>"무메모리 탐색의 한계" — 완전연결 미로에서만 보장</td>
+</tr>
+<tr>
+<td><strong>생성 검증 재시도</strong></td>
+<td>도달 불가 시 최대 6번 재생성</td>
+<td>이론상 불필요(완전연결)하지만 인덱싱 버그 방어망</td>
+</tr>
+<tr>
+<td><strong>매 프레임 전체 렌더</strong></td>
+<td>567칸을 행 단위 문자열로 그림</td>
+<td>셀별 호출보다 빠르게 묶었지만 여전히 전체. 변경분만은 폴리시</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>"DFS가 최단이 아닌 것"과 "벽 따라가기가 실패할 수 있는 것"은
+<strong>버그가 아니라 교재</strong>다. 완벽한 알고리즘만 보여 주면 "왜
+여러 알고리즘이 있는가"를 못 배운다. 각 알고리즘의 <strong>한계를 함께
+보여 주는 것</strong> — 그것이 트레이드오프를 이해하는 유일한
+길이다.</p>
+</blockquote>
+<hr />
+<h2 id="체크포인트--스스로-점검하기">체크포인트 — 스스로 점검하기</h2>
+<p><strong>Q1.</strong> 셀이 13×10인데 격자 배열은 왜
+<code>27×21</code>(2·셀+1)인가? 셀 <code>(cx,cy)</code> 는 격자 어디에
+있나?</p>
+<p><strong>Q2.</strong> Binary Tree 미로가 우상단으로 "편향"되는 이유는?
+이 편향은 어디서 나오나?</p>
+<p><strong>Q3.</strong> Kruskal에서 벽을 뚫을지 말지를
+<code>if (Find(a) != Find(b))</code> 로 정한다.
+<code>Find(a) == Find(b)</code> 인데 벽을 뚫으면 미로에 무슨 문제가
+생기나?</p>
+<p><strong>Q4.</strong> 무가중 격자에서 BFS가 항상 최단경로를 찾는
+이유는? DFS는 왜 최단을 보장하지 못하나?</p>
+<p><strong>Q5.</strong> A*가 BFS보다 적은 칸을 탐색하고도 최단을 찾는
+비결은? <code>f = g + h</code> 에서 <code>h</code> 는 무엇인가?</p>
+<details><summary><b>해설 펼치기</b></summary>
+
+<p><strong>A1.</strong> 방(셀) 사이에 <strong>벽이 놓일 자리</strong>가
+필요하기 때문이다. 셀은 홀수 좌표(항상 통로), 벽은 짝수 좌표(뚫거나
+막음)에 둔다. 셀 <code>(cx,cy)</code> 는 격자
+<code>(2cx+1, 2cy+1)</code>(둘 다 홀수)에 있고, 두 셀 사이 벽은 그 중간
+짝수 좌표다.</p>
+<p><strong>A2.</strong> 각 셀에서 "북 또는 동"만 뚫는데, 맨 위 행은 북이
+없어 <strong>항상 동</strong>만 뚫리고(위 행이 일자 통로), 맨 오른쪽
+열은 동이 없어 <strong>항상 북</strong>만 뚫린다. 이 경계의 강제된
+선택이 미로를 우상단으로 쏠리게 한다 — 알고리즘의 단순한 규칙이 낳는
+편향이다.</p>
+<p><strong>A3.</strong> <code>Find(a) == Find(b)</code> 는 두 셀이
+<strong>이미 연결돼 있다</strong>는 뜻이다. 그런데도 벽을 뚫으면 두 셀
+사이에 <strong>또 다른 경로</strong>가 생겨 <strong>순환(cycle)</strong>
+이 만들어진다. 완전연결 미로(경로가 유일한 트리)가 깨지고, 벽 따라가기
+같은 알고리즘이 실패할 수 있다. 그래서 이미 같은 집합이면 건너뛴다.</p>
+<p><strong>A4.</strong> BFS는 시작점에서 <strong>가까운 칸부터
+균등하게</strong> 확장하므로(큐), 목표에 <strong>처음 도달한
+순간</strong>이 곧 최단이다. 모든 간선 비용이 같은 무가중 격자에서
+"가까운 것부터"가 "최단"과 일치한다. DFS는 스택으로 <strong>한 방향
+깊이</strong> 파고들어, 최단이 아닌 먼 길로 먼저 목표에 닿을 수
+있다.</p>
+<p><strong>A5.</strong> A*는 "지금까지 온 거리 <code>g</code>"에
+"출구까지 남은 거리 추정 <code>h</code>(맨해튼 거리)"를 더한
+<code>f=g+h</code> 가 작은 칸부터 확장한다. <code>h</code> 가 탐색을
+<strong>출구 방향으로 편향</strong>시켜, 엉뚱한 방향은 덜 보고 목표 쪽만
+집중적으로 확장한다. <code>h</code> 가 실제보다 크지 않은 "허용
+휴리스틱"이면 최단이 보장된다.</p>
+</details>
+
+<hr />
+<h2 id="실습-미션--bfs-최단경로-bfsc-star">실습 미션 — BFS 최단경로
+<code>bfs.c</code> ⭐</h2>
+<blockquote>
+<p>이 미션은 경로탐색의 심장 <strong>BFS</strong>를 손으로 만든다. 작은
+미로에서 시작점→출구 최단경로를 찾아 <code>prev</code> 로 복원해 그린다
+— Maze의 채점, Battle City의 적 AI가 모두 이 코드 위에 선다.</p>
+</blockquote>
+<p><strong>드릴 문법</strong> — 2D 격자 · <strong>큐(배열)</strong> ·
+방문 배열 · 4방향 이웃 · <code>prev</code> 로 최단경로 복원
+<strong>만드는 것</strong> — 벽/통로로 된 미로에서 S→E 최단경로를 BFS로
+찾아, 경로를 <code>*</code> 로 표시해 출력. <strong>클리어 조건</strong>
+— 최단 걸음 수를 정확히 세고, 경로를 복원해 그린다.
+<strong>규모</strong> — 약 60줄, 파일 1개. 표준 C만. 알고리즘의 정석을
+눈으로 확인한다.</p>
+<h3 id="문제-정의">문제 정의</h3>
+<p>BFS의 핵심은 세 가지다. <strong>① 큐로 가까운 칸부터 확장하고, ②
+방문한 칸을 표시하며, ③ 각 칸이 "누구로부터 왔는지"(<code>prev</code>)를
+기록한다.</strong> 목표에 닿으면 <code>prev</code> 를 거꾸로 따라 경로를
+복원한다. 가까운 것부터 확장하니 처음 닿은 경로가 최단이다 — 이 성질을
+코드로 확인하는 게 목표다.</p>
+<h3 id="목표--클리어-조건">목표 / 클리어 조건</h3>
+<ol type="1">
+<li>미로를 문자 격자로 둔다(<code>#</code>=벽, <code>.</code>=통로,
+<code>S</code>=시작, <code>E</code>=출구).</li>
+<li>S에서 BFS: 큐에 넣고, 꺼내며 네 방향 이웃 중 통로·미방문 칸을 큐에
+넣는다.</li>
+<li>각 칸의 <code>prev</code>(이전 칸 인덱스)를 기록한다.</li>
+<li>E에 닿으면 <code>prev</code> 를 거꾸로 따라 경로를 복원,
+<code>*</code> 로 표시.</li>
+<li>최단 걸음 수를 출력한다.</li>
+</ol>
+<h3 id="힌트">힌트</h3>
+<details><summary><b>힌트 1 — 배열 큐 BFS</b></summary>
+
+<div class="sourceCode" id="cb18"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> queue<span class="op">[</span>H<span class="op">*</span>W<span class="op">],</span> head <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> tail <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> prev<span class="op">[</span>H<span class="op">*</span>W<span class="op">];</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> visited<span class="op">[</span>H<span class="op">*</span>W<span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>queue<span class="op">[</span>tail<span class="op">++]</span> <span class="op">=</span> startIdx<span class="op">;</span>  visited<span class="op">[</span>startIdx<span class="op">]</span> <span class="op">=</span> <span class="dv">1</span><span class="op">;</span>  prev<span class="op">[</span>startIdx<span class="op">]</span> <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span>head <span class="op">&lt;</span> tail<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> cur <span class="op">=</span> queue<span class="op">[</span>head<span class="op">++];</span>          <span class="co">/* dequeue */</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> r <span class="op">=</span> cur <span class="op">/</span> W<span class="op">,</span> c <span class="op">=</span> cur <span class="op">%</span> W<span class="op">;</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> d <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> d <span class="op">&lt;</span> <span class="dv">4</span><span class="op">;</span> d<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> nr <span class="op">=</span> r <span class="op">+</span> DR<span class="op">[</span>d<span class="op">],</span> nc <span class="op">=</span> c <span class="op">+</span> DC<span class="op">[</span>d<span class="op">];</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>막힘 or 방문<span class="op">)</span> <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> ni <span class="op">=</span> nr<span class="op">*</span>W <span class="op">+</span> nc<span class="op">;</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>        visited<span class="op">[</span>ni<span class="op">]</span> <span class="op">=</span> <span class="dv">1</span><span class="op">;</span>  prev<span class="op">[</span>ni<span class="op">]</span> <span class="op">=</span> cur<span class="op">;</span>  queue<span class="op">[</span>tail<span class="op">++]</span> <span class="op">=</span> ni<span class="op">;</span>   <span class="co">/* enqueue */</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+
+<details><summary><b>힌트 2 — 경로 복원</b></summary>
+
+<p>E에서 <code>prev</code> 를 거꾸로 따라 S까지 가며 <code>*</code> 로
+표시하고 걸음을 센다.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> steps <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> c <span class="op">=</span> endIdx<span class="op">;</span> c <span class="op">!=</span> <span class="op">-</span><span class="dv">1</span> <span class="op">&amp;&amp;</span> c <span class="op">!=</span> startIdx<span class="op">;</span> c <span class="op">=</span> prev<span class="op">[</span>c<span class="op">])</span> <span class="op">{</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    maze<span class="op">[</span>c <span class="op">/</span> W<span class="op">][</span>c <span class="op">%</span> W<span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;*&#39;</span><span class="op">;</span>   <span class="co">/* 경로 표시 */</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    steps<span class="op">++;</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+
+<h3 id="정답-코드">정답 코드</h3>
+<details><summary><b>정답 펼치기 — <code>bfs.c</code></b></summary>
+
+<div class="sourceCode" id="cb20"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define _CRT_SECURE_NO_WARNINGS</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#define H </span><span class="dv">7</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#define W </span><span class="dv">11</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">/* # = 벽, . = 통로, S = 시작, E = 출구 */</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> maze<span class="op">[</span>H<span class="op">][</span>W <span class="op">+</span> <span class="dv">1</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;###########&quot;</span><span class="op">,</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#S..#....E#&quot;</span><span class="op">,</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#.#.#.###.#&quot;</span><span class="op">,</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#.#...#...#&quot;</span><span class="op">,</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#.#####.#.#&quot;</span><span class="op">,</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#.......#.#&quot;</span><span class="op">,</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;###########&quot;</span><span class="op">,</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">const</span> <span class="dt">int</span> DR<span class="op">[</span><span class="dv">4</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">0</span> <span class="op">};</span>   <span class="co">/* 북 동 남 서 */</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">const</span> <span class="dt">int</span> DC<span class="op">[</span><span class="dv">4</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="op">-</span><span class="dv">1</span> <span class="op">};</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> queue<span class="op">[</span>H <span class="op">*</span> W<span class="op">],</span> head <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> tail <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> prev<span class="op">[</span>H <span class="op">*</span> W<span class="op">],</span> visited<span class="op">[</span>H <span class="op">*</span> W<span class="op">];</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> startIdx <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> endIdx <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>    memset<span class="op">(</span>visited<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>visited<span class="op">));</span></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> r <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> r <span class="op">&lt;</span> H<span class="op">;</span> r<span class="op">++)</span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> c <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> c <span class="op">&lt;</span> W<span class="op">;</span> c<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>maze<span class="op">[</span>r<span class="op">][</span>c<span class="op">]</span> <span class="op">==</span> <span class="ch">&#39;S&#39;</span><span class="op">)</span> startIdx <span class="op">=</span> r <span class="op">*</span> W <span class="op">+</span> c<span class="op">;</span></span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>maze<span class="op">[</span>r<span class="op">][</span>c<span class="op">]</span> <span class="op">==</span> <span class="ch">&#39;E&#39;</span><span class="op">)</span> endIdx   <span class="op">=</span> r <span class="op">*</span> W <span class="op">+</span> c<span class="op">;</span></span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* --- BFS --- */</span></span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a>    queue<span class="op">[</span>tail<span class="op">++]</span> <span class="op">=</span> startIdx<span class="op">;</span></span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a>    visited<span class="op">[</span>startIdx<span class="op">]</span> <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a>    prev<span class="op">[</span>startIdx<span class="op">]</span> <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>head <span class="op">&lt;</span> tail<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> cur <span class="op">=</span> queue<span class="op">[</span>head<span class="op">++];</span>               <span class="co">/* 큐에서 꺼내기 (가까운 것부터) */</span></span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>cur <span class="op">==</span> endIdx<span class="op">)</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> r <span class="op">=</span> cur <span class="op">/</span> W<span class="op">,</span> c <span class="op">=</span> cur <span class="op">%</span> W<span class="op">;</span></span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> d <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> d <span class="op">&lt;</span> <span class="dv">4</span><span class="op">;</span> d<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a>            <span class="dt">int</span> nr <span class="op">=</span> r <span class="op">+</span> DR<span class="op">[</span>d<span class="op">],</span> nc <span class="op">=</span> c <span class="op">+</span> DC<span class="op">[</span>d<span class="op">];</span></span>
+<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>nr <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">||</span> nr <span class="op">&gt;=</span> H <span class="op">||</span> nc <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">||</span> nc <span class="op">&gt;=</span> W<span class="op">)</span> <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a>            <span class="dt">int</span> ni <span class="op">=</span> nr <span class="op">*</span> W <span class="op">+</span> nc<span class="op">;</span></span>
+<span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>maze<span class="op">[</span>nr<span class="op">][</span>nc<span class="op">]</span> <span class="op">==</span> <span class="ch">&#39;#&#39;</span> <span class="op">||</span> visited<span class="op">[</span>ni<span class="op">])</span> <span class="cf">continue</span><span class="op">;</span>   <span class="co">/* 벽·방문 제외 */</span></span>
+<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a>            visited<span class="op">[</span>ni<span class="op">]</span> <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a>            prev<span class="op">[</span>ni<span class="op">]</span> <span class="op">=</span> cur<span class="op">;</span>                    <span class="co">/* &#39;누구로부터 왔는가&#39; 기록 */</span></span>
+<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a>            queue<span class="op">[</span>tail<span class="op">++]</span> <span class="op">=</span> ni<span class="op">;</span>                <span class="co">/* 큐에 넣기 */</span></span>
+<span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb20-53"><a href="#cb20-53" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb20-54"><a href="#cb20-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-55"><a href="#cb20-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>visited<span class="op">[</span>endIdx<span class="op">])</span> <span class="op">{</span> printf<span class="op">(</span><span class="st">&quot;경로 없음</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span> <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb20-56"><a href="#cb20-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-57"><a href="#cb20-57" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* --- prev 를 거꾸로 따라 최단경로 복원 --- */</span></span>
+<span id="cb20-58"><a href="#cb20-58" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> steps <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb20-59"><a href="#cb20-59" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> cur <span class="op">=</span> prev<span class="op">[</span>endIdx<span class="op">];</span> cur <span class="op">!=</span> <span class="op">-</span><span class="dv">1</span> <span class="op">&amp;&amp;</span> cur <span class="op">!=</span> startIdx<span class="op">;</span> cur <span class="op">=</span> prev<span class="op">[</span>cur<span class="op">])</span> <span class="op">{</span></span>
+<span id="cb20-60"><a href="#cb20-60" aria-hidden="true" tabindex="-1"></a>        maze<span class="op">[</span>cur <span class="op">/</span> W<span class="op">][</span>cur <span class="op">%</span> W<span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;*&#39;</span><span class="op">;</span>          <span class="co">/* 경로 표시 */</span></span>
+<span id="cb20-61"><a href="#cb20-61" aria-hidden="true" tabindex="-1"></a>        steps<span class="op">++;</span></span>
+<span id="cb20-62"><a href="#cb20-62" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb20-63"><a href="#cb20-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-64"><a href="#cb20-64" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;최단 걸음: </span><span class="sc">%d\n\n</span><span class="st">&quot;</span><span class="op">,</span> steps <span class="op">+</span> <span class="dv">1</span><span class="op">);</span>     <span class="co">/* +1: E로 들어가는 마지막 걸음 */</span></span>
+<span id="cb20-65"><a href="#cb20-65" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> r <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> r <span class="op">&lt;</span> H<span class="op">;</span> r<span class="op">++)</span></span>
+<span id="cb20-66"><a href="#cb20-66" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;  </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> maze<span class="op">[</span>r<span class="op">]);</span></span>
+<span id="cb20-67"><a href="#cb20-67" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb20-68"><a href="#cb20-68" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>빌드:</strong> <code>cl bfs.c</code> (MSVC) 또는
+<code>gcc bfs.c -o bfs</code></p>
+<p><strong>함정/체크포인트</strong></p>
+<ul>
+<li><strong>큐는 앞에서 꺼낸다(<code>queue[head++]</code>).</strong>
+이것이 "가까운 것부터"를 만들어 최단을 보장한다. 만약 뒤에서
+꺼내면(<code>stack.pop</code>) DFS가 되어 최단이 깨진다 — 큐↔︎스택 하나가
+알고리즘을 바꾼다(개념 5).</li>
+<li><strong><code>visited</code> 표시는 큐에 넣을 때.</strong> 꺼낼 때
+표시하면 같은 칸이 큐에 여러 번 들어가 비효율·중복이 생긴다.</li>
+<li><strong><code>prev</code> 가 경로의 전부다.</strong> 탐색은
+"닿았다"만 알고, 실제 경로는 <code>prev</code> 를 역추적해 복원한다 —
+모든 경로탐색의 공통 마무리.</li>
+</ul>
+<p><strong>확장 과제</strong></p>
+<ul>
+<li>큐를 스택으로 바꿔 <strong>DFS</strong>로 만들어 보고, 같은 미로에서
+경로가 더 길어지는지 비교(개념 5).</li>
+<li><code>prev</code> 대신 <code>dist</code>(시작에서의 거리) 배열을
+채우면, 모든 칸의 최단 거리를 한 번에 얻는다(BFS의 또 다른 쓰임).</li>
+<li><strong>union-find</strong>로 "두 칸이 연결돼 있나?"를 O(α)에 답하는
+<code>union.c</code> 에 도전(개념 3).</li>
+</ul>
+</details>
+
+<hr />
+<h2 id="이-단계를-마치며">이 단계를 마치며</h2>
+<table>
+<thead>
+<tr>
+<th>얻은 것</th>
+<th>다음에 쓰는 곳</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>절차적 생성(5종)</td>
+<td><strong>Battle City</strong> 의 전장 생성</td>
+</tr>
+<tr>
+<td>union-find(분리집합)</td>
+<td>연결성 판정 전반, MST</td>
+</tr>
+<tr>
+<td>분할정복</td>
+<td>정렬·탐색·트리 등 CS 전반</td>
+</tr>
+<tr>
+<td>BFS·A* 경로탐색</td>
+<td><strong>Battle City</strong> 적 AI, 모든 격자 길찾기</td>
+</tr>
+<tr>
+<td>BFS 최단경로 복원</td>
+<td>추적·네비게이션</td>
+</tr>
+</tbody>
+</table>
+<p>Maze로 우리는 "게임을 만드는 기법"을 넘어 <strong>"알고리즘 그
+자체"</strong> 를 다뤘다. 생성 다섯, 탐색 넷 — 아홉 알고리즘의 성격과
+트레이드오프를 눈으로 겪었다. 이제 마지막 관문만 남았다. 다음 7단계
+Battle City는 지금까지 쌓은 <strong>두 축을 한 게임에서
+수렴</strong>시킨다 — 5단계의 <strong>오브젝트 풀</strong>로 총알·적
+탱크·폭발을 돌리고, 6단계의 <strong>절차적 생성과 BFS</strong>로 전장을
+만들고 적을 움직인다. 커리큘럼의 졸업 과제다.</p>
+<blockquote>
+<p><strong>← 이전:</strong> <a href="Part2_06.html">5단계 · Galaga —
+오브젝트 풀링</a> | <strong>다음 →</strong> <a href="Part2_08.html">7단계
+· Battle City — 종합 캡스톤</a></p>
+</blockquote>
+  </article>
+</main>
+<footer class="site-footer">
+  <a href="index.html">← 목차로 돌아가기</a>
+  <span>CSGP Learn · 표시용 원고 (코드는 UTF-8 사본)</span>
+</footer>
+<script src="book-nav.js"></script>
+</body>
+</html>

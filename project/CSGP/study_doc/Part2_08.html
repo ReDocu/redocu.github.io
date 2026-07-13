@@ -1,0 +1,849 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7단계 · Battle City — 종합 캡스톤 (맵 생성 + 풀링)</title>
+<script>try{var _t=localStorage.getItem('csgp-theme');if(_t)document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
+<style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<link rel="stylesheet" href="book.css">
+
+</head>
+<body>
+<div class="topbar">
+  <button class="drawer-toggle" id="drawerToggle" type="button" aria-label="목차 열기/닫기" aria-expanded="false">☰ 목차</button>
+  <a class="home" href="index.html">📘 CSGP</a>
+  <span class="crumb">콘솔 게임으로 배우는 C · C++</span>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="라이트/다크 전환">🌙</button>
+</div>
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" aria-label="책 목차">
+  <div class="drawer-dash">
+    <div class="dash-title">콘솔 게임으로 배우는 C · C++</div>
+    <div class="dash-sub">학습 목차 · 대시보드</div>
+    <div class="dash-progress"><div class="dash-bar"><i id="dashBar"></i></div><span class="dash-pct" id="dashPct"></span></div>
+    <input class="drawer-search" id="drawerSearch" type="search" placeholder="🔍 챕터 검색…" aria-label="챕터 검색">
+  </div>
+  <nav class="booknav" aria-label="책 목차"><a class="booknav-home" href="index.html">📘 전체 목차</a><ul class="booknav-list"><li class="grp">1부 · C 기본 문법</li><li><a href="Part1_00.html" title="1부 — C 기본 문법: 회사를 키우며 배우는 언어">1부 개요</a></li><li><a href="Part1_01.html" title="A 모듈 · 1–4장 — 값·계산·분기: 회사에 숫자를 세우다">A · 값·계산·분기</a></li><li><a href="Part1_02.html" title="B 모듈 · 5–6장 — 반복문과 함수: 회사에 심장을 달다">B · 반복문·함수</a></li><li><a href="Part1_03.html" title="C 모듈 · 7–8장 — 배열과 문자열: 회사에 사람과 이름을 채우다">C · 배열·문자열</a></li><li><a href="Part1_04.html" title="D 모듈 · 9–10장 — 구조체와 포인터: 데이터에 모양을 주다">D · 구조체·포인터</a></li><li><a href="Part1_05.html" title="E 모듈 · 11–12장 — 동적 메모리와 랜덤: 회사가 자라고, 시장이 살아난다">E · 메모리·랜덤</a></li><li><a href="Part1_06.html" title="F 모듈 · 13–15장 — 파일·모듈·캡스톤: 회사를 저장하고, 게임을 출시하다">F · 파일·모듈·캡스톤</a></li><li class="grp">2부 · C++ 프레임워크</li><li><a href="Part2_00.html" title="2부 — C++ 콘솔 게임 프레임워크: 7개의 게임으로 오르기">2부 개요</a></li><li><a href="Part2_01.html" title="1단계 · Snake — 자료구조·충돌·상태머신">1단계 · Snake</a></li><li><a href="Part2_02.html" title="2단계 · Tetris — 알고리즘과 그리드">2단계 · Tetris</a></li><li><a href="Part2_03.html" title="3단계 · Dino — 물리와 스크롤">3단계 · Dino</a></li><li><a href="Part2_04.html" title="4단계 · Road Fighter — 엔티티 시스템과 리소스">4단계 · Road Fighter</a></li><li><a href="Part2_05.html" title="번외 · GameDevTycoon 이식 — C에서 C++로">번외 · Tycoon 이식</a></li><li><a href="Part2_06.html" title="5단계 · Galaga — 오브젝트 풀링">5단계 · Galaga</a></li><li><a href="Part2_07.html" title="6단계 · Maze — 알고리즘 심화 (생성 + 탐색)">6단계 · Maze</a></li><li class="active"><a href="Part2_08.html" title="7단계 · Battle City — 종합 캡스톤 (맵 생성 + 풀링)">7단계 · Battle City</a><ul class="sections">
+<li><a href="#이-단계의-학습-목표" id="toc-이-단계의-학습-목표">이
+단계의 학습 목표</a></li>
+<li><a href="#왜-battle-city가-마지막인가"
+id="toc-왜-battle-city가-마지막인가">왜 Battle City가
+마지막인가</a></li>
+<li><a href="#개념-1--두-기술의-결합--타일-맵-위의-풀"
+id="toc-개념-1--두-기술의-결합--타일-맵-위의-풀">개념 1 · 두 기술의 결합
+— 타일 맵 위의 풀</a></li>
+<li><a href="#개념-2--절차적-전장-생성--대칭-배치-파이프라인"
+id="toc-개념-2--절차적-전장-생성--대칭-배치-파이프라인">개념 2 · 절차적
+전장 생성 — 대칭 배치 파이프라인</a></li>
+<li><a href="#개념-3--연결성-검증--flood-fill-maze-재사용"
+id="toc-개념-3--연결성-검증--flood-fill-maze-재사용">개념 3 · 연결성
+검증 — flood fill (Maze 재사용)</a></li>
+<li><a href="#개념-4--파괴-가능한-지형--타일-상호작용"
+id="toc-개념-4--파괴-가능한-지형--타일-상호작용">개념 4 · 파괴 가능한
+지형 — 타일 상호작용</a></li>
+<li><a href="#개념-5--적-ai--기지를-향해"
+id="toc-개념-5--적-ai--기지를-향해">개념 5 · 적 AI — 기지를
+향해</a></li>
+<li><a href="#개념-6--기지-방어와-파워업--지킬-것과-뒤집을-수"
+id="toc-개념-6--기지-방어와-파워업--지킬-것과-뒤집을-수">개념 6 · 기지
+방어와 파워업 — 지킬 것과 뒤집을 수</a></li>
+<li><a
+href="#코드-워크스루--oningameupdate-모든-것이-수렴하는-한-프레임"
+id="toc-코드-워크스루--oningameupdate-모든-것이-수렴하는-한-프레임">코드
+워크스루 — <code>OnInGameUpdate</code>, 모든 것이 수렴하는 한
+프레임</a></li>
+<li><a href="#그림으로-정리--두-축의-수렴"
+id="toc-그림으로-정리--두-축의-수렴">그림으로 정리 — 두 축의
+수렴</a></li>
+<li><a href="#알려진-이슈에서-배우기-as-built"
+id="toc-알려진-이슈에서-배우기-as-built">알려진 이슈에서 배우기
+(as-built)</a></li>
+<li><a href="#체크포인트--스스로-점검하기"
+id="toc-체크포인트--스스로-점검하기">체크포인트 — 스스로
+점검하기</a></li>
+<li><a href="#실습-미션--연결성-검증-floodc-star"
+id="toc-실습-미션--연결성-검증-floodc-star">실습 미션 — 연결성 검증
+<code>flood.c</code> ⭐</a></li>
+<li><a href="#이-단계를-마치며" id="toc-이-단계를-마치며">이 단계를
+마치며</a></li>
+</ul></li><li><a href="Part2_09.html" title="확장 · Pac-Man — 유령 AI와 상태머신">확장 · Pac-Man</a></li><li class="grp">부록</li><li><a href="Appendix.html" title="부록 — 용어집 · 핵심 이슈 · 요약">부록</a></li></ul></nav>
+</aside>
+<main class="reader">
+  <article class="page">
+<h1 id="7단계--battle-city--종합-캡스톤-맵-생성--풀링">7단계 · Battle
+City — 종합 캡스톤 (맵 생성 + 풀링)</h1>
+<div class="chapter-badge">
+
+<p><strong>단계 7</strong> 🏁 · 게임 <code>Battle City</code> · 씬
+클래스 <code>BattleCityContent : public IGameContent</code> <strong>처음
+배우는 기술</strong> — <code>두 기술 축의 결합</code>
+<code>절차적 전장 생성(대칭 배치)</code>
+<code>연결성 검증(flood fill)</code>
+<code>파괴 지형(타일 상호작용)</code> <code>기지 방어(승패 축)</code>
+<code>적 AI(기지 편향/BFS)</code> <code>파워업 아이템 6종</code>
+<code>얼음 관성·숲 시야 가림</code> <strong>예상 학습 시간</strong> —
+8–10시간</p>
+</div>
+
+<blockquote>
+<p>커리큘럼의 졸업 과제다. 지금까지 우리는 두 개의 큰 기술 축을 따로
+배웠다 — 5단계 Galaga의 <strong>오브젝트 풀</strong>과 6단계 Maze의
+<strong>절차적 생성·경로탐색</strong>. Battle City는 그 둘을 <strong>한
+게임에서 수렴</strong>시킨다. 절차적으로 생성된 전장 위에서, 풀로
+관리되는 총알·적 탱크·폭발이 싸우고, 벽돌은 부서지고, 적은 기지를 향해
+몰려오고, 플레이어는 아군 기지(이글)를 지킨다. 절차적 맵·대량
+오브젝트·파괴 지형·적 AI가 동시에 얽히는 — 이 책이 쌓아 온 모든 것이
+만나는 마지막 무대다.</p>
+</blockquote>
+<h2 id="이-단계의-학습-목표">이 단계의 학습 목표</h2>
+<p>이 단계를 마치면 다음을 할 수 있다.</p>
+<ol type="1">
+<li><strong>두 기술 축</strong>(오브젝트 풀 + 절차적 생성)을 한 게임에
+결합하는 구조를 설계할 수 있다.</li>
+<li><strong>대칭 배치</strong>로 전장을 절차적으로 생성하고, 다층
+파이프라인으로 타일을 채울 수 있다.</li>
+<li><strong>연결성 검증(flood fill)</strong> 으로 "모든 적 스폰이 기지에
+도달 가능한가"를 검사할 수 있다.</li>
+<li><strong>파괴 가능한 지형</strong> — 총알이 타일에 닿을 때 종류별로
+다르게 반응하는 상호작용을 구현할 수 있다.</li>
+<li><strong>기지 방어</strong>라는 승패 축과, 목표를 향해 편향 이동하는
+<strong>적 AI</strong>를 짤 수 있다.</li>
+<li>여러 시스템(맵·풀·충돌·AI·아이템)이 한 프레임에 수렴하는 캡스톤의
+구조를 읽을 수 있다.</li>
+</ol>
+<h2 id="왜-battle-city가-마지막인가">왜 Battle City가 마지막인가</h2>
+<p>이 책의 2부는 게임마다 새 기술을 한 겹씩 쌓아 왔다. 자료구조(Snake) →
+알고리즘(Tetris) → 물리(Dino) → 시스템(Road Fighter) →
+<strong>성능/풀(Galaga)</strong> → <strong>알고리즘
+심화/생성·탐색(Maze)</strong>. 각 게임은 한 축에 집중했다.</p>
+<p>캡스톤의 임무는 <strong>그 축들을 하나로 수렴</strong>시키는 것이다.
+특히 마지막 두 게임이 세운 두 기둥이 여기서 만난다.</p>
+<ul>
+<li><strong>Galaga의 오브젝트 풀</strong> → 탱크전은 슈팅보다
+총알·폭발이 훨씬 잦다. 총알·적 탱크·폭발·아이템을 전부 풀로 돌려, 초당
+수십 개가 오가도 힙을 건드리지 않는다.</li>
+<li><strong>Maze의 절차적 생성 + 경로탐색</strong> → 스테이지마다 전장을
+절차적으로 생성하고(벽돌·철벽·물·숲·얼음·기지), flood fill로 "적이
+기지까지 갈 수 있는지" 검증하며, 적 AI가 기지를 향해 길을 찾는다.</li>
+</ul>
+<p>여기에 캡스톤만의 새 요소가 더해진다 — <strong>파괴 가능한
+지형</strong>(벽돌이 부서지고 길이 열린다), <strong>기지
+방어</strong>(지켜야 할 것이 있는 승패 축),
+<strong>파워업</strong>(별·헬멧·시계·삽·목숨·폭탄). 실시간 액션·절차적
+맵·대량 오브젝트·타일 규칙·AI가 <strong>동시에</strong> 얽힌다.</p>
+<blockquote>
+<p><strong>커리큘럼의 수렴점.</strong> Galaga(성능)와 Maze(알고리즘)라는
+두 봉우리가 여기서 하나의 계곡으로 흘러든다. 그래서 Maze를 캡스톤 바로
+앞에 뒀다 — flood fill과 BFS를 <strong>배우고 즉시</strong> 전장 검증과
+적 AI에 쓴다. 커리큘럼 전체가 이 마지막 게임을 향해 설계됐다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-1--두-기술의-결합--타일-맵-위의-풀">개념 1 · 두 기술의 결합
+— 타일 맵 위의 풀</h2>
+<p>Battle City의 데이터는 두 세계로 나뉜다 — <strong>정적인 타일
+맵</strong>과 <strong>동적인 오브젝트 풀</strong>.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 세계 ① 절차적으로 생성되는 정적 전장 (Maze의 격자)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> <span class="kw">class</span> _ETile <span class="op">{</span> EMPTY<span class="op">,</span> BRICK<span class="op">,</span> STEEL<span class="op">,</span> WATER<span class="op">,</span> FOREST<span class="op">,</span> ICE<span class="op">,</span> BASE <span class="op">};</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>_ETile tile<span class="op">[</span>FIELD_H<span class="op">][</span>FIELD_W<span class="op">];</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">// 세계 ② 풀로 관리되는 동적 오브젝트 (Galaga의 풀)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>Pool<span class="op">&lt;</span>Bullet<span class="op">,</span> MAX_PBULLET<span class="op">&gt;</span> pBullets<span class="op">;</span>   <span class="co">// 8</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>Pool<span class="op">&lt;</span>Bullet<span class="op">,</span> MAX_EBULLET<span class="op">&gt;</span> eBullets<span class="op">;</span>   <span class="co">// 24</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>Pool<span class="op">&lt;</span>Tank<span class="op">,</span>   MAX_ENEMY<span class="op">&gt;</span>   enemies<span class="op">;</span>    <span class="co">// 8</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>Pool<span class="op">&lt;</span>Fx<span class="op">,</span>     MAX_FX<span class="op">&gt;</span>      fxs<span class="op">;</span>         <span class="co">// 24</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>Pool<span class="op">&lt;</span>Item<span class="op">,</span>   MAX_ITEM<span class="op">&gt;</span>    items<span class="op">;</span>       <span class="co">// 4</span></span></code></pre></div>
+<p>이 둘이 맞물려 게임을 만든다. <strong>타일 맵은 오브젝트가 움직일
+무대</strong>를 정하고(탱크는 벽을 못 지나고, 총알은 벽돌을 부순다),
+<strong>풀은 그 무대 위 배우들</strong>(총알·탱크·폭발·아이템)을
+관리한다. Galaga의 <code>Pool&lt;T,N&gt;</code>(5단계의
+<code>FrameWork/Object/Pool.h</code>)을 <strong>그대로</strong>
+재사용하고, Maze의 격자 좌표계를 타일 맵으로 가져온다. 두 게임에서
+손으로 만든 도구가 여기서 조립된다.</p>
+<p>스테이지가 바뀌면 두 세계를 함께 리셋한다 — 풀은
+<code>Clear()</code>(재할당 없이), 맵은 <code>GenerateMap()</code>(새로
+생성).</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> BattleCityContent<span class="op">::</span>StartStage<span class="op">(</span><span class="dt">int</span> s<span class="op">)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    pBullets<span class="op">.</span>Clear<span class="op">();</span>  eBullets<span class="op">.</span>Clear<span class="op">();</span>  enemies<span class="op">.</span>Clear<span class="op">();</span>  fxs<span class="op">.</span>Clear<span class="op">();</span>  items<span class="op">.</span>Clear<span class="op">();</span>  <span class="co">// 풀 비우기</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    GenerateMap<span class="op">(</span>s<span class="op">);</span>                    <span class="co">// 전장 새로 생성</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    enemiesToSpawn <span class="op">=</span> STAGE_TOTAL<span class="op">;</span>      <span class="co">// 이번 스테이지 적 20마리</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* ... 플레이어·기지·상태 리셋 ... */</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<hr />
+<h2 id="개념-2--절차적-전장-생성--대칭-배치-파이프라인">개념 2 · 절차적
+전장 생성 — 대칭 배치 파이프라인</h2>
+<p>전장은 <strong>여러 단계를 거쳐</strong> 채워진다. 빈 맵에서 시작해,
+지형을 층층이 얹는 다층 파이프라인이다.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> BattleCityContent<span class="op">::</span>GenerateMap<span class="op">(</span><span class="dt">int</span> s<span class="op">)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 0) 전부 EMPTY 로 초기화</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>…<span class="op">)</span> tile<span class="op">[</span>y<span class="op">][</span>x<span class="op">]</span> <span class="op">=</span> _ETile<span class="op">::</span>EMPTY<span class="op">;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 1) 지형 군집 — 좌우 대칭 랜덤 배치 (스테이지로 양 조절)</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>n <span class="op">&lt;</span> brickN<span class="op">)</span>  PlaceRectSym<span class="op">(</span>BRICK<span class="op">,</span> 랜덤위치<span class="op">,</span> 랜덤크기<span class="op">);</span>   <span class="co">// 벽돌</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>n <span class="op">&lt;</span> steelN<span class="op">)</span>  PlaceRectSym<span class="op">(</span>STEEL<span class="op">,</span> …<span class="op">);</span>                    <span class="co">// 철벽</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>n <span class="op">&lt;</span> waterN<span class="op">)</span>  PlaceRectSym<span class="op">(</span>WATER<span class="op">,</span> …<span class="op">);</span>                    <span class="co">// 물</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>n <span class="op">&lt;</span> forestN<span class="op">)</span> PlaceRectSym<span class="op">(</span>FOREST<span class="op">,</span> …<span class="op">);</span>                   <span class="co">// 숲</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>n <span class="op">&lt;</span> iceN<span class="op">)</span>    PlaceRectSym<span class="op">(</span>ICE<span class="op">,</span>  …<span class="op">);</span>                     <span class="co">// 얼음</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 2) 철벽 테두리 (파괴 불가 경계)</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>…<span class="op">)</span> tile<span class="op">[</span><span class="dv">0</span><span class="op">][</span>x<span class="op">]</span> <span class="op">=</span> tile<span class="op">[</span>FIELD_H<span class="op">-</span><span class="dv">1</span><span class="op">][</span>x<span class="op">]</span> <span class="op">=</span> STEEL<span class="op">;</span> <span class="co">/* 상하 */</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>…<span class="op">)</span> tile<span class="op">[</span>y<span class="op">][</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> tile<span class="op">[</span>y<span class="op">][</span>FIELD_W<span class="op">-</span><span class="dv">1</span><span class="op">]</span> <span class="op">=</span> STEEL<span class="op">;</span> <span class="co">/* 좌우 */</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 3) 기지 + 벽돌 요새</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    tile<span class="op">[</span>baseY<span class="op">][</span>baseX<span class="op">]</span> <span class="op">=</span> BASE<span class="op">;</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    SetFortress<span class="op">(</span>BRICK<span class="op">);</span>            <span class="co">// 기지 3면을 벽돌로 감쌈</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 4) 스폰존 확보 + 연결성 검증</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    ClearSpawnZones<span class="op">();</span>             <span class="co">// 스폰 지점·플레이어 시작칸을 EMPTY 로</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    CarveConnectivity<span class="op">();</span>           <span class="co">// 막힌 곳을 뚫어 도달 가능 보장 (개념 3)</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>핵심은 <strong>대칭 배치</strong> <code>PlaceRectSym</code> 이다.
+Battle City 특유의 좌우 대칭 맵을 위해, 사각형을 놓을 때 그
+<strong>거울상</strong>도 함께 놓는다.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> BattleCityContent<span class="op">::</span>PlaceRectSym<span class="op">(</span>_ETile t<span class="op">,</span> <span class="dt">int</span> x0<span class="op">,</span> <span class="dt">int</span> y0<span class="op">,</span> <span class="dt">int</span> w<span class="op">,</span> <span class="dt">int</span> h<span class="op">)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> yy <span class="op">=</span> y0<span class="op">;</span> yy <span class="op">&lt;</span> y0<span class="op">+</span>h<span class="op">;</span> yy<span class="op">++)</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> xx <span class="op">=</span> x0<span class="op">;</span> xx <span class="op">&lt;</span> x0<span class="op">+</span>w<span class="op">;</span> xx<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>경계 밖<span class="op">)</span> <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>            tile<span class="op">[</span>yy<span class="op">][</span>xx<span class="op">]</span> <span class="op">=</span> t<span class="op">;</span>                    <span class="co">// 원본</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>            <span class="dt">int</span> mx <span class="op">=</span> FIELD_W <span class="op">-</span> <span class="dv">1</span> <span class="op">-</span> xx<span class="op">;</span>           <span class="co">// ★ 좌우 미러 x</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>mx 유효<span class="op">)</span> tile<span class="op">[</span>yy<span class="op">][</span>mx<span class="op">]</span> <span class="op">=</span> t<span class="op">;</span>        <span class="co">// 거울상도 함께</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>mx = FIELD_W - 1 - xx</code> 가 좌우 대칭점이다. 왼쪽에 벽돌
+덩어리를 놓으면 오른쪽에도 똑같이 놓인다. 이 한 줄이 전장에 <strong>균형
+잡힌 대칭미</strong>를 준다 — 원작 배틀 시티의 그 느낌이다. 지형의
+양(<code>brickN</code>, <code>steelN</code>…)을 스테이지에 따라
+조절하면, <strong>맵 생성 파라미터가 곧 난이도 다이얼</strong>이
+된다(Dino·Road Fighter의 게이팅과 같은 발상, 이번엔 지형에 적용).</p>
+<blockquote>
+<p><strong>as-built 참고 — 대칭 배치 vs 셀룰러 오토마타.</strong> GDD는
+물·숲을 <strong>셀룰러 오토마타</strong>(노이즈 + 이웃 다수결 스무딩)로
+유기적으로 만들자고 설계했지만, 실제 구현은 더 단순한 <strong>대칭
+사각형 배치</strong>를 택했다. "동작하는 단순함을 먼저"(Galaga의 교훈)의
+또 한 예다. CA는 폴리시로 남았다 — 캡스톤이라고 모든 걸 최고급으로 만들
+필요는 없다. <strong>무엇을 단순하게 둘지 판단하는 것</strong>도 완성의
+일부다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-3--연결성-검증--flood-fill-maze-재사용">개념 3 · 연결성
+검증 — flood fill (Maze 재사용)</h2>
+<p>절차적으로 지형을 뿌리면 문제가 생긴다 — <strong>적 스폰 지점이나
+기지가 벽에 둘러싸여 갇힐 수 있다.</strong> 적이 기지까지 못 가면 게임이
+성립하지 않는다. 그래서 생성 후 반드시 <strong>"모든 중요 지점이 서로
+연결됐는가"를 검증</strong>한다. 이때 쓰는 것이 6단계 Maze에서 배운
+<strong>flood fill</strong>(BFS/DFS로 연결 영역 채우기)이다.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> BattleCityContent<span class="op">::</span>CarveConnectivity<span class="op">()</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> vis<span class="op">[</span>FIELD_H<span class="op">][</span>FIELD_W<span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="kw">false</span> <span class="op">};</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> stackX<span class="op">[</span>…<span class="op">],</span> stackY<span class="op">[</span>…<span class="op">],</span> sp <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>      <span class="co">// 명시적 스택 (Maze의 그것)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ① 플레이어 시작칸에서 flood fill — 통행 가능 타일을 전부 방문</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    vis<span class="op">[</span>startY<span class="op">][</span>startX<span class="op">]</span> <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    stackX<span class="op">[</span>sp<span class="op">]</span> <span class="op">=</span> startX<span class="op">;</span> stackY<span class="op">[</span>sp<span class="op">]</span> <span class="op">=</span> startY<span class="op">;</span> sp<span class="op">++;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>sp <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> cx <span class="op">=</span> stackX<span class="op">[--</span>sp<span class="op">],</span> cy <span class="op">=</span> stackY<span class="op">[</span>sp<span class="op">];</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> d <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> d <span class="op">&lt;</span> <span class="dv">4</span><span class="op">;</span> d<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>            <span class="dt">int</span> nx <span class="op">=</span> cx <span class="op">+</span> dxs<span class="op">[</span>d<span class="op">],</span> ny <span class="op">=</span> cy <span class="op">+</span> dys<span class="op">[</span>d<span class="op">];</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>InField<span class="op">(</span>nx<span class="op">,</span>ny<span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="op">!</span>vis<span class="op">[</span>ny<span class="op">][</span>nx<span class="op">]</span> <span class="op">&amp;&amp;</span> Passable<span class="op">(</span>nx<span class="op">,</span>ny<span class="op">))</span> <span class="op">{</span>   <span class="co">// 갈 수 있고 미방문이면</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>                vis<span class="op">[</span>ny<span class="op">][</span>nx<span class="op">]</span> <span class="op">=</span> <span class="kw">true</span><span class="op">;</span>                                    <span class="co">// 방문 표시</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>                stackX<span class="op">[</span>sp<span class="op">]</span> <span class="op">=</span> nx<span class="op">;</span> stackY<span class="op">[</span>sp<span class="op">]</span> <span class="op">=</span> ny<span class="op">;</span> sp<span class="op">++;</span>                <span class="co">// 스택에 쌓기</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ② 스폰 지점·기지 앞이 방문 안 됐으면(고립) → 시작칸 쪽으로 길을 뚫는다</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>각 중요 지점<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> <span class="op">(</span>도달 안 됨<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>            tile<span class="op">[</span>cy<span class="op">][</span>cx<span class="op">]</span> <span class="op">=</span> EMPTY<span class="op">;</span>              <span class="co">// 벽 뚫기</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>            <span class="co">/* 시작칸 방향으로 한 칸 전진 */</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>flood fill의 원리는 단순하다 — 시작칸에서 <strong>갈 수 있는 이웃으로
+계속 번져 나가며</strong> 방문한 칸을 표시한다. 다 번지고 나면,
+<code>vis</code> 가 <code>true</code> 인 칸이 곧 "시작칸에서 도달 가능한
+영역"이다. 스폰 지점이나 기지 앞이 그 영역
+밖(<code>vis == false</code>)이면 고립된 것이므로, 시작칸 방향으로 벽을
+뚫어 길을 낸다.</p>
+<p>이것이 <strong>Maze에서 배운 것의 직접 응용</strong>이다. Maze의
+<code>ShortestPath</code>(BFS)가 "미로가 풀리는가"를 검증했듯, 여기선
+flood fill이 "전장이 연결됐는가"를 검증한다. <strong>같은 알고리즘이
+다른 게임에서 다시 일한다</strong> — 알고리즘은 한 번 익히면 어디서든
+재사용되는 재산이다.</p>
+<blockquote>
+<p><strong><code>Passable</code> 이 통행 규칙을 한곳에 모은다.</strong>
+flood fill이 "갈 수 있는가"를 묻는 <code>Passable(tx,ty)</code> 은
+<code>EMPTY/FOREST/ICE</code> 만 참을 준다(벽돌·철벽·물·기지는 못 감).
+이 한 함수에 통행 규칙을 모아 두니, 연결성 검증도·탱크 이동도·적 AI도
+전부 같은 규칙을 공유한다(Tetris의 <code>CanMove</code> 와 같은 "판단을
+한곳에" 정신).</p>
+</blockquote>
+<hr />
+<h2 id="개념-4--파괴-가능한-지형--타일-상호작용">개념 4 · 파괴 가능한
+지형 — 타일 상호작용</h2>
+<p>배틀 시티의 손맛은 <strong>벽돌을 부수며 길을 여는 것</strong>이다.
+총알이 타일에 닿을 때, 타일 종류마다 다르게 반응한다. 이 상호작용이
+<code>StepBullet</code> 한 함수에 모여 있다.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 총알을 한 칸 전진시키고 타일 충돌을 처리. false = 총알 소멸.</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> BattleCityContent<span class="op">::</span>StepBullet<span class="op">(</span>Bullet<span class="op">&amp;</span> b<span class="op">)</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> nx <span class="op">=</span> b<span class="op">.</span>x <span class="op">+</span> dx<span class="op">,</span> ny <span class="op">=</span> b<span class="op">.</span>y <span class="op">+</span> dy<span class="op">;</span>          <span class="co">// 다음 칸</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>InField<span class="op">(</span>nx<span class="op">,</span> ny<span class="op">))</span> <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span>         <span class="co">// 전장 밖 → 소멸</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    _ETile t <span class="op">=</span> tile<span class="op">[</span>ny<span class="op">][</span>nx<span class="op">];</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>t <span class="op">==</span> BRICK<span class="op">)</span> <span class="op">{</span> tile<span class="op">[</span>ny<span class="op">][</span>nx<span class="op">]</span> <span class="op">=</span> EMPTY<span class="op">;</span> <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span> <span class="op">}</span>        <span class="co">// 벽돌: 부수고 소멸</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>t <span class="op">==</span> STEEL<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">bool</span> border <span class="op">=</span> <span class="op">(</span>경계<span class="op">);</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>b<span class="op">.</span>power <span class="op">&amp;&amp;</span> <span class="op">!</span>border<span class="op">)</span> tile<span class="op">[</span>ny<span class="op">][</span>nx<span class="op">]</span> <span class="op">=</span> EMPTY<span class="op">;</span>              <span class="co">// 철벽: 강화탄만 부숨</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span>                                              <span class="co">//       (아니면 총알만 소멸)</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>t <span class="op">==</span> BASE<span class="op">)</span>  <span class="op">{</span> baseAlive <span class="op">=</span> <span class="kw">false</span><span class="op">;</span> SpawnFx<span class="op">(</span>nx<span class="op">,</span>ny<span class="op">);</span> <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span> <span class="op">}</span>   <span class="co">// 기지: 게임 오버!</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">// EMPTY / WATER / FOREST / ICE → 통과</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    b<span class="op">.</span>x <span class="op">=</span> nx<span class="op">;</span> b<span class="op">.</span>y <span class="op">=</span> ny<span class="op">;</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>타일 종류가 곧 규칙이다.</p>
+<ul>
+<li><strong>BRICK(벽돌)</strong> — 총알에 부서져 <code>EMPTY</code> 가
+된다(길이 열린다). 캡스톤의 핵심 손맛.</li>
+<li><strong>STEEL(철벽)</strong> — 보통 총알은 못 뚫고,
+<strong>강화탄</strong>(파워업 최대치)만 부순다. 단 경계 철벽은 파괴
+불가.</li>
+<li><strong>WATER(물)</strong> — 탱크는 못 지나지만 <strong>총알은
+통과</strong>한다(타일 상호작용이 탱크와 총알에 다르게 적용).</li>
+<li><strong>FOREST(숲)</strong> — 통과 가능하지만 <strong>시야를
+가린다</strong>(렌더에서 오브젝트 위에 다시 덮어 그림).</li>
+<li><strong>ICE(얼음)</strong> — 통과하되
+<strong>미끄러진다</strong>(관성).</li>
+<li><strong>BASE(기지)</strong> — 총알이 닿으면 즉시 게임 오버.</li>
+</ul>
+<p><strong>"정적인 맵이 동적으로 변한다"</strong> 는 것이 캡스톤을 앞선
+게임과 가르는 지점이다. Tetris·Maze의 격자는 고정이었지만, Battle City의
+전장은 총알에 부서지고 삽 아이템에 강화된다. 맵과 오브젝트가 서로 영향을
+주고받는 — 살아있는 전장이다.</p>
+<hr />
+<h2 id="개념-5--적-ai--기지를-향해">개념 5 · 적 AI — 기지를 향해</h2>
+<p>적 탱크는 단순히 헤매지 않는다. <strong>기지를 향해 편향</strong>되어
+움직인다. 40% 확률로 기지 방향으로, 나머지는 랜덤으로 방향을 정한다.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> BattleCityContent<span class="op">::</span>ChooseEnemyDir<span class="op">(</span>Tank<span class="op">&amp;</span> e<span class="op">)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>rand<span class="op">()</span> <span class="op">%</span> <span class="dv">100</span> <span class="op">&lt;</span> <span class="dv">40</span><span class="op">)</span> <span class="op">{</span>                        <span class="co">// 40%: 기지 쪽으로 편향</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> ddx <span class="op">=</span> baseX <span class="op">-</span> e<span class="op">.</span>x<span class="op">,</span> ddy <span class="op">=</span> baseY <span class="op">-</span> e<span class="op">.</span>y<span class="op">;</span>   <span class="co">// 기지까지의 방향</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>abs<span class="op">(</span>ddx<span class="op">)</span> <span class="op">&gt;</span> abs<span class="op">(</span>ddy<span class="op">))</span>                    <span class="co">// 더 먼 축부터 좁힌다 (그리디)</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>            e<span class="op">.</span>dir <span class="op">=</span> <span class="op">(</span>ddx <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">?</span> _EDir<span class="op">::</span>RIGHT <span class="op">:</span> _EDir<span class="op">::</span>LEFT<span class="op">;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>            e<span class="op">.</span>dir <span class="op">=</span> <span class="op">(</span>ddy <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">?</span> _EDir<span class="op">::</span>DOWN <span class="op">:</span> _EDir<span class="op">::</span>UP<span class="op">;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        e<span class="op">.</span>dir <span class="op">=</span> <span class="op">(</span>_EDir<span class="op">)(</span>rand<span class="op">()</span> <span class="op">%</span> <span class="dv">4</span><span class="op">);</span>                <span class="co">// 60%: 랜덤 (예측 불가·벽 회피)</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>이것은 <strong>그리디(greedy) 접근</strong> — "기지까지 x와 y 중 더
+먼 축을 먼저 좁힌다". 완벽한 최단경로는 아니지만(벽을 못 피한다), 랜덤
+40:60 섞임 덕분에 적들이 기지로 몰려오되 벽에 갇히지 않고 자연스럽게
+흩어진다. 이동은 <code>Passable</code> + <code>TankAt</code>(다른 탱크
+점유)을 검사해, 못 가면 방향을 다시 고른다.</p>
+<blockquote>
+<p><strong>여기가 Maze의 BFS가 빛날 자리다.</strong> 그리디 편향은 벽을
+우회하지 못한다 — 기지 앞에 벽돌 요새가 있으면 적이 벽에 부딪혀 헤맬 수
+있다. GDD는 <strong>정밀한 추적을 원하면 Maze의 BFS로 기지까지 다음 한
+칸을 계산</strong>하라고 남겨 뒀다(폴리시). 6단계에서 만든
+<code>ShortestPath</code> 를 여기 붙이면, 적이 벽을 돌아 기지로 최단
+접근하는 진짜 추적 AI가 된다. <strong>알고리즘 하나(BFS)가 게임의 지능을
+바꾼다</strong> — 커리큘럼이 Maze를 캡스톤 앞에 둔 이유가 여기서
+완성된다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-6--기지-방어와-파워업--지킬-것과-뒤집을-수">개념 6 · 기지
+방어와 파워업 — 지킬 것과 뒤집을 수</h2>
+<p>캡스톤에는 앞선 게임에 없던 <strong>지켜야 할 것</strong>이 있다 —
+아군 기지(이글, <code>★</code>). 승패 축이 둘로 늘었다: <strong>적
+전멸(승리)</strong> 또는 <strong>기지 파괴/생명 0(패배)</strong>.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 패배: 기지 파괴 또는 생명 0</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(!</span>baseAlive<span class="op">)</span> <span class="op">{</span> gameState <span class="op">=</span> GAMEOVER<span class="op">;</span> <span class="cf">return</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">// 승리: 스폰할 적이 없고, 살아있는 적도 없으면 → 스테이지 클리어</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>enemiesToSpawn <span class="op">&lt;=</span> <span class="dv">0</span> <span class="op">&amp;&amp;</span> ActiveEnemyCount<span class="op">()</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    score <span class="op">+=</span> <span class="dv">1000</span><span class="op">;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    gameState <span class="op">=</span> STAGECLEAR<span class="op">;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>기지는 벽돌 <strong>요새</strong>로
+보호되고(<code>SetFortress</code>), 삽 아이템으로 잠깐 철벽 방어막을
+두른다. 기지를 지키며 적을 막는 이 공수(攻守) 동시성이 배틀 시티의
+긴장감이다.</p>
+<p><strong>파워업 아이템 6종</strong>은 판을 뒤집는 수다. 점멸(flashing)
+적을 잡으면 드랍되고, 주우면 즉시 발동한다.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> BattleCityContent<span class="op">::</span>ApplyItem<span class="op">(</span>_EItemType type<span class="op">)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span> <span class="op">(</span>type<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> STAR<span class="op">:</span>   powerLevel<span class="op">++;</span>   <span class="cf">break</span><span class="op">;</span>                 <span class="co">// 동시탄↑, 최대치=강화탄</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> HELMET<span class="op">:</span> invincible <span class="op">=</span> <span class="kw">true</span><span class="op">;</span> invTimer <span class="op">=</span> <span class="dv">300</span><span class="op">;</span> <span class="cf">break</span><span class="op">;</span>  <span class="co">// 잠깐 무적</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> CLOCK<span class="op">:</span>  freezeTimer <span class="op">=</span> <span class="dv">360</span><span class="op">;</span> <span class="cf">break</span><span class="op">;</span>              <span class="co">// 모든 적 정지</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> SHOVEL<span class="op">:</span> shieldTimer <span class="op">=</span> <span class="dv">600</span><span class="op">;</span> SetFortress<span class="op">(</span>STEEL<span class="op">);</span> <span class="cf">break</span><span class="op">;</span>  <span class="co">// 기지 철벽 보호</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> LIFE<span class="op">:</span>   life<span class="op">++;</span> <span class="cf">break</span><span class="op">;</span>                          <span class="co">// 목숨 +1</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> BOMB<span class="op">:</span>   <span class="co">/* 활성 적 전멸 */</span> <span class="cf">break</span><span class="op">;</span>               <span class="co">// 화면 청소</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>freezeTimer</code>, <code>invTimer</code>,
+<code>shieldTimer</code> — 전부 4단계 Road Fighter에서 배운
+<strong>"상태에 수명을 주는" 타이머</strong>다(매 프레임 감소, 0이 되면
+해제). 시계로 적을 얼리고, 삽으로 기지를 지키고, 폭탄으로 화면을
+청소하는 — 이 극적인 순간들이 아이템 풀(<code>items</code>)과 타이머로
+구현된다. <strong>앞 게임들에서 배운 조각들이 캡스톤에서 하나하나
+제자리를 찾는다.</strong></p>
+<hr />
+<h2 id="코드-워크스루--oningameupdate-모든-것이-수렴하는-한-프레임">코드
+워크스루 — <code>OnInGameUpdate</code>, 모든 것이 수렴하는 한
+프레임</h2>
+<p>캡스톤의 한 프레임은 이 책이 배운 <strong>모든 시스템이 순서대로
+도는</strong> 파이프라인이다.</p>
+<blockquote>
+<p><strong>실제 파일:</strong>
+<code>Main/Content/BattleCityContent.cpp</code></p>
+</blockquote>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> BattleCityContent<span class="op">::</span>OnInGameUpdate<span class="op">()</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... STAGESTART · PAUSE · STAGECLEAR · GAMEOVER 처리 ...</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ── PLAYING : 모든 시스템 수렴 ──</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    UpdatePlayer<span class="op">();</span>      <span class="co">// ① 이동(관성·벽) · 회전 · 발사(pBullets 풀)   [Dino 물리·Galaga 풀]</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    UpdateEnemies<span class="op">();</span>     <span class="co">// ② 스폰 · 기지 편향 AI · 사격(eBullets 풀)      [Maze 경로·RF 엔티티]</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    UpdateBullets<span class="op">();</span>     <span class="co">// ③ 총알 이동 · 타일 상호작용(StepBullet)         [타일 파괴]</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    UpdateItems<span class="op">();</span>       <span class="co">// ④ 아이템 점멸</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    UpdateFx<span class="op">();</span>          <span class="co">// ⑤ 폭발 애니메이션(fxs 풀)                       [Galaga 풀]</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    HandleCollisions<span class="op">();</span>  <span class="co">// ⑥ 풀 × 풀 충돌 → 파괴·득점·아이템·피격          [Galaga 충돌]</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>freezeTimer <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> freezeTimer<span class="op">--;</span>    <span class="co">// 상태 타이머들 (RF)</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>shieldTimer <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> shieldTimer<span class="op">--;</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>baseAlive<span class="op">)</span> <span class="op">{</span> gameState <span class="op">=</span> GAMEOVER<span class="op">;</span> <span class="cf">return</span><span class="op">;</span> <span class="op">}</span>              <span class="co">// 패배: 기지</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>enemiesToSpawn <span class="op">&lt;=</span> <span class="dv">0</span> <span class="op">&amp;&amp;</span> ActiveEnemyCount<span class="op">()</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span>            <span class="co">// 승리: 전멸</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span> score <span class="op">+=</span> <span class="dv">1000</span><span class="op">;</span> gameState <span class="op">=</span> STAGECLEAR<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>각 줄 옆에 <strong>그 시스템이 어느 게임에서 왔는지</strong> 적어
+두었다. 캡스톤은 새 기법을 발명하기보다, <strong>배운 것을
+조립</strong>한다.</p>
+<ul>
+<li><strong>①</strong> 이동은 Dino의 float 물리 감각(여기선 얼음 관성)과
+벽 충돌, 발사는 Galaga의 풀.</li>
+<li><strong>②</strong> 적 스폰·AI는 Road Fighter의 엔티티 관리와 Maze의
+경로 발상.</li>
+<li><strong>③</strong> 총알-타일 상호작용은 이 게임의 새 요소(파괴
+지형).</li>
+<li><strong>⑥</strong> 충돌은 Galaga의 풀 × 풀 판정 그대로.</li>
+</ul>
+<p><code>HandleCollisions</code> 하나가 [내탄↔︎적탱크(격추·득점·아이템
+드랍) / 적탄↔︎플레이어(피격) / 내탄↔︎적탄(상쇄) / 플레이어↔︎아이템(획득)]을
+전부 처리한다 — 전부 활성 슬롯끼리의 좌표 비교(Galaga 개념 5). 렌더도
+계층적이다: 맵 → 아이템 → 탱크 → 총알 → 폭발 → <strong>숲
+오버레이(오브젝트 위에 다시 덮어 시야 가림)</strong> → HUD. 숲을 맨
+나중에 그리는 그 한 수가 "숲에 숨은 탱크"를 만든다.</p>
+<p><strong>이것이 캡스톤의 본질이다</strong> — 화려한 새 기술이 아니라,
+<strong>여러 시스템을 정확한 순서로 엮어 하나의 완결된 게임</strong>을
+만드는 것. 그 엮음을 읽을 수 있다면, 당신은 이 책을 졸업한 것이다.</p>
+<hr />
+<h2 id="그림으로-정리--두-축의-수렴">그림으로 정리 — 두 축의 수렴</h2>
+<blockquote>
+<p>📊 <strong>웹 교육문서에서는 맵 생성 파이프라인과 두 기술 축의 수렴이
+애니메이션(V-P2-7)으로 재생된다.</strong> 책에서는 아래 도식으로
+대신한다.</p>
+</blockquote>
+<p><strong>대칭 전장 생성 — 층층이 쌓기</strong></p>
+<pre><code>  ① EMPTY → ② 대칭 지형 → ③ 철벽 테두리 → ④ 기지+요새 → ⑤ flood fill 검증
+  ┌────────┐   ┌────────┐    ┌────────┐     ┌────────┐     ┌────────┐
+  │        │   │ □   □  │    │■■■■■■■■│     │■■■■■■■■│     │■■■■■■■■│
+  │        │   │  ≈  ≈  │ →  │■ □   □■│ →   │■ □   □■│ →   │■ □   □■│
+  │        │   │ ♣    ♣ │    │■ ≈  ≈ ■│     │■ ≈  ≈ ■│     │■ ≈  ≈ ■│
+  │        │   │        │    │■■■■■■■■│     │■■■□★□■■│     │■■■□★□■■│
+  └────────┘   └────────┘    └────────┘     └────────┘     └────────┘
+    빈 맵       PlaceRectSym    STEEL 경계     BASE+요새      스폰→기지 연결 보장
+              (좌우 대칭!)                                   (Maze flood fill 재사용)</code></pre>
+<p><strong>두 기술 축의 수렴 — 캡스톤</strong></p>
+<pre><code>        5단계 Galaga                6단계 Maze
+     ┌─ 오브젝트 풀 ─┐         ┌─ 절차적 생성 · BFS ─┐
+     │ Pool&lt;T,N&gt;     │         │ 맵 생성 · 경로탐색   │
+     └───────┬───────┘         └──────────┬──────────┘
+             │                            │
+             ▼          7단계 Battle City ▼
+     총알·탱크·폭발·아이템    ←수렴→   절차적 전장 + 연결성 검증 + 적 AI
+     ═══════════════════════════════════════════════════
+       파괴 지형 · 기지 방어 · 파워업 (캡스톤의 새 요소)</code></pre>
+<p>한 문장으로: <strong>캡스톤은 새 기법을 발명하지 않는다 — 오브젝트
+풀과 절차적 생성이라는 두 축을 수렴시키고, 그 위에 파괴 지형·기지
+방어·AI를 얹어, 이 책이 배운 모든 것을 하나의 완결된 게임으로
+조립한다.</strong></p>
+<hr />
+<h2 id="알려진-이슈에서-배우기-as-built">알려진 이슈에서 배우기
+(as-built)</h2>
+<p>캡스톤이라고 모든 걸 최고급으로 만들지 않았다. 무엇을 완성하고 무엇을
+단순화할지의 판단이, 여기 고스란히 남아 있다.</p>
+<table>
+<thead>
+<tr>
+<th>이슈</th>
+<th>as-built 상태</th>
+<th>무엇을 배우나</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>적 AI 그리디</strong></td>
+<td>기지 방향 편향(BFS 아님)</td>
+<td>벽 우회 못 함. <strong>Maze BFS 붙이면 진짜 추적</strong>(개념 5) —
+남겨 둔 성장 여지</td>
+</tr>
+<tr>
+<td><strong>물/숲 대칭 배치</strong></td>
+<td>셀룰러 오토마타 대신 대칭 사각형</td>
+<td>GDD의 CA는 폴리시로. "동작하는 단순함 먼저"</td>
+</tr>
+<tr>
+<td><strong>연결성 = flood fill 뚫기</strong></td>
+<td>고립되면 시작칸 쪽으로 직선 carve</td>
+<td>최단 경로는 아니지만 도달성은 보장 — 실용적 안전망</td>
+</tr>
+<tr>
+<td><strong>충돌 O(총알×적)</strong></td>
+<td>이중 루프 전수 비교</td>
+<td>풀이 작아 충분. 타일 점유 맵은 폴리시</td>
+</tr>
+<tr>
+<td><strong>하이스코어 세션 한정</strong></td>
+<td><code>hiScore</code> 멤버</td>
+<td>파일 저장(1부 F)은 향후 확장</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>"AI가 BFS를 안 쓰는 것"이 눈에 띈다 — 그런데 이건 결함이 아니라
+<strong>다음 단계로 가는 문</strong>이다. 당신이 이 책을 다 읽었다면,
+6단계의 <code>ShortestPath</code> 를 여기 붙여 적을 똑똑하게 만들 수
+있다. <strong>완성된 게임에도 언제나 개선의 여지가 있고, 그 여지를 볼 수
+있는 것</strong>이 곧 개발자가 된다는 것이다. as-built의 정직함은,
+마지막까지 "게임은 완벽한 설계가 아니라 계속 자라는 것"이라는 이 책의
+메시지를 전한다.</p>
+</blockquote>
+<hr />
+<h2 id="체크포인트--스스로-점검하기">체크포인트 — 스스로 점검하기</h2>
+<p><strong>Q1.</strong> Battle City가 결합하는 두 기술 축은 무엇이고,
+각각 어느 게임에서 왔나?</p>
+<p><strong>Q2.</strong> <code>PlaceRectSym</code> 에서
+<code>mx = FIELD_W - 1 - xx</code> 는 무엇을 위한 것인가? 왜 대칭으로
+배치하나?</p>
+<p><strong>Q3.</strong> 전장을 절차적으로 생성한 뒤 flood fill로 무엇을
+검증하나? 검증에 실패하면 어떻게 하나?</p>
+<p><strong>Q4.</strong> 총알이 BRICK·STEEL·WATER·BASE에 닿았을 때 각각
+어떻게 되나? 이 규칙은 어디에 모여 있나?</p>
+<p><strong>Q5.</strong> 적 AI는 40% 확률로 기지 방향으로 편향된다. 이
+그리디 방식의 한계는? 어떻게 개선하나?</p>
+<details><summary><b>해설 펼치기</b></summary>
+
+<p><strong>A1.</strong> <strong>오브젝트 풀</strong>(5단계 Galaga —
+총알·탱크·폭발·아이템을 <code>Pool&lt;T,N&gt;</code>로 관리, 힙 할당
+0회)과 <strong>절차적 생성·경로탐색</strong>(6단계 Maze — 전장을
+알고리즘으로 생성, flood fill로 연결성 검증, BFS로 적 AI). 두 봉우리가
+캡스톤에서 하나로 수렴한다.</p>
+<p><strong>A2.</strong> <code>FIELD_W - 1 - xx</code> 는 x좌표의 좌우
+대칭점이다. 지형을 왼쪽에 놓을 때 그 거울상을 오른쪽에도 함께 놓아, 배틀
+시티 특유의 <strong>좌우 대칭 맵</strong>을 만든다. 대칭은 양쪽 플레이의
+공정함과 시각적 균형을 준다.</p>
+<p><strong>A3.</strong> <strong>"모든 적 스폰 지점과 기지가 플레이어
+시작칸에서 도달 가능한가"</strong> 를 검증한다. 시작칸에서 통행 가능
+타일로 flood fill해 방문 영역을 구하고, 중요 지점이 그 밖(고립)이면
+시작칸 방향으로 벽을 뚫어 길을 낸다. 적이 기지에 못 가는 "성립 불가
+맵"을 방지하는 안전망이다.</p>
+<p><strong>A4.</strong> BRICK → 부서져 EMPTY가 되고 총알 소멸. STEEL →
+강화탄이면 부수고 아니면 총알만 소멸(경계는 파괴 불가). WATER → 총알
+통과(탱크는 못 감). BASE → <strong>게임 오버</strong>. 이 규칙은
+<code>StepBullet</code> 한 함수에 모여 있다("판단을 한곳에").</p>
+<p><strong>A5.</strong> 그리디 편향은 "기지 쪽으로 한 칸"만 볼 뿐
+<strong>벽을 우회하지 못한다</strong> — 기지 앞 요새에 막혀 헤맬 수
+있다. 개선책은 6단계 Maze의 <strong>BFS(<code>ShortestPath</code>)로
+기지까지 최단경로를 계산</strong>해 다음 한 칸을 정하는 것. 그러면 적이
+벽을 돌아 기지로 정확히 접근하는 진짜 추적 AI가 된다.</p>
+</details>
+
+<hr />
+<h2 id="실습-미션--연결성-검증-floodc-star">실습 미션 — 연결성 검증
+<code>flood.c</code> ⭐</h2>
+<blockquote>
+<p>이 마지막 미션은 캡스톤의 심장 <strong>flood fill 연결성
+검증</strong>을 손으로 만든다. 전장에서 "모든 스폰이 기지에 닿는가"를
+확인하는 것 — Maze의 flood fill이 Battle City에서 어떻게 일하는지 그대로
+재현한다. <code>bfs.c</code>(6단계)와 짝을 이루는, 책을 닫는
+알고리즘이다.</p>
+</blockquote>
+<p><strong>드릴 문법</strong> — 2D 타일 격자 · <strong>flood
+fill(스택/DFS)</strong> · 4방향 · 도달성 판정 <strong>만드는 것</strong>
+— 벽/통로로 된 전장에서 시작칸으로부터 flood fill해, 각 스폰 지점과
+기지가 연결됐는지 판정. <strong>클리어 조건</strong> — 도달 가능한 칸을
+정확히 표시하고, 고립된 지점을 찾아낸다. <strong>규모</strong> — 약
+55줄, 파일 1개. 표준 C만. 책의 마지막 알고리즘.</p>
+<h3 id="문제-정의">문제 정의</h3>
+<p>flood fill은 "시작칸에서 <strong>갈 수 있는 이웃으로 계속
+번져</strong> 방문 영역을 채우는" 알고리즘이다(BFS/DFS와 뼈대가 같다).
+전장에서 플레이어 시작칸부터 통로를 타고 번지면, 방문된 칸이 "도달 가능
+영역"이다. 스폰 지점(<code>X</code>)이나 기지(<code>B</code>)가 그
+밖이면 <strong>고립</strong> — 적이 갈 수 없는 성립 불가 맵이다. 이
+검증을 통과해야 게임이 성립한다.</p>
+<h3 id="목표--클리어-조건">목표 / 클리어 조건</h3>
+<ol type="1">
+<li>전장을 문자 격자로 둔다(<code>#</code>=벽, <code>.</code>=통로,
+<code>S</code>=시작, <code>X</code>=적 스폰, <code>B</code>=기지).</li>
+<li>S에서 flood fill: 스택에 넣고 꺼내며, 벽이 아닌 미방문 이웃을 스택에
+넣는다.</li>
+<li>방문 영역을 표시한다.</li>
+<li>각 <code>X</code> 와 <code>B</code> 가 방문됐는지(연결됐는지) 판정해
+보고한다.</li>
+<li>하나라도 고립됐으면 "재생성 필요"를 출력.</li>
+</ol>
+<h3 id="힌트">힌트</h3>
+<details><summary><b>힌트 1 — flood fill (명시적 스택)</b></summary>
+
+<div class="sourceCode" id="cb13"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> stackX<span class="op">[</span>H<span class="op">*</span>W<span class="op">],</span> stackY<span class="op">[</span>H<span class="op">*</span>W<span class="op">],</span> sp <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> visited<span class="op">[</span>H<span class="op">][</span>W<span class="op">]</span> <span class="op">=</span> <span class="op">{{</span><span class="dv">0</span><span class="op">}};</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>stackX<span class="op">[</span>sp<span class="op">]</span> <span class="op">=</span> sx<span class="op">;</span> stackY<span class="op">[</span>sp<span class="op">]</span> <span class="op">=</span> sy<span class="op">;</span> sp<span class="op">++;</span>  visited<span class="op">[</span>sy<span class="op">][</span>sx<span class="op">]</span> <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span>sp <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> cx <span class="op">=</span> stackX<span class="op">[--</span>sp<span class="op">],</span> cy <span class="op">=</span> stackY<span class="op">[</span>sp<span class="op">];</span>   <span class="co">/* 스택에서 꺼내기 */</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> d <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> d <span class="op">&lt;</span> <span class="dv">4</span><span class="op">;</span> d<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> nx <span class="op">=</span> cx <span class="op">+</span> DX<span class="op">[</span>d<span class="op">],</span> ny <span class="op">=</span> cy <span class="op">+</span> DY<span class="op">[</span>d<span class="op">];</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>범위 밖 <span class="op">||</span> 벽 <span class="op">||</span> 방문<span class="op">)</span> <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>        visited<span class="op">[</span>ny<span class="op">][</span>nx<span class="op">]</span> <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        stackX<span class="op">[</span>sp<span class="op">]</span> <span class="op">=</span> nx<span class="op">;</span> stackY<span class="op">[</span>sp<span class="op">]</span> <span class="op">=</span> ny<span class="op">;</span> sp<span class="op">++;</span>   <span class="co">/* 스택에 넣기 */</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+
+<details><summary><b>힌트 2 — 연결성 판정</b></summary>
+
+<p>flood fill 후, 각 스폰/기지 칸의 <code>visited</code> 를
+확인한다.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> allConnected <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>각 X<span class="op">,</span> B 칸<span class="op">)</span> <span class="cf">if</span> <span class="op">(!</span>visited<span class="op">[</span>y<span class="op">][</span>x<span class="op">])</span> allConnected <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>  <span class="co">/* 하나라도 고립되면 실패 */</span></span></code></pre></div>
+</details>
+
+<h3 id="정답-코드">정답 코드</h3>
+<details><summary><b>정답 펼치기 — <code>flood.c</code></b></summary>
+
+<div class="sourceCode" id="cb15"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define _CRT_SECURE_NO_WARNINGS</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#define H </span><span class="dv">9</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#define W </span><span class="dv">16</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">/* # = 벽, . = 통로, S = 시작, X = 적 스폰, B = 기지 */</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> field<span class="op">[</span>H<span class="op">][</span>W <span class="op">+</span> <span class="dv">1</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;################&quot;</span><span class="op">,</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#X....#..X.....#&quot;</span><span class="op">,</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#.###.#.####.#.#&quot;</span><span class="op">,</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#...#...#....#.#&quot;</span><span class="op">,</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;###.#.###.###.##&quot;</span><span class="op">,</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#.....S...#....#&quot;</span><span class="op">,</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#.#####.#.#.##.#&quot;</span><span class="op">,</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#.....#.#.B..#.#&quot;</span><span class="op">,</span>   <span class="co">/* B = 기지 */</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;################&quot;</span><span class="op">,</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">const</span> <span class="dt">int</span> DX<span class="op">[</span><span class="dv">4</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">1</span> <span class="op">};</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">const</span> <span class="dt">int</span> DY<span class="op">[</span><span class="dv">4</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span> <span class="op">};</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> visited<span class="op">[</span>H<span class="op">][</span>W<span class="op">];</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> stackX<span class="op">[</span>H <span class="op">*</span> W<span class="op">],</span> stackY<span class="op">[</span>H <span class="op">*</span> W<span class="op">],</span> sp <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> sx <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> sy <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>    memset<span class="op">(</span>visited<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>visited<span class="op">));</span></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> y <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> y <span class="op">&lt;</span> H<span class="op">;</span> y<span class="op">++)</span></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> x <span class="op">&lt;</span> W<span class="op">;</span> x<span class="op">++)</span></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>field<span class="op">[</span>y<span class="op">][</span>x<span class="op">]</span> <span class="op">==</span> <span class="ch">&#39;S&#39;</span><span class="op">)</span> <span class="op">{</span> sx <span class="op">=</span> x<span class="op">;</span> sy <span class="op">=</span> y<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* --- flood fill (시작칸에서 번지기) --- */</span></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>    stackX<span class="op">[</span>sp<span class="op">]</span> <span class="op">=</span> sx<span class="op">;</span> stackY<span class="op">[</span>sp<span class="op">]</span> <span class="op">=</span> sy<span class="op">;</span> sp<span class="op">++;</span></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>    visited<span class="op">[</span>sy<span class="op">][</span>sx<span class="op">]</span> <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>sp <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> cx <span class="op">=</span> stackX<span class="op">[--</span>sp<span class="op">],</span> cy <span class="op">=</span> stackY<span class="op">[</span>sp<span class="op">];</span></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> d <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> d <span class="op">&lt;</span> <span class="dv">4</span><span class="op">;</span> d<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>            <span class="dt">int</span> nx <span class="op">=</span> cx <span class="op">+</span> DX<span class="op">[</span>d<span class="op">],</span> ny <span class="op">=</span> cy <span class="op">+</span> DY<span class="op">[</span>d<span class="op">];</span></span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>nx <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">||</span> nx <span class="op">&gt;=</span> W <span class="op">||</span> ny <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">||</span> ny <span class="op">&gt;=</span> H<span class="op">)</span> <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>field<span class="op">[</span>ny<span class="op">][</span>nx<span class="op">]</span> <span class="op">==</span> <span class="ch">&#39;#&#39;</span> <span class="op">||</span> visited<span class="op">[</span>ny<span class="op">][</span>nx<span class="op">])</span> <span class="cf">continue</span><span class="op">;</span>   <span class="co">/* 벽·방문 제외 */</span></span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a>            visited<span class="op">[</span>ny<span class="op">][</span>nx<span class="op">]</span> <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>            stackX<span class="op">[</span>sp<span class="op">]</span> <span class="op">=</span> nx<span class="op">;</span> stackY<span class="op">[</span>sp<span class="op">]</span> <span class="op">=</span> ny<span class="op">;</span> sp<span class="op">++;</span></span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* --- 도달 영역 표시 + 연결성 판정 --- */</span></span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> allConnected <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> y <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> y <span class="op">&lt;</span> H<span class="op">;</span> y<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;  &quot;</span><span class="op">);</span></span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> x <span class="op">&lt;</span> W<span class="op">;</span> x<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a>            <span class="dt">char</span> c <span class="op">=</span> field<span class="op">[</span>y<span class="op">][</span>x<span class="op">];</span></span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">((</span>c <span class="op">==</span> <span class="ch">&#39;X&#39;</span> <span class="op">||</span> c <span class="op">==</span> <span class="ch">&#39;B&#39;</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="op">!</span>visited<span class="op">[</span>y<span class="op">][</span>x<span class="op">])</span> allConnected <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">/* 고립! */</span></span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a>            <span class="co">/* 도달 가능한 통로는 소문자로 표시 */</span></span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>visited<span class="op">[</span>y<span class="op">][</span>x<span class="op">]</span> <span class="op">&amp;&amp;</span> c <span class="op">==</span> <span class="ch">&#39;.&#39;</span><span class="op">)</span> c <span class="op">=</span> <span class="ch">&#39;o&#39;</span><span class="op">;</span></span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%c</span><span class="st">&quot;</span><span class="op">,</span> c<span class="op">);</span></span>
+<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&gt;&gt; </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> allConnected</span>
+<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a>        <span class="op">?</span> <span class="st">&quot;모든 스폰/기지가 연결됨 — 유효한 전장!&quot;</span></span>
+<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a>        <span class="op">:</span> <span class="st">&quot;고립된 지점 발견 — 재생성 필요!&quot;</span><span class="op">);</span></span>
+<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>빌드:</strong> <code>cl flood.c</code> (MSVC) 또는
+<code>gcc flood.c -o flood</code></p>
+<p><strong>함정/체크포인트</strong></p>
+<ul>
+<li><strong>flood fill = BFS/DFS의 사촌.</strong> 스택으로 꺼내면
+DFS(깊이), 큐로 꺼내면 BFS(너비)지만, "연결 영역을 채운다"는 목적엔 어느
+쪽이든 결과가 같다. 여기선 스택(DFS)을 썼다 — 6단계의 <code>bfs.c</code>
+와 비교해 보자.</li>
+<li><strong>벽 안에 갇힌 <code>X</code> 를 찾아라.</strong> 맵의
+<code>X</code>(스폰) 하나를 벽으로 완전히 둘러싸면, flood fill이 거기 못
+닿아 <code>allConnected = 0</code> 이 된다. 이것이 Battle City가 "성립
+불가 맵"을 걸러내는 방식이다.</li>
+<li><strong><code>visited</code> 표시는 스택에 넣을 때.</strong> 꺼낼 때
+표시하면 같은 칸이 스택에 여러 번 들어가 중복된다(<code>bfs.c</code> 와
+같은 주의).</li>
+</ul>
+<p><strong>확장 과제</strong></p>
+<ul>
+<li>고립된 지점을 찾으면, 시작칸 쪽으로 벽을 뚫는
+<code>CarveConnectivity</code> 를 구현해 보자(개념 3) — 그러면 Battle
+City의 실제 검증-보정 로직이 완성된다.</li>
+<li>스택을 큐로 바꿔 BFS로 만들면, 각 칸의 "시작칸으로부터의 거리"도
+함께 얻을 수 있다.</li>
+</ul>
+</details>
+
+<hr />
+<h2 id="이-단계를-마치며">이 단계를 마치며</h2>
+<table>
+<thead>
+<tr>
+<th>얻은 것</th>
+<th>그 뿌리</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>두 기술 축의 결합</td>
+<td>5단계 풀 + 6단계 생성</td>
+</tr>
+<tr>
+<td>절차적 전장 + 연결성 검증</td>
+<td>6단계 Maze flood fill</td>
+</tr>
+<tr>
+<td>파괴 지형(타일 상호작용)</td>
+<td>이 게임의 새 요소</td>
+</tr>
+<tr>
+<td>기지 방어·적 AI·파워업</td>
+<td>4단계 시스템·타이머의 집대성</td>
+</tr>
+</tbody>
+</table>
+<p>Battle City로 우리는 이 책이 쌓아 온 모든 것을 하나로 조립했다.
+절차적 맵 위에서 풀링된 오브젝트가 싸우고, 지형이 부서지고, 적이 기지를
+노리고, 플레이어가 그것을 지킨다. <strong>새 기법을 배우기보다, 배운
+것을 엮어 완결된 게임을 만드는 것</strong> — 그것이 졸업 과제의
+의미였다.</p>
+<hr />
+<p>커리큘럼의 일곱 단계는 여기서 끝난다. 하지만 이 프레임워크로 지을 수
+있는 게임이 하나 더 남아 있다 — 다음 <strong>확장 챕터</strong>에서,
+유령 넷이 쫓아오는 고전 <strong>Pac-Man</strong>을 만들며 격자 위 추적
+AI와 상태머신을 다루고, 그 끝에서 이 책의 두 여정을 함께 돌아본다.</p>
+<blockquote>
+<p><strong>← 이전:</strong> <a href="Part2_07.html">6단계 · Maze —
+알고리즘 심화</a> | <strong>다음 →</strong> <a href="Part2_09.html">확장 ·
+Pac-Man — 유령 AI와 상태머신</a></p>
+</blockquote>
+  </article>
+</main>
+<footer class="site-footer">
+  <a href="index.html">← 목차로 돌아가기</a>
+  <span>CSGP Learn · 표시용 원고 (코드는 UTF-8 사본)</span>
+</footer>
+<script src="book-nav.js"></script>
+</body>
+</html>

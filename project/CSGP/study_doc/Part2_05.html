@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>번외 · GameDevTycoon 이식 — C에서 C++로</title>
+<script>try{var _t=localStorage.getItem('csgp-theme');if(_t)document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
+<style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<link rel="stylesheet" href="book.css">
+
+</head>
+<body>
+<div class="topbar">
+  <button class="drawer-toggle" id="drawerToggle" type="button" aria-label="목차 열기/닫기" aria-expanded="false">☰ 목차</button>
+  <a class="home" href="index.html">📘 CSGP</a>
+  <span class="crumb">콘솔 게임으로 배우는 C · C++</span>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="라이트/다크 전환">🌙</button>
+</div>
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" aria-label="책 목차">
+  <div class="drawer-dash">
+    <div class="dash-title">콘솔 게임으로 배우는 C · C++</div>
+    <div class="dash-sub">학습 목차 · 대시보드</div>
+    <div class="dash-progress"><div class="dash-bar"><i id="dashBar"></i></div><span class="dash-pct" id="dashPct"></span></div>
+    <input class="drawer-search" id="drawerSearch" type="search" placeholder="🔍 챕터 검색…" aria-label="챕터 검색">
+  </div>
+  <nav class="booknav" aria-label="책 목차"><a class="booknav-home" href="index.html">📘 전체 목차</a><ul class="booknav-list"><li class="grp">1부 · C 기본 문법</li><li><a href="Part1_00.html" title="1부 — C 기본 문법: 회사를 키우며 배우는 언어">1부 개요</a></li><li><a href="Part1_01.html" title="A 모듈 · 1–4장 — 값·계산·분기: 회사에 숫자를 세우다">A · 값·계산·분기</a></li><li><a href="Part1_02.html" title="B 모듈 · 5–6장 — 반복문과 함수: 회사에 심장을 달다">B · 반복문·함수</a></li><li><a href="Part1_03.html" title="C 모듈 · 7–8장 — 배열과 문자열: 회사에 사람과 이름을 채우다">C · 배열·문자열</a></li><li><a href="Part1_04.html" title="D 모듈 · 9–10장 — 구조체와 포인터: 데이터에 모양을 주다">D · 구조체·포인터</a></li><li><a href="Part1_05.html" title="E 모듈 · 11–12장 — 동적 메모리와 랜덤: 회사가 자라고, 시장이 살아난다">E · 메모리·랜덤</a></li><li><a href="Part1_06.html" title="F 모듈 · 13–15장 — 파일·모듈·캡스톤: 회사를 저장하고, 게임을 출시하다">F · 파일·모듈·캡스톤</a></li><li class="grp">2부 · C++ 프레임워크</li><li><a href="Part2_00.html" title="2부 — C++ 콘솔 게임 프레임워크: 7개의 게임으로 오르기">2부 개요</a></li><li><a href="Part2_01.html" title="1단계 · Snake — 자료구조·충돌·상태머신">1단계 · Snake</a></li><li><a href="Part2_02.html" title="2단계 · Tetris — 알고리즘과 그리드">2단계 · Tetris</a></li><li><a href="Part2_03.html" title="3단계 · Dino — 물리와 스크롤">3단계 · Dino</a></li><li><a href="Part2_04.html" title="4단계 · Road Fighter — 엔티티 시스템과 리소스">4단계 · Road Fighter</a></li><li class="active"><a href="Part2_05.html" title="번외 · GameDevTycoon 이식 — C에서 C++로">번외 · Tycoon 이식</a><ul class="sections">
+<li><a href="#이-챕터의-학습-목표" id="toc-이-챕터의-학습-목표">이
+챕터의 학습 목표</a></li>
+<li><a href="#왜-이-이식인가" id="toc-왜-이-이식인가">왜 이
+이식인가</a></li>
+<li><a href="#개념-1--회사가-클래스가-되다--구조체--전역--멤버"
+id="toc-개념-1--회사가-클래스가-되다--구조체--전역--멤버">개념 1 ·
+회사가 클래스가 되다 — 구조체 + 전역 → 멤버</a></li>
+<li><a href="#개념-2--char--stdstring"
+id="toc-개념-2--char--stdstring">개념 2 · <code>char[]</code> →
+<code>std::string</code></a></li>
+<li><a href="#개념-3--mallocrealloc고정-배열--stdvector"
+id="toc-개념-3--mallocrealloc고정-배열--stdvector">개념 3 ·
+<code>malloc</code>/<code>realloc</code>/고정 배열 →
+<code>std::vector</code></a></li>
+<li><a href="#개념-4--define--static-const-enum--enum-class"
+id="toc-개념-4--define--static-const-enum--enum-class">개념 4 ·
+<code>#define</code> → <code>static const</code>, <code>enum</code> →
+<code>enum class</code></a></li>
+<li><a href="#개념-5--턴제를-실시간-프레임워크에--커서-메뉴--상태머신"
+id="toc-개념-5--턴제를-실시간-프레임워크에--커서-메뉴--상태머신">개념 5
+· 턴제를 실시간 프레임워크에 — 커서 메뉴 + 상태머신</a></li>
+<li><a href="#개념-6--월-처리--같은-로직-이제-메서드"
+id="toc-개념-6--월-처리--같은-로직-이제-메서드">개념 6 · 월 처리 — 같은
+로직, 이제 메서드</a></li>
+<li><a href="#코드-워크스루--이식의-지도"
+id="toc-코드-워크스루--이식의-지도">코드 워크스루 — 이식의 지도</a></li>
+<li><a href="#그림으로-정리--c의-회사와-c의-회사"
+id="toc-그림으로-정리--c의-회사와-c의-회사">그림으로 정리 — C의 회사와
+C++의 회사</a></li>
+<li><a href="#체크포인트--스스로-점검하기"
+id="toc-체크포인트--스스로-점검하기">체크포인트 — 스스로
+점검하기</a></li>
+<li><a href="#실습-미션--미니-명부를-c에서-c로-rostercpp-star"
+id="toc-실습-미션--미니-명부를-c에서-c로-rostercpp-star">실습 미션 —
+미니 명부를 C에서 C++로 <code>roster.cpp</code> ⭐</a></li>
+<li><a href="#이-챕터를-마치며" id="toc-이-챕터를-마치며">이 챕터를
+마치며</a></li>
+</ul></li><li><a href="Part2_06.html" title="5단계 · Galaga — 오브젝트 풀링">5단계 · Galaga</a></li><li><a href="Part2_07.html" title="6단계 · Maze — 알고리즘 심화 (생성 + 탐색)">6단계 · Maze</a></li><li><a href="Part2_08.html" title="7단계 · Battle City — 종합 캡스톤 (맵 생성 + 풀링)">7단계 · Battle City</a></li><li><a href="Part2_09.html" title="확장 · Pac-Man — 유령 AI와 상태머신">확장 · Pac-Man</a></li><li class="grp">부록</li><li><a href="Appendix.html" title="부록 — 용어집 · 핵심 이슈 · 요약">부록</a></li></ul></nav>
+</aside>
+<main class="reader">
+  <article class="page">
+<h1 id="번외--gamedevtycoon-이식--c에서-c로">번외 · GameDevTycoon 이식 —
+C에서 C++로</h1>
+<div class="chapter-badge">
+
+<p><strong>번외 · 다리(Bridge)</strong> · 게임 <code>Tycoon</code> · 씬
+클래스 <code>TycoonContent : public IGameContent</code> <strong>처음
+배우는 기술</strong> — <code>구조체+전역 → 클래스 멤버</code>
+<code>char[] → std::string</code>
+<code>malloc/realloc/고정 배열 → std::vector</code>
+<code>#define → static const</code> <code>enum → enum class</code>
+<code>전역 함수(Company *c) → 메서드</code>
+<code>턴제를 실시간 프레임워크에(커서 메뉴 + 상태머신)</code>
+<strong>예상 학습 시간</strong> — 3–5시간</p>
+</div>
+
+<blockquote>
+<p>1부에서 우리는 게임 회사 운영 게임을 <strong>C로</strong> 처음부터
+끝까지 만들었다. 2부에서는 그 위에 <strong>C++와 프레임워크</strong>를
+배웠다. 이 번외 챕터는 두 부를 잇는 다리다 — <strong>1부의 그 게임을,
+2부의 프레임워크 위에 C++ 씬으로 다시 짓는다.</strong> 구조체는 클래스가
+되고, <code>char[]</code> 는 <code>std::string</code>,
+<code>malloc</code>/<code>realloc</code> 은 <code>std::vector</code>,
+<code>Company *c</code> 를 넘기던 함수는 메서드가 된다. 새 게임을 배우는
+게 아니라, <strong>이미 아는 게임을 새 언어로 다시 쓰며</strong> C→C++
+리팩터링을 온몸으로 겪는 장이다. 그리고 이 게임은 2부에서 유일한
+<strong>턴제 게임</strong>이라, "실시간 프레임워크가 턴제도 담을 수
+있는가"라는 물음의 답이기도 하다.</p>
+</blockquote>
+<h2 id="이-챕터의-학습-목표">이 챕터의 학습 목표</h2>
+<p>이 챕터를 마치면 다음을 할 수 있다.</p>
+<ol type="1">
+<li>C의 <strong>구조체 + 전역 변수 + <code>Company *c</code>
+전달</strong>을, C++의 <strong>클래스 멤버 + 메서드</strong>로 옮길 수
+있다.</li>
+<li><code>char name[20]</code> 을
+<strong><code>std::string</code></strong> 으로,
+<code>snprintf</code>/<code>strcpy</code> 를 <strong><code>+</code>
+연결</strong>로 바꿀 수 있다.</li>
+<li><code>malloc</code>/<code>realloc</code>/고정 배열 + 수동 당기기를
+<strong><code>std::vector</code></strong> 의
+<code>push_back</code>/<code>erase</code>/<code>size()</code> 로 바꿀 수
+있다.</li>
+<li><code>#define</code> 상수를
+<strong><code>static const</code></strong> 로, <code>enum</code> 을
+<strong><code>enum class</code></strong> 로 승격할 수 있다.</li>
+<li><strong>블로킹 <code>scanf</code> 없는 턴제</strong> 를 커서 메뉴 +
+내부 상태머신(<code>_EVIEW</code>)으로 구현할 수 있다.</li>
+<li>C→C++ 이식이 왜 "종합 복습"인지 — 1부의 데이터·2부의 문법이
+한자리에서 만나는지 이해한다.</li>
+</ol>
+<h2 id="왜-이-이식인가">왜 이 이식인가</h2>
+<p>새 게임을 하나 더 배우는 대신, 왜 <strong>이미 만든 게임을
+다시</strong> 만들까?</p>
+<p>프로그래밍에서 가장 확실한 학습은 <strong>아는 것을 다른 방식으로
+다시 해 보는 것</strong>이다. 1부의 타이쿤은 우리가 로직을 속속들이 아는
+게임이다 — 자본금이 어떻게 도는지, 직원을 어떻게 고용하는지, 평점을
+어떻게 매기는지. 그 <strong>로직은 그대로 두고 언어의 옷만
+갈아입히면</strong>, C와 C++의 차이가 선명하게 드러난다. 게임 규칙에
+정신을 뺏기지 않고, 오직 "이 C 코드가 C++에서 어떻게 더 나아지는가"에만
+집중할 수 있다.</p>
+<p>그리고 이 이식은 <strong>1부의 고비들이 C++에서 얼마나
+편해지는지</strong> 보여 주는 보상이기도 하다.</p>
+<ul>
+<li>1부 C 모듈의 <strong>병렬 배열 지옥</strong>(직원 하나에 배열 다섯
+개) → C++에선 <code>std::vector&lt;Staff&gt;</code> 하나.</li>
+<li>1부 D 모듈의 <strong><code>Company *c</code> 를 모든 함수에
+넘기기</strong> → C++에선 클래스가 곧 회사, 메서드가 멤버에 바로
+접근.</li>
+<li>1부 E 모듈의 <strong><code>malloc</code>/<code>realloc</code> 로
+직원 배열 키우기</strong> → C++에선 <code>push_back</code> 이
+알아서.</li>
+<li>1부의 <strong><code>snprintf</code>/<code>strcpy</code> 문자열
+다루기</strong> → C++에선 <code>"* [" + name + "] 해고"</code> 한
+줄.</li>
+</ul>
+<p><strong>우리가 1부에서 겪은 불편들이, 여기서 하나씩
+사라진다.</strong> 그것이 C++가 C 위에 얹은 편의의 정체다.</p>
+<blockquote>
+<p><strong>왜 여기(Road Fighter 뒤·Galaga 앞)인가.</strong> Road
+Fighter까지 우리는 실시간 시스템 설계를 익혔고, 곧이어 Galaga·Maze에서
+성능·알고리즘이라는 엔지니어링으로 들어간다. 그 사이에
+<strong>데이터·경제 게임인 타이쿤을 C++로 리팩터링</strong>하며 잠깐
+숨을 고른다. 실시간 액션이 아닌 턴제·데이터 게임이라, "프레임워크는
+실시간만을 위한 게 아니다"라는 사실도 확인한다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-1--회사가-클래스가-되다--구조체--전역--멤버">개념 1 ·
+회사가 클래스가 되다 — 구조체 + 전역 → 멤버</h2>
+<p>1부의 타이쿤은 게임의 모든 상태를 <code>Company</code> 구조체 하나에
+담고, <strong>그 구조체의 주소(<code>Company *c</code>)를 모든 함수에
+넘겼다</strong>(D 모듈의 핵심). C++ 이식의 첫걸음은 이 발상을 뒤집는
+것이다 — <strong>회사 그 자체가 클래스가 되고, 게임 상태는 그 클래스의
+멤버 변수가 된다.</strong></p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 2부 C++ — TycoonContent.h : 회사가 곧 씬 클래스</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TycoonContent <span class="op">:</span> <span class="kw">public</span> IGameContent</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> money <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> fame <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>          <span class="co">// 1부의 c-&gt;money, c-&gt;fame</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> year <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> month <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> trend <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>Staff<span class="op">&gt;</span>   staffList<span class="op">;</span>    <span class="co">// 1부의 Employee *staff (개념 3)</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>Staff<span class="op">&gt;</span>   applicants<span class="op">;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    Project              proj<span class="op">;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>Release<span class="op">&gt;</span> shelf<span class="op">;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    _EENDING ending <span class="op">=</span> _EENDING<span class="op">::</span>NONE<span class="op">;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> bestRating <span class="op">=</span> <span class="fl">0.0</span><span class="bu">f</span><span class="op">;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>1부에서 <code>Company</code> 구조체의 멤버였던 것들이, 이제
+<code>TycoonContent</code> <strong>클래스의 멤버</strong>가 되었다.
+차이는 결정적이다 — 1부에선 함수가 회사를 만지려면
+<code>Company *c</code> 를 인자로 받아야 했지만, C++에선
+<strong>메서드가 같은 클래스의 멤버에 그냥 접근</strong>한다.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* 1부 C — 회사의 주소를 넘겨받아야 만질 수 있다 */</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> TotalSalary<span class="op">(</span><span class="dt">const</span> Company <span class="op">*</span>c<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> sum <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> c<span class="op">-&gt;</span>staffCount<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        sum <span class="op">+=</span> c<span class="op">-&gt;</span>staff<span class="op">[</span>i<span class="op">].</span>salary<span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sum<span class="op">;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 2부 C++ — c-&gt; 가 사라진다. 메서드는 자기 클래스의 멤버를 바로 본다</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> TycoonContent<span class="op">::</span>TotalSalary<span class="op">()</span> <span class="at">const</span> <span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> sum <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">size_t</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> staffList<span class="op">.</span>size<span class="op">();</span> i<span class="op">++)</span>   <span class="co">// c-&gt;staff → staffList (멤버)</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        sum <span class="op">+=</span> staffList<span class="op">[</span>i<span class="op">].</span>salary<span class="op">;</span>                 <span class="co">// c-&gt; 없이 직접</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sum<span class="op">;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>const Company *c</code> 인자가 사라지고,
+<code>c-&gt;staff</code> 가 그냥 <code>staffList</code> 가 됐다.
+<strong>1부 D 모듈에서 그토록 공들여 배운 "포인터로 회사를 넘기기"가,
+C++에선 클래스라는 문법에 흡수되어 보이지 않게 된다.</strong> 메서드는
+암묵적으로 자기 객체(<code>this</code>)를 알기 때문이다. 포인터 전달의
+수고를 몸으로 겪은 사람만이, 이 사라짐의 편안함을 안다.</p>
+<hr />
+<h2 id="개념-2--char--stdstring">개념 2 · <code>char[]</code> →
+<code>std::string</code></h2>
+<p>1부에서 직원 이름은 <code>char name[20]</code> 이었다. 문자열을
+복사하려면 <code>strcpy</code>, 만들려면 <code>snprintf</code>, 크기는
+늘 신경 써야 했고(글자수+1), 공백·널 종료의 함정이 도사렸다(C 모듈).
+C++의 <code>std::string</code> 은 이 모든 것을 지운다.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Staff <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>string name<span class="op">;</span>     <span class="co">// 1부: char name[20]  →  이제 길이 걱정 없음</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> dev<span class="op">,</span> cre<span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> salary<span class="op">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> months<span class="op">;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>문자열을 <strong>만들고 잇는</strong> 것도 <code>+</code> 연산자
+하나로 끝난다. 1부의 <code>snprintf(buf, ...)</code> 가 사라진다.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* 1부 C — 버퍼 잡고 snprintf */</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> label<span class="op">[</span><span class="dv">64</span><span class="op">];</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>snprintf<span class="op">(</span>label<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>label<span class="op">),</span> <span class="st">&quot;판매 수익 </span><span class="sc">\&quot;%s\&quot;</span><span class="st">&quot;</span><span class="op">,</span> r<span class="op">-&gt;</span>title<span class="op">);</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 2부 C++ — string + string, 버퍼도 크기도 없다</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>uiMsg <span class="op">=</span> <span class="st">&quot;* [&quot;</span> <span class="op">+</span> staffList<span class="op">[</span>staffCursor<span class="op">].</span>name <span class="op">+</span> <span class="st">&quot;] 해고 (퇴직금 지급)&quot;</span><span class="op">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>reportMsgs<span class="op">.</span>push_back<span class="op">(</span><span class="st">&quot;[이벤트] &quot;</span> <span class="op">+</span> s<span class="op">.</span>name <span class="op">+</span> <span class="st">&quot; 월급 인상 수락 (&quot;</span> <span class="op">+</span> MoneyText<span class="op">(</span>s<span class="op">.</span>salary<span class="op">)</span> <span class="op">+</span> <span class="st">&quot;만원)&quot;</span><span class="op">);</span></span></code></pre></div>
+<p><code>"* [" + name + "] 해고"</code> — 문자열 리터럴과
+<code>std::string</code> 을 <code>+</code> 로 잇는다. 버퍼
+크기(<code>char[64]</code>)도, <code>snprintf</code> 의 서식도, 널
+종료도 신경 쓰지 않는다. <strong><code>std::string</code> 이 길이를
+스스로 관리</strong>하기 때문이다. 1부 C 모듈에서 문자열이
+"<code>char</code> 배열 + <code>'\0'</code>"이라 성가셨던 그 모든 것이,
+여기선 그냥 값처럼 다뤄진다.</p>
+<blockquote>
+<p><strong><code>MoneyText</code> — 1부 <code>MoneyStr</code> 의 C++
+버전.</strong> 1부에선 3자리 콤마를 <code>char buf[]</code> 에 채우는
+<code>MoneyStr(v, buf, size)</code> 였다(B 모듈). C++ 이식에선
+<code>std::string MoneyText(int v)</code> — <strong>결과를 문자열로
+반환</strong>한다. 호출부도 <code>MoneyText(cost)</code> 처럼 값으로
+받아 바로 <code>+</code> 로 잇는다. 반환값이 문자열이 되니, 버퍼를
+넘겨받던 번거로움이 사라진다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-3--mallocrealloc고정-배열--stdvector">개념 3 ·
+<code>malloc</code>/<code>realloc</code>/고정 배열 →
+<code>std::vector</code></h2>
+<p>여기가 이식의 하이라이트다. 1부에서 직원 목록은 가장 큰 골칫거리였다
+— C 모듈에선 <strong>병렬 배열 다섯 개</strong>, D 모듈에서 구조체
+배열로 묶고, E 모듈에서 <strong><code>malloc</code>/<code>realloc</code>
+로 크기를 키웠다.</strong> 고용은 용량 확인 후 확장, 해고는 배열을 한
+칸씩 당기기. C++의 <code>std::vector</code> 는 이 모두를 삼킨다.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span>Staff<span class="op">&gt;</span> staffList<span class="op">;</span>   <span class="co">// 1부: Employee *staff + staffCount + staffCap + malloc/realloc</span></span></code></pre></div>
+<p><strong>고용</strong> — 1부에선 <code>staffCount == staffCap</code>
+이면 <code>realloc</code> 로 2배 확장한 뒤 넣었다(E 모듈). C++에선
+<code>push_back</code> 한 줄. 벡터가 알아서 커진다.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* 1부 C — 꽉 차면 직접 realloc 로 확장 (E 모듈) */</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>c<span class="op">-&gt;</span>staffCount <span class="op">==</span> c<span class="op">-&gt;</span>staffCap<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    Employee <span class="op">*</span>tmp <span class="op">=</span> realloc<span class="op">(</span>c<span class="op">-&gt;</span>staff<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>Employee<span class="op">)</span> <span class="op">*</span> c<span class="op">-&gt;</span>staffCap <span class="op">*</span> <span class="dv">2</span><span class="op">);</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>tmp <span class="op">==</span> NULL<span class="op">)</span> <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    c<span class="op">-&gt;</span>staff <span class="op">=</span> tmp<span class="op">;</span> c<span class="op">-&gt;</span>staffCap <span class="op">*=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>c<span class="op">-&gt;</span>staff<span class="op">[</span>c<span class="op">-&gt;</span>staffCount<span class="op">++]</span> <span class="op">=</span> <span class="op">*</span>e<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 2부 C++ — 한 줄. 크기 관리·재할당·복사를 vector 가 알아서</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>staffList<span class="op">.</span>push_back<span class="op">(</span>applicants<span class="op">[</span>ai<span class="op">]);</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>applicants<span class="op">.</span>erase<span class="op">(</span>applicants<span class="op">.</span>begin<span class="op">()</span> <span class="op">+</span> ai<span class="op">);</span>   <span class="co">// 지원자 목록에서 제거도 한 줄</span></span></code></pre></div>
+<p><strong>해고</strong> — 1부의 가장 아팠던 코드. C 모듈에선 병렬 배열
+다섯 개를 각각 당겼고, D 모듈에서 구조체 덕에
+<code>c-&gt;staff[i]=c-&gt;staff[i+1]</code> 로 줄었지만 여전히 수동
+반복이었다(<code>QuitEmployee</code>). C++에선 <code>erase</code> 한
+줄.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* 1부 C — 뒤 직원을 한 칸씩 당기기 (D 모듈 QuitEmployee) */</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> QuitEmployee<span class="op">(</span>Company <span class="op">*</span>c<span class="op">,</span> <span class="dt">int</span> idx<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> idx<span class="op">;</span> i <span class="op">&lt;</span> c<span class="op">-&gt;</span>staffCount <span class="op">-</span> <span class="dv">1</span><span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>        c<span class="op">-&gt;</span>staff<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> c<span class="op">-&gt;</span>staff<span class="op">[</span>i <span class="op">+</span> <span class="dv">1</span><span class="op">];</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    c<span class="op">-&gt;</span>staffCount<span class="op">--;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 2부 C++ — 한 줄. 당기기·크기 감소를 vector 가 처리</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>staffList<span class="op">.</span>erase<span class="op">(</span>staffList<span class="op">.</span>begin<span class="op">()</span> <span class="op">+</span> staffCursor<span class="op">);</span></span></code></pre></div>
+<p><code>erase(begin() + idx)</code> — "idx 번째를 지우고 뒤를 당겨라"가
+한 줄이다. 크기(<code>staffCount</code>)도 벡터가 스스로 줄인다. 순회는
+<code>size()</code> 로.</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">size_t</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> staffList<span class="op">.</span>size<span class="op">();</span> i<span class="op">++)</span>   <span class="co">// 1부: i &lt; c-&gt;staffCount</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    staffList<span class="op">[</span>i<span class="op">].</span>months<span class="op">++;</span>                       <span class="co">// 근속 +1</span></span></code></pre></div>
+<p><strong>1부 C·D·E 모듈에서 세 장에 걸쳐 씨름한 직원 배열 관리가,
+<code>std::vector</code> 하나로 압축된다.</strong>
+<code>staffCount</code>(현재 수)와 <code>staffCap</code>(용량)이라는 두
+변수가 사라지고,
+<code>push_back</code>·<code>erase</code>·<code>size()</code> 세
+메서드가 그 일을 대신한다. 이것이 C++ 표준 라이브러리(STL)의 힘이다 —
+<strong>자주 필요한 자료구조를, 검증된 구현으로 제공한다.</strong></p>
+<blockquote>
+<p><strong>1부의 복선이 여기서 회수된다.</strong> Snake(1단계)에서
+<code>vector&lt;Snake*&gt;</code> 로 벡터를 처음 만났고,
+Tetris·Dino·Road Fighter에서 값 타입 벡터를 썼다. 그
+<code>std::vector</code> 가, 1부의
+<code>malloc</code>/<code>realloc</code> 자리에 정확히 들어앉는다.
+<strong>"1부의 동적 배열 = 2부의 vector"</strong> — 두 부를 잇는 가장
+굵은 실이다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-4--define--static-const-enum--enum-class">개념 4 ·
+<code>#define</code> → <code>static const</code>, <code>enum</code> →
+<code>enum class</code></h2>
+<p>작지만 의미 있는 승격이 둘 있다.</p>
+<p><strong>밸런스 상수: <code>#define</code> →
+<code>static const</code>.</strong> 1부 F 모듈에서 밸런스를
+<code>#define</code> 으로 모았다. C++에선 <strong>타입이 있는 클래스
+상수</strong>로 둔다.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* 1부 C — 매크로 (타입 없음, 전역) */</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#define START_MONEY </span><span class="dv">5000</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#define OFFICE_RENT </span><span class="dv">100</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 2부 C++ — 타입 있는 클래스 멤버 상수 (스코프 안에)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="at">const</span> <span class="dt">int</span> START_MONEY   <span class="op">=</span> <span class="dv">5000</span><span class="op">;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="at">const</span> <span class="dt">int</span> OFFICE_RENT   <span class="op">=</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="at">const</span> <span class="dt">int</span> SALARY_RATE   <span class="op">=</span> <span class="dv">30</span><span class="op">;</span></span></code></pre></div>
+<p><code>static const int</code> 는 <code>int</code> 라는
+<strong>타입</strong>을 가지며 클래스 스코프 안에 산다(전역을 오염시키지
+않음). 컴파일러가 타입을 확인해 주고, 디버거에서도 보인다 — 매크로의
+단순 치환보다 안전하다.</p>
+<p><strong>열거형: <code>enum</code> → <code>enum class</code>.</strong>
+1부의 <code>enum</code> 은 이름이 전역으로 새어 나갔다. C++의
+<code>enum class</code> 는 <strong>스코프를 가진
+열거형</strong>이다.</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> <span class="kw">class</span> _EVIEW   <span class="op">{</span> MAIN<span class="op">,</span> DEV<span class="op">,</span> STAFF<span class="op">,</span> STATUS<span class="op">,</span> SHELF<span class="op">,</span> EVENT<span class="op">,</span> REPORT<span class="op">,</span> ENDING <span class="op">};</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> <span class="kw">class</span> _EENDING <span class="op">{</span> NONE<span class="op">,</span> BANKRUPT<span class="op">,</span> RICH<span class="op">,</span> MASTERPIECE <span class="op">};</span>   <span class="co">// 1부: enum Ending</span></span></code></pre></div>
+<p><code>enum class</code> 의 값은 <code>_EENDING::BANKRUPT</code> 처럼
+<strong>이름을 앞에 붙여</strong> 쓴다. 그래서 서로 다른 enum이 같은
+이름(<code>NONE</code>)을 써도 충돌하지 않는다. 2부의 모든 씬이
+<code>_EPhase</code>, <code>_EDIRECT</code>, <code>_ESELECT</code>
+등에서 이 <code>enum class</code> 를 쓰는 이유다. 1부 F 모듈의
+<code>enum Ending</code> 이, 여기서 <code>enum class _EENDING</code>
+으로 자란다.</p>
+<hr />
+<h2 id="개념-5--턴제를-실시간-프레임워크에--커서-메뉴--상태머신">개념 5
+· 턴제를 실시간 프레임워크에 — 커서 메뉴 + 상태머신</h2>
+<p>가장 흥미로운 이식 문제가 이것이다. <strong>1부 타이쿤은
+<code>scanf</code> 앞에서 멈춰 사람을 기다리는 턴제 게임</strong>이었다.
+그런데 2부 프레임워크의 게임 루프는 초당 60번 <strong>멈추지
+않고</strong> 돈다(0단계). <code>scanf</code> 로 입력을 기다리면 게임
+루프가 멈춰 버린다. 어떻게 턴제를 실시간 루프 안에 담을까?</p>
+<p>답은 <strong>블로킹을 쓰지 않는 것</strong>이다. 입력을 기다리며
+멈추는 대신, 매 프레임 "지금 무슨 키가 눌렸나"를 폴링하고(0단계 개념 4),
+<strong>화면(뷰) 상태</strong>를 내부 상태머신으로 관리한다. 시간은
+저절로 흐르지 않고, 플레이어가 "다음 달"을 고를 때만 한 달이
+진행된다.</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 인게임 세부 화면 = 상태머신 (1부의 화면=함수를, enum 뷰로)</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> <span class="kw">class</span> _EVIEW <span class="op">{</span> MAIN<span class="op">,</span> DEV<span class="op">,</span> STAFF<span class="op">,</span> STATUS<span class="op">,</span> SHELF<span class="op">,</span> EVENT<span class="op">,</span> REPORT<span class="op">,</span> ENDING <span class="op">};</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>_EVIEW view <span class="op">=</span> _EVIEW<span class="op">::</span>MAIN<span class="op">;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> TycoonContent<span class="op">::</span>OnInGameUpdate<span class="op">()</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... ESC 처리 (뷰에 따라 뒤로/타이틀) ...</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span> <span class="op">(</span>view<span class="op">)</span> <span class="op">{</span>                       <span class="co">// 현재 뷰에 맞는 갱신으로 분기</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> _EVIEW<span class="op">::</span>MAIN<span class="op">:</span>   UpdateMain<span class="op">();</span>   <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> _EVIEW<span class="op">::</span>DEV<span class="op">:</span>    UpdateDev<span class="op">();</span>    <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> _EVIEW<span class="op">::</span>STAFF<span class="op">:</span>  UpdateStaff<span class="op">();</span>  <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> _EVIEW<span class="op">::</span>REPORT<span class="op">:</span> UpdateReport<span class="op">();</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>메인 메뉴는 <strong>커서</strong>로 조작한다 — 1부에서
+<code>scanf("%d", &amp;sel)</code> 로 번호를 받던 것을, 방향키로 커서를
+옮기고 Enter로 확정하는 방식으로 바꾼다(2부 Snake의 타이틀 메뉴와 같은
+패턴).</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> TycoonContent<span class="op">::</span>UpdateMain<span class="op">()</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_UP<span class="op">))</span>   mainCursor <span class="op">=</span> <span class="op">(</span>mainCursor <span class="op">+</span> <span class="dv">5</span><span class="op">)</span> <span class="op">%</span> <span class="dv">6</span><span class="op">;</span>   <span class="co">// 커서 위 (순환)</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_DOWN<span class="op">))</span> mainCursor <span class="op">=</span> <span class="op">(</span>mainCursor <span class="op">+</span> <span class="dv">1</span><span class="op">)</span> <span class="op">%</span> <span class="dv">6</span><span class="op">;</span>   <span class="co">// 커서 아래</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_RETURN<span class="op">))</span> <span class="op">{</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">switch</span> <span class="op">(</span>mainCursor<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">0</span><span class="op">:</span> view <span class="op">=</span> _EVIEW<span class="op">::</span>DEV<span class="op">;</span>   <span class="cf">break</span><span class="op">;</span>   <span class="co">// 게임 개발 화면으로</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">1</span><span class="op">:</span> view <span class="op">=</span> _EVIEW<span class="op">::</span>STAFF<span class="op">;</span> <span class="cf">break</span><span class="op">;</span>   <span class="co">// 직원 관리 화면으로</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">4</span><span class="op">:</span> StartMonth<span class="op">();</span>         <span class="cf">break</span><span class="op">;</span>   <span class="co">// ★ 다음 달 진행 — 이때만 시간이 흐른다</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">5</span><span class="op">:</span> currentPhase <span class="op">=</span> _EPhase<span class="op">::</span>TITLE<span class="op">;</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>핵심은 <code>case 4: StartMonth();</code> 다. <strong>한 달은 저절로
+흐르지 않는다</strong> — 플레이어가 "다음 달 진행"을 고른 그 순간에만
+<code>StartMonth()</code> 가 불려 한 달이 처리된다. 나머지 시간엔 커서를
+움직이고 화면을 오갈 뿐, 게임 상태는 그대로다. 렌더는 매 프레임
+일어나지만(60fps로 현황판을 다시 그림), <strong>상태 변화는
+입력에만</strong> 반응한다. 이것이 "실시간 루프 위의 턴제"다.</p>
+<blockquote>
+<p><strong>1부의 "화면 = 함수"가 2부의 "화면 = 뷰 상태"로.</strong> 1부
+GDD는 타이쿤의 화면 전환을 "함수 호출 구조"(<code>MainMenu()</code> →
+<code>DevMenu()</code> …)로 표현했다. C++ 이식에선 이것이
+<code>_EVIEW</code> <strong>상태머신</strong>이 된다 — <code>view</code>
+변수 하나가 지금 어느 화면인지 담고,
+<code>OnInGameUpdate</code>/<code>OnInGameRender</code> 가 그에 따라
+분기한다. 1부 F 모듈의 <code>gameOver</code>·<code>enum Ending</code>,
+2부 0단계의 <code>_EPhase</code> 로 이어진 "상태를 변수에 담는다"는
+발상이, 여기서 게임 내부 화면 전환까지 확장된다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-6--월-처리--같은-로직-이제-메서드">개념 6 · 월 처리 — 같은
+로직, 이제 메서드</h2>
+<p>게임의 심장인 월 처리는 <strong>1부의 8단계 로직
+그대로</strong>다(GDD §2). 달라진 건 전역 함수
+<code>Func(Company *c)</code> 들이 <code>Company *c</code> 없는 메서드가
+되었다는 것뿐이다.</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> TycoonContent<span class="op">::</span>StartMonth<span class="op">()</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    reportMsgs<span class="op">.</span>clear<span class="op">();</span>  reportMoney<span class="op">.</span>clear<span class="op">();</span>       <span class="co">// std::vector 초기화</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    StepProject<span class="op">();</span>                                  <span class="co">// (1) 개발 진행</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>proj<span class="op">.</span>active <span class="op">&amp;&amp;</span> proj<span class="op">.</span>progress <span class="op">&gt;=</span> proj<span class="op">.</span>need<span class="op">)</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>        DoRelease<span class="op">(</span><span class="kw">false</span><span class="op">);</span>                           <span class="co">// (2) 출시</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    StepSales<span class="op">();</span>                                    <span class="co">// (3) 판매 정산</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    RollApplicants<span class="op">();</span>                               <span class="co">// (4) 지원자</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    StepEvent<span class="op">();</span>                                    <span class="co">//     랜덤 이벤트</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>raiseIdx <span class="op">&gt;=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> view <span class="op">=</span> _EVIEW<span class="op">::</span>EVENT<span class="op">;</span> <span class="cf">return</span><span class="op">;</span> <span class="op">}</span>  <span class="co">// 월급 인상 → 선택 화면</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    FinishMonth<span class="op">();</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> TycoonContent<span class="op">::</span>FinishMonth<span class="op">()</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>month <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> UpdateTrend<span class="op">(</span><span class="kw">true</span><span class="op">);</span>          <span class="co">// 분기마다 유행 재추첨</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> sal <span class="op">=</span> TotalSalary<span class="op">();</span>                        <span class="co">// (5) 지출</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... reportMoney 에 월급·임대료 추가 ...</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">size_t</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> staffList<span class="op">.</span>size<span class="op">();</span> i<span class="op">++)</span>   <span class="co">// 근속 +1 (vector 순회)</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>        staffList<span class="op">[</span>i<span class="op">].</span>months<span class="op">++;</span></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>    money <span class="op">+=</span> net<span class="op">;</span>                                   <span class="co">// (6) 자본금 반영 (멤버 직접)</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>    CheckEnding<span class="op">();</span>                                  <span class="co">// (7) 파산/승리 판정</span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>    month<span class="op">++;</span>                                        <span class="co">// (8) 달력</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>month <span class="op">&gt;</span> <span class="dv">12</span><span class="op">)</span> <span class="op">{</span> month <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> year<span class="op">++;</span> <span class="op">}</span></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>    view <span class="op">=</span> _EVIEW<span class="op">::</span>REPORT<span class="op">;</span>                          <span class="co">// 결산 화면으로</span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>StepProject()</code>, <code>DoRelease()</code>,
+<code>TotalSalary()</code>, <code>CheckEnding()</code> — 1부에서
+<code>ProgressProject(c)</code>, <code>ReleaseNow(c,...)</code>,
+<code>TotalSalary(c)</code>, <code>CheckEnding(c)</code> 였던 것들이다.
+<strong>함수 이름과 로직은 거의 그대로, <code>Company *c</code> 인자만
+사라졌다.</strong> 그리고 <code>c-&gt;money += net</code> 이
+<code>money += net</code> 으로, <code>c-&gt;staffCount</code> 가
+<code>staffList.size()</code> 로 바뀌었다.</p>
+<p><code>StepProject</code> 안을 1부와 나란히 두면 대응이 선명하다.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* 1부 C */</span>                          <span class="co">// 2부 C++</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> ProgressProject<span class="op">(</span>Company <span class="op">*</span>c<span class="op">)</span> <span class="op">{</span>   <span class="dt">void</span> TycoonContent<span class="op">::</span>StepProject<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    Project <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>c<span class="op">-&gt;</span>proj<span class="op">;</span>               <span class="cf">if</span> <span class="op">(!</span>proj<span class="op">.</span>active<span class="op">)</span> <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>p<span class="op">-&gt;</span>active<span class="op">)</span> <span class="cf">return</span><span class="op">;</span>              proj<span class="op">.</span>progress <span class="op">+=</span> BASE_PROGRESS <span class="op">+</span> DevSum<span class="op">();</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    p<span class="op">-&gt;</span>progress <span class="op">+=</span> BASE_PROGRESS         proj<span class="op">.</span>quality  <span class="op">+=</span> DevSum<span class="op">();</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">+</span> DevSum<span class="op">(</span>c<span class="op">);</span>                     proj<span class="op">.</span>fun      <span class="op">+=</span> CreSum<span class="op">()</span> <span class="op">+</span> rand<span class="op">()</span> <span class="op">%</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* ... */</span>                            proj<span class="op">.</span>devMonths<span class="op">++;</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span>                                    <span class="op">}</span></span></code></pre></div>
+<p><code>p-&gt;</code>(포인터)가 <code>proj.</code>(멤버)로,
+<code>DevSum(c)</code> 가 <code>DevSum()</code> 으로. <strong>로직은 한
+줄도 다르지 않다</strong> — 오직 "회사에 어떻게 닿느냐"만 C의 포인터
+전달에서 C++의 멤버 접근으로 바뀌었다.</p>
+<hr />
+<h2 id="코드-워크스루--이식의-지도">코드 워크스루 — 이식의 지도</h2>
+<p>1부의 C 코드와 2부의 C++ 코드가 어디서 어떻게 대응되는지, 한 장의
+지도로 본다.</p>
+<blockquote>
+<p><strong>실제 파일:</strong>
+<code>Main/Content/TycoonContent.{h,cpp}</code> (C++ 이식) ↔︎
+<code>Study/Tycoon/*.c</code> (1부 C 원본)</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>1부 C (<code>Study/Tycoon/</code>)</th>
+<th>2부 C++ (<code>TycoonContent</code>)</th>
+<th>무엇이 바뀌었나</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>struct Company { … }</code> + 전역</td>
+<td>클래스 멤버 변수</td>
+<td>회사 = 클래스 (개념 1)</td>
+</tr>
+<tr>
+<td><code>Func(Company *c)</code></td>
+<td><code>TycoonContent::Func()</code></td>
+<td><code>c-&gt;</code> → 멤버 직접 (개념 1·6)</td>
+</tr>
+<tr>
+<td><code>char name[20]</code></td>
+<td><code>std::string name</code></td>
+<td>길이 관리 자동 (개념 2)</td>
+</tr>
+<tr>
+<td><code>snprintf</code>/<code>strcpy</code></td>
+<td><code>"a" + str + "b"</code></td>
+<td><code>+</code> 연결 (개념 2)</td>
+</tr>
+<tr>
+<td><code>Employee *staff</code> +
+<code>malloc</code>/<code>realloc</code></td>
+<td><code>std::vector&lt;Staff&gt;</code></td>
+<td><code>push_back</code>/<code>erase</code> (개념 3)</td>
+</tr>
+<tr>
+<td><code>c-&gt;staffCount</code></td>
+<td><code>staffList.size()</code></td>
+<td>크기 자동 (개념 3)</td>
+</tr>
+<tr>
+<td><code>#define START_MONEY</code></td>
+<td><code>static const int</code></td>
+<td>타입·스코프 (개념 4)</td>
+</tr>
+<tr>
+<td><code>enum Ending</code></td>
+<td><code>enum class _EENDING</code></td>
+<td>스코프 (개념 4)</td>
+</tr>
+<tr>
+<td><code>scanf</code> 블로킹 턴제</td>
+<td><code>_EVIEW</code> 상태머신 + 폴링</td>
+<td>실시간 루프 위 턴제 (개념 5)</td>
+</tr>
+<tr>
+<td>월 8단계 함수들</td>
+<td>같은 이름 메서드</td>
+<td>로직 동일 (개념 6)</td>
+</tr>
+</tbody>
+</table>
+<p>이 표가 이 챕터의 전부다. <strong>왼쪽(1부 C)에서 오른쪽(2부 C++)으로
+가는 여덟 가지 변환</strong> — 그것이 C→C++ 리팩터링의 실체다. 게임의
+규칙(경제·평점·판매)은 왼쪽과 오른쪽이 완전히 같다. 바뀐 것은 오직
+<strong>그 규칙을 담는 언어의 그릇</strong>이다.</p>
+<p>한 가지 더 눈여겨볼 것 — <strong>파일 구조의 변화.</strong> 1부는
+14장에서 게임을
+<code>main.c</code>/<code>company.c</code>/<code>employee.c</code>… 7개
+파일로 나눴다. C++ 이식은 이 모두를 <strong>하나의 씬 클래스
+<code>TycoonContent</code></strong> 로 합친다. 1부에서 파일로 나눴던
+모듈들(company·employee·project·market)이, 이제 한 클래스의
+<strong>메서드
+그룹</strong>(<code>StepProject</code>/<code>RollApplicants</code>/<code>StepSales</code>/<code>StepEvent</code>)이
+된다. 프레임워크가 "게임 하나 = 씬 하나"를 요구하기 때문이다(0단계).
+나눔의 축이 "파일"에서 "메서드"로 옮겨간 셈이다.</p>
+<hr />
+<h2 id="그림으로-정리--c의-회사와-c의-회사">그림으로 정리 — C의 회사와
+C++의 회사</h2>
+<blockquote>
+<p>📊 <strong>웹 교육문서에서는 C 구조체+포인터 전달과 C++
+클래스+메서드가 나란히 애니메이션(V-P2-B)으로 비교된다.</strong>
+책에서는 아래 도식으로 대신한다.</p>
+</blockquote>
+<p><strong>회사에 닿는 두 가지 길</strong></p>
+<pre><code>  [1부 C]  회사는 구조체, 함수는 주소를 넘겨받는다
+     Company c;
+        │  &amp;c
+        ▼
+     ProgressProject(&amp;c) → c-&gt;proj.progress += ...   (모든 함수에 c 를 넘김)
+     TotalSalary(&amp;c)     → c-&gt;staff[i].salary
+
+  [2부 C++]  회사는 클래스, 메서드는 멤버를 직접 본다
+     class TycoonContent {  int money;  vector&lt;Staff&gt; staffList;  ... }
+        │  (this 는 암묵적)
+        ▼
+     StepProject()  → proj.progress += ...            (c 인자가 사라진다)
+     TotalSalary()  → staffList[i].salary</code></pre>
+<p><strong>직원 목록의 진화 (1부 세 모듈 → 2부 한 줄)</strong></p>
+<pre><code>  C모듈:  char staffName[4][20]; int staffDev[4]; ... staffCount;   (병렬 배열 5개)
+     │
+  D모듈:  Employee staff[4]; int staffCount;                        (구조체 배열)
+     │
+  E모듈:  Employee *staff; malloc/realloc; staffCount, staffCap;    (동적 배열)
+     │
+  2부:    std::vector&lt;Staff&gt; staffList;                             (push_back/erase/size)
+          └ 세 모듈의 고생이 STL 한 줄로 흡수된다</code></pre>
+<p>한 문장으로: <strong>C→C++ 이식은 게임을 새로 만드는 게 아니라, 같은
+게임의 데이터를 더 안전하고 짧은 문법으로 다시 담는 일이다 — 1부에서
+겪은 불편이 클래스·<code>string</code>·<code>vector</code> 로 하나씩
+사라진다.</strong></p>
+<hr />
+<h2 id="체크포인트--스스로-점검하기">체크포인트 — 스스로 점검하기</h2>
+<p><strong>Q1.</strong> 1부의
+<code>int TotalSalary(const Company *c)</code> 가 C++ 이식에선
+<code>int TycoonContent::TotalSalary() const</code> 가 된다.
+<code>Company *c</code> 인자는 왜 사라졌나?</p>
+<p><strong>Q2.</strong> 1부에서 직원을 해고하려면 배열을 한 칸씩 당기고
+<code>staffCount--</code> 를 했다. C++에선 어떤 한 줄로 대체되나?</p>
+<p><strong>Q3.</strong> 1부의 <code>char name[20]</code> +
+<code>snprintf(buf, ...)</code> 대신 C++이 쓰는 두 가지는?</p>
+<p><strong>Q4.</strong> 2부 프레임워크의 게임 루프는 멈추지 않는데, 턴제
+타이쿤은 어떻게 "다음 달"에만 시간이 흐르게 하나?</p>
+<p><strong>Q5.</strong> <code>enum Ending</code> 을
+<code>enum class _EENDING</code> 으로 바꾸면 좋은 점은? 값은 어떻게
+쓰나?</p>
+<details><summary><b>해설 펼치기</b></summary>
+
+<p><strong>A1.</strong> C++에선 <strong>회사 그 자체가
+클래스(<code>TycoonContent</code>)</strong> 이고, 게임 상태가 그
+클래스의 멤버 변수다. 메서드는 자기 객체(암묵적 <code>this</code>)의
+멤버에 바로 접근하므로, "회사를 넘겨받을" 필요가 없다. 1부에서 포인터로
+넘기던 회사가, C++에선 클래스라는 문법에 흡수됐다.</p>
+<p><strong>A2.</strong>
+<code>staffList.erase(staffList.begin() + idx);</code> 한 줄.
+<code>std::vector</code> 의 <code>erase</code> 가 해당 원소를 지우고
+뒤를 당기고 크기를 줄이는 것을 모두 처리한다(1부 D 모듈
+<code>QuitEmployee</code> 전체를 대체).</p>
+<p><strong>A3.</strong> <code>std::string name</code>(길이 자동 관리,
+크기·널 종료 걱정 없음)과 <strong><code>+</code>
+연산자</strong>(<code>"* [" + name + "] 해고"</code> 처럼 문자열을
+잇기). 버퍼·<code>snprintf</code>·<code>strcpy</code> 가 모두
+사라진다.</p>
+<p><strong>A4.</strong> <strong>블로킹 입력(<code>scanf</code>)을 쓰지
+않는다.</strong> 매 프레임 키를 폴링하고 <code>_EVIEW</code>
+상태머신으로 화면만 오가되, 플레이어가 메뉴에서 "다음 달 진행"을 고른 그
+순간에만 <code>StartMonth()</code> 를 불러 한 달을 처리한다. 그 외엔
+상태가 안 변한다(렌더는 매 프레임, 상태 변화는 입력에만).</p>
+<p><strong>A5.</strong> <code>enum class</code> 는
+<strong>스코프</strong>를 가져, 값을 <code>_EENDING::BANKRUPT</code>
+처럼 이름 앞에 붙여 쓴다. 그래서 서로 다른 enum이 같은
+이름(<code>NONE</code>)을 써도 충돌하지 않고, 이름이 전역을 오염시키지
+않는다. 타입 안전성도 높다.</p>
+</details>
+
+<hr />
+<h2 id="실습-미션--미니-명부를-c에서-c로-rostercpp-star">실습 미션 —
+미니 명부를 C에서 C++로 <code>roster.cpp</code> ⭐</h2>
+<blockquote>
+<p>이 미션은 이 챕터의 전부를 압축한다 — <strong>작은 C 스타일 코드를
+C++로 리팩터링</strong>하며, 구조체+배열을 <code>std::vector</code>로,
+<code>char[]</code>를 <code>std::string</code>으로 바꾼다.</p>
+</blockquote>
+<p><strong>드릴 문법</strong> — <code>std::vector&lt;struct&gt;</code> ·
+<code>std::string</code> ·
+<code>push_back</code>/<code>erase</code>/<code>size</code> ·
+<code>+</code> 연결 · 범위 순회 <strong>하는 것</strong> — C 스타일의
+"직원 명부"(고정 배열 + <code>char[]</code> + 수동 삭제)를, 같은 동작의
+C++로 다시 쓴다. <strong>클리어 조건</strong> — C 버전과 결과가
+같으면서, 배열 크기·<code>strcpy</code>·수동 당기기가 모두 사라진다.
+<strong>규모</strong> — 약 45줄. 1부의 데이터가 2부의 문법으로 옮겨지는
+것을 손으로 겪는다.</p>
+<h3 id="문제-정의">문제 정의</h3>
+<p>아래는 1부 스타일의 C 명부다. 고정 배열 4칸, 이름은
+<code>char[20]</code>, 삭제는 수동 당기기. 이걸 C++로 이식하라 —
+<code>std::vector&lt;Staff&gt;</code> + <code>std::string</code> 으로.
+고용은 <code>push_back</code>, 해고는 <code>erase</code>, 순회는
+<code>size()</code>.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* BEFORE — 1부 스타일 C */</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MAX </span><span class="dv">4</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> names<span class="op">[</span>MAX<span class="op">][</span><span class="dv">20</span><span class="op">];</span>  <span class="dt">int</span> devs<span class="op">[</span>MAX<span class="op">];</span>  <span class="dt">int</span> count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> hire<span class="op">(</span><span class="dt">const</span> <span class="dt">char</span><span class="op">*</span> n<span class="op">,</span> <span class="dt">int</span> d<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>count <span class="op">&gt;=</span> MAX<span class="op">)</span> <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    strcpy<span class="op">(</span>names<span class="op">[</span>count<span class="op">],</span> n<span class="op">);</span>  devs<span class="op">[</span>count<span class="op">]</span> <span class="op">=</span> d<span class="op">;</span>  count<span class="op">++;</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> fire<span class="op">(</span><span class="dt">int</span> idx<span class="op">)</span> <span class="op">{</span>                       <span class="co">/* 수동 당기기 */</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> idx<span class="op">;</span> i <span class="op">&lt;</span> count <span class="op">-</span> <span class="dv">1</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>        strcpy<span class="op">(</span>names<span class="op">[</span>i<span class="op">],</span> names<span class="op">[</span>i<span class="op">+</span><span class="dv">1</span><span class="op">]);</span>  devs<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> devs<span class="op">[</span>i<span class="op">+</span><span class="dv">1</span><span class="op">];</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    count<span class="op">--;</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="힌트">힌트</h3>
+<details><summary><b>힌트 1 — 구조체 + vector</b></summary>
+
+<p>병렬 배열(<code>names[][]</code>, <code>devs[]</code>)을
+<strong>하나의 구조체 + 벡터</strong>로 묶는다.</p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Staff <span class="op">{</span> <span class="bu">std::</span>string name<span class="op">;</span> <span class="dt">int</span> dev<span class="op">;</span> <span class="op">};</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span>Staff<span class="op">&gt;</span> roster<span class="op">;</span>      <span class="co">// count 변수도 필요 없다 — roster.size()</span></span></code></pre></div>
+</details>
+
+<details><summary><b>힌트 2 — 고용/해고 한 줄씩</b></summary>
+
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> hire<span class="op">(</span><span class="at">const</span> <span class="bu">std::</span>string<span class="op">&amp;</span> n<span class="op">,</span> <span class="dt">int</span> d<span class="op">)</span> <span class="op">{</span> roster<span class="op">.</span>push_back<span class="op">({</span> n<span class="op">,</span> d <span class="op">});</span> <span class="op">}</span>  <span class="co">// 크기 제한도 자동으로 없앰</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> fire<span class="op">(</span><span class="dt">int</span> idx<span class="op">)</span> <span class="op">{</span> roster<span class="op">.</span>erase<span class="op">(</span>roster<span class="op">.</span>begin<span class="op">()</span> <span class="op">+</span> idx<span class="op">);</span> <span class="op">}</span>              <span class="co">// 수동 당기기 → 한 줄</span></span></code></pre></div>
+</details>
+
+<h3 id="정답-코드">정답 코드</h3>
+<details><summary><b>정답 펼치기 — <code>roster.cpp</code></b></summary>
+
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;cstdio&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string&gt;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;vector&gt;</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Staff <span class="op">{</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>string name<span class="op">;</span>   <span class="co">// char[20] → 길이 걱정 없음</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> dev<span class="op">;</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span>Staff<span class="op">&gt;</span> roster<span class="op">;</span>   <span class="co">// 고정 배열 + count → vector 하나</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> hire<span class="op">(</span><span class="at">const</span> <span class="bu">std::</span>string<span class="op">&amp;</span> n<span class="op">,</span> <span class="dt">int</span> d<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    roster<span class="op">.</span>push_back<span class="op">({</span> n<span class="op">,</span> d <span class="op">});</span>          <span class="co">// realloc·크기 확인 없이 그냥 추가</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> fire<span class="op">(</span><span class="dt">int</span> idx<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>idx <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">||</span> idx <span class="op">&gt;=</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span>roster<span class="op">.</span>size<span class="op">())</span> <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>    roster<span class="op">.</span>erase<span class="op">(</span>roster<span class="op">.</span>begin<span class="op">()</span> <span class="op">+</span> idx<span class="op">);</span>  <span class="co">// 수동 당기기 → 한 줄</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> print<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;-- 명부 (</span><span class="sc">%zu</span><span class="st">명) --</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> roster<span class="op">.</span>size<span class="op">());</span></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">size_t</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> roster<span class="op">.</span>size<span class="op">();</span> i<span class="op">++)</span>   <span class="co">// count 대신 size()</span></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;  </span><span class="sc">%zu</span><span class="st">) </span><span class="sc">%-10s</span><span class="st"> dev </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i <span class="op">+</span> <span class="dv">1</span><span class="op">,</span> roster<span class="op">[</span>i<span class="op">].</span>name<span class="op">.</span>c_str<span class="op">(),</span> roster<span class="op">[</span>i<span class="op">].</span>dev<span class="op">);</span></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 문자열 + 연결도 자유롭게:</span></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>string msg <span class="op">=</span> <span class="st">&quot;총 개발력 &quot;</span><span class="op">;</span></span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> sum <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">size_t</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> roster<span class="op">.</span>size<span class="op">();</span> i<span class="op">++)</span> sum <span class="op">+=</span> roster<span class="op">[</span>i<span class="op">].</span>dev<span class="op">;</span></span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>    msg <span class="op">+=</span> <span class="bu">std::</span>to_string<span class="op">(</span>sum<span class="op">);</span></span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;  </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> msg<span class="op">.</span>c_str<span class="op">());</span></span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>    hire<span class="op">(</span><span class="st">&quot;김개발&quot;</span><span class="op">,</span> <span class="dv">7</span><span class="op">);</span></span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>    hire<span class="op">(</span><span class="st">&quot;이서버&quot;</span><span class="op">,</span> <span class="dv">5</span><span class="op">);</span></span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>    hire<span class="op">(</span><span class="st">&quot;박퍼즈&quot;</span><span class="op">,</span> <span class="dv">8</span><span class="op">);</span></span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>    hire<span class="op">(</span><span class="st">&quot;최네트&quot;</span><span class="op">,</span> <span class="dv">6</span><span class="op">);</span></span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>    hire<span class="op">(</span><span class="st">&quot;정클라&quot;</span><span class="op">,</span> <span class="dv">9</span><span class="op">);</span>   <span class="co">// C 버전이면 MAX=4라 거절됐을 5번째 — vector는 그냥 늘어난다</span></span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>    print<span class="op">();</span></span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>    fire<span class="op">(</span><span class="dv">1</span><span class="op">);</span>             <span class="co">// 이서버 해고 (뒤가 한 줄로 당겨짐)</span></span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>    print<span class="op">();</span></span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>빌드:</strong> <code>cl /EHsc roster.cpp</code> (MSVC) 또는
+<code>g++ roster.cpp -o roster</code></p>
+<p><strong>함정/체크포인트</strong></p>
+<ul>
+<li><strong><code>count</code> 변수가 사라진다.</strong> 현재 인원은
+<code>roster.size()</code>. 별도 카운터를 두면 벡터와 어긋날 위험이
+생긴다 — 크기는 벡터에게 맡긴다.</li>
+<li><strong>5번째 고용이 그냥 된다.</strong> C
+버전(<code>MAX=4</code>)이면 거절됐을 다섯 번째 직원을, 벡터는 알아서
+공간을 늘려 받는다 — 1부 E 모듈 <code>realloc</code> 을 벡터가 대신하는
+것.</li>
+<li><strong><code>roster.push_back({ n, d })</code></strong> 의
+<code>{ n, d }</code> 는 <code>Staff</code> 를 즉석에서 만드는 C++
+초기화. <code>printf</code> 에 <code>std::string</code> 을 넣을 땐
+<code>.c_str()</code> 로 C 문자열을 꺼낸다(C 함수와의 접점).</li>
+</ul>
+<p><strong>확장 과제</strong></p>
+<ul>
+<li><code>fire</code> 를 이름으로 찾아 지우게 바꿔 보자(<code>for</code>
+순회 + <code>erase</code>) — 1부라면 인덱스를 먼저 찾아야 했다.</li>
+<li><code>Staff</code> 에 <code>cre</code>, <code>salary</code> 를
+추가해도 배열 선언·삭제 코드가 안 늘어난다(병렬 배열이었다면 다섯 곳을
+고쳐야 했다).</li>
+</ul>
+</details>
+
+<hr />
+<h2 id="이-챕터를-마치며">이 챕터를 마치며</h2>
+<table>
+<thead>
+<tr>
+<th>얻은 것</th>
+<th>그 뿌리</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>구조체+전역 → 클래스+메서드</td>
+<td>1부 D 포인터 · 2부 0단계 클래스</td>
+</tr>
+<tr>
+<td><code>char[]</code> → <code>std::string</code></td>
+<td>1부 C 문자열</td>
+</tr>
+<tr>
+<td><code>malloc</code>/<code>realloc</code> →
+<code>std::vector</code></td>
+<td>1부 E 동적 메모리 · 2부 Snake~ 벡터</td>
+</tr>
+<tr>
+<td>턴제를 상태머신으로</td>
+<td>1부 상태 플래그 · 2부 <code>_EPhase</code></td>
+</tr>
+</tbody>
+</table>
+<p>이 다리를 건너며 우리는 1부와 2부가 한 몸임을 확인했다 — 1부에서 C로
+만든 게임의 데이터가, 2부의 C++ 문법으로 더 짧고 안전하게 다시 담겼다.
+<strong>C에서 C++로 간다는 것은, 새 언어를 배우는 게 아니라 이미 아는
+것을 더 나은 도구로 다시 짓는 것</strong>이다. 이제 이 데이터·경제
+게임의 막간을 지나, 다시 실시간 엔지니어링으로 — 다음 5단계 Galaga에서
+오브젝트 풀로 성능을 다룬다.</p>
+<blockquote>
+<p><strong>← 이전:</strong> <a href="Part2_04.html">4단계 · Road Fighter —
+엔티티 시스템과 리소스</a> | <strong>다음 →</strong> <a
+href="Part2_06.html">5단계 · Galaga — 오브젝트 풀링</a></p>
+</blockquote>
+  </article>
+</main>
+<footer class="site-footer">
+  <a href="index.html">← 목차로 돌아가기</a>
+  <span>CSGP Learn · 표시용 원고 (코드는 UTF-8 사본)</span>
+</footer>
+<script src="book-nav.js"></script>
+</body>
+</html>

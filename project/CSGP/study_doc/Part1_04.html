@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D 모듈 · 9–10장 — 구조체와 포인터: 데이터에 모양을 주다</title>
+<script>try{var _t=localStorage.getItem('csgp-theme');if(_t)document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
+<style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<link rel="stylesheet" href="book.css">
+
+</head>
+<body>
+<div class="topbar">
+  <button class="drawer-toggle" id="drawerToggle" type="button" aria-label="목차 열기/닫기" aria-expanded="false">☰ 목차</button>
+  <a class="home" href="index.html">📘 CSGP</a>
+  <span class="crumb">콘솔 게임으로 배우는 C · C++</span>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="라이트/다크 전환">🌙</button>
+</div>
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" aria-label="책 목차">
+  <div class="drawer-dash">
+    <div class="dash-title">콘솔 게임으로 배우는 C · C++</div>
+    <div class="dash-sub">학습 목차 · 대시보드</div>
+    <div class="dash-progress"><div class="dash-bar"><i id="dashBar"></i></div><span class="dash-pct" id="dashPct"></span></div>
+    <input class="drawer-search" id="drawerSearch" type="search" placeholder="🔍 챕터 검색…" aria-label="챕터 검색">
+  </div>
+  <nav class="booknav" aria-label="책 목차"><a class="booknav-home" href="index.html">📘 전체 목차</a><ul class="booknav-list"><li class="grp">1부 · C 기본 문법</li><li><a href="Part1_00.html" title="1부 — C 기본 문법: 회사를 키우며 배우는 언어">1부 개요</a></li><li><a href="Part1_01.html" title="A 모듈 · 1–4장 — 값·계산·분기: 회사에 숫자를 세우다">A · 값·계산·분기</a></li><li><a href="Part1_02.html" title="B 모듈 · 5–6장 — 반복문과 함수: 회사에 심장을 달다">B · 반복문·함수</a></li><li><a href="Part1_03.html" title="C 모듈 · 7–8장 — 배열과 문자열: 회사에 사람과 이름을 채우다">C · 배열·문자열</a></li><li class="active"><a href="Part1_04.html" title="D 모듈 · 9–10장 — 구조체와 포인터: 데이터에 모양을 주다">D · 구조체·포인터</a><ul class="sections">
+<li><a href="#이-모듈의-학습-목표" id="toc-이-모듈의-학습-목표">이
+모듈의 학습 목표</a></li>
+<li><a href="#왜-지금-구조체와-포인터인가"
+id="toc-왜-지금-구조체와-포인터인가">왜 지금, 구조체와
+포인터인가</a></li>
+<li><a href="#9장--구조체--흩어진-값에-이름을-주다"
+id="toc-9장--구조체--흩어진-값에-이름을-주다">9장 · 구조체 — 흩어진 값에
+이름을 주다</a></li>
+<li><a href="#10장--포인터--함수가-원본을-고치게-하다"
+id="toc-10장--포인터--함수가-원본을-고치게-하다">10장 · 포인터 — 함수가
+원본을 고치게 하다</a></li>
+<li><a href="#코드-워크스루--실제-소스에서-보는-구조체포인터"
+id="toc-코드-워크스루--실제-소스에서-보는-구조체포인터">코드 워크스루 —
+실제 소스에서 보는 구조체·포인터</a></li>
+<li><a href="#그림으로-정리--값-전달-vs-포인터-전달"
+id="toc-그림으로-정리--값-전달-vs-포인터-전달">그림으로 정리 — 값 전달
+vs 포인터 전달</a></li>
+<li><a href="#체크포인트--스스로-점검하기"
+id="toc-체크포인트--스스로-점검하기">체크포인트 — 스스로
+점검하기</a></li>
+<li><a href="#실습-미션--턴제-rpg-배틀-battlec-star"
+id="toc-실습-미션--턴제-rpg-배틀-battlec-star">실습 미션 — 턴제 RPG 배틀
+<code>battle.c</code> ⭐</a></li>
+<li><a href="#이-모듈을-마치며" id="toc-이-모듈을-마치며">이 모듈을
+마치며</a></li>
+</ul></li><li><a href="Part1_05.html" title="E 모듈 · 11–12장 — 동적 메모리와 랜덤: 회사가 자라고, 시장이 살아난다">E · 메모리·랜덤</a></li><li><a href="Part1_06.html" title="F 모듈 · 13–15장 — 파일·모듈·캡스톤: 회사를 저장하고, 게임을 출시하다">F · 파일·모듈·캡스톤</a></li><li class="grp">2부 · C++ 프레임워크</li><li><a href="Part2_00.html" title="2부 — C++ 콘솔 게임 프레임워크: 7개의 게임으로 오르기">2부 개요</a></li><li><a href="Part2_01.html" title="1단계 · Snake — 자료구조·충돌·상태머신">1단계 · Snake</a></li><li><a href="Part2_02.html" title="2단계 · Tetris — 알고리즘과 그리드">2단계 · Tetris</a></li><li><a href="Part2_03.html" title="3단계 · Dino — 물리와 스크롤">3단계 · Dino</a></li><li><a href="Part2_04.html" title="4단계 · Road Fighter — 엔티티 시스템과 리소스">4단계 · Road Fighter</a></li><li><a href="Part2_05.html" title="번외 · GameDevTycoon 이식 — C에서 C++로">번외 · Tycoon 이식</a></li><li><a href="Part2_06.html" title="5단계 · Galaga — 오브젝트 풀링">5단계 · Galaga</a></li><li><a href="Part2_07.html" title="6단계 · Maze — 알고리즘 심화 (생성 + 탐색)">6단계 · Maze</a></li><li><a href="Part2_08.html" title="7단계 · Battle City — 종합 캡스톤 (맵 생성 + 풀링)">7단계 · Battle City</a></li><li><a href="Part2_09.html" title="확장 · Pac-Man — 유령 AI와 상태머신">확장 · Pac-Man</a></li><li class="grp">부록</li><li><a href="Appendix.html" title="부록 — 용어집 · 핵심 이슈 · 요약">부록</a></li></ul></nav>
+</aside>
+<main class="reader">
+  <article class="page">
+<h1 id="d-모듈--910장--구조체와-포인터-데이터에-모양을-주다">D 모듈 ·
+9–10장 — 구조체와 포인터: 데이터에 모양을 주다</h1>
+<div class="chapter-badge">
+
+<p><strong>모듈 D</strong> · 9–10장 · 게임 버전 <strong>v0.5</strong> ·
+예상 학습 시간 <strong>4–6시간</strong> <strong>처음 배우는
+기술</strong> — <code>구조체(struct)</code> <code>typedef</code>
+<code>구조체 배열</code> <code>포인터</code> <code>주소·역참조</code>
+<code>함수 인자로 포인터 전달</code> <code>-&gt; 연산자</code>
+<code>NULL</code></p>
+</div>
+
+<blockquote>
+<p>지금까지(1–8장) 우리 회사는 흩어진 변수 수십 개로 굴러왔다. 이
+모듈에서 그 변수들을 <strong>구조체</strong>로 묶어 "직원"과
+"프로젝트"라는 개념에 모양을 주고, <strong>포인터</strong>로 함수가 그
+데이터를 직접 고치게 만든다. 이 두 문법이 손에 붙으면, 비로소 게임 개발
+사이클(기획 → 개발 → 출시 → 판매)이 완성된다.</p>
+</blockquote>
+<h2 id="이-모듈의-학습-목표">이 모듈의 학습 목표</h2>
+<p>이 모듈을 마치면 다음을 할 수 있다.</p>
+<ol type="1">
+<li>서로 관련된 여러 값을 하나의 <strong>구조체</strong>로 묶고,
+<code>.</code> 로 멤버에 접근할 수 있다.</li>
+<li><code>typedef</code> 로 구조체에 짧은 이름을 붙이고, <strong>구조체
+배열</strong>로 같은 종류의 데이터 여럿을 다룰 수 있다.</li>
+<li>변수의 <strong>주소(<code>&amp;</code>)</strong> 와
+<strong>역참조(<code>*</code>)</strong> 의 의미를 그림으로 설명할 수
+있다.</li>
+<li>함수에 <strong>포인터를 넘겨</strong> 함수 안에서 호출자의 원본 값을
+바꿀 수 있고, <strong>값 전달과의 차이</strong>를 안다.</li>
+<li>구조체 포인터에서 <code>-&gt;</code> 로 멤버에 접근하고,
+<code>NULL</code> 을 안전하게 검사할 수 있다.</li>
+<li>왜 우리 게임의 모든 시스템 함수가 <code>Company *c</code> 하나를
+받도록 설계됐는지 이해한다.</li>
+</ol>
+<h2 id="왜-지금-구조체와-포인터인가">왜 지금, 구조체와 포인터인가</h2>
+<p>배움에는 순서가 있다. 이 책은 그 순서를 게임의 필요로 정한다.
+여기까지 걸어온 길을 잠깐 돌아보자.</p>
+<ul>
+<li><strong>A 모듈(1–4장)</strong> 에서 우리는 자본금·명성 같은
+<strong>값</strong>을 담고, 계산하고, 조건에 따라 갈라지게 했다.</li>
+<li><strong>B 모듈(5–6장)</strong> 에서 <code>while</code> 루프가 생기며
+게임이 "돌기" 시작했고, 커진 코드를 함수로 정리했다.</li>
+<li><strong>C 모듈(7–8장)</strong> 에서 배열로 직원 여럿을, 문자열로
+이름을 다뤘다.</li>
+</ul>
+<p>그런데 C 모듈까지 온 우리 코드에는 슬슬 곪는 상처가 하나 있다.
+<strong>직원 한 명을 표현하는 데 변수가 여러 개 필요한데, 그것들이 서로
+묶여 있지 않다는 것.</strong> 지금 우리 직원 정보는 이렇게 생겼다.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* 8장까지의 방식 — &quot;병렬 배열&quot;의 지옥 */</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> staffName<span class="op">[</span><span class="dv">4</span><span class="op">][</span><span class="dv">20</span><span class="op">];</span>   <span class="co">/* 직원 이름 4명분 */</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span>  staffDev<span class="op">[</span><span class="dv">4</span><span class="op">];</span>        <span class="co">/* 직원 개발력 4명분 */</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span>  staffCre<span class="op">[</span><span class="dv">4</span><span class="op">];</span>        <span class="co">/* 직원 창의력 4명분 */</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span>  staffSalary<span class="op">[</span><span class="dv">4</span><span class="op">];</span>     <span class="co">/* 직원 월급 4명분 */</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span>  staffMonths<span class="op">[</span><span class="dv">4</span><span class="op">];</span>     <span class="co">/* 직원 근속 4명분 */</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span>  staffCount<span class="op">;</span>         <span class="co">/* 현재 직원 수 */</span></span></code></pre></div>
+<p><code>staffName[2]</code>, <code>staffDev[2]</code>,
+<code>staffCre[2]</code> … 세 번째 직원 한 명의 정보가 배열 세 개에
+흩어져 있다. 이 방식은 곧바로 문제를 일으킨다.</p>
+<ul>
+<li>직원을 <strong>한 명 해고</strong>하려면 다섯 개 배열을 모두 한 칸씩
+당겨야 한다. 하나라도 빠뜨리면 이름과 능력치가 어긋난다.</li>
+<li>함수에 "직원 한 명"을 넘기려면 <strong>인자를 다섯 개</strong>
+넘겨야 한다.</li>
+<li>직원에게 속성 하나(예: 사기)를 추가하려면 배열 선언·복사·인자를 쓰는
+곳을 <strong>전부</strong> 손봐야 한다.</li>
+</ul>
+<p>이것이 <strong>구조체가 필요한 이유</strong>다. 구조체는 흩어진
+값들을 "직원"이라는 하나의 이름으로 묶어 준다. 그리고 그렇게 묶고 나면,
+이번엔 "그 묶음을 함수가 어떻게 고치게 할 것인가"라는 질문이 자연스럽게
+따라온다 — 그 답이 <strong>포인터</strong>다.</p>
+<blockquote>
+<p>순서를 다시 보라. <strong>구조체 없이 병렬 배열로 고생을 먼저 겪은
+뒤에 구조체를 배운다.</strong> 이건 우연이 아니라 설계다. "왜 이게
+필요한가"를 몸으로 느낀 다음에 도구를 손에 쥐면, 그 도구는 잊히지
+않는다.</p>
+</blockquote>
+<hr />
+<h2 id="9장--구조체--흩어진-값에-이름을-주다">9장 · 구조체 — 흩어진 값에
+이름을 주다</h2>
+<h3 id="91-구조체-정의하기">9.1 구조체 정의하기</h3>
+<p><strong>구조체(structure)</strong> 는 서로 다른 자료형의 값 여러 개를
+하나로 묶는 사용자 정의 자료형이다. 직원 한 명을 이렇게 정의한다.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Employee <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> name<span class="op">[</span><span class="dv">20</span><span class="op">];</span>   <span class="co">/* 이름  */</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>  dev<span class="op">;</span>        <span class="co">/* 개발력 (1~10) */</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>  cre<span class="op">;</span>        <span class="co">/* 창의력 (1~10) */</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>  salary<span class="op">;</span>     <span class="co">/* 월급 (만원) */</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>  months<span class="op">;</span>     <span class="co">/* 근속 개월 */</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>이제 <code>struct Employee</code> 는 <code>int</code>,
+<code>double</code> 처럼 하나의 자료형이 되었다. 이 자료형으로 변수를
+만들고, <code>.</code>(점 연산자)로 각 <strong>멤버</strong>에
+접근한다.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Employee kim<span class="op">;</span>            <span class="co">/* 직원 한 명 선언 */</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>strcpy<span class="op">(</span>kim<span class="op">.</span>name<span class="op">,</span> <span class="st">&quot;김개발&quot;</span><span class="op">);</span>     <span class="co">/* 문자열 멤버는 strcpy 로 대입 */</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>kim<span class="op">.</span>dev <span class="op">=</span> <span class="dv">7</span><span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>kim<span class="op">.</span>cre <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>kim<span class="op">.</span>salary <span class="op">=</span> <span class="op">(</span>kim<span class="op">.</span>dev <span class="op">+</span> kim<span class="op">.</span>cre<span class="op">)</span> <span class="op">*</span> <span class="dv">30</span><span class="op">;</span>   <span class="co">/* 능력에 비례한 월급 = 360 */</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>kim<span class="op">.</span>months <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span></code></pre></div>
+<p><code>kim</code> 이라는 변수 하나 안에 이름·개발력·창의력·월급·근속이
+<strong>한 덩어리로</strong> 들어 있다. 병렬 배열에서 흩어져 있던 것들이
+마침내 한집에 산다.</p>
+<h3 id="92-typedef--struct-를-매번-쓰지-않으려면">9.2
+<code>typedef</code> — <code>struct</code> 를 매번 쓰지 않으려면</h3>
+<p>변수를 선언할 때마다 <code>struct Employee</code> 라고 두 단어를 쓰는
+건 번거롭다. <code>typedef</code> 로 짧은 별명을 붙이면, 앞으로는
+<code>Employee</code> 한 단어로 쓸 수 있다.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> name<span class="op">[</span><span class="dv">20</span><span class="op">];</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>  dev<span class="op">,</span> cre<span class="op">;</span>     <span class="co">/* 같은 자료형은 콤마로 함께 선언 */</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>  salary<span class="op">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>  months<span class="op">;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> Employee<span class="op">;</span>            <span class="co">/* 이 이름이 곧 자료형 이름이 된다 */</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>Employee kim<span class="op">;</span>          <span class="co">/* 이제 struct 없이 이렇게 쓴다 */</span></span></code></pre></div>
+<p>우리 게임은 이 <code>typedef struct { … } Name;</code> 형태를
+표준으로 쓴다. 앞으로 나오는 모든 구조체가 이 모양이다.</p>
+<h3 id="93-구조체-배열--직원-목록">9.3 구조체 배열 — 직원 "목록"</h3>
+<p>직원은 한 명이 아니다. 7장에서 배운 배열을 구조체에 그대로 적용하면,
+직원 <strong>목록</strong>이 된다. 병렬 배열 다섯 개가 구조체 배열
+<strong>하나</strong>로 접힌다.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Employee staff<span class="op">[</span><span class="dv">4</span><span class="op">];</span>       <span class="co">/* 직원 4명분 — 8장의 병렬 배열 5개를 대체 */</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span>      staffCount <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> <span class="co">/* 현재 직원 수 */</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">/* 두 번째 직원의 개발력에 접근: 배열 인덱스 뒤에 점 */</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>staff<span class="op">[</span><span class="dv">1</span><span class="op">].</span>dev <span class="op">=</span> <span class="dv">8</span><span class="op">;</span></span></code></pre></div>
+<p><code>staff[i].name</code>, <code>staff[i].dev</code> … 인덱스
+<code>i</code> 하나로 그 직원의 <strong>모든</strong> 정보에 닿는다.
+이제 직원을 해고할 때 배열을 한 칸씩 당기는 것도 훨씬 안전하다. 다섯
+줄을 각각 당기는 게 아니라, <strong>구조체 하나를 통째로</strong> 당기면
+되기 때문이다.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* idx 번 직원을 목록에서 제거 — 뒤 직원들을 한 칸씩 앞으로 */</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> QuitEmployee<span class="op">(</span>Company <span class="op">*</span>c<span class="op">,</span> <span class="dt">int</span> idx<span class="op">)</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> idx<span class="op">;</span> i <span class="op">&lt;</span> c<span class="op">-&gt;</span>staffCount <span class="op">-</span> <span class="dv">1</span><span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        c<span class="op">-&gt;</span>staff<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> c<span class="op">-&gt;</span>staff<span class="op">[</span>i <span class="op">+</span> <span class="dv">1</span><span class="op">];</span>   <span class="co">/* 구조체 통째 복사 — 한 줄이면 끝 */</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    c<span class="op">-&gt;</span>staffCount<span class="op">--;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>c-&gt;staff[i] = c-&gt;staff[i + 1];</code> 이 한 줄이
+이름·개발력·창의력·월급·근속을 <strong>한꺼번에</strong> 복사한다. 병렬
+배열이었다면 다섯 줄이 필요했고, 하나라도 빠뜨리면 데이터가 어긋났을
+것이다. (<code>c-&gt;</code> 의 화살표는 곧 10장에서 설명한다. 지금은
+"회사 <code>c</code> 안의 <code>staff</code> 배열" 정도로 읽으면
+된다.)</p>
+<h3 id="94-우리-게임의-데이터-설계">9.4 우리 게임의 데이터 설계</h3>
+<p>이 원리로 우리 게임의 핵심 데이터를 모두 구조체로 정의한다. 이것이
+게임의 뼈대다.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* --- 이름 붙인 정수 목록 (enum) — 정식 설명은 15장, 지금은 &#39;라벨&#39;로 이해하면 충분 --- */</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">enum</span> <span class="op">{</span> G_RPG<span class="op">,</span> G_ACTION<span class="op">,</span> G_PUZZLE<span class="op">,</span> G_SIM<span class="op">,</span> G_SPORTS<span class="op">,</span> GENRE_COUNT <span class="op">}</span> Genre<span class="op">;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">enum</span> <span class="op">{</span> S_SMALL<span class="op">,</span> S_MEDIUM<span class="op">,</span> S_LARGE<span class="op">,</span> SCALE_COUNT <span class="op">}</span> Scale<span class="op">;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span>          <span class="co">/* 직원 */</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> name<span class="op">[</span><span class="dv">20</span><span class="op">];</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>  dev<span class="op">,</span> cre<span class="op">;</span>        <span class="co">/* 개발력 / 창의력 (1~10) */</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>  salary<span class="op">;</span>          <span class="co">/* 만원/월 */</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>  months<span class="op">;</span>          <span class="co">/* 근속 */</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> Employee<span class="op">;</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span>          <span class="co">/* 개발 중인 게임 프로젝트 */</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span>  title<span class="op">[</span><span class="dv">30</span><span class="op">];</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    Genre genre<span class="op">;</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    Scale scale<span class="op">;</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>   progress<span class="op">,</span> need<span class="op">;</span> <span class="co">/* 진행도 / 필요치 */</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>   quality<span class="op">,</span> fun<span class="op">;</span>   <span class="co">/* 품질 / 재미 */</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>   devMonths<span class="op">;</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>   active<span class="op">;</span>         <span class="co">/* 0 = 진행 중인 프로젝트 없음 */</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> Project<span class="op">;</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span>          <span class="co">/* 회사 — 게임 전체 상태를 담는 큰 구조체 */</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span>      name<span class="op">[</span><span class="dv">20</span><span class="op">];</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>       money<span class="op">,</span> fame<span class="op">;</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>       year<span class="op">,</span> month<span class="op">;</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    Employee <span class="op">*</span>staff<span class="op">;</span>      <span class="co">/* 직원 목록 (11장에서 동적 배열로) */</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>       staffCount<span class="op">,</span> staffCap<span class="op">;</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    Project   proj<span class="op">;</span>       <span class="co">/* 구조체가 다른 구조체를 멤버로 가진다 */</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    Genre     trend<span class="op">;</span>      <span class="co">/* 이번 분기 유행 장르 */</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> Company<span class="op">;</span></span></code></pre></div>
+<p>세 가지를 눈여겨보자.</p>
+<ul>
+<li><strong>구조체가 구조체를 품는다.</strong> <code>Company</code> 안에
+<code>Project proj;</code> 가 있다. <code>c.proj.progress</code> 처럼
+점을 두 번 찍어 안쪽 멤버에 닿는다.</li>
+<li><strong><code>Company</code> 하나가 게임의 모든 상태다.</strong>
+자본금, 날짜, 직원 목록, 진행 중 프로젝트, 유행 장르 — 게임을 저장하려면
+이 구조체 하나만 파일에 쓰면 된다(13장). 이 "상태를 한 곳에 모으는"
+설계가 이후 모든 장을 편하게 만든다.</li>
+<li><strong><code>Employee *staff</code> 의 별(<code>*</code>).</strong>
+이건 포인터다. 지금 당장은 <code>Employee staff[4];</code> 같은 배열로
+생각해도 좋지만, 11장에서 직원 수 제한을 풀 때 이 별이 중요해진다.
+10장에서 이 별의 정체를 밝힌다.</li>
+</ul>
+<blockquote>
+<p><strong>⚠️ enum은 아직 맛보기다.</strong> <code>Genre</code>,
+<code>Scale</code> 은 <code>typedef enum</code> 으로 정의했지만,
+<code>enum</code> 의 정식 설명은 15장(캡스톤)에서 한다. 지금은
+<code>G_RPG</code> 가 0, <code>G_ACTION</code> 이 1 … 처럼
+<strong>이름을 붙인 정수 목록</strong> 이라고만 이해하면 충분하다.
+장르에 <code>0, 1, 2</code> 대신 <code>G_RPG, G_ACTION</code> 이라는
+이름을 쓰면 코드가 훨씬 읽기 쉬워진다는 것만 느끼면 된다.</p>
+</blockquote>
+<hr />
+<h2 id="10장--포인터--함수가-원본을-고치게-하다">10장 · 포인터 — 함수가
+원본을 고치게 하다</h2>
+<p>구조체로 데이터에 모양을 줬으니, 이제 <strong>함수가 그 데이터를
+고치게</strong> 만들 차례다. 여기서 포인터가 등장한다. 1부 전체에서 가장
+어려운 고비이지만, 한 번 넘으면 프로그래밍을 보는 눈이 달라진다.</p>
+<h3 id="101-문제-함수는-왜-원본을-못-바꾸는가">10.1 문제: 함수는 왜
+원본을 못 바꾸는가</h3>
+<p>먼저 포인터 없이 벽에 부딪혀 보자. "직원의 근속을 1 늘리는" 함수를
+순진하게 짜면 이렇게 된다.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> AgeOne<span class="op">(</span>Employee e<span class="op">)</span>   <span class="co">/* 값을 그대로 받는다 */</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    e<span class="op">.</span>months<span class="op">++;</span>           <span class="co">/* e 의 근속을 늘린다 */</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    Employee kim <span class="op">=</span> <span class="op">{</span> <span class="st">&quot;김개발&quot;</span><span class="op">,</span> <span class="dv">7</span><span class="op">,</span> <span class="dv">5</span><span class="op">,</span> <span class="dv">360</span><span class="op">,</span> <span class="dv">0</span> <span class="op">};</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    AgeOne<span class="op">(</span>kim<span class="op">);</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> kim<span class="op">.</span>months<span class="op">);</span>   <span class="co">/* ??? */</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>출력은 <code>1</code> 이 아니라 <strong><code>0</code></strong> 이다.
+왜일까?</p>
+<p>C에서 함수에 값을 넘기면, 함수는 그 값의 <strong>복사본</strong>을
+받는다. <code>AgeOne</code> 안의 <code>e</code> 는 <code>kim</code> 이
+아니라 <code>kim</code> 을 베낀 딴 상자다. <code>e.months++</code> 는 그
+복사본의 근속만 늘리고, 함수가 끝나면 복사본은 사라진다. 원본
+<code>kim</code> 은 손도 대지 않은 채 그대로다.</p>
+<p>이걸 <strong>값에 의한 전달(pass by value)</strong> 이라 한다.
+안전하지만(함수가 실수로 원본을 망칠 수 없다), <strong>원본을 고쳐야 할
+때는 무력하다.</strong> 그리고 게임에서는 원본을 고쳐야 할 일이
+대부분이다 — 고용은 직원 목록을 늘리고, 개발은 프로젝트 진행도를 올리고,
+정산은 자본금을 바꾼다.</p>
+<h3 id="102-주소와-역참조---와-">10.2 주소와 역참조 — <code>&amp;</code>
+와 <code>*</code></h3>
+<p>해결의 열쇠는 "복사본 말고 <strong>원본이 사는 위치</strong>를 알려
+주는 것"이다. 모든 변수는 메모리 어딘가에 살고, 그 위치에는
+<strong>주소(address)</strong> 가 있다. 집집마다 번지수가 있는 것과
+같다.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> hp <span class="op">=</span> <span class="dv">30</span><span class="op">;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> hp<span class="op">);</span>    <span class="co">/* 30  — 값 */</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%p\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>hp<span class="op">);</span>   <span class="co">/* 0x7ffe... — hp 가 사는 주소 (&amp; = 주소 연산자) */</span></span></code></pre></div>
+<ul>
+<li><strong><code>&amp;hp</code></strong> — 변수 <code>hp</code> 의
+<strong>주소</strong>. "이 값이 어디 사는지."</li>
+<li><strong>포인터</strong> — 주소를 담는 변수. <code>int *p</code> 는
+"<code>int</code> 가 사는 주소를 담는 변수 <code>p</code>".</li>
+<li><strong><code>*p</code></strong> (역참조) — 포인터가 가리키는
+<strong>그 주소에 사는 값</strong>. "번지수를 따라가 실제 집을 여는"
+동작.</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span>  hp <span class="op">=</span> <span class="dv">30</span><span class="op">;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p  <span class="op">=</span> <span class="op">&amp;</span>hp<span class="op">;</span>   <span class="co">/* p 는 hp 의 주소를 담는다 = &quot;p 가 hp 를 가리킨다&quot; */</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>p<span class="op">);</span>   <span class="co">/* 30 — p 를 따라가면 hp 의 값 */</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="op">*</span>p <span class="op">=</span> <span class="dv">100</span><span class="op">;</span>             <span class="co">/* p 가 가리키는 곳(=hp)에 100 을 쓴다 */</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> hp<span class="op">);</span>   <span class="co">/* 100 — 원본 hp 가 바뀌었다! */</span></span></code></pre></div>
+<p>마지막 두 줄이 핵심이다. <strong><code>*p = 100;</code> 은
+<code>hp</code> 를 직접 바꾼다.</strong> <code>p</code> 를 통하면,
+<code>p</code> 가 가리키는 원본에 손을 댈 수 있다. 이 힘을 함수에
+넘겨주면 아까의 문제가 풀린다.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> AgeOne<span class="op">(</span>Employee <span class="op">*</span>e<span class="op">)</span>   <span class="co">/* 값이 아니라 &#39;주소&#39;를 받는다 */</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">(*</span>e<span class="op">).</span>months<span class="op">++;</span>         <span class="co">/* e 가 가리키는 원본의 근속을 늘린다 */</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    Employee kim <span class="op">=</span> <span class="op">{</span> <span class="st">&quot;김개발&quot;</span><span class="op">,</span> <span class="dv">7</span><span class="op">,</span> <span class="dv">5</span><span class="op">,</span> <span class="dv">360</span><span class="op">,</span> <span class="dv">0</span> <span class="op">};</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    AgeOne<span class="op">(&amp;</span>kim<span class="op">);</span>          <span class="co">/* kim 자체가 아니라 kim 의 &#39;주소&#39;를 넘긴다 */</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> kim<span class="op">.</span>months<span class="op">);</span>   <span class="co">/* 1 — 이번엔 진짜 바뀐다 */</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>AgeOne(&amp;kim)</code> — 호출할 때 <code>&amp;</code> 를 붙여
+<strong>주소</strong>를 넘긴다. 함수는 복사본이 아니라 <code>kim</code>
+이 사는 위치를 받았으므로, <code>(*e).months++</code> 로 원본을 늘린다.
+이것이 <strong>주소에 의한 전달(pass by pointer)</strong> 이다.</p>
+<h3 id="103----구조체-포인터의-지름길">10.3 <code>-&gt;</code> — 구조체
+포인터의 지름길</h3>
+<p><code>(*e).months</code> 는 매번 쓰기 번거롭다. "역참조하고 멤버
+접근하기"는 워낙 자주 하는 일이라 C는 전용 연산자
+<code>-&gt;</code>(화살표)를 준다.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="op">(*</span>e<span class="op">).</span>months<span class="op">++;</span>   <span class="co">/* 이 둘은 완전히 같다 */</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>e<span class="op">-&gt;</span>months<span class="op">++;</span>     <span class="co">/* 화살표: &#39;포인터가 가리키는 것의 멤버&#39; */</span></span></code></pre></div>
+<p>규칙은 간단하다.</p>
+<ul>
+<li>구조체 <strong>변수</strong> 는 점(<code>.</code>) →
+<code>kim.months</code></li>
+<li>구조체 <strong>포인터</strong> 는 화살표(<code>-&gt;</code>) →
+<code>e-&gt;months</code></li>
+</ul>
+<p>앞으로 함수는 대부분 구조체 포인터를 받으므로, 우리 게임 코드에는
+<code>-&gt;</code> 가 가득하다. <code>c-&gt;money</code>,
+<code>p-&gt;progress</code>, <code>e-&gt;salary</code> — 전부 "포인터가
+가리키는 원본의 멤버를 직접 만진다"는 뜻이다.</p>
+<h3 id="104-게임에-적용-모든-시스템-함수가-company-c-를-받는다">10.4
+게임에 적용: 모든 시스템 함수가 <code>Company *c</code> 를 받는다</h3>
+<p>이제 우리 게임의 실제 코드를 보자. 10장부터 우리는 전역 변수를
+<strong>버린다.</strong> 대신 게임의 모든 상태를 <code>Company</code>
+구조체 하나에 담고, 모든 시스템 함수가 <strong>그 회사의
+주소(<code>Company *c</code>)</strong> 를 받아 직접 고친다.</p>
+<p>첫 번째 예 — 매달 개발을 진행시키는 함수다.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* 매월: 진행 중인 프로젝트의 진행도·품질·재미를 누적한다 */</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> ProgressProject<span class="op">(</span>Company <span class="op">*</span>c<span class="op">)</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    Project <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>c<span class="op">-&gt;</span>proj<span class="op">;</span>          <span class="co">/* 회사 안 프로젝트의 &#39;주소&#39;를 p 에 담는다 */</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>p<span class="op">-&gt;</span>active<span class="op">)</span>                 <span class="co">/* 진행 중인 프로젝트가 없으면 */</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span>                     <span class="co">/* 아무것도 안 하고 나간다 */</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    p<span class="op">-&gt;</span>progress <span class="op">+=</span> BASE_PROGRESS <span class="op">+</span> DevSum<span class="op">(</span>c<span class="op">);</span>   <span class="co">/* 진행도 += 15 + 개발력 합 */</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    p<span class="op">-&gt;</span>quality  <span class="op">+=</span> DevSum<span class="op">(</span>c<span class="op">);</span>                   <span class="co">/* 품질 += 개발력 합 */</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    p<span class="op">-&gt;</span>fun      <span class="op">+=</span> CreSum<span class="op">(</span>c<span class="op">)</span> <span class="op">+</span> rand<span class="op">()</span> <span class="op">%</span> <span class="dv">3</span><span class="op">;</span>      <span class="co">/* 재미 += 창의력 합 + 약간의 랜덤 */</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    p<span class="op">-&gt;</span>devMonths<span class="op">++;</span>                             <span class="co">/* 개발 개월 수 +1 */</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>한 줄 한 줄 뜯어 보자.</p>
+<ul>
+<li><code>Project *p = &amp;c-&gt;proj;</code> — <code>c</code> 는
+회사의 주소다. <code>c-&gt;proj</code> 는 그 회사 안의
+프로젝트(구조체)이고, <code>&amp;c-&gt;proj</code> 는 <strong>그
+프로젝트가 사는 주소</strong>다. 그 주소를 <code>p</code> 에 담았으니,
+이제 <code>p</code> 를 통해 프로젝트 원본을 고칠 수 있다. (매번
+<code>c-&gt;proj.progress</code> 라고 길게 쓰지 않으려는 지름길이기도
+하다.)</li>
+<li><code>p-&gt;progress += …</code> — <code>p</code> 가 가리키는
+프로젝트의 진행도를 <strong>직접</strong> 올린다. 함수가 끝나도 이
+변화는 남는다. 회사 <code>c</code> 안의 진짜 프로젝트가 바뀌었기
+때문이다.</li>
+<li><code>return;</code> — 값을 돌려주지 않는(<code>void</code>)
+함수라도, 조건이 안 맞으면 일찍 빠져나올 수 있다.
+<code>if (!p-&gt;active) return;</code> 은 "프로젝트 없으면 그냥
+나가라"는 <strong>가드(guard)</strong> 다.</li>
+</ul>
+<p>값 전달이었다면 이 함수는 아무 일도 못 했을 것이다.
+<code>ProgressProject</code> 가 회사의 복사본을 받았다면, 진행도를 올려
+봤자 함수가 끝나는 순간 복사본과 함께 사라졌을 테니까. <strong>포인터를
+받기 때문에</strong>, 이 함수는 진짜 회사를 키운다.</p>
+<p>두 번째 예 — 읽기만 하는 함수도 포인터를 받는다. 단,
+<code>const</code> 를 붙여 "나는 읽기만 하고 고치지 않겠다"고
+약속한다.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* 직원들 개발력 합계 (+ 사장 능력치) — 읽기만 하므로 const */</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> DevSum<span class="op">(</span><span class="dt">const</span> Company <span class="op">*</span>c<span class="op">)</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> sum <span class="op">=</span> BOSS_DEV<span class="op">,</span> i<span class="op">;</span>              <span class="co">/* 사장의 개발력부터 시작 */</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> c<span class="op">-&gt;</span>staffCount<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        sum <span class="op">+=</span> c<span class="op">-&gt;</span>staff<span class="op">[</span>i<span class="op">].</span>dev<span class="op">;</span>         <span class="co">/* 각 직원의 개발력을 더한다 */</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sum<span class="op">;</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<ul>
+<li><code>const Company *c</code> — "<code>c</code> 가 가리키는 회사를
+<strong>바꾸지 않겠다</strong>"는 선언이다. 실수로
+<code>c-&gt;money = 0;</code> 같은 코드를 쓰면 컴파일러가 막아 준다.
+읽기 전용 함수에 <code>const</code> 를 붙이는 건 좋은 습관이다.</li>
+<li><code>c-&gt;staff[i].dev</code> — 화살표와 점이 함께 나온다.
+<code>c-&gt;staff</code> 는 (포인터가 가리키는 회사의) 직원 배열,
+<code>c-&gt;staff[i]</code> 는 그중 <code>i</code> 번째 직원(구조체),
+<code>.dev</code> 는 그 직원의 개발력. <strong>화살표 한 번, 인덱스, 점
+한 번</strong> 을 차례로 따라가면 된다.</li>
+</ul>
+<p>세 번째 예 — 앞서 본 해고 함수를 다시 보자. 이제 왜
+<code>Company *c</code> 를 받는지 분명하다.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> QuitEmployee<span class="op">(</span>Company <span class="op">*</span>c<span class="op">,</span> <span class="dt">int</span> idx<span class="op">)</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> idx<span class="op">;</span> i <span class="op">&lt;</span> c<span class="op">-&gt;</span>staffCount <span class="op">-</span> <span class="dv">1</span><span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>        c<span class="op">-&gt;</span>staff<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> c<span class="op">-&gt;</span>staff<span class="op">[</span>i <span class="op">+</span> <span class="dv">1</span><span class="op">];</span>   <span class="co">/* 뒤 직원을 한 칸씩 앞으로 (구조체 통째 복사) */</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    c<span class="op">-&gt;</span>staffCount<span class="op">--;</span>                     <span class="co">/* 직원 수를 줄인다 — 원본 회사에 반영된다 */</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>c-&gt;staffCount--;</code> 가 원본 회사의 직원 수를 실제로
+줄인다. 함수가 회사의 주소를 받았기 때문에 가능한 일이다.</p>
+<h3 id="105-null--아무것도-가리키지-않는-포인터">10.5 <code>NULL</code>
+— "아무것도 가리키지 않는" 포인터</h3>
+<p>포인터가 아직 아무 데도 가리키지 않을 때, 우리는 <code>NULL</code>(빈
+주소)을 담는다. 포인터를 쓰기 전에 <code>NULL</code> 인지 확인하는
+습관은 프로그램이 죽는 것을 막는다. <code>Employee *staff</code> 는 게임
+시작 시 아직 직원이 없으면 <code>NULL</code> 일 수 있고, 11장에서
+<code>malloc</code> 이 실패해도 <code>NULL</code> 을 돌려준다. 파일을 못
+열어도 <code>fopen</code> 은 <code>NULL</code> 을 준다(13장).</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Employee <span class="op">*</span>staff <span class="op">=</span> NULL<span class="op">;</span>      <span class="co">/* 아직 아무 직원 배열도 없음 */</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>staff <span class="op">!=</span> NULL<span class="op">)</span>           <span class="co">/* NULL 이 아닐 때만 안전하게 접근 */</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> staff<span class="op">[</span><span class="dv">0</span><span class="op">].</span>name<span class="op">);</span></span></code></pre></div>
+<p><code>NULL</code> 인 포인터를 역참조하면(<code>*staff</code>,
+<code>staff-&gt;name</code>) 프로그램이 그 자리에서 죽는다. 그래서 "쓰기
+전에 검사"가 철칙이다. 이 습관은 11장(동적 메모리)과 13장(파일)에서 계속
+등장한다.</p>
+<h3 id="106-배열과-포인터-그리고-다음-장으로의-복선">10.6 배열과 포인터,
+그리고 다음 장으로의 복선</h3>
+<p>마지막으로 <code>Company</code> 구조체의
+<code>Employee *staff;</code> 를 다시 보자. 왜
+<code>Employee staff[4];</code>(고정 배열)가 아니라 포인터일까?</p>
+<p>7장에서 우리 회사는 직원 4명까지만 고용할 수 있었다. 5번째를 뽑으려
+하면 "사무실이 좁습니다"라며 거절당했다. 고정 배열의 크기는 컴파일
+시점에 못 박히기 때문이다. 하지만 회사는 계속 커져야 한다.</p>
+<p>C에서 <strong>배열의 이름은 사실 그 배열의 첫 원소를 가리키는
+포인터처럼 동작한다.</strong> 그래서 <code>Employee *staff</code> 는
+"직원 배열을 가리키는 포인터"가 되고 — 그 배열을 <strong>실행 중에
+원하는 만큼 크게</strong> 만들 수 있게 된다. 그 방법이 바로 다음
+장(11장)의 <strong>동적
+메모리(<code>malloc</code>/<code>realloc</code>)</strong> 다. 이번
+장에서 포인터를 손에 넣었기 때문에, 다음 장에서 "직원 수 무제한"이라는
+선물을 풀 수 있다.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* 11장 미리보기 — 직원이 꽉 차면 배열을 2배로 늘린다 */</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>c<span class="op">-&gt;</span>staffCount <span class="op">==</span> c<span class="op">-&gt;</span>staffCap<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    Employee <span class="op">*</span>tmp <span class="op">=</span> realloc<span class="op">(</span>c<span class="op">-&gt;</span>staff<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>Employee<span class="op">)</span> <span class="op">*</span> c<span class="op">-&gt;</span>staffCap <span class="op">*</span> <span class="dv">2</span><span class="op">);</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>tmp <span class="op">==</span> NULL<span class="op">)</span> <span class="cf">return</span><span class="op">;</span>      <span class="co">/* 확장 실패 — NULL 검사 (10.5) */</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    c<span class="op">-&gt;</span>staff <span class="op">=</span> tmp<span class="op">;</span>               <span class="co">/* staff 포인터가 더 큰 배열을 가리키게 */</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    c<span class="op">-&gt;</span>staffCap <span class="op">*=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>지금은 이 코드를 다 이해하지 못해도 좋다. 다만 <code>staff</code> 가
+<strong>포인터라서</strong> 이런 일이 가능하다는 것 — 이번 장의 포인터가
+다음 장의 문을 연다는 것만 기억하자.</p>
+<hr />
+<h2 id="코드-워크스루--실제-소스에서-보는-구조체포인터">코드 워크스루 —
+실제 소스에서 보는 구조체·포인터</h2>
+<p>지금까지의 조각들이 실제 게임 코드에서 어떻게 맞물리는지,
+<code>Study/Tycoon/</code> 의 실제 소스로 확인하자. 아래는 매달 개발이
+진행되는 흐름이다.</p>
+<blockquote>
+<p><strong>실제 파일:</strong> <code>Study/Tycoon/company.h</code> ·
+<code>Study/Tycoon/employee.c</code> ·
+<code>Study/Tycoon/project.c</code></p>
+</blockquote>
+<p><strong>① 데이터 설계 (<code>company.h</code>)</strong> — 게임의 모든
+상태가 <code>Company</code> 구조체 하나에 모인다. (9.4에서 본
+그대로다.)</p>
+<p><strong>② 매달 개발 진행 (<code>project.c</code>)</strong></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> ProgressProject<span class="op">(</span>Company <span class="op">*</span>c<span class="op">)</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    Project <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>c<span class="op">-&gt;</span>proj<span class="op">;</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>p<span class="op">-&gt;</span>active<span class="op">)</span> <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    p<span class="op">-&gt;</span>progress <span class="op">+=</span> BASE_PROGRESS <span class="op">+</span> DevSum<span class="op">(</span>c<span class="op">);</span>   <span class="co">/* ← DevSum 이 직원 능력을 합산 */</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    p<span class="op">-&gt;</span>quality  <span class="op">+=</span> DevSum<span class="op">(</span>c<span class="op">);</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    p<span class="op">-&gt;</span>fun      <span class="op">+=</span> CreSum<span class="op">(</span>c<span class="op">)</span> <span class="op">+</span> rand<span class="op">()</span> <span class="op">%</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    p<span class="op">-&gt;</span>devMonths<span class="op">++;</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>③ 능력치 합산 (<code>employee.c</code>)</strong> —
+<code>ProgressProject</code> 가 부르는 <code>DevSum</code> 은
+<code>const Company *c</code> 를 받아 직원 배열을 순회한다.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> DevSum<span class="op">(</span><span class="dt">const</span> Company <span class="op">*</span>c<span class="op">)</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> sum <span class="op">=</span> BOSS_DEV<span class="op">,</span> i<span class="op">;</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> c<span class="op">-&gt;</span>staffCount<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>        sum <span class="op">+=</span> c<span class="op">-&gt;</span>staff<span class="op">[</span>i<span class="op">].</span>dev<span class="op">;</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sum<span class="op">;</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>이 세 조각의 연결을 보라. <code>ProgressProject(c)</code> 는 회사의
+주소를 받아, 그 회사의 프로젝트 진행도를 <strong>직접</strong> 올린다.
+그 값은 <code>DevSum(c)</code> 가 같은 회사의 직원 배열을 훑어 계산한다.
+<strong>회사(<code>Company</code>)라는 하나의 구조체를, 여러 함수가
+포인터로 나눠 들고 각자 자기 역할을 한다.</strong> 이것이 구조체 +
+포인터가 만드는 프로그램의 짜임새다.</p>
+<p>전역 변수를 썼다면 어땠을까? 함수들이 같은 전역 상태를 몰래 공유했을
+것이고, "이 함수가 무엇을 건드리는지"가 코드에 드러나지 않았을 것이다.
+<code>Company *c</code> 를 명시적으로 주고받는 지금 방식은,
+<strong>함수의 서명(signature)만 봐도 "이 함수는 회사를 만진다"</strong>
+는 것을 알려 준다. 포인터는 힘일 뿐 아니라, 설계를 정직하게 만드는
+문서이기도 하다.</p>
+<hr />
+<h2 id="그림으로-정리--값-전달-vs-포인터-전달">그림으로 정리 — 값 전달
+vs 포인터 전달</h2>
+<blockquote>
+<p>📊 <strong>웹 교육문서에서는 이 개념이 인터랙티브
+애니메이션(V-P1-D)으로 재생된다.</strong> 함수 호출 시 상자(변수)가
+복사되는지, 화살표(주소)가 원본을 가리키는지를 단계별로 보여 준다.
+책에서는 아래 도식으로 대신한다.</p>
+</blockquote>
+<p><strong>값 전달 — 복사본을 고친다 (원본은 그대로)</strong></p>
+<pre><code>  main:  kim = [ 김개발 | dev 7 | ... | months 0 ]
+                       │  (값을 복사)
+                       ▼
+  함수:  e   = [ 김개발 | dev 7 | ... | months 0 ]  ← 딴 상자
+                                          months++ → 1
+              함수 끝 → e 소멸.  kim.months 는 여전히 0</code></pre>
+<p><strong>포인터 전달 — 주소로 원본을 고친다</strong></p>
+<pre><code>  main:  kim = [ 김개발 | dev 7 | ... | months 0 ]  ← 원본
+                 ▲
+                 │  &amp;kim (주소를 넘김)
+  함수:  e ──────┘   e-&gt;months++  →  원본 kim.months 가 1 이 된다
+              함수 끝 → e(주소)만 소멸.  kim 의 변화는 남는다</code></pre>
+<p>한 문장으로: <strong>값 전달은 사진을 주는 것, 포인터 전달은 집
+주소를 주는 것이다.</strong> 사진에 낙서해 봤자 집은 안 바뀌지만, 주소를
+알면 그 집에 찾아가 벽을 칠할 수 있다.</p>
+<p><strong>구조체 메모리 레이아웃</strong> — <code>Employee</code>
+하나가 메모리에 놓이는 모습.</p>
+<pre><code>  Employee kim;
+  ┌───────────────┬─────┬─────┬────────┬────────┐
+  │ name[20]      │ dev │ cre │ salary │ months │
+  └───────────────┴─────┴─────┴────────┴────────┘
+   0             20    24    28       32       36 (바이트, 대략)
+   ← 멤버들이 한 덩어리로 연속해 있다. 그래서 c-&gt;staff[i]=c-&gt;staff[i+1] 한 줄이
+     이 블록 전체를 통째로 복사할 수 있다.</code></pre>
+<hr />
+<h2 id="체크포인트--스스로-점검하기">체크포인트 — 스스로 점검하기</h2>
+<p>각 문항을 먼저 스스로 답해 본 뒤, 아래 해설을 펼쳐 확인하자.</p>
+<p><strong>Q1.</strong> 함수
+<code>void heal(Player p) { p.hp += 10; }</code> 를
+<code>heal(hero);</code> 로 불렀는데 <code>hero.hp</code> 가 안 바뀐다.
+왜인가?</p>
+<p><strong>Q2.</strong> <code>(*e).salary</code> 를 화살표 연산자로 다시
+쓰면?</p>
+<p><strong>Q3.</strong> <code>const Company *c</code> 에서
+<code>const</code> 는 무엇을 막는가?</p>
+<p><strong>Q4.</strong> 아래 코드에서 잘못된 줄을 찾고 고쳐라.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>Employee <span class="op">*</span>e <span class="op">=</span> NULL<span class="op">;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> e<span class="op">-&gt;</span>name<span class="op">);</span></span></code></pre></div>
+<p><strong>Q5.</strong> <code>Company</code> 구조체 안에
+<code>Project proj;</code> 가 있을 때, 회사 <code>c</code>(포인터)를
+통해 프로젝트 진행도에 접근하는 표현은?</p>
+<details><summary><b>해설 펼치기</b></summary>
+
+<p><strong>A1.</strong> <code>Player p</code> 는 <strong>값
+전달</strong>이라 <code>hero</code> 의 복사본을 받는다.
+<code>p.hp += 10</code> 은 복사본만 고치고 함수가 끝나면 사라진다.
+원본을 고치려면 포인터를 받아야 한다:
+<code>void heal(Player *p) { p-&gt;hp += 10; }</code> 로 정의하고
+<code>heal(&amp;hero);</code> 로 호출한다.</p>
+<p><strong>A2.</strong> <code>e-&gt;salary</code>.
+<code>(*포인터).멤버</code> 는 언제나 <code>포인터-&gt;멤버</code> 와
+같다.</p>
+<p><strong>A3.</strong> <code>c</code> 가 가리키는 회사를
+<strong>수정하는 것</strong>을 막는다. <code>c-&gt;money = 0;</code>
+같은 쓰기는 컴파일 에러가 된다. 읽기(<code>c-&gt;money</code> 값을 읽는
+것)는 허용된다. "이 함수는 읽기만 한다"는 약속이자 실수 방지 장치다.</p>
+<p><strong>A4.</strong> <code>e</code> 가 <code>NULL</code>(아무것도 안
+가리킴)인데 <code>e-&gt;name</code> 으로 역참조하면 프로그램이 죽는다.
+접근 전에 검사해야 한다:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>e <span class="op">!=</span> NULL<span class="op">)</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> e<span class="op">-&gt;</span>name<span class="op">);</span></span></code></pre></div>
+<p><strong>A5.</strong> <code>c-&gt;proj.progress</code>. <code>c</code>
+는 포인터라 화살표(<code>-&gt;</code>)로 회사에 닿고, <code>proj</code>
+는 값 멤버(구조체)라 점(<code>.</code>)으로 그 안의
+<code>progress</code> 에 닿는다. <strong>화살표 다음 점</strong> 이
+나오는 전형적인 패턴이다.</p>
+</details>
+
+<hr />
+<h2 id="실습-미션--턴제-rpg-배틀-battlec-star">실습 미션 — 턴제 RPG 배틀
+<code>battle.c</code> ⭐</h2>
+<blockquote>
+<p>본편(타이쿤)이 "한 게임을 계속 키우는 세로 축"이라면, 실습 미션은
+<strong>이 모듈의 새 문법만 콕 집어 연습하는 독립 미니게임(가로
+축)</strong> 이다. 먼저 직접 짜 보고, 막히면 힌트를, 그래도 막히면
+정답을 펼쳐 대조하자.</p>
+</blockquote>
+<p><strong>드릴 문법</strong> — <code>struct</code> ·
+<code>typedef</code> · <strong>포인터로 원본 HP 직접 수정</strong> ·
+구조체를 함수 인자로 전달 <strong>만드는 것</strong> — 용사 vs 슬라임
+턴제 전투. 한쪽 HP가 0이 되면 종료. <strong>클리어 조건</strong> — 매 턴
+행동(강공격/일반/방어)을 골라 상대 HP를 깎고, 승패를 판정해 출력한다.
+<strong>규모</strong> — 약 45줄, 파일 1개. 표준
+C만(<code>printf</code>/<code>scanf</code>). 아직 난수는 쓰지
+않는다(난수는 E 모듈에서 등장).</p>
+<h3 id="문제-정의">문제 정의</h3>
+<p>이 게임의 핵심은 딱 하나다. <strong><code>attackUnit</code> 함수가
+대상의 HP를 "직접" 깎는다.</strong> 즉, 함수에 유닛의
+<strong>주소</strong>를 넘겨(<code>&amp;hero</code>,
+<code>&amp;slime</code>), 함수 안에서 그 원본의 <code>hp</code> 를
+줄인다. 만약 값 전달로 짰다면, 아무리 공격해도 HP가 줄지 않는 버그를
+만나게 된다 — 그것이 바로 이 미션이 겨냥하는 깨달음이다(10.1의 함정과
+정확히 같다).</p>
+<h3 id="목표--클리어-조건">목표 / 클리어 조건</h3>
+<ol type="1">
+<li><code>Unit</code> 구조체를 정의한다:
+이름(<code>char name[20]</code>), HP(<code>int hp</code>),
+공격력(<code>int atk</code>).</li>
+<li><code>void attackUnit(Unit *attacker, Unit *target, int power)</code>
+를 만든다 — <strong>포인터를 받아</strong> <code>target-&gt;hp</code> 를
+직접 깎는다.</li>
+<li><code>while</code> 루프로 두 유닛의 HP가 모두 양수인 동안 턴을
+반복한다.</li>
+<li>매 턴 플레이어가 행동(1:강공격 2:일반 3:방어)을 고르면
+<code>power</code> 가 달라진다.</li>
+<li>한쪽 HP가 0 이하가 되면 승패를 출력하고 종료.</li>
+</ol>
+<h3 id="힌트">힌트</h3>
+<details><summary><b>힌트 1 — 데미지 공식</b></summary>
+
+<p><code>power</code> 를 강공격 15 / 일반 10 / 방어 5 로 두고,
+<code>dmg = attacker-&gt;atk * power / 10;</code> 으로 계산하면
+방어(5)는 절반, 강공격(15)은 1.5배가 된다. 최소 데미지 1은
+보장하자(<code>if (dmg &lt; 1) dmg = 1;</code>).</p>
+</details>
+
+<details><summary><b>힌트 2 — 삼항 연산자로 power 고르기</b></summary>
+
+<div class="sourceCode" id="cb25"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>power <span class="op">=</span> <span class="op">(</span>sel <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">?</span> <span class="dv">15</span> <span class="op">:</span> <span class="op">(</span>sel <span class="op">==</span> <span class="dv">3</span><span class="op">)</span> <span class="op">?</span> <span class="dv">5</span> <span class="op">:</span> <span class="dv">10</span><span class="op">;</span></span></code></pre></div>
+<p>4장에서 배운 삼항 연산자 <code>조건 ? A : B</code> 를 겹쳐 쓰면 세
+갈래를 한 줄로 고를 수 있다.</p>
+</details>
+
+<details><summary><b>힌트 3 — 죽음 판정 위치</b></summary>
+
+<p>용사가 슬라임을 때린 직후 슬라임이 죽었다면, 슬라임의 반격 전에
+<code>break</code> 로 루프를 빠져나가야 한다. "때린다 → 죽었나 확인 →
+살아 있으면 반격" 순서가 자연스럽다.</p>
+</details>
+
+<h3 id="정답-코드">정답 코드</h3>
+<details><summary><b>정답 펼치기 — <code>battle.c</code></b></summary>
+
+<div class="sourceCode" id="cb26"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define _CRT_SECURE_NO_WARNINGS</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> name<span class="op">[</span><span class="dv">20</span><span class="op">];</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>  hp<span class="op">;</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>  atk<span class="op">;</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> Unit<span class="op">;</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co">/* 포인터로 대상의 HP를 &#39;직접&#39; 깎는다 — D 모듈의 핵심 */</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> attackUnit<span class="op">(</span>Unit <span class="op">*</span>attacker<span class="op">,</span> Unit <span class="op">*</span>target<span class="op">,</span> <span class="dt">int</span> power<span class="op">)</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> dmg <span class="op">=</span> attacker<span class="op">-&gt;</span>atk <span class="op">*</span> power <span class="op">/</span> <span class="dv">10</span><span class="op">;</span>   <span class="co">/* power: 강공격15 / 일반10 / 방어5 */</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>dmg <span class="op">&lt;</span> <span class="dv">1</span><span class="op">)</span> dmg <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    target<span class="op">-&gt;</span>hp <span class="op">-=</span> dmg<span class="op">;</span>                       <span class="co">/* 원본 HP 를 깎는다 */</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>target<span class="op">-&gt;</span>hp <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span> target<span class="op">-&gt;</span>hp <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;  </span><span class="sc">%s</span><span class="st"> -&gt; </span><span class="sc">%s</span><span class="st"> : </span><span class="sc">%d</span><span class="st"> 피해!  (</span><span class="sc">%s</span><span class="st"> HP </span><span class="sc">%d</span><span class="st">)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>           attacker<span class="op">-&gt;</span>name<span class="op">,</span> target<span class="op">-&gt;</span>name<span class="op">,</span> dmg<span class="op">,</span> target<span class="op">-&gt;</span>name<span class="op">,</span> target<span class="op">-&gt;</span>hp<span class="op">);</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>    Unit hero  <span class="op">=</span> <span class="op">{</span> <span class="st">&quot;용사&quot;</span><span class="op">,</span>   <span class="dv">30</span><span class="op">,</span> <span class="dv">8</span> <span class="op">};</span></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>    Unit slime <span class="op">=</span> <span class="op">{</span> <span class="st">&quot;슬라임&quot;</span><span class="op">,</span> <span class="dv">24</span><span class="op">,</span> <span class="dv">6</span> <span class="op">};</span></span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> sel<span class="op">,</span> power<span class="op">;</span></span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;=== 턴제 RPG 배틀 ===</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>hero<span class="op">.</span>hp <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">&amp;&amp;</span> slime<span class="op">.</span>hp <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">[용사 HP </span><span class="sc">%d</span><span class="st"> | 슬라임 HP </span><span class="sc">%d</span><span class="st">]</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> hero<span class="op">.</span>hp<span class="op">,</span> slime<span class="op">.</span>hp<span class="op">);</span></span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;행동 (1:강공격 2:일반 3:방어): &quot;</span><span class="op">);</span></span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>        scanf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>sel<span class="op">);</span></span>
+<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a>        power <span class="op">=</span> <span class="op">(</span>sel <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">?</span> <span class="dv">15</span> <span class="op">:</span> <span class="op">(</span>sel <span class="op">==</span> <span class="dv">3</span><span class="op">)</span> <span class="op">?</span> <span class="dv">5</span> <span class="op">:</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>        attackUnit<span class="op">(&amp;</span>hero<span class="op">,</span> <span class="op">&amp;</span>slime<span class="op">,</span> power<span class="op">);</span>           <span class="co">/* 주소를 넘긴다 */</span></span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>slime<span class="op">.</span>hp <span class="op">&lt;=</span> <span class="dv">0</span><span class="op">)</span> <span class="cf">break</span><span class="op">;</span>                    <span class="co">/* 죽었으면 반격 전에 종료 */</span></span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a>        attackUnit<span class="op">(&amp;</span>slime<span class="op">,</span> <span class="op">&amp;</span>hero<span class="op">,</span> <span class="op">(</span>sel <span class="op">==</span> <span class="dv">3</span><span class="op">)</span> <span class="op">?</span> <span class="dv">5</span> <span class="op">:</span> <span class="dv">10</span><span class="op">);</span>  <span class="co">/* 방어 시 반격 절반 */</span></span>
+<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">== 결과 ==</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb26-41"><a href="#cb26-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>hero<span class="op">.</span>hp <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> printf<span class="op">(</span><span class="st">&quot;&gt;&gt; 승리! 슬라임을 물리쳤다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb26-42"><a href="#cb26-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>             printf<span class="op">(</span><span class="st">&quot;&gt;&gt; 패배... 용사가 쓰러졌다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb26-43"><a href="#cb26-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb26-44"><a href="#cb26-44" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>빌드:</strong> <code>cl battle.c</code> (MSVC) 또는
+<code>gcc battle.c -o battle</code></p>
+<p><strong>함정/체크포인트</strong></p>
+<ul>
+<li><code>attackUnit(&amp;hero, &amp;slime, …)</code> 에서
+<code>&amp;</code> 를 빼고 값으로 넘기면(그리고 함수도 값으로 받게
+바꾸면) <strong>HP가 절대 줄지 않는다.</strong> 원본을 못 고치기
+때문이다 — 10.1의 함정과 똑같다. 일부러 한 번 그렇게 짜 보고 버그를
+눈으로 확인하면, 포인터의 의미가 몸에 남는다.</li>
+<li><code>-&gt;</code> (포인터의 멤버)와 <code>.</code> (변수의 멤버)를
+헷갈리지 말자. 함수 안 <code>attacker</code> 는 포인터라
+<code>-&gt;</code>, <code>main</code> 의 <code>hero</code> 는 변수라
+<code>.</code> 다.</li>
+</ul>
+<p><strong>확장 과제</strong></p>
+<ul>
+<li><strong>E 모듈(난수)</strong> 에서 크리티컬(확률로 데미지 2배)을
+추가한다.</li>
+<li>몬스터 여러 마리를 <strong>구조체
+배열</strong>(<code>Unit party[3]</code>)로 만들어 파티 전투로
+키운다.</li>
+</ul>
+</details>
+
+<hr />
+<h2 id="이-모듈을-마치며">이 모듈을 마치며</h2>
+<table>
+<thead>
+<tr>
+<th>얻은 것</th>
+<th>다음에 쓰는 곳</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>구조체로 데이터에 모양 주기</td>
+<td>모든 후속 장 — 게임의 모든 데이터가 구조체다</td>
+</tr>
+<tr>
+<td>포인터로 함수가 원본 수정</td>
+<td>11장(동적 배열), 13장(세이브), 그리고 게임 전체</td>
+</tr>
+<tr>
+<td><code>Company *c</code> 를 주고받는 설계</td>
+<td>14장 파일 분리 시 함수 서명이 그대로 인터페이스가 됨</td>
+</tr>
+</tbody>
+</table>
+<p>구조체와 포인터는 1부의 고비였다. 이 둘을 넘었다면, 사실상 C의 가장
+어려운 개념을 통과한 것이다. 남은 장들(동적 메모리·랜덤·파일·모듈)은
+모두 이 두 도구를 <strong>응용</strong>하는 이야기다.</p>
+<blockquote>
+<p><strong>← 이전:</strong> C 모듈 · 7–8장 — 배열과 문자열 |
+<strong>다음 →</strong> E 모듈 · 11–12장 — 동적 메모리와 랜덤</p>
+</blockquote>
+  </article>
+</main>
+<footer class="site-footer">
+  <a href="index.html">← 목차로 돌아가기</a>
+  <span>CSGP Learn · 표시용 원고 (코드는 UTF-8 사본)</span>
+</footer>
+<script src="book-nav.js"></script>
+</body>
+</html>

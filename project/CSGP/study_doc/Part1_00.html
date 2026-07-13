@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1부 — C 기본 문법: 회사를 키우며 배우는 언어</title>
+<script>try{var _t=localStorage.getItem('csgp-theme');if(_t)document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
+<link rel="stylesheet" href="book.css">
+
+</head>
+<body>
+<div class="topbar">
+  <button class="drawer-toggle" id="drawerToggle" type="button" aria-label="목차 열기/닫기" aria-expanded="false">☰ 목차</button>
+  <a class="home" href="index.html">📘 CSGP</a>
+  <span class="crumb">콘솔 게임으로 배우는 C · C++</span>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="라이트/다크 전환">🌙</button>
+</div>
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" aria-label="책 목차">
+  <div class="drawer-dash">
+    <div class="dash-title">콘솔 게임으로 배우는 C · C++</div>
+    <div class="dash-sub">학습 목차 · 대시보드</div>
+    <div class="dash-progress"><div class="dash-bar"><i id="dashBar"></i></div><span class="dash-pct" id="dashPct"></span></div>
+    <input class="drawer-search" id="drawerSearch" type="search" placeholder="🔍 챕터 검색…" aria-label="챕터 검색">
+  </div>
+  <nav class="booknav" aria-label="책 목차"><a class="booknav-home" href="index.html">📘 전체 목차</a><ul class="booknav-list"><li class="grp">1부 · C 기본 문법</li><li class="active"><a href="Part1_00.html" title="1부 — C 기본 문법: 회사를 키우며 배우는 언어">1부 개요</a><ul class="sections">
+<li><a href="#1부를-여는-말--왜-게임을-만들며-배우는가"
+id="toc-1부를-여는-말--왜-게임을-만들며-배우는가">1부를 여는 말 — 왜
+게임을 만들며 배우는가</a></li>
+</ul></li><li><a href="Part1_01.html" title="A 모듈 · 1–4장 — 값·계산·분기: 회사에 숫자를 세우다">A · 값·계산·분기</a></li><li><a href="Part1_02.html" title="B 모듈 · 5–6장 — 반복문과 함수: 회사에 심장을 달다">B · 반복문·함수</a></li><li><a href="Part1_03.html" title="C 모듈 · 7–8장 — 배열과 문자열: 회사에 사람과 이름을 채우다">C · 배열·문자열</a></li><li><a href="Part1_04.html" title="D 모듈 · 9–10장 — 구조체와 포인터: 데이터에 모양을 주다">D · 구조체·포인터</a></li><li><a href="Part1_05.html" title="E 모듈 · 11–12장 — 동적 메모리와 랜덤: 회사가 자라고, 시장이 살아난다">E · 메모리·랜덤</a></li><li><a href="Part1_06.html" title="F 모듈 · 13–15장 — 파일·모듈·캡스톤: 회사를 저장하고, 게임을 출시하다">F · 파일·모듈·캡스톤</a></li><li class="grp">2부 · C++ 프레임워크</li><li><a href="Part2_00.html" title="2부 — C++ 콘솔 게임 프레임워크: 7개의 게임으로 오르기">2부 개요</a></li><li><a href="Part2_01.html" title="1단계 · Snake — 자료구조·충돌·상태머신">1단계 · Snake</a></li><li><a href="Part2_02.html" title="2단계 · Tetris — 알고리즘과 그리드">2단계 · Tetris</a></li><li><a href="Part2_03.html" title="3단계 · Dino — 물리와 스크롤">3단계 · Dino</a></li><li><a href="Part2_04.html" title="4단계 · Road Fighter — 엔티티 시스템과 리소스">4단계 · Road Fighter</a></li><li><a href="Part2_05.html" title="번외 · GameDevTycoon 이식 — C에서 C++로">번외 · Tycoon 이식</a></li><li><a href="Part2_06.html" title="5단계 · Galaga — 오브젝트 풀링">5단계 · Galaga</a></li><li><a href="Part2_07.html" title="6단계 · Maze — 알고리즘 심화 (생성 + 탐색)">6단계 · Maze</a></li><li><a href="Part2_08.html" title="7단계 · Battle City — 종합 캡스톤 (맵 생성 + 풀링)">7단계 · Battle City</a></li><li><a href="Part2_09.html" title="확장 · Pac-Man — 유령 AI와 상태머신">확장 · Pac-Man</a></li><li class="grp">부록</li><li><a href="Appendix.html" title="부록 — 용어집 · 핵심 이슈 · 요약">부록</a></li></ul></nav>
+</aside>
+<main class="reader">
+  <article class="page">
+<h1 id="1부--c-기본-문법-회사를-키우며-배우는-언어">1부 — C 기본 문법:
+회사를 키우며 배우는 언어</h1>
+<blockquote>
+<p><strong>이 책의 1부는 프로그래밍 언어 C를, 하나의 게임을 처음부터
+끝까지 완성해 가며 배운다.</strong> 우리가 만들 게임은 <strong>게임 회사
+운영 시뮬레이션 (Game Dev Tycoon)</strong> 이다. 1장에서 회사의 자본금을
+담을 변수 하나를 선언하는 것으로 시작해, 15장에서는 직원을 고용하고
+게임을 개발·출시해 돈을 벌고, 랜덤 이벤트에 흔들리고, 세이브 파일에 진행
+상황을 저장하는 완성된 프로그램에 도달한다.</p>
+<p>문법 하나를 배울 때마다 그 문법이 게임의 새 기능 하나가 된다. 배운
+것을 곧바로 써먹기 때문에, "이걸 어디에 쓰지?"라는 질문이 생기지
+않는다.</p>
+</blockquote>
+<hr />
+<h2 id="1부를-여는-말--왜-게임을-만들며-배우는가">1부를 여는 말 — 왜
+게임을 만들며 배우는가</h2>
+<p>프로그래밍 입문서의 오래된 고민이 하나 있다. 변수, 반복문, 함수,
+포인터… 문법은 하나하나 배울 수 있지만, <strong>그것들이 모여 무엇이
+되는지</strong>를 보여 주기가 어렵다는 것이다.
+<code>printf("Hello, World")</code>와 "실제로 돌아가는 프로그램"
+사이에는 넓은 강이 있고, 많은 입문자가 그 강 앞에서 멈춘다.</p>
+<p>이 책은 그 강 위에 다리를 하나 놓는다. <strong>처음부터 게임 하나를
+붙잡고, 그 게임을 키우는 데 필요한 문법만 그때그때 배우는
+방식</strong>이다.</p>
+<p>우리가 고른 게임은 텍스트 기반 경영 시뮬레이션이다. 플레이어는 1인
+게임 회사의 사장이 되어 —</p>
+<ul>
+<li><strong>월 단위로 시간이 흐른다.</strong> 메인 루프가 한 바퀴 돌면
+한 달이 지난다.</li>
+<li><strong>직원을 고용</strong>하고 월급을 주며, <strong>게임
+프로젝트</strong>를 기획 → 개발 → 출시한다.</li>
+<li>출시한 게임의 <strong>평점과 판매량</strong>에 따라 수익이 들어오고,
+랜덤 이벤트가 회사를 흔든다.</li>
+<li>자본금이 0 밑으로 떨어지면 <strong>파산(게임 오버)</strong>, 목표를
+이루면 승리한다.</li>
+</ul>
+<p>왜 하필 경영 시뮬레이션인가? <strong>경영 시뮬은 C 문법의 각 단원과
+게임의 기능이 거의 1:1로 맞아떨어지기 때문이다.</strong></p>
+<table>
+<thead>
+<tr>
+<th>C 문법</th>
+<th>게임 기능</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>변수·자료형 (1장)</td>
+<td>자본금·명성·날짜</td>
+</tr>
+<tr>
+<td>반복문 (5장)</td>
+<td>월 단위 메인 루프 — "게임이 돌기 시작"</td>
+</tr>
+<tr>
+<td>배열 (7장)</td>
+<td>직원 목록, 월별 매출 기록</td>
+</tr>
+<tr>
+<td><strong>구조체 (9장)</strong></td>
+<td><strong>직원·프로젝트를 하나의 데이터로 묶기</strong></td>
+</tr>
+<tr>
+<td><strong>포인터 (10장)</strong></td>
+<td><strong>함수가 회사 상태를 직접 수정</strong></td>
+</tr>
+<tr>
+<td>동적 메모리 (11장)</td>
+<td>직원 수 제한 해제</td>
+</tr>
+<tr>
+<td>랜덤 (12장)</td>
+<td>랜덤 이벤트, 평점 산정</td>
+</tr>
+<tr>
+<td>파일 입출력 (13장)</td>
+<td>세이브 / 로드</td>
+</tr>
+</tbody>
+</table>
+<p>숫자(자본금)·목록(직원)·기록(매출)·저장(세이브)이 모두 필요한
+게임이라, 문법을 배우는 즉시 게임의 살로 붙는다. 그래서 이 게임은 "문법
+연습용 예제"가 아니라, <strong>문법을 배우는 순서 그 자체가 게임을
+완성해 가는 순서</strong>다.</p>
+<blockquote>
+<p><strong>1부는 표준 C만 쓴다.</strong> <code>printf</code>와
+<code>scanf</code>만으로 완성되도록 설계했다. Windows 콘솔 API도,
+클래스도, 실시간 게임 루프도 등장하지 않는다. 그런 것들은 2부(C++
+프레임워크)의 몫이다. 1부의 목표는 화려한 화면이 아니라
+<strong>프로그래밍의 뼈대 — 값·분기·반복·데이터의 모양 — 를 튼튼히
+세우는 것</strong>이다.</p>
+</blockquote>
+<h3 id="1부-로드맵-15장--6모듈">1부 로드맵 (15장 · 6모듈)</h3>
+<p>15개의 장은 게임의 버전(v0.1 → v1.0)을 올려 가는 마일스톤이고, 인지
+부담을 줄이려 6개의 <strong>모듈</strong>로 묶었다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">모듈</th>
+<th style="text-align: center;">장</th>
+<th>배우는 문법</th>
+<th>게임 버전에서 생기는 것</th>
+<th>파일</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>A. 값·계산·분기</strong></td>
+<td style="text-align: center;">1–4</td>
+<td>자료형·입출력·연산자·조건문</td>
+<td>회사 현황판, 월 정산, 파산 판정</td>
+<td><a href="Part1_01.html">Part1_01</a></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>B. 반복·함수</strong></td>
+<td style="text-align: center;">5–6</td>
+<td>반복문·함수</td>
+<td>월 루프 완성 — 최소 게임이 된다</td>
+<td><a href="Part1_02.html">Part1_02</a></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>C. 배열·문자열</strong></td>
+<td style="text-align: center;">7–8</td>
+<td>배열·문자열</td>
+<td>직원 목록(고정 슬롯), 회사명·게임 제목</td>
+<td><a href="Part1_03.html">Part1_03</a></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>D. 구조체·포인터</strong>
+⭐</td>
+<td style="text-align: center;">9–10</td>
+<td>구조체·포인터</td>
+<td><strong>개발 사이클 완성 — 게임의 뼈대</strong></td>
+<td><a href="Part1_04.html">Part1_04</a></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>E. 동적·랜덤</strong></td>
+<td style="text-align: center;">11–12</td>
+<td>동적 메모리·랜덤</td>
+<td>무제한 고용, 랜덤 이벤트</td>
+<td><a href="Part1_05.html">Part1_05</a></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>F. 파일·모듈·종합</strong></td>
+<td style="text-align: center;">13–15</td>
+<td>파일 I/O·파일 분리·캡스톤</td>
+<td>세이브/로드, 모듈화, 엔딩</td>
+<td><a href="Part1_06.html">Part1_06</a></td>
+</tr>
+</tbody>
+</table>
+<p>각 모듈은 <strong>본편(타이쿤에 기능을 얹는 흐름)</strong> 과
+<strong>실습 미션(그 모듈의 새 문법만 콕 집어 연습하는 독립
+미니게임)</strong> 으로 구성된다. 본편이 "한 게임을 계속 키우는 세로
+축"이라면, 미니게임은 "새 문법 하나만 연습하는 가로 축"이다.</p>
+<blockquote>
+<p><strong>읽는 순서.</strong> 1부는 반드시 순서대로 읽는다. 각 모듈은
+앞 모듈의 코드 위에 기능을 얹으므로, 건너뛰면 게임이 돌지 않는다. 문법
+이해의 기준은 "설명할 수 있다"가 아니라 <strong>"내 게임에서
+돌아간다"</strong> 이다 — 모듈마다 실제로 빌드해서 플레이해 보길
+권한다.</p>
+</blockquote>
+<h3 id="우리가-만드는-게임-한눈에">우리가 만드는 게임 한눈에</h3>
+<ul>
+<li><strong>자원</strong>: 자본금 <code>money</code>(시작 5,000만원) ·
+명성 <code>fame</code> · 날짜 <code>year/month</code>(2026년 1월
+시작).</li>
+<li><strong>매달 나가는 돈</strong>: 사무실 임대료 100만원 + 직원 월급
+합계. 아무것도 안 하면 자본금이 마르고 <strong>파산</strong>한다.</li>
+<li><strong>버는 법</strong>: 게임을 기획 → 개발 → 출시 → 판매. 평점과
+명성, 유행 장르에 따라 수익이 달라진다.</li>
+<li><strong>끝</strong>: 자본금이 음수가 되면 파산 엔딩, 자산 1억 또는
+평점 9.0 명작 출시로 승리.</li>
+</ul>
+<p>이 작은 규칙들이 15개 장에 걸쳐 하나씩 코드가 된다. 지금은 이름만
+눈에 익혀 두자. 1장에서 이 자원들을 담을 변수 네 개를 선언하는 것으로,
+우리의 회사가 문을 연다.</p>
+<hr />
+<blockquote>
+<p><strong>다음 →</strong> <a href="Part1_01.html">A 모듈 · 1–4장 —
+값·계산·분기</a></p>
+</blockquote>
+  </article>
+</main>
+<footer class="site-footer">
+  <a href="index.html">← 목차로 돌아가기</a>
+  <span>CSGP Learn · 표시용 원고 (코드는 UTF-8 사본)</span>
+</footer>
+<script src="book-nav.js"></script>
+</body>
+</html>

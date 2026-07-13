@@ -1,0 +1,892 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>확장 · Pac-Man — 유령 AI와 상태머신</title>
+<script>try{var _t=localStorage.getItem('csgp-theme');if(_t)document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
+<style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<link rel="stylesheet" href="book.css">
+
+</head>
+<body>
+<div class="topbar">
+  <button class="drawer-toggle" id="drawerToggle" type="button" aria-label="목차 열기/닫기" aria-expanded="false">☰ 목차</button>
+  <a class="home" href="index.html">📘 CSGP</a>
+  <span class="crumb">콘솔 게임으로 배우는 C · C++</span>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="라이트/다크 전환">🌙</button>
+</div>
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" aria-label="책 목차">
+  <div class="drawer-dash">
+    <div class="dash-title">콘솔 게임으로 배우는 C · C++</div>
+    <div class="dash-sub">학습 목차 · 대시보드</div>
+    <div class="dash-progress"><div class="dash-bar"><i id="dashBar"></i></div><span class="dash-pct" id="dashPct"></span></div>
+    <input class="drawer-search" id="drawerSearch" type="search" placeholder="🔍 챕터 검색…" aria-label="챕터 검색">
+  </div>
+  <nav class="booknav" aria-label="책 목차"><a class="booknav-home" href="index.html">📘 전체 목차</a><ul class="booknav-list"><li class="grp">1부 · C 기본 문법</li><li><a href="Part1_00.html" title="1부 — C 기본 문법: 회사를 키우며 배우는 언어">1부 개요</a></li><li><a href="Part1_01.html" title="A 모듈 · 1–4장 — 값·계산·분기: 회사에 숫자를 세우다">A · 값·계산·분기</a></li><li><a href="Part1_02.html" title="B 모듈 · 5–6장 — 반복문과 함수: 회사에 심장을 달다">B · 반복문·함수</a></li><li><a href="Part1_03.html" title="C 모듈 · 7–8장 — 배열과 문자열: 회사에 사람과 이름을 채우다">C · 배열·문자열</a></li><li><a href="Part1_04.html" title="D 모듈 · 9–10장 — 구조체와 포인터: 데이터에 모양을 주다">D · 구조체·포인터</a></li><li><a href="Part1_05.html" title="E 모듈 · 11–12장 — 동적 메모리와 랜덤: 회사가 자라고, 시장이 살아난다">E · 메모리·랜덤</a></li><li><a href="Part1_06.html" title="F 모듈 · 13–15장 — 파일·모듈·캡스톤: 회사를 저장하고, 게임을 출시하다">F · 파일·모듈·캡스톤</a></li><li class="grp">2부 · C++ 프레임워크</li><li><a href="Part2_00.html" title="2부 — C++ 콘솔 게임 프레임워크: 7개의 게임으로 오르기">2부 개요</a></li><li><a href="Part2_01.html" title="1단계 · Snake — 자료구조·충돌·상태머신">1단계 · Snake</a></li><li><a href="Part2_02.html" title="2단계 · Tetris — 알고리즘과 그리드">2단계 · Tetris</a></li><li><a href="Part2_03.html" title="3단계 · Dino — 물리와 스크롤">3단계 · Dino</a></li><li><a href="Part2_04.html" title="4단계 · Road Fighter — 엔티티 시스템과 리소스">4단계 · Road Fighter</a></li><li><a href="Part2_05.html" title="번외 · GameDevTycoon 이식 — C에서 C++로">번외 · Tycoon 이식</a></li><li><a href="Part2_06.html" title="5단계 · Galaga — 오브젝트 풀링">5단계 · Galaga</a></li><li><a href="Part2_07.html" title="6단계 · Maze — 알고리즘 심화 (생성 + 탐색)">6단계 · Maze</a></li><li><a href="Part2_08.html" title="7단계 · Battle City — 종합 캡스톤 (맵 생성 + 풀링)">7단계 · Battle City</a></li><li class="active"><a href="Part2_09.html" title="확장 · Pac-Man — 유령 AI와 상태머신">확장 · Pac-Man</a><ul class="sections">
+<li><a href="#이-단계의-학습-목표" id="toc-이-단계의-학습-목표">이
+단계의 학습 목표</a></li>
+<li><a href="#왜-pac-man이-마지막인가"
+id="toc-왜-pac-man이-마지막인가">왜 Pac-Man이 마지막인가</a></li>
+<li><a href="#개념-1--데이터-주도-미로--코드가-아니라-데이터로"
+id="toc-개념-1--데이터-주도-미로--코드가-아니라-데이터로">개념 1 ·
+데이터 주도 미로 — 코드가 아니라 데이터로</a></li>
+<li><a href="#개념-2--방향-버퍼링--팩맨의-코너링-손맛"
+id="toc-개념-2--방향-버퍼링--팩맨의-코너링-손맛">개념 2 · 방향 버퍼링 —
+팩맨의 코너링 손맛</a></li>
+<li><a href="#개념-3--유한상태기계--유령의-다섯-상태"
+id="toc-개념-3--유한상태기계--유령의-다섯-상태">개념 3 · 유한상태기계 —
+유령의 다섯 상태</a></li>
+<li><a href="#개념-4--성격별-타게팅--넷이-다른-목표를-노린다-star"
+id="toc-개념-4--성격별-타게팅--넷이-다른-목표를-노린다-star">개념 4 ·
+성격별 타게팅 — 넷이 다른 목표를 노린다 ⭐</a></li>
+<li><a href="#개념-5--greedy-격자-경로선택--목표에-가까운-방향으로"
+id="toc-개념-5--greedy-격자-경로선택--목표에-가까운-방향으로">개념 5 ·
+greedy 격자 경로선택 — 목표에 가까운 방향으로</a></li>
+<li><a href="#개념-6--파워모드--사냥꾼이-사냥감이-되다"
+id="toc-개념-6--파워모드--사냥꾼이-사냥감이-되다">개념 6 · 파워모드 —
+사냥꾼이 사냥감이 되다</a></li>
+<li><a href="#코드-워크스루--updateghosts-한-프레임"
+id="toc-코드-워크스루--updateghosts-한-프레임">코드 워크스루 —
+<code>UpdateGhosts</code> 한 프레임</a></li>
+<li><a href="#그림으로-정리--넷의-목표와-상태-전이"
+id="toc-그림으로-정리--넷의-목표와-상태-전이">그림으로 정리 — 넷의
+목표와 상태 전이</a></li>
+<li><a href="#알려진-이슈에서-배우기-as-built"
+id="toc-알려진-이슈에서-배우기-as-built">알려진 이슈에서 배우기
+(as-built)</a></li>
+<li><a href="#체크포인트--스스로-점검하기"
+id="toc-체크포인트--스스로-점검하기">체크포인트 — 스스로
+점검하기</a></li>
+<li><a href="#실습-미션--유령-타게팅과-추적-ghostc-star"
+id="toc-실습-미션--유령-타게팅과-추적-ghostc-star">실습 미션 — 유령
+타게팅과 추적 <code>ghost.c</code> ⭐</a></li>
+<li><a href="#이-단계를-마치며" id="toc-이-단계를-마치며">이 단계를
+마치며</a></li>
+<li><a href="#책을-닫으며--변수-하나에서-여기까지"
+id="toc-책을-닫으며--변수-하나에서-여기까지">책을 닫으며 — 변수 하나에서
+여기까지</a></li>
+</ul></li><li class="grp">부록</li><li><a href="Appendix.html" title="부록 — 용어집 · 핵심 이슈 · 요약">부록</a></li></ul></nav>
+</aside>
+<main class="reader">
+  <article class="page">
+<h1 id="확장--pac-man--유령-ai와-상태머신">확장 · Pac-Man — 유령 AI와
+상태머신</h1>
+<div class="chapter-badge">
+
+<p><strong>확장 · 8번째 게임</strong> · 게임 <code>Pac-Man</code> · 씬
+클래스 <code>PacManContent : public IGameContent</code> <strong>처음
+배우는 기술</strong> — <code>성격별 타게팅 AI(4유령)</code>
+<code>유한상태기계(FSM)</code>
+<code>전역 모드 스케줄(scatter/chase)</code>
+<code>greedy 격자 경로선택·역방향 금지</code> <code>방향 버퍼링</code>
+<code>파워모드·연쇄 점수</code> <code>데이터 주도 맵 로딩</code>
+<strong>예상 학습 시간</strong> — 5–7시간</p>
+</div>
+
+<blockquote>
+<p>책의 마지막 게임이다. Battle City의 적 탱크는 "랜덤 + 기지
+편향"이라는 소박한 AI였다. Pac-Man은 그것을 한 단계 끌어올린다 — 유령
+넷이 <strong>각자 다른 성격으로 다른 목표를 계산</strong>하고(직접
+추적·앞질러 가로막기·협공·변덕), <strong>상태머신</strong>으로 흩어졌다
+몰려왔다 도망친다. "적 AI란 무엇인가"를 가장 정교하게 다루는 이
+게임으로, 우리는 이 책이 쌓아 온 격자·타일·상태·경로탐색을 모두 한자리에
+모은다. 그리고 그 끝에서, 변수 하나부터 여기까지 온 두 여정을 함께
+돌아본다.</p>
+</blockquote>
+<h2 id="이-단계의-학습-목표">이 단계의 학습 목표</h2>
+<p>이 단계를 마치면 다음을 할 수 있다.</p>
+<ol type="1">
+<li>유령 넷의 <strong>성격별 타게팅</strong>(Blinky/Pinky/Inky/Clyde)이
+어떻게 다른 목표 타일을 계산하는지 설명하고 구현할 수 있다.</li>
+<li>유령의 <strong>유한상태기계(FSM)</strong> —
+<code>HOUSE/SCATTER/CHASE/FRIGHTENED/EATEN</code> — 를 전이 규칙과 함께
+짤 수 있다.</li>
+<li><strong>전역 모드 스케줄</strong>(scatter↔︎chase 교대)이 개별 유령을
+어떻게 모는지 안다.</li>
+<li>교차로에서 <strong>목표에 가장 가까운 방향을 greedy
+선택</strong>하고, 역방향을 금지할 수 있다.</li>
+<li><strong>방향 버퍼링</strong>(<code>wantDir</code>)으로 팩맨의 코너링
+손맛을 만들 수 있다.</li>
+<li>데이터 주도 맵, 파워모드·연쇄 점수를 구현하고, Maze의 BFS로 AI를
+개선하는 방향을 안다.</li>
+</ol>
+<h2 id="왜-pac-man이-마지막인가">왜 Pac-Man이 마지막인가</h2>
+<p>이 책의 게임들은 AI를 조금씩 키워 왔다. Dino의 장애물은 그냥
+다가왔고, Road Fighter의 적은 차선을 오갔으며, Galaga의 편대는 정해진
+궤도로 행진했고, Battle City의 탱크는 <strong>랜덤 40:60으로 기지 쪽을
+향했다.</strong> 점점 똑똑해졌지만, 어느 것도 "생각하는 적"은
+아니었다.</p>
+<p>Pac-Man의 유령은 다르다. 이들은 <strong>각자 목표를 계산하고, 그
+목표를 향해 길을 고른다.</strong> 그리고 넷의 성격이 판이하다.</p>
+<ul>
+<li><strong>Blinky(빨강)</strong> 는 팩맨을 <strong>곧장
+쫓는다.</strong></li>
+<li><strong>Pinky(분홍)</strong> 는 팩맨의 <strong>진행 방향 4칸
+앞</strong>을 노려 <strong>가로막는다.</strong></li>
+<li><strong>Inky(하늘)</strong> 는 Blinky의 위치를 반사해
+<strong>협공</strong>한다.</li>
+<li><strong>Clyde(주황)</strong> 는 멀면 쫓고 가까우면 도망치는
+<strong>변덕쟁이</strong>다.</li>
+</ul>
+<p>이 네 성격이 만드는 것이 팩맨 특유의 심리전 — 앞은 Pinky가 막고 뒤는
+Blinky가 쫓고 옆에서 Inky가 끼어드는 포위망이다. 그리고 이 모든 행동은
+하나의 <strong>유한상태기계</strong>가 지배한다: 유령은 흩어져 코너로
+갔다가(SCATTER), 몰려와 쫓다가(CHASE), 파워펠릿에 놀라
+도망치고(FRIGHTENED), 먹히면 눈만 남아 집으로 돌아간다(EATEN).</p>
+<p><strong>"AI = 목표 선정 + 경로 선택 + 상태 전이"</strong> — 게임 AI의
+세 기둥을, 이 게임이 가장 또렷하게 보여 준다. 그래서 이 책의 마지막에
+둔다. 여기서 쓰는 격자·타일 좌표(Tetris·Maze·Battle City), 상태머신(전
+게임), 경로탐색(Maze BFS)이 모두 앞에서 배운 것들이다 — Pac-Man은 새
+기법의 나열이 아니라, <strong>배운 것으로 만드는 지능</strong>이다.</p>
+<blockquote>
+<p><strong>Battle City와의 대조.</strong> Battle City의 AI는 "랜덤 +
+기지 편향"(그리디의 가장 단순한 형태)이었다. Pac-Man은 <strong>성격별로
+다른 목표 + 상태 전이</strong>로 한 차원 올라선다. 그리고 GDD가 남긴
+폴리시 — Maze의 <strong>BFS로 목표까지 최단 다음 칸을 계산</strong>하면
+벽을 우회하는 더 똑똑한 유령이 된다 — 이 이 책의 두 축(6단계 경로탐색 ·
+적 AI)을 잇는 마지막 매듭이다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-1--데이터-주도-미로--코드가-아니라-데이터로">개념 1 ·
+데이터 주도 미로 — 코드가 아니라 데이터로</h2>
+<p>팩맨의 미로는 코드로 그리지 않는다. <strong>문자 배열로 그려 두고,
+파싱해서 타일 격자로 읽는다.</strong> 미로 모양을 바꾸고 싶으면 코드가
+아니라 데이터를 고친다.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 미로를 &#39;그림&#39;으로 authored — 보이는 그대로가 곧 데이터</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="at">const</span> <span class="dt">char</span><span class="op">*</span> MAZE<span class="op">[</span>MAZE_H<span class="op">]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;###################&quot;</span><span class="op">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#........#........#&quot;</span><span class="op">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#o##.###.#.###.##o#&quot;</span><span class="op">,</span>   <span class="co">// o = 파워펠릿</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#.................#&quot;</span><span class="op">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#.##.#.#####.#.##.#&quot;</span><span class="op">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#....#...#...#....#&quot;</span><span class="op">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... (P = 팩맨 시작, G = 유령 집, - = 게이트) ...</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p><code>LoadMaze()</code> 가 이 문자들을 <code>_ETile</code> 격자로
+옮긴다 — <code>#</code>→벽, <code>.</code>→펠릿,
+<code>o</code>→파워펠릿, <code>-</code>→게이트. 그러면서 펠릿 수를
+세고(<code>pelletCount</code>), 팩맨·유령 시작 위치를 찾는다.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> PacManContent<span class="op">::</span>LoadMaze<span class="op">()</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    pelletCount <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> y <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> y <span class="op">&lt;</span> MAZE_H<span class="op">;</span> y<span class="op">++)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> x <span class="op">&lt;</span> MAZE_W<span class="op">;</span> x<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>            <span class="dt">char</span> c <span class="op">=</span> MAZE<span class="op">[</span>y<span class="op">][</span>x<span class="op">];</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">switch</span> <span class="op">(</span>c<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> <span class="ch">&#39;#&#39;</span><span class="op">:</span> tile<span class="op">[</span>y<span class="op">][</span>x<span class="op">]</span> <span class="op">=</span> _ETile<span class="op">::</span>WALL<span class="op">;</span>  <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> <span class="ch">&#39;.&#39;</span><span class="op">:</span> tile<span class="op">[</span>y<span class="op">][</span>x<span class="op">]</span> <span class="op">=</span> _ETile<span class="op">::</span>PELLET<span class="op">;</span> pelletCount<span class="op">++;</span> <span class="cf">break</span><span class="op">;</span>   <span class="co">// 펠릿 카운트</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> <span class="ch">&#39;o&#39;</span><span class="op">:</span> tile<span class="op">[</span>y<span class="op">][</span>x<span class="op">]</span> <span class="op">=</span> _ETile<span class="op">::</span>POWER<span class="op">;</span>  <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> <span class="ch">&#39;-&#39;</span><span class="op">:</span> tile<span class="op">[</span>y<span class="op">][</span>x<span class="op">]</span> <span class="op">=</span> _ETile<span class="op">::</span>DOOR<span class="op">;</span>   <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> <span class="ch">&#39;P&#39;</span><span class="op">:</span> startX <span class="op">=</span> x<span class="op">;</span> startY <span class="op">=</span> y<span class="op">;</span> tile<span class="op">[</span>y<span class="op">][</span>x<span class="op">]</span> <span class="op">=</span> _ETile<span class="op">::</span>EMPTY<span class="op">;</span> <span class="cf">break</span><span class="op">;</span>  <span class="co">// 시작 위치 추출</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">default</span><span class="op">:</span>  tile<span class="op">[</span>y<span class="op">][</span>x<span class="op">]</span> <span class="op">=</span> _ETile<span class="op">::</span>EMPTY<span class="op">;</span>  <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>"보이는 그대로가 데이터"</strong> 인 이 방식의 장점은 크다 —
+미로를 눈으로 그리며 만들 수 있고, 스테이지마다 다른 미로를 데이터만
+바꿔 넣을 수 있다. 1부 F 모듈의 파일 I/O를 붙이면 미로를 <strong>외부
+파일</strong>에서 읽는 맵 에디터로도 자란다. 코드와 데이터를 분리하는 이
+발상은 큰 게임일수록 중요해진다(레벨 디자이너가 코드 없이 맵을
+만든다).</p>
+<blockquote>
+<p><strong>펠릿이 곧 승리 조건.</strong> 펠릿은 별도 리스트가 아니라
+<strong>타일에 저장</strong>된다(<code>_ETile::PELLET</code>). 먹으면
+타일을 <code>EMPTY</code> 로 바꾸고 <code>pelletCount--</code>.
+<code>pelletCount == 0</code> 이 되면 스테이지 클리어다. 오브젝트를 따로
+관리하지 않고 <strong>맵 자체가 상태를 담는</strong> 것 — Battle City의
+파괴 지형과 같은 발상이다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-2--방향-버퍼링--팩맨의-코너링-손맛">개념 2 · 방향 버퍼링 —
+팩맨의 코너링 손맛</h2>
+<p>팩맨은 격자를 한 칸씩 이동하지만, 조작은 부드러워야 한다. 코너를 돌기
+직전에 방향키를 미리 눌러도 제때 꺾여야 한다. 이를 위해 <strong>입력은
+즉시 "원하는 방향"에 저장하고, 실제 회전은 이동 틱에 벽이 아닐
+때만</strong> 한다.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> PacManContent<span class="op">::</span>UpdatePlayer<span class="op">()</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 입력은 매 프레임 wantDir 에 예약만 (아직 안 꺾음)</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyStay<span class="op">(</span><span class="ch">&#39;W&#39;</span><span class="op">)</span> <span class="op">||</span> INPUT<span class="op">-&gt;</span>OnKeyStay<span class="op">(</span>VK_UP<span class="op">))</span>    wantDir <span class="op">=</span> _EDir<span class="op">::</span>UP<span class="op">;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyStay<span class="op">(</span><span class="ch">&#39;D&#39;</span><span class="op">)</span> <span class="op">||</span> INPUT<span class="op">-&gt;</span>OnKeyStay<span class="op">(</span>VK_RIGHT<span class="op">))</span> wantDir <span class="op">=</span> _EDir<span class="op">::</span>RIGHT<span class="op">;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyStay<span class="op">(</span><span class="ch">&#39;S&#39;</span><span class="op">)</span> <span class="op">||</span> INPUT<span class="op">-&gt;</span>OnKeyStay<span class="op">(</span>VK_DOWN<span class="op">))</span>  wantDir <span class="op">=</span> _EDir<span class="op">::</span>DOWN<span class="op">;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyStay<span class="op">(</span><span class="ch">&#39;A&#39;</span><span class="op">)</span> <span class="op">||</span> INPUT<span class="op">-&gt;</span>OnKeyStay<span class="op">(</span>VK_LEFT<span class="op">))</span>  wantDir <span class="op">=</span> _EDir<span class="op">::</span>LEFT<span class="op">;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>TIMER<span class="op">-&gt;</span>GetTickTimer<span class="op">(</span>pacMove<span class="op">))</span>       <span class="co">// 이동 틱에만</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> wx<span class="op">,</span> wy<span class="op">;</span> DirDelta<span class="op">(</span>wantDir<span class="op">,</span> wx<span class="op">,</span> wy<span class="op">);</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>Passable<span class="op">(</span>WrapX<span class="op">(</span>px <span class="op">+</span> wx<span class="op">),</span> py <span class="op">+</span> wy<span class="op">,</span> <span class="kw">false</span><span class="op">))</span>   <span class="co">// 원하는 방향이 뚫려 있으면</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>            pdir <span class="op">=</span> wantDir<span class="op">;</span>                             <span class="co">// 그제서야 회전</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> dx<span class="op">,</span> dy<span class="op">;</span> DirDelta<span class="op">(</span>pdir<span class="op">,</span> dx<span class="op">,</span> dy<span class="op">);</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>Passable<span class="op">(</span>WrapX<span class="op">(</span>px <span class="op">+</span> dx<span class="op">),</span> py <span class="op">+</span> dy<span class="op">,</span> <span class="kw">false</span><span class="op">))</span> <span class="op">{</span> px <span class="op">=</span> WrapX<span class="op">(</span>px <span class="op">+</span> dx<span class="op">);</span> py <span class="op">=</span> py <span class="op">+</span> dy<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>핵심은 <code>wantDir</code>(원하는 방향)과 <code>pdir</code>(실제
+진행 방향)을 <strong>분리</strong>한 것이다. 매 프레임 키를
+<code>wantDir</code> 에 담아 두고, 이동 틱마다 "지금
+<code>wantDir</code> 로 꺾을 수 있나?"를 확인해 가능하면 회전한다.
+그래서 코너를 조금 일찍 눌러도, 팩맨이 그 지점에 닿는 순간 매끄럽게
+꺾인다. <strong>입력을 "의도"로 저장해 두고 적절한 때에
+반영</strong>하는 이 패턴은, Tetris의 DAS·Dino의 점프 감각과 한 갈래다 —
+"입력받는 주기와 반영하는 주기는 다르다"(0단계).</p>
+<p><code>WrapX</code> 는 좌우 끝 <strong>터널 워프</strong> — x가 미로
+밖으로 나가면 반대편으로 순환시킨다(팩맨 미로의 좌우 통로).</p>
+<hr />
+<h2 id="개념-3--유한상태기계--유령의-다섯-상태">개념 3 · 유한상태기계 —
+유령의 다섯 상태</h2>
+<p>유령의 모든 행동은 <strong>상태(state)</strong> 가 결정한다. 다섯
+상태와 그 사이 전이가 유령 AI의 뼈대다.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> <span class="kw">class</span> _EGhostState <span class="op">{</span> HOUSE<span class="op">,</span> SCATTER<span class="op">,</span> CHASE<span class="op">,</span> FRIGHTENED<span class="op">,</span> EATEN <span class="op">};</span></span></code></pre></div>
+<pre><code>  HOUSE ──(대기시간 경과)──▶ SCATTER ◀──(전역 스케줄)──▶ CHASE
+    ▲                            │  파워펠릿                 │
+    │                            ▼                           │
+ (집 도착)                  FRIGHTENED ──(팩맨에 먹힘)──▶ EATEN(눈) ──▶ HOUSE</code></pre>
+<ul>
+<li><strong>HOUSE</strong> — 유령 집에서
+대기(<code>releaseTimer</code>). 시간이 지나면 게이트로 나가
+SCATTER/CHASE로.</li>
+<li><strong>SCATTER</strong> — 각자 자기 <strong>코너</strong>로
+흩어진다(잠깐의 숨통).</li>
+<li><strong>CHASE</strong> — 성격별 목표로 팩맨을
+<strong>몰아간다</strong>(개념 4).</li>
+<li><strong>FRIGHTENED</strong> — 파워펠릿에 놀라
+<strong>도망</strong>(느려지고 교차로에서 랜덤).</li>
+<li><strong>EATEN</strong> — 먹혀서 <strong>눈만</strong> 남아 집으로
+빠르게 복귀 → 부활.</li>
+</ul>
+<p>이 상태는 두 힘이 몬다. 첫째, <strong>전역 모드 스케줄</strong> —
+정해진 시간표로 SCATTER와 CHASE를 교대시킨다. 둘째,
+<strong>파워펠릿</strong> — 전체를 FRIGHTENED로 뒤집는다.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> PacManContent<span class="op">::</span>UpdateGhosts<span class="op">()</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>powerTimer <span class="op">&lt;=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        modeTimer<span class="op">--;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>modeTimer <span class="op">&lt;=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span>                     <span class="co">// 전역 스케줄 교대</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>            chaseMode <span class="op">=</span> <span class="op">!</span>chaseMode<span class="op">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            modeTimer <span class="op">=</span> chaseMode <span class="op">?</span> CHASE_FRAMES <span class="op">:</span> SCATTER_FRAMES<span class="op">;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">4</span><span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(</span>SCATTER 또는 CHASE 상태<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>                    ghosts<span class="op">[</span>i<span class="op">].</span>state <span class="op">=</span> chaseMode <span class="op">?</span> CHASE <span class="op">:</span> SCATTER<span class="op">;</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                    ghosts<span class="op">[</span>i<span class="op">].</span>dir <span class="op">=</span> Reverse<span class="op">(</span>ghosts<span class="op">[</span>i<span class="op">].</span>dir<span class="op">);</span>   <span class="co">// ★ 모드 전환 시 방향 반전</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>        powerTimer<span class="op">--;</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>powerTimer <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> <span class="co">/* FRIGHTENED → 원래 모드로 복귀 */</span> <span class="op">}</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... 상태별 이동 속도로 각 유령 이동 ...</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>두 가지가 원작 규칙의 정수다. <strong>모드가 바뀌는 순간 유령은 진행
+방향을 반전</strong>한다(<code>Reverse</code>) — 쫓다가 갑자기 돌아서는
+그 움직임이 팩맨의 리듬을 만든다. 그리고 <strong>상태마다 이동 속도가
+다르다</strong> — 프라이트는 느리게(<code>GHOST_FRIGHT</code>), 눈은
+빠르게(<code>GHOST_EATEN</code>), 집에서는 또 다르게. 하나의 상태 값이
+"무엇을 목표로, 얼마나 빨리, 어떻게 고를지"를 통째로 정한다. 이것이
+FSM의 힘 — <strong>복잡한 행동을 몇 개의 상태와 전이로
+정리</strong>한다.</p>
+<hr />
+<h2 id="개념-4--성격별-타게팅--넷이-다른-목표를-노린다-star">개념 4 ·
+성격별 타게팅 — 넷이 다른 목표를 노린다 ⭐</h2>
+<p>이 게임의 심장이다. 네 유령은 CHASE 상태에서 <strong>각자 다른 목표
+타일</strong>을 계산한다. 목표만 다를 뿐, 그 목표로 가는 방법(개념 5)은
+똑같다 — 그래서 "성격"이 목표 계산 하나에 응축된다.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> PacManContent<span class="op">::</span>GhostTarget<span class="op">(</span><span class="at">const</span> Ghost<span class="op">&amp;</span> g<span class="op">,</span> <span class="dt">int</span><span class="op">&amp;</span> tx<span class="op">,</span> <span class="dt">int</span><span class="op">&amp;</span> ty<span class="op">)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>g<span class="op">.</span>state <span class="op">==</span> EATEN <span class="op">||</span> g<span class="op">.</span>state <span class="op">==</span> HOUSE<span class="op">)</span> <span class="op">{</span> tx <span class="op">=</span> EXIT_X<span class="op">;</span> ty <span class="op">=</span> EXIT_Y<span class="op">;</span> <span class="cf">return</span><span class="op">;</span> <span class="op">}</span>  <span class="co">// 집으로</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>g<span class="op">.</span>state <span class="op">==</span> SCATTER<span class="op">)</span>                   <span class="op">{</span> tx <span class="op">=</span> g<span class="op">.</span>scatterX<span class="op">;</span> ty <span class="op">=</span> g<span class="op">.</span>scatterY<span class="op">;</span> <span class="cf">return</span><span class="op">;</span> <span class="op">}</span>  <span class="co">// 코너로</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ── CHASE: 성격별 목표 ──</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> dx<span class="op">,</span> dy<span class="op">;</span> DirDelta<span class="op">(</span>pdir<span class="op">,</span> dx<span class="op">,</span> dy<span class="op">);</span>        <span class="co">// 팩맨의 진행 방향</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span> <span class="op">(</span>g<span class="op">.</span>who<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> BLINKY<span class="op">:</span>                               <span class="co">// 직접 추적</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        tx <span class="op">=</span> px<span class="op">;</span>  ty <span class="op">=</span> py<span class="op">;</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> PINKY<span class="op">:</span>                                <span class="co">// 팩맨 4칸 앞 (가로막기)</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        tx <span class="op">=</span> px <span class="op">+</span> <span class="dv">4</span> <span class="op">*</span> dx<span class="op">;</span>  ty <span class="op">=</span> py <span class="op">+</span> <span class="dv">4</span> <span class="op">*</span> dy<span class="op">;</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> INKY<span class="op">:</span> <span class="op">{</span>                               <span class="co">// Blinky를 반사한 협공 지점</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> ax <span class="op">=</span> px <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> dx<span class="op">,</span> ay <span class="op">=</span> py <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> dy<span class="op">;</span>         <span class="co">// 팩맨 2칸 앞</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> bx <span class="op">=</span> ghosts<span class="op">[</span><span class="dv">0</span><span class="op">].</span>x<span class="op">,</span> by <span class="op">=</span> ghosts<span class="op">[</span><span class="dv">0</span><span class="op">].</span>y<span class="op">;</span>        <span class="co">// Blinky 위치</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        tx <span class="op">=</span> ax <span class="op">+</span> <span class="op">(</span>ax <span class="op">-</span> bx<span class="op">);</span>  ty <span class="op">=</span> ay <span class="op">+</span> <span class="op">(</span>ay <span class="op">-</span> by<span class="op">);</span>     <span class="co">// 그 점을 Blinky 기준으로 반사</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">default</span><span class="op">:</span> <span class="op">{</span>                                 <span class="co">// CLYDE: 멀면 추적, 가까우면 도망</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> man <span class="op">=</span> abs<span class="op">(</span>g<span class="op">.</span>x <span class="op">-</span> px<span class="op">)</span> <span class="op">+</span> abs<span class="op">(</span>g<span class="op">.</span>y <span class="op">-</span> py<span class="op">);</span>       <span class="co">// 맨해튼 거리 (Maze A*의 그것)</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>man <span class="op">&gt;</span> <span class="dv">8</span><span class="op">)</span> <span class="op">{</span> tx <span class="op">=</span> px<span class="op">;</span> ty <span class="op">=</span> py<span class="op">;</span> <span class="op">}</span>             <span class="co">// 8칸 밖 → 직접 추적</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>         <span class="op">{</span> tx <span class="op">=</span> g<span class="op">.</span>scatterX<span class="op">;</span> ty <span class="op">=</span> g<span class="op">.</span>scatterY<span class="op">;</span> <span class="op">}</span>  <span class="co">// 8칸 안 → 자기 코너로 후퇴</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>네 공식을 음미하자.</p>
+<ul>
+<li><strong>Blinky</strong> = <code>(px, py)</code>. 팩맨 그 자리. 가장
+단순하고 가장 무섭다 — 등 뒤에서 끈질기게.</li>
+<li><strong>Pinky</strong> = 팩맨의 <strong>4칸 앞</strong>. 팩맨이 가는
+곳을 미리 노려 <strong>길목을 막는다.</strong> 그래서 Blinky가 뒤에서
+밀고 Pinky가 앞에서 기다린다.</li>
+<li><strong>Inky</strong> = 팩맨 2칸 앞을 잡고, <strong>Blinky 위치를
+기준으로 반사</strong>한 점. <code>a + (a - b)</code> — 벡터 반사다.
+Blinky와 팩맨의 상대 위치에 따라 목표가 요동쳐, 예측하기 가장 어려운
+협공을 만든다.</li>
+<li><strong>Clyde</strong> = <strong>8칸 밖이면 Blinky처럼 추적, 8칸
+안이면 자기 코너로 후퇴.</strong> 다가왔다 물러섰다 하는 변덕. 맨해튼
+거리(<code>abs(dx)+abs(dy)</code>)는 6단계 Maze의 A* 휴리스틱과 같은
+계산이다.</li>
+</ul>
+<p><strong>성격이 곧 목표 함수다.</strong> 이동 코드는 넷이 완전히
+똑같고, 오직 <code>GhostTarget</code> 이 주는 목표 좌표만 다르다. 이것이
+AI 설계의 우아한 통찰 — <strong>행동의 다양성을 "무엇을 목표로
+삼는가"라는 한 점에 모으면</strong>, 나머지(길 찾기)는 공유할 수
+있다.</p>
+<hr />
+<h2 id="개념-5--greedy-격자-경로선택--목표에-가까운-방향으로">개념 5 ·
+greedy 격자 경로선택 — 목표에 가까운 방향으로</h2>
+<p>목표 타일이 정해지면, 유령은 <strong>교차로에서 목표에 가장
+가까워지는 방향</strong>을 고른다. 단, <strong>왔던 길(역방향)로는 못
+돌아간다</strong>(원작 규칙). 최단경로를 완벽히 계산(BFS)하는 대신, 매
+칸에서 당장 가장 가까워 보이는 이웃을 고르는 —
+<strong>그리디(greedy)</strong> 방식이다.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> PacManContent<span class="op">::</span>ChooseGhostDir<span class="op">(</span>Ghost<span class="op">&amp;</span> g<span class="op">)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> tgtX<span class="op">,</span> tgtY<span class="op">;</span> GhostTarget<span class="op">(</span>g<span class="op">,</span> tgtX<span class="op">,</span> tgtY<span class="op">);</span>   <span class="co">// 이 유령의 목표</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    _EDir rev <span class="op">=</span> Reverse<span class="op">(</span>g<span class="op">.</span>dir<span class="op">);</span>                    <span class="co">// 역방향(금지)</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 갈 수 있는 방향 수집 (역방향 제외, 벽 제외)</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    _EDir cand<span class="op">[</span><span class="dv">4</span><span class="op">];</span> <span class="dt">int</span> n <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    _EDir order<span class="op">[</span><span class="dv">4</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> UP<span class="op">,</span> LEFT<span class="op">,</span> DOWN<span class="op">,</span> RIGHT <span class="op">};</span>    <span class="co">// 동점 시 우선순위 (원작 규칙)</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>_EDir d <span class="op">:</span> order<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>d <span class="op">==</span> rev<span class="op">)</span> <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> dx<span class="op">,</span> dy<span class="op">;</span> DirDelta<span class="op">(</span>d<span class="op">,</span> dx<span class="op">,</span> dy<span class="op">);</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>Passable<span class="op">(</span>WrapX<span class="op">(</span>g<span class="op">.</span>x <span class="op">+</span> dx<span class="op">),</span> g<span class="op">.</span>y <span class="op">+</span> dy<span class="op">,</span> <span class="kw">true</span><span class="op">))</span> cand<span class="op">[</span>n<span class="op">++]</span> <span class="op">=</span> d<span class="op">;</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>n <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> g<span class="op">.</span>dir <span class="op">=</span> rev<span class="op">;</span> <span class="cf">return</span><span class="op">;</span> <span class="op">}</span>           <span class="co">// 막다른 길 → 어쩔 수 없이 역방향</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>g<span class="op">.</span>state <span class="op">==</span> FRIGHTENED<span class="op">)</span> <span class="op">{</span> g<span class="op">.</span>dir <span class="op">=</span> cand<span class="op">[</span>rand<span class="op">()</span> <span class="op">%</span> n<span class="op">];</span> <span class="cf">return</span><span class="op">;</span> <span class="op">}</span>  <span class="co">// 겁먹으면 랜덤</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 목표까지 유클리드 거리가 최소인 방향을 고른다 (greedy)</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    _EDir best <span class="op">=</span> cand<span class="op">[</span><span class="dv">0</span><span class="op">];</span> <span class="dt">long</span> bestD <span class="op">=</span> <span class="dv">1</span><span class="bu">L</span> <span class="op">&lt;&lt;</span> <span class="dv">29</span><span class="op">;</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> k <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> k <span class="op">&lt;</span> n<span class="op">;</span> k<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> dx<span class="op">,</span> dy<span class="op">;</span> DirDelta<span class="op">(</span>cand<span class="op">[</span>k<span class="op">],</span> dx<span class="op">,</span> dy<span class="op">);</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> nx <span class="op">=</span> g<span class="op">.</span>x <span class="op">+</span> dx<span class="op">,</span> ny <span class="op">=</span> g<span class="op">.</span>y <span class="op">+</span> dy<span class="op">;</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>        <span class="dt">long</span> dd <span class="op">=</span> <span class="op">(</span><span class="dt">long</span><span class="op">)(</span>nx<span class="op">-</span>tgtX<span class="op">)*(</span>nx<span class="op">-</span>tgtX<span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="dt">long</span><span class="op">)(</span>ny<span class="op">-</span>tgtY<span class="op">)*(</span>ny<span class="op">-</span>tgtY<span class="op">);</span>  <span class="co">// 거리²</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>dd <span class="op">&lt;</span> bestD<span class="op">)</span> <span class="op">{</span> bestD <span class="op">=</span> dd<span class="op">;</span> best <span class="op">=</span> cand<span class="op">[</span>k<span class="op">];</span> <span class="op">}</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    g<span class="op">.</span>dir <span class="op">=</span> best<span class="op">;</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>세 규칙이 원작의 유령을 만든다.</p>
+<ul>
+<li><strong>역방향 금지.</strong> 왔던 길로 못
+돌아가니(<code>d == rev</code> 제외), 유령은 앞으로만 흐른다. 그래서
+직선 통로에선 계속 직진하고, 교차로에서만 방향을 고른다. (예외: 모드
+전환 순간의 강제 반전은 개념 3.)</li>
+<li><strong>거리² 최소 greedy.</strong> 각 후보 방향의 다음 칸이 목표와
+얼마나 가까운지 거리 제곱으로 재, 가장 가까운 방향을 고른다.
+<strong>완벽한 최단이 아니라 "지금 가장 가까워 보이는" 선택</strong> —
+그래서 벽에 막혀 빙 돌기도 한다. 그 불완전함이 원작 팩맨의 맛이다.</li>
+<li><strong>동점 우선순위 UP &gt; LEFT &gt; DOWN &gt; RIGHT.</strong>
+거리가 같은 후보가 여럿이면 이 순서로 고른다(원작의 유명한 규칙). 그리고
+FRIGHTENED면 아예 랜덤으로 골라 도망친다.</li>
+</ul>
+<blockquote>
+<p><strong>greedy vs BFS — Battle City와 Maze가 만나는 곳.</strong> 이
+greedy는 Battle City 적 AI의 "기지 편향"과 같은 발상(당장 가까운
+쪽)이다. 벽을 우회하지 못하는 한계도 같다. <strong>여기에 6단계 Maze의
+BFS를 붙이면</strong>(GDD 폴리시), 유령이 목표까지 최단경로의 다음 칸을
+계산해 벽을 돌아 정확히 추적한다. "적 AI에 경로탐색을 재사용한다" — 이
+책이 6단계에서 예고하고 7단계에서 언급한 그 매듭이, 여기서 완성된다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-6--파워모드--사냥꾼이-사냥감이-되다">개념 6 · 파워모드 —
+사냥꾼이 사냥감이 되다</h2>
+<p>파워펠릿을 먹으면 판이 뒤집힌다 — 전체 유령이 FRIGHTENED가 되어
+도망치고, 팩맨이 그들을 <strong>먹을 수 있다.</strong></p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> PacManContent<span class="op">::</span>SetFrightened<span class="op">()</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    powerTimer <span class="op">=</span> PowerFrames<span class="op">();</span>                 <span class="co">// 파워 지속(스테이지 오를수록 짧아짐)</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    eatChain <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>                               <span class="co">// 연쇄 점수 초기화</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">4</span><span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>SCATTER 또는 CHASE 상태<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>            ghosts<span class="op">[</span>i<span class="op">].</span>state <span class="op">=</span> FRIGHTENED<span class="op">;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>            ghosts<span class="op">[</span>i<span class="op">].</span>dir <span class="op">=</span> Reverse<span class="op">(</span>ghosts<span class="op">[</span>i<span class="op">].</span>dir<span class="op">);</span>   <span class="co">// 놀라서 돌아선다</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>먹을수록 점수가 배가되는 <strong>연쇄 점수</strong>가 파워모드의
+묘미다.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 프라이트 유령을 먹으면 (HandleCollisions에서):</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>score <span class="op">+=</span> <span class="dv">200</span> <span class="op">&lt;&lt;</span> eatChain<span class="op">;</span>    <span class="co">// 200 → 400 → 800 → 1600</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>eatChain<span class="op">++;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>g<span class="op">.</span>state <span class="op">=</span> EATEN<span class="op">;</span>             <span class="co">// 눈만 남아 집으로</span></span></code></pre></div>
+<p><code>200 &lt;&lt; eatChain</code> — 비트 시프트로
+<code>200, 400, 800, 1600</code>을 만든다(한 번 먹을 때마다 2배). 한
+파워모드 동안 넷을 다 먹으면 <code>200+400+800+1600 = 3000</code>점.
+그래서 파워펠릿을 언제 먹고 어떻게 넷을 몰아 잡을지가 고득점의 열쇠다 —
+쫓기던 팩맨이 사냥꾼이 되는 이 반전이, 게임의 심리전을 완성한다.</p>
+<p><code>PowerFrames()</code> 는 스테이지가 오를수록
+짧아진다(<code>480 - (stage-1)*60</code>, 최소 120). 후반부엔 반격의
+시간이 짧아 긴장이 는다 — Road Fighter·Galaga에서 본 "스테이지 = 난이도
+다이얼"이 여기서도.</p>
+<hr />
+<h2 id="코드-워크스루--updateghosts-한-프레임">코드 워크스루 —
+<code>UpdateGhosts</code> 한 프레임</h2>
+<p>유령 AI가 한 프레임에서 어떻게 도는지 따라가자.</p>
+<blockquote>
+<p><strong>실제 파일:</strong>
+<code>Main/Content/PacManContent.cpp</code> — <code>UpdateGhosts</code>
+· <code>ChooseGhostDir</code> · <code>GhostTarget</code></p>
+</blockquote>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> PacManContent<span class="op">::</span>UpdateGhosts<span class="op">()</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ① 전역 모드: 파워 중이 아니면 scatter↔chase 시간표를 돌리고,</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">//    파워 중이면 powerTimer를 깎다가 0에서 FRIGHTENED 해제 (개념 3)</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>powerTimer <span class="op">&lt;=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> <span class="co">/* modeTimer 교대 + 방향 반전 */</span> <span class="op">}</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>                 <span class="op">{</span> <span class="co">/* powerTimer-- ; 0이면 원래 모드로 */</span> <span class="op">}</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ② 상태별 이동 속도 결정 (프라이트 느리게, 눈 빠르게)</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> tN <span class="op">=</span> TIMER<span class="op">-&gt;</span>GetTickTimer<span class="op">(</span>GHOST_MOVE<span class="op">);</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> tF <span class="op">=</span> TIMER<span class="op">-&gt;</span>GetTickTimer<span class="op">(</span>GHOST_FRIGHT<span class="op">);</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> tE <span class="op">=</span> TIMER<span class="op">-&gt;</span>GetTickTimer<span class="op">(</span>GHOST_EATEN<span class="op">);</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">4</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>        Ghost<span class="op">&amp;</span> g <span class="op">=</span> ghosts<span class="op">[</span>i<span class="op">];</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>        <span class="dt">bool</span> moveNow <span class="op">=</span> <span class="op">(</span>g<span class="op">.</span>state <span class="op">==</span> FRIGHTENED<span class="op">)</span> <span class="op">?</span> tF</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>                     <span class="op">:</span> <span class="op">(</span>g<span class="op">.</span>state <span class="op">==</span> EATEN<span class="op">)</span>      <span class="op">?</span> tE <span class="op">:</span> tN<span class="op">;</span>      <span class="co">// 상태가 속도를 정한다</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(!</span>moveNow<span class="op">)</span> <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>        ChooseGhostDir<span class="op">(</span>g<span class="op">);</span>                    <span class="co">// ③ 목표 계산(개념 4) + greedy 방향(개념 5)</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> dx<span class="op">,</span> dy<span class="op">;</span> DirDelta<span class="op">(</span>g<span class="op">.</span>dir<span class="op">,</span> dx<span class="op">,</span> dy<span class="op">);</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> nx <span class="op">=</span> WrapX<span class="op">(</span>g<span class="op">.</span>x <span class="op">+</span> dx<span class="op">),</span> ny <span class="op">=</span> g<span class="op">.</span>y <span class="op">+</span> dy<span class="op">;</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>Passable<span class="op">(</span>nx<span class="op">,</span> ny<span class="op">,</span> <span class="kw">true</span><span class="op">))</span> <span class="op">{</span> g<span class="op">.</span>x <span class="op">=</span> nx<span class="op">;</span> g<span class="op">.</span>y <span class="op">=</span> ny<span class="op">;</span> <span class="op">}</span>   <span class="co">// ④ 이동</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>        <span class="co">// ⑤ EATEN이 집 입구에 도착 → 부활</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>g<span class="op">.</span>state <span class="op">==</span> EATEN <span class="op">&amp;&amp;</span> g<span class="op">.</span>x <span class="op">==</span> EXIT_X <span class="op">&amp;&amp;</span> g<span class="op">.</span>y <span class="op">==</span> EXIT_Y<span class="op">)</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>            g<span class="op">.</span>state <span class="op">=</span> chaseMode <span class="op">?</span> CHASE <span class="op">:</span> SCATTER<span class="op">;</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>한 프레임의 인과가 선명하다 — <strong>전역 모드가 각 유령의 상태를
+정하고(①), 상태가 이동 속도를 정하고(②), 상태가 목표를 정하고(③,
+<code>GhostTarget</code>), 목표가 방향을 정하고(③, greedy), 방향이
+이동을 만든다(④).</strong> 하나의 <code>state</code> 값이 위에서 아래로
+흐르며 유령의 모든 것을 결정한다. <strong>AI가 "if 문 더미"가 아니라
+"상태 → 목표 → 경로"의 깔끔한 파이프라인</strong>이 되는 것 — 그것이 FSM
++ 타게팅 설계의 결실이다.</p>
+<p>렌더는 이 상태를 그린다 — 성격색 <code>Ω</code>(NORMAL), 파랑
+<code>Ω</code>(FRIGHTENED, 종료 직전 흰 깜빡), 눈 <code>◎</code>(EATEN).
+팩맨은 진행 방향으로 입을 벌린 <code>▶◀▲▼</code> 와 닫힌 <code>●</code>
+를 토글해 그 유명한 "냠냠"을 만든다.</p>
+<hr />
+<h2 id="그림으로-정리--넷의-목표와-상태-전이">그림으로 정리 — 넷의
+목표와 상태 전이</h2>
+<blockquote>
+<p>📊 <strong>웹 교육문서에서는 네 유령의 타게팅과 FSM 전이가
+애니메이션(V-P2-9)으로 재생된다.</strong> 책에서는 아래 도식으로
+대신한다.</p>
+</blockquote>
+<p><strong>성격별 타게팅 — 같은 팩맨, 네 개의 목표</strong></p>
+<pre><code>                     Pinky ◎ (팩맨 4칸 앞 — 길목 차단)
+                        ↑
+        Blinky ─────▶ ●팩맨(→)         Clyde: 멀면 ●추적 / 가까우면 ↙코너
+        (직접 추적)      ↘
+                        Inky ◎ (Blinky를 반사한 협공 지점)
+   행동 코드는 넷이 동일. 다른 건 GhostTarget 이 주는 목표 좌표 하나뿐.</code></pre>
+<p><strong>유령 FSM — 상태 하나가 모든 것을 정한다</strong></p>
+<pre><code>     ┌──────────── 전역 스케줄(scatter↔chase) ────────────┐
+     ▼                                                    │
+  HOUSE ──▶ SCATTER ◀──────────────────────────▶ CHASE ──┘
+              │  (파워펠릿: 전체 FRIGHTENED)         │
+              └──────────▶ FRIGHTENED ──(먹힘)──▶ EATEN ──▶ HOUSE
+   state → 이동속도 · 목표(GhostTarget) · 방향선택(greedy/random)</code></pre>
+<p>한 문장으로: <strong>성격은 목표 함수 하나에 응축되고, 유한상태기계가
+그 목표와 속도와 선택을 지휘한다 — 이것이 "생각하는 적"의
+설계다.</strong></p>
+<hr />
+<h2 id="알려진-이슈에서-배우기-as-built">알려진 이슈에서 배우기
+(as-built)</h2>
+<p>Pac-Man의 AI도 원작에 충실한 MVP다. 그 단순화가 오히려 AI 설계의
+선택지를 가르친다.</p>
+<table>
+<thead>
+<tr>
+<th>이슈</th>
+<th>as-built 상태</th>
+<th>무엇을 배우나</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>greedy 경로선택</strong></td>
+<td>교차로에서 거리² 최소 (BFS 아님)</td>
+<td>벽을 우회 못 함(원작도 그렇다). <strong>Maze BFS</strong>로 최단
+추적 가능(개념 5)</td>
+</tr>
+<tr>
+<td><strong>터널·집 규칙 단순화</strong></td>
+<td>워프·게이트를 좌표 조건으로</td>
+<td>원작의 세밀한 속도/영역 규칙은 폴리시</td>
+</tr>
+<tr>
+<td><strong>Inky 반사 근사</strong></td>
+<td>팩맨 2칸 앞 + Blinky 반사</td>
+<td>원작의 미묘함을 벡터 하나로 근사</td>
+</tr>
+<tr>
+<td><strong>연쇄 점수 <code>200&lt;&lt;n</code></strong></td>
+<td>비트 시프트로 배가</td>
+<td>간결하지만 4마리 상한 가정</td>
+</tr>
+<tr>
+<td><strong>하이스코어 세션 한정</strong></td>
+<td>멤버 변수</td>
+<td>파일 저장(1부 F)은 향후 확장</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>"greedy vs BFS"가 다시 눈에 띈다. 이 책을 다 읽은 당신은, 6단계
+Maze의 <code>ShortestPath</code>(BFS)를 여기 <code>GhostTarget</code>
+다음에 붙여 유령이 벽을 돌아 팩맨을 정확히 추적하게 만들 수 있다.
+<strong>배운 알고리즘을 다른 게임에 옮겨 붙이는 것</strong> — 그것이 이
+책이 준비한 마지막 연습이자, 개발자가 된다는 것의 의미다.</p>
+</blockquote>
+<hr />
+<h2 id="체크포인트--스스로-점검하기">체크포인트 — 스스로 점검하기</h2>
+<p><strong>Q1.</strong> 네 유령이 "성격이 다르다"는 것은 코드에서 정확히
+무엇이 다른 것인가? 무엇이 같은가?</p>
+<p><strong>Q2.</strong> Pinky의 목표는 왜 팩맨 위치가 아니라 "4칸
+앞"인가? 어떤 효과를 내나?</p>
+<p><strong>Q3.</strong> 유령이 교차로에서 방향을 고를 때
+<strong>역방향을 금지</strong>하는 이유는? 예외는 언제인가?</p>
+<p><strong>Q4.</strong> 유령의 이동 속도, 목표, 방향 선택 방식이 모두
+다른 값을 갖는데, 이 셋을 한꺼번에 정하는 것은 무엇인가?</p>
+<p><strong>Q5.</strong> greedy 경로선택의 한계는? 6단계에서 배운
+무엇으로 개선할 수 있나?</p>
+<details><summary><b>해설 펼치기</b></summary>
+
+<p><strong>A1.</strong> 다른 것은 <strong><code>GhostTarget</code> 이
+계산하는 목표 타일</strong> 하나뿐이다(Blinky=팩맨, Pinky=4칸 앞,
+Inky=반사, Clyde=거리 조건). 같은 것은 <strong>그 목표로 가는
+방법</strong> — 교차로에서 목표에 가장 가까운 방향을 greedy로 고르는
+<code>ChooseGhostDir</code> 를 넷이 공유한다. "성격 = 목표 함수".</p>
+<p><strong>A2.</strong> 팩맨의 <strong>진행 방향 4칸 앞</strong>을
+노리면, 팩맨이 가려는 길목을 <strong>미리 막을</strong> 수 있다.
+Blinky가 뒤에서 쫓는 동안 Pinky가 앞에서 기다리는 협공이 되어, 팩맨을
+포위한다.</p>
+<p><strong>A3.</strong> 역방향을 허용하면 유령이 교차로에서 왔다갔다
+진동하거나 비겁하게 뒤로 빠질 수 있다. 금지하면 앞으로만 흐르는
+자연스러운 추격이 된다. <strong>예외는 모드가 전환되는
+순간</strong>(SCATTER↔︎CHASE, 파워펠릿) — 이때만 강제로 방향을
+반전한다(원작 규칙).</p>
+<p><strong>A4.</strong> 유령의 <strong>상태(<code>state</code>)</strong>
+다. <code>state</code> 하나가 이동 속도(FRIGHTENED 느리게/EATEN 빠르게),
+목표(<code>GhostTarget</code> 이 상태로 분기), 방향 선택
+방식(FRIGHTENED면 랜덤, 아니면 greedy)을 모두 정한다. FSM의 핵심 —
+상태가 행동 전체를 지휘한다.</p>
+<p><strong>A5.</strong> greedy는 "지금 당장 가장 가까운 방향"만 보므로
+<strong>벽을 우회하지 못한다</strong>(막다른 곳으로 몰리거나 빙 돈다).
+6단계 Maze의 <strong>BFS(<code>ShortestPath</code>)</strong> 로 목표까지
+최단경로의 다음 칸을 계산하면, 벽을 돌아 정확히 추적하는 더 똑똑한
+유령이 된다.</p>
+</details>
+
+<hr />
+<h2 id="실습-미션--유령-타게팅과-추적-ghostc-star">실습 미션 — 유령
+타게팅과 추적 <code>ghost.c</code> ⭐</h2>
+<blockquote>
+<p>이 책의 마지막 미션이다. Pac-Man AI의 심장인 <strong>성격별 목표 계산
++ greedy 방향 선택</strong>을 손으로 구현한다.</p>
+</blockquote>
+<p><strong>드릴 문법</strong> — 좌표 계산(타게팅) · 방향 후보 순회 ·
+거리² 비교(greedy) · 역방향 금지 · 조건 분기 <strong>하는 것</strong> —
+팩맨 위치·방향과 유령 위치가 주어졌을 때, 네 유령의 목표를 계산하고, 한
+유령의 다음 방향을 greedy로 고른다. <strong>클리어 조건</strong> —
+Blinky/Pinky/Clyde의 목표가 공식대로 나오고, 벽을 피해 목표에 가까워지는
+방향을 고른다. <strong>규모</strong> — 약 55줄, 파일 1개. 표준 C만.
+격자·거리·조건 — 이 책이 배운 것들의 총정리.</p>
+<h3 id="문제-정의">문제 정의</h3>
+<p>핵심은 두 단계다. <strong>① 성격에 따라 목표 타일을
+계산하고(Blinky=팩맨, Pinky=4칸 앞, Clyde=거리 조건), ② 그 목표에 가장
+가까워지는 방향을 역방향 제외하고 고른다.</strong> 완벽한 최단(BFS)이
+아니라 "지금 가장 가까운" greedy — 그래서 짧고 명료하다.</p>
+<h3 id="힌트">힌트</h3>
+<details><summary><b>힌트 1 — 성격별 목표</b></summary>
+
+<div class="sourceCode" id="cb14"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* 팩맨 (px,py) 진행방향 (dx,dy), 유령 gx,gy */</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> target<span class="op">(</span><span class="dt">char</span> who<span class="op">,</span> <span class="dt">int</span><span class="op">*</span> tx<span class="op">,</span> <span class="dt">int</span><span class="op">*</span> ty<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>who <span class="op">==</span> <span class="ch">&#39;B&#39;</span><span class="op">)</span> <span class="op">{</span> <span class="op">*</span>tx <span class="op">=</span> px<span class="op">;</span> <span class="op">*</span>ty <span class="op">=</span> py<span class="op">;</span> <span class="op">}</span>                 <span class="co">/* Blinky 직접 */</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>who <span class="op">==</span> <span class="ch">&#39;P&#39;</span><span class="op">)</span> <span class="op">{</span> <span class="op">*</span>tx <span class="op">=</span> px <span class="op">+</span> <span class="dv">4</span><span class="op">*</span>dx<span class="op">;</span> <span class="op">*</span>ty <span class="op">=</span> py <span class="op">+</span> <span class="dv">4</span><span class="op">*</span>dy<span class="op">;</span> <span class="op">}</span> <span class="co">/* Pinky 4칸 앞 */</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="op">{</span> <span class="dt">int</span> man <span class="op">=</span> abs<span class="op">(</span>gx<span class="op">-</span>px<span class="op">)+</span>abs<span class="op">(</span>gy<span class="op">-</span>py<span class="op">);</span>                  <span class="co">/* Clyde 거리 조건 */</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>           <span class="cf">if</span> <span class="op">(</span>man <span class="op">&gt;</span> <span class="dv">8</span><span class="op">)</span> <span class="op">{</span> <span class="op">*</span>tx <span class="op">=</span> px<span class="op">;</span> <span class="op">*</span>ty <span class="op">=</span> py<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>           <span class="cf">else</span>         <span class="op">{</span> <span class="op">*</span>tx <span class="op">=</span> CLYDE_CORNER_X<span class="op">;</span> <span class="op">*</span>ty <span class="op">=</span> CLYDE_CORNER_Y<span class="op">;</span> <span class="op">}</span> <span class="op">}</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+
+<details><summary><b>힌트 2 — greedy 방향 (역방향 제외)</b></summary>
+
+<div class="sourceCode" id="cb15"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> DX<span class="op">[</span><span class="dv">4</span><span class="op">]={</span><span class="dv">0</span><span class="op">,</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">,-</span><span class="dv">1</span><span class="op">},</span> DY<span class="op">[</span><span class="dv">4</span><span class="op">]={-</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">};</span>   <span class="co">/* 북 동 남 서 */</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> best<span class="op">=-</span><span class="dv">1</span><span class="op">;</span> <span class="dt">long</span> bestD<span class="op">=</span><span class="dv">1</span><span class="bu">L</span><span class="op">&lt;&lt;</span><span class="dv">30</span><span class="op">;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> d<span class="op">=</span><span class="dv">0</span><span class="op">;</span> d<span class="op">&lt;</span><span class="dv">4</span><span class="op">;</span> d<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>d <span class="op">==</span> <span class="op">(</span>curDir<span class="op">+</span><span class="dv">2</span><span class="op">)%</span><span class="dv">4</span><span class="op">)</span> <span class="cf">continue</span><span class="op">;</span>      <span class="co">/* 역방향 금지 */</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> nx<span class="op">=</span>gx<span class="op">+</span>DX<span class="op">[</span>d<span class="op">],</span> ny<span class="op">=</span>gy<span class="op">+</span>DY<span class="op">[</span>d<span class="op">];</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>maze<span class="op">[</span>ny<span class="op">][</span>nx<span class="op">]==</span><span class="ch">&#39;#&#39;</span><span class="op">)</span> <span class="cf">continue</span><span class="op">;</span>      <span class="co">/* 벽 제외 */</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">long</span> dd<span class="op">=(</span><span class="dt">long</span><span class="op">)(</span>nx<span class="op">-</span>tx<span class="op">)*(</span>nx<span class="op">-</span>tx<span class="op">)+(</span><span class="dt">long</span><span class="op">)(</span>ny<span class="op">-</span>ty<span class="op">)*(</span>ny<span class="op">-</span>ty<span class="op">);</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>dd<span class="op">&lt;</span>bestD<span class="op">){</span>bestD<span class="op">=</span>dd<span class="op">;</span>best<span class="op">=</span>d<span class="op">;}</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+
+<h3 id="정답-코드">정답 코드</h3>
+<details><summary><b>정답 펼치기 — <code>ghost.c</code></b></summary>
+
+<div class="sourceCode" id="cb16"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define _CRT_SECURE_NO_WARNINGS</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#define H </span><span class="dv">7</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#define W </span><span class="dv">11</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> maze<span class="op">[</span>H<span class="op">][</span>W<span class="op">+</span><span class="dv">1</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;###########&quot;</span><span class="op">,</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#.........#&quot;</span><span class="op">,</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#.###.###.#&quot;</span><span class="op">,</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#....B....#&quot;</span><span class="op">,</span>   <span class="co">/* B = 유령 시작 위치 표시(참고용) */</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#.###.###.#&quot;</span><span class="op">,</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#....P....#&quot;</span><span class="op">,</span>   <span class="co">/* P = 팩맨 위치 표시 */</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;###########&quot;</span><span class="op">,</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co">/* 방향: 0북 1동 2남 3서 */</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> DX<span class="op">[</span><span class="dv">4</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="op">-</span><span class="dv">1</span> <span class="op">};</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> DY<span class="op">[</span><span class="dv">4</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">0</span> <span class="op">};</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="dt">const</span> <span class="dt">char</span><span class="op">*</span> DNAME<span class="op">[</span><span class="dv">4</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="st">&quot;북&quot;</span><span class="op">,</span> <span class="st">&quot;동&quot;</span><span class="op">,</span> <span class="st">&quot;남&quot;</span><span class="op">,</span> <span class="st">&quot;서&quot;</span> <span class="op">};</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> px <span class="op">=</span> <span class="dv">5</span><span class="op">,</span> py <span class="op">=</span> <span class="dv">5</span><span class="op">,</span> pdir <span class="op">=</span> <span class="dv">1</span><span class="op">;</span>        <span class="co">/* 팩맨: (5,5), 동쪽으로 */</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> gx <span class="op">=</span> <span class="dv">5</span><span class="op">,</span> gy <span class="op">=</span> <span class="dv">3</span><span class="op">,</span> gdir <span class="op">=</span> <span class="dv">3</span><span class="op">;</span>        <span class="co">/* 유령: (5,3), 서쪽으로 */</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> target<span class="op">(</span><span class="dt">char</span> who<span class="op">,</span> <span class="dt">int</span><span class="op">*</span> tx<span class="op">,</span> <span class="dt">int</span><span class="op">*</span> ty<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> dx <span class="op">=</span> DX<span class="op">[</span>pdir<span class="op">],</span> dy <span class="op">=</span> DY<span class="op">[</span>pdir<span class="op">];</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>who <span class="op">==</span> <span class="ch">&#39;B&#39;</span><span class="op">)</span> <span class="op">{</span> <span class="op">*</span>tx <span class="op">=</span> px<span class="op">;</span> <span class="op">*</span>ty <span class="op">=</span> py<span class="op">;</span> <span class="op">}</span>                       <span class="co">/* Blinky: 직접 */</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>who <span class="op">==</span> <span class="ch">&#39;P&#39;</span><span class="op">)</span> <span class="op">{</span> <span class="op">*</span>tx <span class="op">=</span> px <span class="op">+</span> <span class="dv">4</span><span class="op">*</span>dx<span class="op">;</span> <span class="op">*</span>ty <span class="op">=</span> py <span class="op">+</span> <span class="dv">4</span><span class="op">*</span>dy<span class="op">;</span> <span class="op">}</span>    <span class="co">/* Pinky: 4칸 앞 */</span></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="op">{</span>                                                        <span class="co">/* Clyde: 8칸 조건 */</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> man <span class="op">=</span> abs<span class="op">(</span>gx <span class="op">-</span> px<span class="op">)</span> <span class="op">+</span> abs<span class="op">(</span>gy <span class="op">-</span> py<span class="op">);</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>man <span class="op">&gt;</span> <span class="dv">8</span><span class="op">)</span> <span class="op">{</span> <span class="op">*</span>tx <span class="op">=</span> px<span class="op">;</span> <span class="op">*</span>ty <span class="op">=</span> py<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>         <span class="op">{</span> <span class="op">*</span>tx <span class="op">=</span> <span class="dv">1</span><span class="op">;</span>  <span class="op">*</span>ty <span class="op">=</span> H <span class="op">-</span> <span class="dv">2</span><span class="op">;</span> <span class="op">}</span>                   <span class="co">/* 좌하단 코너로 */</span></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> greedyDir<span class="op">(</span><span class="dt">int</span> tx<span class="op">,</span> <span class="dt">int</span> ty<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> best <span class="op">=</span> gdir<span class="op">;</span> <span class="dt">long</span> bestD <span class="op">=</span> <span class="dv">1</span><span class="bu">L</span> <span class="op">&lt;&lt;</span> <span class="dv">30</span><span class="op">;</span></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> d <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> d <span class="op">&lt;</span> <span class="dv">4</span><span class="op">;</span> d<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>d <span class="op">==</span> <span class="op">(</span>gdir <span class="op">+</span> <span class="dv">2</span><span class="op">)</span> <span class="op">%</span> <span class="dv">4</span><span class="op">)</span> <span class="cf">continue</span><span class="op">;</span>          <span class="co">/* 역방향 금지 */</span></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> nx <span class="op">=</span> gx <span class="op">+</span> DX<span class="op">[</span>d<span class="op">],</span> ny <span class="op">=</span> gy <span class="op">+</span> DY<span class="op">[</span>d<span class="op">];</span></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>ny <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">||</span> ny <span class="op">&gt;=</span> H <span class="op">||</span> nx <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">||</span> nx <span class="op">&gt;=</span> W<span class="op">)</span> <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>maze<span class="op">[</span>ny<span class="op">][</span>nx<span class="op">]</span> <span class="op">==</span> <span class="ch">&#39;#&#39;</span><span class="op">)</span> <span class="cf">continue</span><span class="op">;</span>          <span class="co">/* 벽 제외 */</span></span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>        <span class="dt">long</span> dd <span class="op">=</span> <span class="op">(</span><span class="dt">long</span><span class="op">)(</span>nx<span class="op">-</span>tx<span class="op">)*(</span>nx<span class="op">-</span>tx<span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="dt">long</span><span class="op">)(</span>ny<span class="op">-</span>ty<span class="op">)*(</span>ny<span class="op">-</span>ty<span class="op">);</span></span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>dd <span class="op">&lt;</span> bestD<span class="op">)</span> <span class="op">{</span> bestD <span class="op">=</span> dd<span class="op">;</span> best <span class="op">=</span> d<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> best<span class="op">;</span></span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> tx<span class="op">,</span> ty<span class="op">;</span></span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;팩맨 (</span><span class="sc">%d</span><span class="st">,</span><span class="sc">%d</span><span class="st">) </span><span class="sc">%s</span><span class="st">향 / 유령 (</span><span class="sc">%d</span><span class="st">,</span><span class="sc">%d</span><span class="st">)</span><span class="sc">\n\n</span><span class="st">&quot;</span><span class="op">,</span> px<span class="op">,</span> py<span class="op">,</span> DNAME<span class="op">[</span>pdir<span class="op">],</span> gx<span class="op">,</span> gy<span class="op">);</span></span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> who<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="ch">&#39;B&#39;</span><span class="op">,</span> <span class="ch">&#39;P&#39;</span><span class="op">,</span> <span class="ch">&#39;C&#39;</span> <span class="op">};</span></span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>    <span class="dt">const</span> <span class="dt">char</span><span class="op">*</span> name<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="st">&quot;Blinky(직접)&quot;</span><span class="op">,</span> <span class="st">&quot;Pinky(4칸앞)&quot;</span><span class="op">,</span> <span class="st">&quot;Clyde(변덕)&quot;</span> <span class="op">};</span></span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a>        target<span class="op">(</span>who<span class="op">[</span>i<span class="op">],</span> <span class="op">&amp;</span>tx<span class="op">,</span> <span class="op">&amp;</span>ty<span class="op">);</span></span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> d <span class="op">=</span> greedyDir<span class="op">(</span>tx<span class="op">,</span> ty<span class="op">);</span></span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;  </span><span class="sc">%-14s</span><span class="st"> 목표(</span><span class="sc">%d</span><span class="st">,</span><span class="sc">%d</span><span class="st">) → 다음 방향: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> name<span class="op">[</span>i<span class="op">],</span> tx<span class="op">,</span> ty<span class="op">,</span> DNAME<span class="op">[</span>d<span class="op">]);</span></span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>빌드:</strong> <code>cl ghost.c</code> (MSVC) 또는
+<code>gcc ghost.c -o ghost</code></p>
+<p><strong>함정/체크포인트</strong></p>
+<ul>
+<li><strong>목표만 바꾸면 성격이 바뀐다.</strong> <code>greedyDir</code>
+는 셋이 똑같이 쓰고, <code>target</code> 만 다르다 — 개념 4의 "성격 =
+목표 함수"를 코드로 확인하자.</li>
+<li><strong>역방향 <code>(gdir+2)%4</code>.</strong> 네 방향에서 반대는
+인덱스 +2(mod 4). 이걸 빼먹으면 유령이 왔다갔다 진동한다.</li>
+<li><strong>거리는 제곱으로 비교.</strong> 제곱근을 안 구해도 대소
+비교엔 지장 없다(더 빠르다). 6단계 A*의 맨해튼 거리와 짝을 이루는, 격자
+거리의 또 다른 형태.</li>
+</ul>
+<p><strong>확장 과제</strong></p>
+<ul>
+<li><strong>Inky</strong>(팩맨 2칸 앞을 Blinky로 반사:
+<code>a + (a-b)</code>)를 추가해 넷을 완성하라.</li>
+<li>greedy 대신 <strong>6단계 <code>bfs.c</code></strong> 를 붙여, 벽을
+우회해 목표로 가는 방향을 계산해 보라 — 그것이 "똑똑한 유령"이다.</li>
+</ul>
+</details>
+
+<hr />
+<h2 id="이-단계를-마치며">이 단계를 마치며</h2>
+<table>
+<thead>
+<tr>
+<th>얻은 것</th>
+<th>그 뿌리</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>성격별 타게팅 AI</td>
+<td>7단계 기지 편향 AI를 정교화</td>
+</tr>
+<tr>
+<td>유한상태기계(FSM)</td>
+<td>전 게임의 상태머신·페이즈</td>
+</tr>
+<tr>
+<td>greedy 경로선택</td>
+<td>7단계 그리디 · 6단계 BFS로 개선</td>
+</tr>
+<tr>
+<td>데이터 주도 맵</td>
+<td>1부 파일 I/O·Battle City 타일맵</td>
+</tr>
+</tbody>
+</table>
+<p>Pac-Man으로 우리는 "생각하는 적"을 만들었다. 성격이 목표를 정하고,
+상태머신이 행동을 지휘하며, 격자 위에서 팩맨과 유령이 쫓고 쫓긴다. 이
+책의 여덟 번째 게임이자 마지막 게임 — 앞에서 배운
+격자·타일·상태·거리·경로탐색이 모두 여기 모였다.</p>
+<hr />
+<h2 id="책을-닫으며--변수-하나에서-여기까지">책을 닫으며 — 변수 하나에서
+여기까지</h2>
+<p>기억하는가. 이 책은 1부에서 <code>int money = 5000;</code> 한 줄로,
+2부에서 <code>main.cpp</code> 의 게임 루프 다섯 줄로 시작했다. 그 작은
+시작에서 —</p>
+<ul>
+<li><strong>1부</strong> 에서 값·계산·분기(A)로 회사를 세우고,
+반복·함수(B)로 게임을 돌리고, 배열·문자열(C)로 사람과 이름을 채우고,
+구조체·포인터(D)로 뼈대를 갖추고, 동적 메모리·랜덤(E)으로 회사를 키우고
+시장을 살리고, 파일·모듈·캡스톤(F)으로 게임 회사 운영 게임
+<strong>v1.0</strong> 을 출시했다.</li>
+<li><strong>2부</strong> 에서 엔진(0)으로 실시간의 심장을 짓고,
+Snake(자료구조)·Tetris(알고리즘)·Dino(물리)·Road Fighter(시스템)로
+살아있는 게임을 쌓았으며, 그 사이 <strong>Tycoon 이식</strong>으로 1부의
+C를 2부의 C++로 다시 지었고, Galaga(성능)·Maze(알고리즘 심화)로
+엔지니어링에 눈떴으며, Battle City(종합 캡스톤)로 그 모두를 수렴시키고,
+마지막 Pac-Man(AI)으로 "생각하는 적"까지 만들었다.</li>
+</ul>
+<p>문법과 기술을 배우는 순서가, 그대로 무언가를 완성해 가는 순서였다.
+그래서 우리는 한 번도 "이걸 어디에 쓰지?"라고 묻지 않았다. 배운 즉시
+그것이 게임의 살이 되었으니까. 그리고 <strong>1부에서 C로 만든 게임을
+2부에서 C++로 다시 지으며</strong>, 두 여정이 사실 하나의 길이었음을
+확인했다.</p>
+<p>이 책이 되풀이해 말한 것들을 마지막으로 새겨 두자.</p>
+<ul>
+<li><strong>불편을 먼저 겪고 도구를 쥔다.</strong> 병렬 배열의 고통 뒤에
+구조체를, <code>new/delete</code> 남발 뒤에 오브젝트 풀을,
+<code>malloc</code>/<code>realloc</code> 뒤에 <code>std::vector</code>
+를 배웠다. 왜 필요한지 몸으로 안 도구는 잊히지 않는다.</li>
+<li><strong>동작하는 단순함을 먼저, 최적화는 측정한 뒤에.</strong> 선형
+탐색도, 그리디 AI도 — "지금 충분한가"를 판단하는 것이 성능을 다루는
+태도였다.</li>
+<li><strong>완성된 것에도 언제나 성장의 여지가 있다.</strong> 각 게임의
+as-built 이슈는 결함이 아니라 다음 문이었다. Pac-Man의 greedy에 Maze의
+BFS를 붙이는 것처럼, 배운 것을 다른 곳에 옮겨 붙이는 것이 다음
+걸음이다.</li>
+</ul>
+<p>여기서 멈추지 않아도 된다. 유령에게 BFS를 달아 똑똑하게 만들고, 각
+게임에 1부의 파일 I/O로 최고 점수를 저장하고,
+<code>Docs/FUTURE_GAMES.md</code> 의 Breakout·Sokoban에 도전하고,
+당신만의 게임을 이 엔진 위에 새로 얹을 수 있다. <strong>이 책은 끝이
+아니라 출발점이다.</strong></p>
+<p>당신은 변수 하나에서 시작해, 두 개의 강을 건너, 여덟 게임과 하나의
+회사를 만들었다. 이제 당신의 손에는
+값·분기·반복·데이터·메모리·알고리즘·엔진·AI — 무언가를 만드는 데 필요한
+뼈대가 모두 쥐어져 있다. 다음에 무엇을 만들지는, 당신의 몫이다.</p>
+<p><strong>끝까지 와 주어 고맙다. 이제, 당신의 게임을 만들
+차례다.</strong></p>
+<blockquote>
+<p><strong>← 이전:</strong> <a href="Part2_08.html">7단계 · Battle City —
+종합 캡스톤</a> | <strong>처음으로 →</strong> <a
+href="index.html">목차</a> · <a href="Part1_00.html">1부를 여는 말</a></p>
+</blockquote>
+  </article>
+</main>
+<footer class="site-footer">
+  <a href="index.html">← 목차로 돌아가기</a>
+  <span>CSGP Learn · 표시용 원고 (코드는 UTF-8 사본)</span>
+</footer>
+<script src="book-nav.js"></script>
+</body>
+</html>

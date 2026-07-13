@@ -1,0 +1,973 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>F 모듈 · 13–15장 — 파일·모듈·캡스톤: 회사를 저장하고, 게임을
+출시하다</title>
+<script>try{var _t=localStorage.getItem('csgp-theme');if(_t)document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
+<style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<link rel="stylesheet" href="book.css">
+
+</head>
+<body>
+<div class="topbar">
+  <button class="drawer-toggle" id="drawerToggle" type="button" aria-label="목차 열기/닫기" aria-expanded="false">☰ 목차</button>
+  <a class="home" href="index.html">📘 CSGP</a>
+  <span class="crumb">콘솔 게임으로 배우는 C · C++</span>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="라이트/다크 전환">🌙</button>
+</div>
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" aria-label="책 목차">
+  <div class="drawer-dash">
+    <div class="dash-title">콘솔 게임으로 배우는 C · C++</div>
+    <div class="dash-sub">학습 목차 · 대시보드</div>
+    <div class="dash-progress"><div class="dash-bar"><i id="dashBar"></i></div><span class="dash-pct" id="dashPct"></span></div>
+    <input class="drawer-search" id="drawerSearch" type="search" placeholder="🔍 챕터 검색…" aria-label="챕터 검색">
+  </div>
+  <nav class="booknav" aria-label="책 목차"><a class="booknav-home" href="index.html">📘 전체 목차</a><ul class="booknav-list"><li class="grp">1부 · C 기본 문법</li><li><a href="Part1_00.html" title="1부 — C 기본 문법: 회사를 키우며 배우는 언어">1부 개요</a></li><li><a href="Part1_01.html" title="A 모듈 · 1–4장 — 값·계산·분기: 회사에 숫자를 세우다">A · 값·계산·분기</a></li><li><a href="Part1_02.html" title="B 모듈 · 5–6장 — 반복문과 함수: 회사에 심장을 달다">B · 반복문·함수</a></li><li><a href="Part1_03.html" title="C 모듈 · 7–8장 — 배열과 문자열: 회사에 사람과 이름을 채우다">C · 배열·문자열</a></li><li><a href="Part1_04.html" title="D 모듈 · 9–10장 — 구조체와 포인터: 데이터에 모양을 주다">D · 구조체·포인터</a></li><li><a href="Part1_05.html" title="E 모듈 · 11–12장 — 동적 메모리와 랜덤: 회사가 자라고, 시장이 살아난다">E · 메모리·랜덤</a></li><li class="active"><a href="Part1_06.html" title="F 모듈 · 13–15장 — 파일·모듈·캡스톤: 회사를 저장하고, 게임을 출시하다">F · 파일·모듈·캡스톤</a><ul class="sections">
+<li><a href="#이-모듈의-학습-목표" id="toc-이-모듈의-학습-목표">이
+모듈의 학습 목표</a></li>
+<li><a href="#왜-지금-파일모듈종합인가"
+id="toc-왜-지금-파일모듈종합인가">왜 지금, 파일·모듈·종합인가</a></li>
+<li><a href="#13장--파일-입출력--회사를-저장하다"
+id="toc-13장--파일-입출력--회사를-저장하다">13장 · 파일 입출력 — 회사를
+저장하다</a></li>
+<li><a href="#14장--여러-파일로-분리--프로젝트답게"
+id="toc-14장--여러-파일로-분리--프로젝트답게">14장 · 여러 파일로 분리 —
+프로젝트답게</a></li>
+<li><a href="#15장--캡스톤--enum-과-마무리"
+id="toc-15장--캡스톤--enum-과-마무리">15장 · 캡스톤 — <code>enum</code>
+과 마무리</a></li>
+<li><a href="#코드-워크스루--실제-소스에서-보는-파일모듈enum"
+id="toc-코드-워크스루--실제-소스에서-보는-파일모듈enum">코드 워크스루 —
+실제 소스에서 보는 파일·모듈·enum</a></li>
+<li><a href="#그림으로-정리--세이브-파일과-모듈-지도"
+id="toc-그림으로-정리--세이브-파일과-모듈-지도">그림으로 정리 — 세이브
+파일과 모듈 지도</a></li>
+<li><a href="#체크포인트--스스로-점검하기"
+id="toc-체크포인트--스스로-점검하기">체크포인트 — 스스로
+점검하기</a></li>
+<li><a href="#실습-미션--최고-기록-저장-highscorec-star"
+id="toc-실습-미션--최고-기록-저장-highscorec-star">실습 미션 — 최고 기록
+저장 <code>highscore.c</code> ⭐</a></li>
+<li><a href="#이-모듈을-마치며" id="toc-이-모듈을-마치며">이 모듈을
+마치며</a></li>
+<li><a href="#1부를-마치며--변수-하나에서-완성된-게임까지"
+id="toc-1부를-마치며--변수-하나에서-완성된-게임까지">1부를 마치며 — 변수
+하나에서 완성된 게임까지</a></li>
+</ul></li><li class="grp">2부 · C++ 프레임워크</li><li><a href="Part2_00.html" title="2부 — C++ 콘솔 게임 프레임워크: 7개의 게임으로 오르기">2부 개요</a></li><li><a href="Part2_01.html" title="1단계 · Snake — 자료구조·충돌·상태머신">1단계 · Snake</a></li><li><a href="Part2_02.html" title="2단계 · Tetris — 알고리즘과 그리드">2단계 · Tetris</a></li><li><a href="Part2_03.html" title="3단계 · Dino — 물리와 스크롤">3단계 · Dino</a></li><li><a href="Part2_04.html" title="4단계 · Road Fighter — 엔티티 시스템과 리소스">4단계 · Road Fighter</a></li><li><a href="Part2_05.html" title="번외 · GameDevTycoon 이식 — C에서 C++로">번외 · Tycoon 이식</a></li><li><a href="Part2_06.html" title="5단계 · Galaga — 오브젝트 풀링">5단계 · Galaga</a></li><li><a href="Part2_07.html" title="6단계 · Maze — 알고리즘 심화 (생성 + 탐색)">6단계 · Maze</a></li><li><a href="Part2_08.html" title="7단계 · Battle City — 종합 캡스톤 (맵 생성 + 풀링)">7단계 · Battle City</a></li><li><a href="Part2_09.html" title="확장 · Pac-Man — 유령 AI와 상태머신">확장 · Pac-Man</a></li><li class="grp">부록</li><li><a href="Appendix.html" title="부록 — 용어집 · 핵심 이슈 · 요약">부록</a></li></ul></nav>
+</aside>
+<main class="reader">
+  <article class="page">
+<h1
+id="f-모듈--1315장--파일모듈캡스톤-회사를-저장하고-게임을-출시하다">F
+모듈 · 13–15장 — 파일·모듈·캡스톤: 회사를 저장하고, 게임을 출시하다</h1>
+<div class="chapter-badge">
+
+<p><strong>모듈 F</strong> · 13–15장 · 게임 버전 <strong>v0.7 →
+v1.0</strong> · 예상 학습 시간 <strong>5–7시간</strong> <strong>처음
+배우는 기술</strong> — <code>fopen</code> <code>fclose</code>
+<code>fprintf</code> <code>fscanf</code> <code>파일 모드</code>
+<code>텍스트 vs 바이너리</code> <code>파일 열기 실패(NULL)</code>
+<code>헤더/소스 분리</code> <code>인클루드 가드(#ifndef)</code>
+<code>extern</code> <code>enum(열거형)</code>
+<code>#define 상수화</code> <code>게임 엔딩(상태 enum)</code></p>
+</div>
+
+<blockquote>
+<p>우리 게임은 이제 살아 움직인다. 회사는 자라고, 시장은 매번 다른
+얼굴을 보인다. 그런데 프로그램을 껐다 켜면 <strong>모든 게
+사라진다.</strong> 그리고 <code>main.c</code> 는 어느새 수백 줄로
+부풀어, 무엇이 어디 있는지 찾기 어렵다. 마지막 모듈에서 이 둘을
+해결한다. <strong>파일</strong>로 회사를 저장해 이어하기를 만들고,
+코드를 <strong>여러 파일로 분리</strong>해 프로젝트답게 정리하며,
+<strong><code>enum</code></strong> 으로 흩어진 숫자에 이름을 주고 엔딩을
+붙여 — 게임을 <strong>v1.0으로 출시</strong>한다. 1부의 종착점이다.</p>
+</blockquote>
+<h2 id="이-모듈의-학습-목표">이 모듈의 학습 목표</h2>
+<p>이 모듈을 마치면 다음을 할 수 있다.</p>
+<ol type="1">
+<li><code>fopen</code>/<code>fclose</code> 로 파일을 열고 닫으며, 파일
+모드(<code>"r"</code>·<code>"w"</code>)를 구분해 쓸 수 있다.</li>
+<li><code>fprintf</code>/<code>fscanf</code> 로 게임 상태를 파일에
+저장하고 다시 읽어올 수 있다.</li>
+<li>파일 열기 실패(<code>NULL</code>)를 검사해, 세이브가 없으면 새
+게임으로 안전하게 넘어갈 수 있다.</li>
+<li>하나의 소스를 <strong>헤더(.h)와 소스(.c)</strong> 로 나누고,
+<strong>인클루드 가드</strong>로 중복 포함을 막을 수 있다.</li>
+<li><strong><code>enum</code></strong> 으로 장르·엔딩 같은 "이름 붙인
+정수 집합"을 정의하고, <code>switch</code> 와 함께 쓸 수 있다.</li>
+<li><code>#define</code> 으로 밸런스 상수를 한곳에 모아, 게임을 조율하고
+마무리할 수 있다.</li>
+</ol>
+<h2 id="왜-지금-파일모듈종합인가">왜 지금, 파일·모듈·종합인가</h2>
+<p>E 모듈까지 우리 게임은 기능적으로 거의 완성됐다. 남은 것은 "게임을
+게임답게, 프로젝트를 프로젝트답게" 마감하는 일이다.</p>
+<p>첫째, <strong>영속성.</strong> 지금 우리 회사는 프로그램이 끝나면
+흔적도 없이 사라진다. 3년을 키운 회사도 창을 닫으면 끝이다. 진행 상황을
+<strong>파일에 남겨</strong> 다음에 이어할 수 있어야 비로소 "저장되는
+게임"이 된다 — 13장 파일 입출력이다.</p>
+<p>둘째, <strong>구조.</strong> <code>main.c</code> 하나에
+타이틀·루프·정산·직원·판매·저장이 다 들어가 이제 수백 줄이다. 관련된
+코드끼리 파일로 묶으면(직원은 <code>employee.c</code>, 판매는
+<code>market.c</code>) 찾기도 고치기도 쉬워진다 — 14장 파일 분리다. 이건
+문법이라기보다 <strong>큰 프로그램을 다루는 태도</strong>다.</p>
+<p>셋째, <strong>마감.</strong> 지금까지 우리는 <code>G_RPG</code> 같은
+이름을 "맛보기"로 써 왔다(D 모듈에서 예고했듯 정식 설명을 미뤄 뒀다).
+15장에서 <code>enum</code> 을 제대로 배워 흩어진 숫자에 이름을 주고,
+<code>#define</code> 으로 밸런스를 모으고, 엔딩 3종을 붙여 게임을
+<strong>출시 버전</strong>으로 마무리한다.</p>
+<blockquote>
+<p><strong>이 모듈에서 만드는 것.</strong> 세이브/로드(v0.8)로
+이어하기가 가능하고, 코드가 7개 모듈로 깔끔히 나뉘며(v0.9),
+<code>enum</code> 과 엔딩·밸런스 정리로 개발 사이클과 승패가 온전히
+굴러가는 — GDD 마일스톤 <strong>v1.0 "출시"</strong> 다. 이 모듈을
+마치면 1부의 게임이 완성되고, 우리는 2부(C++ 프레임워크)로 넘어갈 준비를
+마친다.</p>
+</blockquote>
+<hr />
+<h2 id="13장--파일-입출력--회사를-저장하다">13장 · 파일 입출력 — 회사를
+저장하다</h2>
+<h3 id="131-fopen-과-fclose--파일을-열고-닫기">13.1 <code>fopen</code>
+과 <code>fclose</code> — 파일을 열고 닫기</h3>
+<p>파일을 다루는 첫걸음은 <code>fopen</code> 으로 여는 것이다.
+<code>fopen(파일명, 모드)</code> 은 파일을 열어 그 <strong>파일
+포인터(<code>FILE *</code>)</strong> 를 돌려주고, 다 쓰면
+<code>fclose</code> 로 닫는다.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">FILE</span> <span class="op">*</span>fp <span class="op">=</span> fopen<span class="op">(</span><span class="st">&quot;save.txt&quot;</span><span class="op">,</span> <span class="st">&quot;w&quot;</span><span class="op">);</span>   <span class="co">/* &quot;save.txt&quot; 를 쓰기 모드로 열기 */</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>fp <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span>                    <span class="co">/* 열기 실패 검사 (13.3) */</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;파일을 열 수 없습니다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">/* ... fp 로 읽거나 쓰기 ... */</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>fclose<span class="op">(</span>fp<span class="op">);</span>                          <span class="co">/* 반드시 닫는다 */</span></span></code></pre></div>
+<p>모드가 무엇을 할지 정한다.</p>
+<table>
+<thead>
+<tr>
+<th>모드</th>
+<th>뜻</th>
+<th>파일이 없으면</th>
+<th>파일이 있으면</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"r"</code></td>
+<td>읽기</td>
+<td>실패(<code>NULL</code>)</td>
+<td>처음부터 읽음</td>
+</tr>
+<tr>
+<td><code>"w"</code></td>
+<td>쓰기</td>
+<td>새로 만듦</td>
+<td><strong>기존 내용 덮어씀</strong></td>
+</tr>
+<tr>
+<td><code>"a"</code></td>
+<td>이어쓰기</td>
+<td>새로 만듦</td>
+<td>끝에 덧붙임</td>
+</tr>
+</tbody>
+</table>
+<p><code>"w"</code> 는 기존 내용을 <strong>지우고</strong> 새로 쓴다.
+세이브는 매번 최신 상태로 덮어써야 하니 <code>"w"</code>, 로드는 읽기니
+<code>"r"</code> 이다. <code>fclose</code> 를 빼먹으면 쓴 내용이 파일에
+다 반영되지 않을 수 있으니(버퍼 문제) 반드시 닫는다.</p>
+<h3 id="132-fprintf--파일에-쓰기">13.2 <code>fprintf</code> — 파일에
+쓰기</h3>
+<p><code>fprintf</code> 는 <code>printf</code> 와 똑같다. 다른 점은
+<strong>첫 인자로 어디에 쓸지(<code>FILE *</code>)</strong> 를 준다는
+것뿐이다. <code>printf</code> 가 화면에 찍었다면, <code>fprintf</code>
+는 파일에 찍는다.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fprintf<span class="op">(</span>fp<span class="op">,</span> <span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> money<span class="op">,</span> fame<span class="op">,</span> year<span class="op">,</span> month<span class="op">);</span>  <span class="co">/* 파일에 한 줄 */</span></span></code></pre></div>
+<p>값들 사이를 공백으로, 줄 끝을 <code>\n</code> 으로 구분해 두면,
+나중에 <code>fscanf</code> 로 같은 순서로 읽어올 수 있다. 세이브 파일은
+결국 <strong>"게임 상태를 정해진 순서로 적어 둔 텍스트"</strong> 다.</p>
+<h3 id="133-fscanf--파일에서-읽기-그리고-null-검사">13.3
+<code>fscanf</code> — 파일에서 읽기, 그리고 <code>NULL</code> 검사</h3>
+<p><code>fscanf</code> 는 <code>scanf</code> 의 파일 버전이다. 저장할
+때와 <strong>똑같은 순서</strong>로 읽어 변수에 담는다.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">FILE</span> <span class="op">*</span>fp <span class="op">=</span> fopen<span class="op">(</span><span class="st">&quot;save.txt&quot;</span><span class="op">,</span> <span class="st">&quot;r&quot;</span><span class="op">);</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>fp <span class="op">==</span> NULL<span class="op">)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span>               <span class="co">/* 세이브 파일이 없다 → 새 게임으로 (실패로 처리) */</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>fscanf<span class="op">(</span>fp<span class="op">,</span> <span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>money<span class="op">,</span> <span class="op">&amp;</span>fame<span class="op">,</span> <span class="op">&amp;</span>year<span class="op">,</span> <span class="op">&amp;</span>month<span class="op">);</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>fclose<span class="op">(</span>fp<span class="op">);</span></span></code></pre></div>
+<p>여기서 <strong><code>fopen</code> 의 <code>NULL</code>
+검사</strong>가 결정적이다. 세이브 파일이 아직 없는 첫 실행에서
+<code>fopen("save.txt", "r")</code> 은 <code>NULL</code> 을 돌려준다.
+이걸 검사하지 않고 <code>fscanf(NULL, ...)</code> 를 부르면 프로그램이
+죽는다. E 모듈에서 배운 <code>NULL</code> 검사가 여기서 또 실전이 된다 —
+<strong>자원을 얻는 함수(<code>malloc</code>·<code>fopen</code>)는
+실패할 수 있고, 그 결과는 늘 검사한다.</strong></p>
+<blockquote>
+<p><strong>읽기와 쓰기의 순서는 반드시 같아야 한다.</strong>
+<code>fprintf</code> 로 <code>money fame year month</code> 순서로
+썼다면, <code>fscanf</code> 도 정확히 그 순서로 읽어야 한다. 순서가
+어긋나면 명성 자리에 자본금이 들어가는 식으로 데이터가 뒤섞인다. 세이브
+포맷은 "쓰는 쪽과 읽는 쪽이 지키기로 한 약속"이다.</p>
+</blockquote>
+<h3 id="134-텍스트-파일-vs-바이너리-파일">13.4 텍스트 파일 vs 바이너리
+파일</h3>
+<p>파일에 값을 저장하는 방법은 두 가지다.</p>
+<ul>
+<li><strong>텍스트 파일</strong>
+(<code>fprintf</code>/<code>fscanf</code>) — 값을 사람이 읽을 수 있는
+글자로 적는다. <code>4920</code> 은 문자 <code>'4' '9' '2' '0'</code>.
+메모장으로 열어 볼 수 있고, 손으로 고칠 수도 있다.</li>
+<li><strong>바이너리 파일</strong>
+(<code>fwrite</code>/<code>fread</code>) — 메모리의 바이트를 그대로
+쏟아붓는다. 작고 빠르지만 메모장으로 열면 깨져 보인다.</li>
+</ul>
+<p>우리 게임은 <strong>텍스트</strong>를 골랐다. 세이브 파일을
+메모장으로 열어 자본금을 확인하거나(디버깅), 일부러 고쳐 치트를 쓸 수도
+있어서(학습 효과) 입문 단계에 알맞다. 바이너리 세이브는 15장 이후의 선택
+과제다.</p>
+<h3 id="135-게임에-적용--세이브와-로드">13.5 게임에 적용 — 세이브와
+로드</h3>
+<p>이제 회사 전체를 파일에 저장한다. 매직 문자열(이게 우리 세이브 파일이
+맞는지 확인용)과 버전을 먼저 쓰고, 자본금·직원·프로젝트·출시작을
+순서대로 적는다.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> SaveGame<span class="op">(</span><span class="dt">const</span> Company <span class="op">*</span>c<span class="op">)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">FILE</span> <span class="op">*</span>fp <span class="op">=</span> fopen<span class="op">(</span><span class="st">&quot;save.txt&quot;</span><span class="op">,</span> <span class="st">&quot;w&quot;</span><span class="op">);</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>fp <span class="op">==</span> NULL<span class="op">)</span> <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span>                 <span class="co">/* 열기 실패 → 저장 실패 */</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    fprintf<span class="op">(</span>fp<span class="op">,</span> <span class="st">&quot;CSGP_TYCOON_SAVE 1</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>      <span class="co">/* 매직 + 버전 */</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    fprintf<span class="op">(</span>fp<span class="op">,</span> <span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> c<span class="op">-&gt;</span>name<span class="op">);</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    fprintf<span class="op">(</span>fp<span class="op">,</span> <span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> c<span class="op">-&gt;</span>money<span class="op">,</span> c<span class="op">-&gt;</span>fame<span class="op">,</span> c<span class="op">-&gt;</span>year<span class="op">,</span> c<span class="op">-&gt;</span>month<span class="op">);</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    fprintf<span class="op">(</span>fp<span class="op">,</span> <span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> c<span class="op">-&gt;</span>staffCount<span class="op">);</span>       <span class="co">/* 직원 수, 그다음 직원들 */</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> c<span class="op">-&gt;</span>staffCount<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        fprintf<span class="op">(</span>fp<span class="op">,</span> <span class="st">&quot;</span><span class="sc">%s</span><span class="st"> </span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> c<span class="op">-&gt;</span>staff<span class="op">[</span>i<span class="op">].</span>name<span class="op">,</span> c<span class="op">-&gt;</span>staff<span class="op">[</span>i<span class="op">].</span>dev<span class="op">,</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>                c<span class="op">-&gt;</span>staff<span class="op">[</span>i<span class="op">].</span>cre<span class="op">,</span> c<span class="op">-&gt;</span>staff<span class="op">[</span>i<span class="op">].</span>salary<span class="op">,</span> c<span class="op">-&gt;</span>staff<span class="op">[</span>i<span class="op">].</span>months<span class="op">);</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* ... 프로젝트·출시작·유행도 같은 방식으로 ... */</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    fclose<span class="op">(</span>fp<span class="op">);</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span>                                 <span class="co">/* 저장 성공 */</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>로드는 정확히 같은 순서로 읽되, <strong>파일이 없거나 매직이 안
+맞으면</strong> 실패로 처리해 새 게임으로 넘긴다.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> LoadGame<span class="op">(</span>Company <span class="op">*</span>c<span class="op">)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> magic<span class="op">[</span><span class="dv">32</span><span class="op">];</span> <span class="dt">int</span> ver<span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">FILE</span> <span class="op">*</span>fp <span class="op">=</span> fopen<span class="op">(</span><span class="st">&quot;save.txt&quot;</span><span class="op">,</span> <span class="st">&quot;r&quot;</span><span class="op">);</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>fp <span class="op">==</span> NULL<span class="op">)</span> <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span>                 <span class="co">/* 세이브 없음 → 새 게임 */</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>fscanf<span class="op">(</span>fp<span class="op">,</span> <span class="st">&quot;</span><span class="sc">%31s</span><span class="st"> </span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> magic<span class="op">,</span> <span class="op">&amp;</span>ver<span class="op">)</span> <span class="op">!=</span> <span class="dv">2</span> <span class="op">||</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        strcmp<span class="op">(</span>magic<span class="op">,</span> <span class="st">&quot;CSGP_TYCOON_SAVE&quot;</span><span class="op">)</span> <span class="op">!=</span> <span class="dv">0</span> <span class="op">||</span> ver <span class="op">!=</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        fclose<span class="op">(</span>fp<span class="op">);</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span>                             <span class="co">/* 우리 세이브가 아니거나 버전 불일치 */</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* ... 자본금·직원·프로젝트를 저장 때와 같은 순서로 fscanf ... */</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    fclose<span class="op">(</span>fp<span class="op">);</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>여기 <strong>C 모듈에서 만난 함정이 되돌아온다.</strong> 회사명
+"EQMENT STUDIO"에는 공백이 있는데, <code>fscanf("%s")</code> 는 공백에서
+멈춘다(C 모듈 8.3). 그러면 "EQMENT"만 읽고 "STUDIO"는 다음 필드로 새어
+들어가 포맷이 통째로 어긋난다. 해결은 저장할 때 공백을 <code>'_'</code>
+로 바꿔 두고, 읽은 뒤 되돌리는 것이다.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* 저장 전: 공백 → &#39;_&#39; (fscanf 가 공백에서 안 끊기게) */</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> Encode<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>dst<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>src<span class="op">,</span> <span class="dt">int</span> size<span class="op">)</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> size <span class="op">-</span> <span class="dv">1</span> <span class="op">&amp;&amp;</span> src<span class="op">[</span>i<span class="op">]</span> <span class="op">!=</span> <span class="ch">&#39;</span><span class="sc">\0</span><span class="ch">&#39;</span><span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        dst<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> <span class="op">(</span>src<span class="op">[</span>i<span class="op">]</span> <span class="op">==</span> <span class="ch">&#39; &#39;</span><span class="op">)</span> <span class="op">?</span> <span class="ch">&#39;_&#39;</span> <span class="op">:</span> src<span class="op">[</span>i<span class="op">];</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    dst<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;</span><span class="sc">\0</span><span class="ch">&#39;</span><span class="op">;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">/* 읽은 후: &#39;_&#39; → 공백 (원래 이름 복원) */</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> Decode<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>s<span class="op">)</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(;</span> <span class="op">*</span>s <span class="op">!=</span> <span class="ch">&#39;</span><span class="sc">\0</span><span class="ch">&#39;</span><span class="op">;</span> s<span class="op">++)</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(*</span>s <span class="op">==</span> <span class="ch">&#39;_&#39;</span><span class="op">)</span> <span class="op">*</span>s <span class="op">=</span> <span class="ch">&#39; &#39;</span><span class="op">;</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>C 모듈에서 "<code>scanf %s</code> 는 공백에서 잘린다"를 배울 때는
+그저 성가신 성질이었는데, 파일을 다루는 지금은 그것이 <strong>설계를
+바꿔야 하는 실제 문제</strong>가 된다. 문법의 작은 성질 하나가 어떻게
+실전에서 발목을 잡는지 — 이것이 배운 것을 끝까지 밀어붙일 때 얻는
+통찰이다.</p>
+<blockquote>
+<p><strong>로드 실패 시 안전하게.</strong> 로드가 중간에 실패하면(파일이
+손상됐거나 형식이 어긋나면), 이미 잡은 메모리를 <code>free</code> 하고
+깨끗이 새 게임으로 돌아가야 한다. 실제 코드는 <code>goto fail;</code> 로
+한 곳에 모아 이 정리를 처리한다 — 실패 지점이 여럿일 때 뒷정리를 한
+군데로 모으는 실용적 패턴이다.</p>
+</blockquote>
+<hr />
+<h2 id="14장--여러-파일로-분리--프로젝트답게">14장 · 여러 파일로 분리 —
+프로젝트답게</h2>
+<p>세이브까지 붙자 <code>main.c</code> 는 수백 줄이 되었다. 이제 문법이
+아니라 <strong>큰 코드를 다루는 법</strong>을 배운다. 관련된 코드끼리
+파일로 나누는 것이다.</p>
+<h3 id="141-왜-파일을-나누나">14.1 왜 파일을 나누나</h3>
+<p>한 파일에 모든 게 있으면, 직원 코드를 고치려 해도 판매·저장 코드를
+헤치고 다녀야 한다. 관련된 것끼리 파일로 묶으면 —</p>
+<ul>
+<li><strong>찾기 쉽다.</strong> 직원 관련은 <code>employee.c</code> 에만
+있다.</li>
+<li><strong>고치기 안전하다.</strong> 판매 코드를 만질 때 직원 코드를
+건드릴 일이 없다.</li>
+<li><strong>나눠 일할 수 있다.</strong> 여럿이 서로 다른 파일을 동시에
+작업할 수 있다.</li>
+</ul>
+<p>우리 게임은 7개 모듈로 나눈다(GDD §8).</p>
+<table>
+<thead>
+<tr>
+<th>파일</th>
+<th>담는 것</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>main.c</code></td>
+<td><code>main</code>, 타이틀, 게임 루프</td>
+</tr>
+<tr>
+<td><code>company.h/.c</code></td>
+<td><code>Company</code> 정의, 월 정산, 승패 판정</td>
+</tr>
+<tr>
+<td><code>employee.h/.c</code></td>
+<td>지원자·고용·해고·월급</td>
+</tr>
+<tr>
+<td><code>project.h/.c</code></td>
+<td>기획·개발 진행·출시(평점)</td>
+</tr>
+<tr>
+<td><code>market.h/.c</code></td>
+<td>판매·유행·랜덤 이벤트</td>
+</tr>
+<tr>
+<td><code>savefile.h/.c</code></td>
+<td>세이브/로드</td>
+</tr>
+<tr>
+<td><code>ui.h/.c</code></td>
+<td>화면 출력·입력 공용 함수</td>
+</tr>
+</tbody>
+</table>
+<h3 id="142-헤더h와-소스c--선언과-정의를-나누기">14.2 헤더(.h)와
+소스(.c) — 선언과 정의를 나누기</h3>
+<p>파일을 나누면 문제가 생긴다. <code>main.c</code> 가
+<code>employee.c</code> 의 <code>TotalSalary</code> 함수를 부르려면, 그
+함수가 "어떻게 생겼는지"(반환형·매개변수)를 알아야 한다. 이
+<strong>선언</strong>을 담는 것이 헤더 파일(<code>.h</code>)이다.</p>
+<ul>
+<li><strong>헤더(<code>.h</code>)</strong> — "이런 함수/자료형이 있다"는
+<strong>선언</strong>(명세). 함수의 몸통은 없다.</li>
+<li><strong>소스(<code>.c</code>)</strong> — 그 함수의 실제
+<strong>정의</strong>(구현).</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* employee.h — 선언 (이 파일을 include 하면 함수 사용법을 알게 된다) */</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span>  TotalSalary<span class="op">(</span><span class="dt">const</span> Company <span class="op">*</span>c<span class="op">);</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> QuitEmployee<span class="op">(</span>Company <span class="op">*</span>c<span class="op">,</span> <span class="dt">int</span> idx<span class="op">);</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* employee.c — 정의 (실제 구현) */</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;employee.h&quot;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> TotalSalary<span class="op">(</span><span class="dt">const</span> Company <span class="op">*</span>c<span class="op">)</span> <span class="op">{</span> <span class="co">/* ... 실제 코드 ... */</span> <span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* main.c — employee.h 를 include 하면 TotalSalary 를 쓸 수 있다 */</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;employee.h&quot;</span></span></code></pre></div>
+<p>6장에서 배운 함수의 "선언"과 "정의"가, 파일 단위로 커진 셈이다.
+헤더는 목차, 소스는 본문이다.</p>
+<blockquote>
+<p><strong><code>extern</code> — 파일 사이에서 변수를 공유하기.</strong>
+함수뿐 아니라 전역 변수를 여러 파일이 공유해야 할 때는
+<code>extern</code> 을 쓴다. 헤더에 <code>extern int g_score;</code>
+라고 <strong>선언</strong>만 두고, 한 소스 파일에서
+<code>int g_score;</code> 로 딱 한 번 <strong>정의</strong>한다. 다른
+파일들은 헤더를 include 해 그 변수에 접근한다. (우리 게임은 상태를 전역
+대신 <code>Company *c</code> 로 넘겨 다녀서 <code>extern</code> 을 거의
+안 쓰지만, 큰 프로젝트에서 자주 만나는 도구다.)</p>
+</blockquote>
+<h3 id="143-인클루드-가드--같은-헤더를-두-번-포함하지-않기">14.3
+인클루드 가드 — 같은 헤더를 두 번 포함하지 않기</h3>
+<p>헤더를 여러 파일이 include 하다 보면, 한 파일에 같은 헤더가
+<strong>두 번</strong> 들어가는 일이 생긴다(예: <code>main.c</code> 가
+<code>employee.h</code> 와 <code>savefile.h</code> 를 include 하는데, 둘
+다 내부에서 <code>company.h</code> 를 include 하는 경우). 그러면
+<code>Company</code> 구조체가 두 번 정의되어 컴파일 에러가 난다. 이를
+막는 것이 <strong>인클루드 가드</strong>다.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#ifndef COMPANY_H        </span><span class="co">/* 만약 COMPANY_H 가 아직 정의 안 됐으면 */</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#define COMPANY_H        </span><span class="co">/* 정의하고, 아래 내용을 포함한다 */</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span> <span class="co">/* ... Company ... */</span> <span class="op">}</span> Company<span class="op">;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">/* ... 선언들 ... */</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif                   </span><span class="co">/* COMPANY_H 끝 */</span></span></code></pre></div>
+<p>동작은 단순하다 — 이 헤더가 처음 포함되면 <code>COMPANY_H</code> 를
+정의하고 내용을 읽는다. 두 번째로 포함되려 하면 <code>COMPANY_H</code>
+가 이미 정의돼 있으니 <code>#ifndef</code> 가 거짓이 되어 <strong>내용을
+통째로 건너뛴다.</strong> 그래서 몇 번을 include 해도 실제 정의는 한
+번만 들어간다. 모든 헤더 파일은 이
+<code>#ifndef / #define / #endif</code> 삼단 구조로 감싼다 — C 헤더의
+관례다.</p>
+<h3 id="144-게임에-적용--나눠도-동작은-그대로">14.4 게임에 적용 — 나눠도
+동작은 그대로</h3>
+<p>파일 분리는 <strong>동작을 전혀 바꾸지 않는 리팩터링</strong>이다.
+<code>main.c</code> 하나였던 게임을 7개 파일로 쪼개도, 컴파일해 실행하면
+완전히 똑같이 돈다. 달라진 건 오직 "코드가 사는 집"뿐이다. 각 소스는
+자기가 필요한 헤더를 include 해 다른 모듈의 함수를 부른다.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* market.c — 판매·이벤트. 직원 능력치가 필요하니 employee.h 를 include */</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;market.h&quot;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;employee.h&quot;</span><span class="pp">     </span><span class="co">/* DevSum, CreSum 을 쓰려고 */</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;project.h&quot;</span><span class="pp">      </span><span class="co">/* 출시 처리를 쓰려고 */</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> UpdateSales<span class="op">(</span>Company <span class="op">*</span>c<span class="op">)</span> <span class="op">{</span> <span class="co">/* ... */</span> <span class="op">}</span></span></code></pre></div>
+<p>이렇게 나눠 두면, 컴파일은 각 <code>.c</code> 를 따로 컴파일한 뒤
+하나로 <strong>링크</strong>한다. <code>build.bat</code> 이
+<code>cl *.c</code> 로 모든 소스를 함께 빌드하는 이유다.</p>
+<hr />
+<h2 id="15장--캡스톤--enum-과-마무리">15장 · 캡스톤 — <code>enum</code>
+과 마무리</h2>
+<p>마지막 장이다. 지금까지 미뤄 둔 <code>enum</code> 을 정식으로 배우고,
+밸런스를 정리하고, 엔딩을 붙여 게임을 출시 버전으로 마감한다.</p>
+<h3 id="151-enum--이름-붙인-정수-드디어-정식으로">15.1 <code>enum</code>
+— 이름 붙인 정수 (드디어 정식으로)</h3>
+<p>D 모듈부터 우리는 <code>G_RPG</code>, <code>S_SMALL</code> 같은
+이름을 "맛보기"로 써 왔다. 그 정체가 바로
+<strong><code>enum</code>(열거형)</strong> 이다. <code>enum</code> 은
+서로 관련된 정수들에 이름을 붙여 묶은 것이다.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">enum</span> <span class="op">{</span> G_RPG<span class="op">,</span> G_ACTION<span class="op">,</span> G_PUZZLE<span class="op">,</span> G_SIM<span class="op">,</span> G_SPORTS<span class="op">,</span> GENRE_COUNT <span class="op">}</span> Genre<span class="op">;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*              0       1         2         3      4         5           */</span></span></code></pre></div>
+<p><code>enum</code> 은 첫 이름부터 0, 1, 2… 순서로 정수를 자동
+부여한다. <code>G_RPG</code> 는 그냥 <code>0</code> 이지만, 코드에
+<code>0</code> 대신 <code>G_RPG</code> 라고 쓰면 <strong>무슨 장르인지
+한눈에</strong> 읽힌다. 장르를 <code>int</code> 로 두고
+<code>if (genre == 2)</code> 라고 쓰는 것과, <code>Genre</code> 로 두고
+<code>if (genre == G_PUZZLE)</code> 라고 쓰는 것의 차이다.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>Genre trend <span class="op">=</span> G_RPG<span class="op">;</span>                 <span class="co">/* 0 대신 의미 있는 이름 */</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>proj<span class="op">.</span>genre <span class="op">==</span> trend<span class="op">)</span>             <span class="co">/* &quot;장르가 유행과 같으면&quot; — 읽힌다 */</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    sales <span class="op">=</span> sales <span class="op">*</span> <span class="dv">3</span> <span class="op">/</span> <span class="dv">2</span><span class="op">;</span></span></code></pre></div>
+<blockquote>
+<p><strong><code>GENRE_COUNT</code> 트릭.</strong> <code>enum</code> 의
+마지막에 <code>GENRE_COUNT</code> 를 두면, 그것은 자동으로 "앞 항목들의
+개수"(여기선 5)가 된다. 그래서 <code>rand() % GENRE_COUNT</code> 로
+무작위 장르를 뽑거나(E 모듈),
+<code>for (g = 0; g &lt; GENRE_COUNT; g++)</code> 로 모든 장르를 순회할
+수 있다. 장르를 추가해도 이 코드들은 자동으로 맞춰진다 —
+<code>enum</code> 하나만 고치면 된다. 흩어진 숫자에 이름을 주는 것을
+넘어, <strong>개수까지 이름으로 관리하는</strong> 기법이다.</p>
+</blockquote>
+<h3 id="152-define-으로-밸런스를-한곳에">15.2 <code>#define</code> 으로
+밸런스를 한곳에</h3>
+<p>게임을 조율하려면 자본금·임대료·월급률 같은 수많은 숫자를 만져야
+한다. 이 값들이 코드 곳곳에 흩어져 있으면 조율이 악몽이 된다. 그래서
+밸런스 상수를 <strong><code>#define</code> 으로 한곳에
+모은다.</strong></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* company.h 맨 위 — 밸런스는 전부 여기서 조율 (15장) */</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#define START_MONEY   </span><span class="dv">5000</span><span class="pp">    </span><span class="co">/* 시작 자본 */</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#define OFFICE_RENT   </span><span class="dv">100</span><span class="pp">     </span><span class="co">/* 임대료 */</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#define WIN_MONEY     </span><span class="dv">10000</span><span class="pp">   </span><span class="co">/* 승리 자산 */</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#define SALARY_RATE   </span><span class="dv">30</span><span class="pp">      </span><span class="co">/* 월급 = (dev+cre)*30 */</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#define BASE_PROGRESS </span><span class="dv">15</span><span class="pp">      </span><span class="co">/* 월 진행도 = 15 + Σdev */</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#define EVENT_CHANCE  </span><span class="dv">30</span><span class="pp">      </span><span class="co">/* 이벤트 확률 % */</span></span></code></pre></div>
+<p>A 모듈의 <code>const RENT</code> 를 기억하는가? <code>#define</code>
+은 그 정신의 확장이다 — "매직 넘버(맥락 없는 숫자)를 이름 있는 상수로."
+게임이 너무 쉬우면 <code>START_MONEY</code> 를 줄이고, 이벤트가 잦으면
+<code>EVENT_CHANCE</code> 를 낮춘다. <strong>밸런싱이 파일 맨 위 몇 줄을
+만지는 일</strong>이 된다. (<code>const</code> 와 <code>#define</code>
+은 쓰임이 겹치지만, 배열 크기나 여러 파일이 공유하는 상수엔 전통적으로
+<code>#define</code> 을 많이 쓴다.)</p>
+<h3 id="153-엔딩--상태를-enum-으로">15.3 엔딩 — 상태를 <code>enum</code>
+으로</h3>
+<p>B 모듈에서 게임의 끝은 <code>gameOver</code>(0/1) 한 변수였다. 이제
+파산·거상·명작을 구분해야 하니, <code>enum</code> 으로 상태를
+넓힌다.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">enum</span> <span class="op">{</span> END_NONE<span class="op">,</span> END_BANKRUPT<span class="op">,</span> END_RICH<span class="op">,</span> END_MASTERPIECE <span class="op">}</span> Ending<span class="op">;</span></span></code></pre></div>
+<p>매달 판정에서 조건에 맞는 엔딩을 설정하고, 게임 루프가 그것을 보고
+끝낸다.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> CheckEnding<span class="op">(</span>Company <span class="op">*</span>c<span class="op">)</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>c<span class="op">-&gt;</span>money <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span>                  c<span class="op">-&gt;</span>ending <span class="op">=</span> END_BANKRUPT<span class="op">;</span>   <span class="co">/* 자본금 음수 */</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>c<span class="op">-&gt;</span>bestRating <span class="op">&gt;=</span> <span class="fl">9.0</span><span class="bu">f</span><span class="op">)</span>    c<span class="op">-&gt;</span>ending <span class="op">=</span> END_MASTERPIECE<span class="op">;</span><span class="co">/* 명작 출시 */</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>c<span class="op">-&gt;</span>money <span class="op">&gt;=</span> WIN_MONEY<span class="op">)</span>    c<span class="op">-&gt;</span>ending <span class="op">=</span> END_RICH<span class="op">;</span>       <span class="co">/* 자산 1억 */</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>엔딩 화면은 <code>switch (c-&gt;ending)</code> 로 갈라 각기 다른
+결말을 보여 준다 — 4장의 <code>switch</code> 가 게임의 마지막을
+장식한다.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="cf">switch</span> <span class="op">(</span>c<span class="op">-&gt;</span>ending<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="cf">case</span> END_BANKRUPT<span class="op">:</span>    printf<span class="op">(</span><span class="st">&quot;파산... 회사의 문을 닫습니다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>     <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="cf">case</span> END_RICH<span class="op">:</span>        printf<span class="op">(</span><span class="st">&quot;거상! 업계의 큰손이 되었습니다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>   <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="cf">case</span> END_MASTERPIECE<span class="op">:</span> printf<span class="op">(</span><span class="st">&quot;명작! 당신의 게임이 역사에 남았습니다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="cf">default</span><span class="op">:</span>              printf<span class="op">(</span><span class="st">&quot;이야기는 여기서 잠시 멈춥니다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>    <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>B 모듈의 <code>gameOver</code> 플래그가 <code>Ending</code> enum으로
+자랐다. 뿌리는 같다 — <strong>게임의 상태를 변수에 담고, 그 변수로
+흐름을 정한다.</strong> 이 발상은 2부의 실시간 게임에서
+<code>_EPhase{ TITLE, INGAME }</code> 페이즈로 다시 이어진다.</p>
+<h3 id="154-마무리--v10-출시">15.4 마무리 — v1.0 출시</h3>
+<p>이제 모든 조각이 제자리를 찾았다. 기획(제목·장르·규모) → 개발(매달
+진행) → 출시(평점) → 판매(감쇠하는 수익)의 개발 사이클이 완성되고, 랜덤
+이벤트가 회사를 흔들며, 세이브로 이어할 수 있고, 세 엔딩이 게임의 끝을
+정한다. 코드는 7개 모듈로 정돈됐고, 밸런스는 <code>#define</code>
+한곳에서 조율된다. <strong>우리의 게임 회사 운영 게임이 v1.0으로
+출시됐다.</strong></p>
+<p>돌이켜 보면, 우리는 1장에서 변수
+하나(<code>int money = 5000;</code>)로 시작했다. 그 한 줄이 자라 이제
+직원을 고용하고, 게임을 만들어 팔고, 파산과 명작 사이를 오가는 살아있는
+프로그램이 되었다. <strong>문법을 배우는 순서가 곧 게임을 완성하는
+순서였다</strong> — 이 책이 약속했던 그대로다.</p>
+<hr />
+<h2 id="코드-워크스루--실제-소스에서-보는-파일모듈enum">코드 워크스루 —
+실제 소스에서 보는 파일·모듈·enum</h2>
+<p>우리가 배운 세 가지가 <code>Study/Tycoon/</code> 완성본에서 어떻게
+맞물리는지 마지막으로 확인하자.</p>
+<blockquote>
+<p><strong>실제 파일:</strong>
+<code>Study/Tycoon/savefile.c</code>(세이브/로드) ·
+<code>Study/Tycoon/company.h</code>(헤더·enum·상수) ·
+<code>Study/Tycoon/main.c</code>(엔딩)</p>
+</blockquote>
+<p><strong>① 세이브/로드 (<code>savefile.c</code>)</strong> — 13.5의
+실전판. 매직·버전으로 파일을 검증하고, 실패하면 <code>goto fail;</code>
+로 정리한 뒤 새 게임으로 돌아간다. 로드 후엔 저장 안 한 런타임 값(최고
+평점 등)을 다시 계산해 복구한다.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>fscanf<span class="op">(</span>fp<span class="op">,</span> <span class="st">&quot;</span><span class="sc">%31s</span><span class="st"> </span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> magic<span class="op">,</span> <span class="op">&amp;</span>ver<span class="op">)</span> <span class="op">!=</span> <span class="dv">2</span> <span class="op">||</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    strcmp<span class="op">(</span>magic<span class="op">,</span> SAVE_MAGIC<span class="op">)</span> <span class="op">!=</span> <span class="dv">0</span> <span class="op">||</span> ver <span class="op">!=</span> SAVE_VER<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    fclose<span class="op">(</span>fp<span class="op">);</span> <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span>              <span class="co">/* 우리 세이브가 아니다 → 새 게임 */</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co">/* ... 순서대로 fscanf ... */</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> c<span class="op">-&gt;</span>shelfCount<span class="op">;</span> i<span class="op">++)</span>   <span class="co">/* 저장 안 한 값 복구 */</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>c<span class="op">-&gt;</span>shelf<span class="op">[</span>i<span class="op">].</span>rating <span class="op">&gt;</span> c<span class="op">-&gt;</span>bestRating<span class="op">)</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>        c<span class="op">-&gt;</span>bestRating <span class="op">=</span> c<span class="op">-&gt;</span>shelf<span class="op">[</span>i<span class="op">].</span>rating<span class="op">;</span></span></code></pre></div>
+<p>로드 중 직원을 읽을 때도 E 모듈의 <code>realloc</code> 확장이 그대로
+쓰인다 — 저장된 직원이 초기 용량보다 많으면 배열을 키우며 읽는다.
+<strong>한 모듈이 앞선 모듈들 위에 선다.</strong></p>
+<p><strong>② 헤더 구조 (<code>company.h</code>)</strong> — 14장의
+인클루드 가드와 15장의 <code>enum</code>·<code>#define</code> 이 한
+파일에 모여 있다. 밸런스 상수, 세 개의 <code>enum</code>, 구조체, 함수
+선언 — 이 헤더가 게임 전체의 "명세서"다.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#ifndef COMPANY_H</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#define COMPANY_H</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#define START_MONEY </span><span class="dv">5000</span><span class="pp">            </span><span class="co">/* 밸런스 상수 (15장) */</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">/* ... */</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">enum</span> <span class="op">{</span> G_RPG<span class="op">,</span> <span class="op">...,</span> GENRE_COUNT <span class="op">}</span> Genre<span class="op">;</span>       <span class="co">/* enum (15장) */</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">enum</span> <span class="op">{</span> END_NONE<span class="op">,</span> END_BANKRUPT<span class="op">,</span> <span class="op">...</span> <span class="op">}</span> Ending<span class="op">;</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span> <span class="co">/* ... */</span> <span class="op">}</span> Company<span class="op">;</span>                 <span class="co">/* 구조체 (9장) */</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> AdvanceMonth<span class="op">(</span>Company <span class="op">*</span>c<span class="op">);</span>                         <span class="co">/* 함수 선언 (14장) */</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span></code></pre></div>
+<p><strong>③ 엔딩 (<code>main.c</code> ·
+<code>EndingScreen</code>)</strong> — 15.3의
+<code>switch (c-&gt;ending)</code>. 게임의 마지막 화면이 A~F 모듈의 모든
+문법을 한자리에 모은다 — 변수·서식 출력·조건 분기·배열
+순회·구조체·<code>enum</code> 이 이 한 함수 안에 함께 있다.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="cf">switch</span> <span class="op">(</span>c<span class="op">-&gt;</span>ending<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="cf">case</span> END_BANKRUPT<span class="op">:</span>    printf<span class="op">(</span><span class="st">&quot;문을 닫았습니다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>    <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="cf">case</span> END_RICH<span class="op">:</span>        printf<span class="op">(</span><span class="st">&quot;업계의 큰손이 되었습니다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="cf">case</span> END_MASTERPIECE<span class="op">:</span> printf<span class="op">(</span><span class="st">&quot;이름을 게임 역사에 남겼습니다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> c<span class="op">-&gt;</span>shelfCount<span class="op">;</span> i<span class="op">++)</span>   <span class="co">/* 배열 순회로 총 판매량 집계 */</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    totalSold <span class="op">+=</span> c<span class="op">-&gt;</span>shelf<span class="op">[</span>i<span class="op">].</span>totalSales<span class="op">;</span></span></code></pre></div>
+<p>이 세 조각이 1부 전체를 요약한다 — <strong>파일로 남기고, 모듈로
+나누고, <code>enum</code> 으로 이름 붙인다.</strong> 1장의 변수 하나에서
+시작한 여정이, 저장되고 정돈된 완성 프로그램으로 끝난다.</p>
+<hr />
+<h2 id="그림으로-정리--세이브-파일과-모듈-지도">그림으로 정리 — 세이브
+파일과 모듈 지도</h2>
+<blockquote>
+<p>📊 <strong>웹 교육문서에서는 세이브→로드 왕복과 모듈 의존 그래프가
+애니메이션(V-P1-F)으로 재생된다.</strong> 책에서는 아래 도식으로
+대신한다.</p>
+</blockquote>
+<p><strong>세이브 파일 — 게임 상태를 순서대로 적어 둔
+텍스트</strong></p>
+<pre><code>  save.txt (메모장으로 열림 — 텍스트 파일)
+  ┌─────────────────────────────────┐
+  │ CSGP_TYCOON_SAVE 1              │ ← 매직 + 버전 (로드 시 검증)
+  │ EQMENT_STUDIO                   │ ← 회사명 (공백은 &#39;_&#39; 로 인코딩)
+  │ 4920 12 2026 3                  │ ← money fame year month
+  │ 3                               │ ← 직원 수
+  │ 김개발 7 5 360 8                 │ ← 직원 × N
+  │ ...                             │
+  └─────────────────────────────────┘
+   fprintf 로 이 순서대로 쓰고, fscanf 로 이 순서대로 읽는다 (약속).</code></pre>
+<p><strong>모듈 의존 지도 — 헤더로 이어진 7개 파일</strong></p>
+<pre><code>                      company.h  (Company·enum·상수 — 모두가 포함)
+                     ╱    │    ╲
+             employee.h project.h market.h   savefile.h   ui.h
+                 │        │        │             │          │
+             employee.c project.c market.c   savefile.c   ui.c
+                     ╲    │    ╱  ╲    │    ╱
+                        main.c  (게임 루프 — 모든 모듈을 엮는다)
+   각 .c 는 필요한 .h 를 include. #ifndef 가드가 중복 포함을 막는다.</code></pre>
+<p>한 문장으로: <strong>파일은 게임을 시간 너머로 저장하고, 모듈은
+코드를 공간적으로 정돈하며, <code>enum</code> 은 흩어진 숫자에 이름을
+준다.</strong></p>
+<hr />
+<h2 id="체크포인트--스스로-점검하기">체크포인트 — 스스로 점검하기</h2>
+<p><strong>Q1.</strong> <code>fopen("save.txt", "w")</code> 로 열었을
+때, 그 파일에 이미 내용이 있었다면 어떻게 되나? <code>"r"</code> 과의
+차이는?</p>
+<p><strong>Q2.</strong> <code>FILE *fp = fopen("save.txt", "r");</code>
+뒤에 왜 <code>if (fp == NULL)</code> 검사가 반드시 필요한가?</p>
+<p><strong>Q3.</strong> 회사명 "EQMENT STUDIO"를
+<code>fprintf(fp, "%s\n", name)</code> 로 저장하고
+<code>fscanf(fp, "%s", name)</code> 로 읽으면 무엇이 문제인가? 어떻게
+푸나?</p>
+<p><strong>Q4.</strong> 인클루드
+가드(<code>#ifndef COMPANY_H / #define COMPANY_H / #endif</code>)는
+무엇을 막는가?</p>
+<p><strong>Q5.</strong>
+<code>enum { G_RPG, G_ACTION, G_PUZZLE, G_SIM, G_SPORTS, GENRE_COUNT }</code>
+에서 <code>G_PUZZLE</code> 과 <code>GENRE_COUNT</code> 의 값은 각각
+얼마인가? <code>GENRE_COUNT</code> 는 어디에 쓰나?</p>
+<details><summary><b>해설 펼치기</b></summary>
+
+<p><strong>A1.</strong> <code>"w"</code> 모드는 기존 내용을 <strong>전부
+지우고</strong> 새로 쓴다(덮어쓰기). 세이브는 매번 최신 상태로 갈아써야
+하니 <code>"w"</code> 가 맞다. <code>"r"</code> 은 읽기 전용이라 쓸 수
+없고, 파일이 없으면 <code>NULL</code> 을 반환한다.</p>
+<p><strong>A2.</strong> 세이브 파일이 아직 없는 첫 실행에서
+<code>fopen(..., "r")</code> 은 <code>NULL</code> 을 돌려준다. 검사 없이
+<code>fscanf(NULL, ...)</code> 를 부르면 프로그램이 죽는다.
+<code>NULL</code> 이면 "세이브 없음 → 새 게임"으로 안전하게 넘겨야
+한다.</p>
+<p><strong>A3.</strong> <code>fscanf("%s")</code> 는 <strong>공백에서
+멈추므로</strong> "EQMENT"만 읽고 "STUDIO"는 다음 필드로 새어 들어가
+포맷이 어긋난다. 저장할 때 공백을 <code>'_'</code> 로
+바꿔(<code>EQMENT_STUDIO</code>) 쓰고, 읽은 뒤 <code>'_'</code> 를
+공백으로 되돌린다(Encode/Decode). — C 모듈의 <code>scanf %s</code> 공백
+함정이 파일에서 되돌아온 것.</p>
+<p><strong>A4.</strong> 같은 헤더가 한 파일에 <strong>두 번 이상
+포함</strong>되는 것을 막는다. 두 번째 포함 때는 <code>COMPANY_H</code>
+가 이미 정의돼 있어 <code>#ifndef</code> 가 거짓이 되고 내용을 통째로
+건너뛴다. 덕분에 구조체·선언이 중복 정의되어 나는 컴파일 에러를
+예방한다.</p>
+<p><strong>A5.</strong> <code>G_PUZZLE</code> 은
+<strong>2</strong>(0부터 세어 세 번째), <code>GENRE_COUNT</code> 는
+<strong>5</strong>(앞의 5개 다음). <code>GENRE_COUNT</code> 는 "장르
+개수"라 <code>rand() % GENRE_COUNT</code> 로 무작위 장르를 뽑거나
+<code>for (g = 0; g &lt; GENRE_COUNT; g++)</code> 로 전체를 순회하는 데
+쓴다. 장르를 추가해도 이 값이 자동으로 맞춰진다.</p>
+</details>
+
+<hr />
+<h2 id="실습-미션--최고-기록-저장-highscorec-star">실습 미션 — 최고 기록
+저장 <code>highscore.c</code> ⭐</h2>
+<blockquote>
+<p>본편(타이쿤)이 "한 게임을 계속 키우는 세로 축"이라면, 실습 미션은
+<strong>이 모듈의 새 문법만 콕 집어 연습하는 독립 미니게임(가로
+축)</strong> 이다. 먼저 직접 짜 보고, 막히면 힌트를, 그래도 막히면
+정답을 펼쳐 대조하자.</p>
+</blockquote>
+<p><strong>드릴 문법</strong> —
+<code>fopen</code>/<code>fscanf</code>/<code>fprintf</code>/<code>fclose</code>
+· 파일 열기 실패(<code>NULL</code>) 검사 · <code>rand</code>(E 모듈) ·
+<code>while</code> 루프(B 모듈) <strong>만드는 것</strong> —
+하이·로우(다음 수가 클지 작을지) 게임. 연승 기록을 파일에 저장해, 다시
+실행하면 이전 최고 기록을 불러온다. <strong>클리어 조건</strong> —
+프로그램을 껐다 켜도 최고 연승 기록이 유지된다. 갱신 시 파일에 새로
+저장. <strong>규모</strong> — 약 50줄, 파일 1개. 1부에서 배운
+파일·랜덤·반복·조건이 한자리에 모이는 마무리 미션이다.</p>
+<h3 id="문제-정의">문제 정의</h3>
+<p>이 게임의 핵심은 <strong>"프로그램이 꺼져도 기록이 남는다"</strong>
+는 것이다. 그러려면 최고 기록을 파일에 저장(<code>fprintf</code>)하고,
+시작할 때 다시 읽어야(<code>fscanf</code>) 한다. 첫 실행에는 기록 파일이
+없으니 <code>fopen</code> 이 <code>NULL</code> 을 돌려주는데, 이때 "기록
+없음(0)"으로 처리하는 것이 이 미션의 관문이다 — 13.3의 <code>NULL</code>
+검사가 그대로 필요하다.</p>
+<h3 id="목표--클리어-조건">목표 / 클리어 조건</h3>
+<ol type="1">
+<li>시작 시 <code>"best.txt"</code> 에서 최고 연승을 읽는다. 파일이
+없으면(<code>NULL</code>) 0으로.</li>
+<li>하이·로우 게임: 현재 수(1~9)를 보여 주고, 다음 수가
+클지(<code>&gt;</code>) 작을지(<code>&lt;</code>) 맞힌다.</li>
+<li>맞히면 연승 +1, 틀리면 게임 종료. (같으면 무승부로 계속)</li>
+<li>이번 연승이 최고 기록을 넘으면 <code>"best.txt"</code> 에 새로
+저장한다.</li>
+<li>껐다 다시 켜면 이전 최고 기록이 그대로 보여야 한다.</li>
+</ol>
+<h3 id="힌트">힌트</h3>
+<details><summary><b>힌트 1 — 기록 불러오기 (NULL 검사)</b></summary>
+
+<div class="sourceCode" id="cb23"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> LoadBest<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> best <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">FILE</span> <span class="op">*</span>fp <span class="op">=</span> fopen<span class="op">(</span><span class="st">&quot;best.txt&quot;</span><span class="op">,</span> <span class="st">&quot;r&quot;</span><span class="op">);</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>fp <span class="op">==</span> NULL<span class="op">)</span>               <span class="co">/* 첫 실행: 파일 없음 → 0 */</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    fscanf<span class="op">(</span>fp<span class="op">,</span> <span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>best<span class="op">);</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    fclose<span class="op">(</span>fp<span class="op">);</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> best<span class="op">;</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+
+<details><summary><b>힌트 2 — 기록 저장하기</b></summary>
+
+<div class="sourceCode" id="cb24"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> SaveBest<span class="op">(</span><span class="dt">int</span> best<span class="op">)</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">FILE</span> <span class="op">*</span>fp <span class="op">=</span> fopen<span class="op">(</span><span class="st">&quot;best.txt&quot;</span><span class="op">,</span> <span class="st">&quot;w&quot;</span><span class="op">);</span>   <span class="co">/* &quot;w&quot;: 매번 최신 기록으로 덮어쓰기 */</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>fp <span class="op">==</span> NULL<span class="op">)</span> <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    fprintf<span class="op">(</span>fp<span class="op">,</span> <span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> best<span class="op">);</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    fclose<span class="op">(</span>fp<span class="op">);</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+
+<details><summary><b>힌트 3 — 하이·로우 판정</b></summary>
+
+<p>현재 수 <code>cur</code> 와 새로 뽑은 <code>next</code> 를 비교한다.
+사용자가 "크다(1)"를 골랐는데 실제로 <code>next &gt; cur</code> 이면
+정답, "작다(2)"인데 <code>next &lt; cur</code> 이면 정답이다.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">((</span>sel <span class="op">==</span> <span class="dv">1</span> <span class="op">&amp;&amp;</span> next <span class="op">&gt;</span> cur<span class="op">)</span> <span class="op">||</span> <span class="op">(</span>sel <span class="op">==</span> <span class="dv">2</span> <span class="op">&amp;&amp;</span> next <span class="op">&lt;</span> cur<span class="op">))</span> <span class="op">{</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    streak<span class="op">++;</span> cur <span class="op">=</span> next<span class="op">;</span>      <span class="co">/* 맞힘: 연승 +1, 현재 수를 next 로 갱신 */</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>next <span class="op">==</span> cur<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* 무승부: 아무 변화 없이 다시 */</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span><span class="op">;</span>                     <span class="co">/* 틀림: 게임 종료 */</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+
+<h3 id="정답-코드">정답 코드</h3>
+<details><summary><b>정답 펼치기 — <code>highscore.c</code></b></summary>
+
+<div class="sourceCode" id="cb26"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define _CRT_SECURE_NO_WARNINGS</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;time.h&gt;</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co">/* 최고 기록 불러오기 — 파일이 없으면(첫 실행) 0 */</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> LoadBest<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> best <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">FILE</span> <span class="op">*</span>fp <span class="op">=</span> fopen<span class="op">(</span><span class="st">&quot;best.txt&quot;</span><span class="op">,</span> <span class="st">&quot;r&quot;</span><span class="op">);</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>fp <span class="op">==</span> NULL<span class="op">)</span> <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span>          <span class="co">/* NULL 검사 — 세이브 없음 */</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    fscanf<span class="op">(</span>fp<span class="op">,</span> <span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>best<span class="op">);</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    fclose<span class="op">(</span>fp<span class="op">);</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> best<span class="op">;</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a><span class="co">/* 최고 기록 저장하기 — &quot;w&quot; 로 덮어쓰기 */</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> SaveBest<span class="op">(</span><span class="dt">int</span> best<span class="op">)</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">FILE</span> <span class="op">*</span>fp <span class="op">=</span> fopen<span class="op">(</span><span class="st">&quot;best.txt&quot;</span><span class="op">,</span> <span class="st">&quot;w&quot;</span><span class="op">);</span></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>fp <span class="op">==</span> NULL<span class="op">)</span> <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>    fprintf<span class="op">(</span>fp<span class="op">,</span> <span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> best<span class="op">);</span></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>    fclose<span class="op">(</span>fp<span class="op">);</span></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> best<span class="op">,</span> streak <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> cur<span class="op">,</span> next<span class="op">,</span> sel<span class="op">;</span></span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>    srand<span class="op">((</span><span class="dt">unsigned</span><span class="op">)</span>time<span class="op">(</span>NULL<span class="op">));</span>       <span class="co">/* 난수 초기화 (한 번만) */</span></span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>    best <span class="op">=</span> LoadBest<span class="op">();</span>                 <span class="co">/* 이전 최고 기록 불러오기 */</span></span>
+<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;=== 하이·로우 (역대 최고 연승: </span><span class="sc">%d</span><span class="st">) ===</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> best<span class="op">);</span></span>
+<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>    cur <span class="op">=</span> <span class="dv">1</span> <span class="op">+</span> rand<span class="op">()</span> <span class="op">%</span> <span class="dv">9</span><span class="op">;</span>              <span class="co">/* 현재 수 1~9 */</span></span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(;;)</span> <span class="op">{</span></span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">현재 수: </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> cur<span class="op">);</span></span>
+<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;다음 수는? [1] 더 크다(&gt;)   [2] 더 작다(&lt;) : &quot;</span><span class="op">);</span></span>
+<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a>        scanf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>sel<span class="op">);</span></span>
+<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-41"><a href="#cb26-41" aria-hidden="true" tabindex="-1"></a>        next <span class="op">=</span> <span class="dv">1</span> <span class="op">+</span> rand<span class="op">()</span> <span class="op">%</span> <span class="dv">9</span><span class="op">;</span></span>
+<span id="cb26-42"><a href="#cb26-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-43"><a href="#cb26-43" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>next <span class="op">==</span> cur<span class="op">)</span> <span class="op">{</span>             <span class="co">/* 무승부 → 계속 */</span></span>
+<span id="cb26-44"><a href="#cb26-44" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;  같은 수(</span><span class="sc">%d</span><span class="st">)! 무승부, 다시.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> next<span class="op">);</span></span>
+<span id="cb26-45"><a href="#cb26-45" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb26-46"><a href="#cb26-46" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb26-47"><a href="#cb26-47" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">((</span>sel <span class="op">==</span> <span class="dv">1</span> <span class="op">&amp;&amp;</span> next <span class="op">&gt;</span> cur<span class="op">)</span> <span class="op">||</span> <span class="op">(</span>sel <span class="op">==</span> <span class="dv">2</span> <span class="op">&amp;&amp;</span> next <span class="op">&lt;</span> cur<span class="op">))</span> <span class="op">{</span></span>
+<span id="cb26-48"><a href="#cb26-48" aria-hidden="true" tabindex="-1"></a>            streak<span class="op">++;</span>                  <span class="co">/* 맞힘 */</span></span>
+<span id="cb26-49"><a href="#cb26-49" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;  다음 수 </span><span class="sc">%d</span><span class="st"> — 정답! 연승 </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> next<span class="op">,</span> streak<span class="op">);</span></span>
+<span id="cb26-50"><a href="#cb26-50" aria-hidden="true" tabindex="-1"></a>            cur <span class="op">=</span> next<span class="op">;</span></span>
+<span id="cb26-51"><a href="#cb26-51" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span>                       <span class="co">/* 틀림 */</span></span>
+<span id="cb26-52"><a href="#cb26-52" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;  다음 수 </span><span class="sc">%d</span><span class="st"> — 틀렸습니다. </span><span class="sc">%d</span><span class="st"> 연승에서 종료.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> next<span class="op">,</span> streak<span class="op">);</span></span>
+<span id="cb26-53"><a href="#cb26-53" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb26-54"><a href="#cb26-54" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb26-55"><a href="#cb26-55" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb26-56"><a href="#cb26-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-57"><a href="#cb26-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>streak <span class="op">&gt;</span> best<span class="op">)</span> <span class="op">{</span>               <span class="co">/* 신기록이면 파일에 갱신 */</span></span>
+<span id="cb26-58"><a href="#cb26-58" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&gt;&gt; 신기록! </span><span class="sc">%d</span><span class="st"> 연승 (이전 기록 </span><span class="sc">%d</span><span class="st">)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> streak<span class="op">,</span> best<span class="op">);</span></span>
+<span id="cb26-59"><a href="#cb26-59" aria-hidden="true" tabindex="-1"></a>        SaveBest<span class="op">(</span>streak<span class="op">);</span></span>
+<span id="cb26-60"><a href="#cb26-60" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb26-61"><a href="#cb26-61" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&gt;&gt; </span><span class="sc">%d</span><span class="st"> 연승. 최고 기록 </span><span class="sc">%d</span><span class="st"> 은(는) 못 넘었습니다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> streak<span class="op">,</span> best<span class="op">);</span></span>
+<span id="cb26-62"><a href="#cb26-62" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb26-63"><a href="#cb26-63" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb26-64"><a href="#cb26-64" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>빌드:</strong> <code>cl highscore.c</code> (MSVC) 또는
+<code>gcc highscore.c -o highscore</code></p>
+<p><strong>함정/체크포인트</strong></p>
+<ul>
+<li><strong>첫 실행에는 <code>best.txt</code> 가 없다.</strong>
+<code>fopen(..., "r")</code> 이 <code>NULL</code> 을 돌려주는데, 이걸
+검사하지 않고 <code>fscanf</code> 를 부르면 프로그램이 죽는다.
+<code>NULL</code> 이면 "기록 없음(0)"으로 처리하는 것이 이 미션의
+핵심이다.</li>
+<li>저장은 <code>"w"</code> 모드다. <code>"a"</code>(이어쓰기)로 열면
+기록이 지워지지 않고 계속 쌓여, 다음 로드에서 첫 줄만 읽혀 엉킨다. "최신
+기록 하나만 유지"에는 <code>"w"</code> 가 맞다.</li>
+<li>프로그램을 <strong>껐다 다시 켜서</strong> 기록이 유지되는지 꼭
+확인하자. 그것이 "파일에 저장했다"는 유일한 증거다 — 메모리 변수와
+파일의 차이를 눈으로 보는 순간이다.</li>
+</ul>
+<p><strong>확장 과제</strong></p>
+<ul>
+<li>최고 기록과 함께 <strong>날짜</strong>(<code>time</code>)나 플레이어
+이름(문자열)도 저장해, 세이브 포맷을 여러 필드로 늘려 보자(본편 세이브
+파일의 축소판).</li>
+<li>기록 파일을 일부러 메모장으로 열어 숫자를 고쳐 보자. <strong>텍스트
+세이브는 이렇게 "치트"가 가능</strong>하다 — 13.4에서 말한 텍스트 포맷의
+양면성을 체감할 수 있다.</li>
+</ul>
+</details>
+
+<hr />
+<h2 id="이-모듈을-마치며">이 모듈을 마치며</h2>
+<table>
+<thead>
+<tr>
+<th>얻은 것</th>
+<th>다음에 쓰는 곳</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>파일
+입출력(<code>fopen</code>/<code>fprintf</code>/<code>fscanf</code>)</td>
+<td>세이브/로드, 2부 최고점수·설정 저장</td>
+</tr>
+<tr>
+<td>파일 열기 실패(<code>NULL</code>) 검사</td>
+<td>모든 자원 획득의 실전 습관</td>
+</tr>
+<tr>
+<td>헤더/소스 분리·인클루드 가드</td>
+<td><strong>2부 전체</strong> — 매니저·씬이 전부
+<code>.h</code>/<code>.cpp</code> 쌍</td>
+</tr>
+<tr>
+<td><code>enum</code>·<code>#define</code> 으로 정돈</td>
+<td>2부 <code>_EPhase</code>·<code>_EDIRECT</code> 등 모든 상태
+enum</td>
+</tr>
+</tbody>
+</table>
+<p>파일로 회사를 시간 너머에 저장하고, 모듈로 코드를 정돈하고,
+<code>enum</code> 으로 흩어진 숫자에 이름을 주었다. 개발 사이클과
+엔딩까지 붙어, 우리의 게임 회사 운영 게임이 <strong>v1.0으로
+출시</strong>됐다. F 모듈은 문법을 넘어 "프로젝트를 완성하고 마감하는
+법"을 배우는 장이었다.</p>
+<hr />
+<h2 id="1부를-마치며--변수-하나에서-완성된-게임까지">1부를 마치며 — 변수
+하나에서 완성된 게임까지</h2>
+<p>돌아보자. 우리는 A 모듈 1장에서 <code>int money = 5000;</code> 이라는
+<strong>단 한 줄</strong>로 시작했다. 그 변수 하나가 —</p>
+<ul>
+<li><strong>A 모듈</strong>에서 계산되고 갈라졌고(값·연산·조건),</li>
+<li><strong>B 모듈</strong>에서 반복되며 게임이 "돌기"
+시작했고(루프·함수),</li>
+<li><strong>C 모듈</strong>에서 사람과 이름을 얻었고(배열·문자열),</li>
+<li><strong>D 모듈</strong>에서 구조체로 모양을 갖추고 포인터로 함수에
+넘겨졌고(1부의 고비),</li>
+<li><strong>E 모듈</strong>에서 회사를 무한히 키우고 시장을 살아나게
+했고(동적 메모리·랜덤),</li>
+<li><strong>F 모듈</strong>에서 파일에 저장되고, 모듈로 정돈되고, 엔딩을
+맞았다(파일·분리·캡스톤).</li>
+</ul>
+<p>문법을 배우는 순서가 곧 게임을 완성하는 순서였다. 우리는 "이 문법을
+어디에 쓰지?"라고 물을 필요가 없었다 — 배운 즉시 회사의 새 기능이
+되었으니까. 그것이 이 책 1부의 약속이었고, 회사는 그 약속대로
+자랐다.</p>
+<p>이제 우리는 C의 뼈대를 손에 쥐었다. 값·분기·반복·함수·데이터의
+모양·메모리·파일 — 프로그래밍의 기본기가 모두 하나의 살아있는 게임
+안에서 익혀졌다.</p>
+<p><strong>하지만 우리 게임에는 아직 없는 것이 있다.</strong> 화면은
+<code>scanf</code> 앞에서 멈춰 사람을 기다리고, 매 화면은
+<code>system("cls")</code> 로 지웠다 다시 그려 깜빡인다. 뱀이 스스로
+기어가고, 블록이 떨어지고, 탱크가 서로를 쏘는 — <strong>매 순간 스스로
+움직이는 실시간 세계</strong>는 여기에 없다. "깜빡임 없는 화면"이 탐나기
+시작한다면, 그것이 바로 2부로 넘어갈 때가 됐다는 신호다.</p>
+<p>2부에서 우리는 C를 <strong>C++</strong> 로 넓히고, Windows 콘솔 API
+위에 <strong>게임 루프·더블 버퍼링·씬 시스템</strong>을 얹어, 실시간으로
+돌아가는 게임 7종을 만든다. 1부의 구조체는 클래스가 되고, 함수는
+메서드가 되며, <code>Company *c</code> 를 주고받던 감각은 "객체가 자기
+데이터를 스스로 관리한다"는 감각으로 자란다. <strong>1부에서 세운 뼈대
+위에, 2부가 살아 움직이는 세계를 짓는다.</strong></p>
+<p>수고했다. 첫 번째 강을 건넜다. 이제 두 번째 강으로 간다.</p>
+<blockquote>
+<p><strong>← 이전:</strong> <a href="Part1_05.html">E 모듈 · 11–12장 —
+동적 메모리와 랜덤</a> | <strong>다음 →</strong> <a
+href="Part2_00.html">2부 — C++ 콘솔 게임 프레임워크</a></p>
+</blockquote>
+  </article>
+</main>
+<footer class="site-footer">
+  <a href="index.html">← 목차로 돌아가기</a>
+  <span>CSGP Learn · 표시용 원고 (코드는 UTF-8 사본)</span>
+</footer>
+<script src="book-nav.js"></script>
+</body>
+</html>

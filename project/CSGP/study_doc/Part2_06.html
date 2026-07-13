@@ -1,0 +1,834 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5단계 · Galaga — 오브젝트 풀링</title>
+<script>try{var _t=localStorage.getItem('csgp-theme');if(_t)document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
+<style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<link rel="stylesheet" href="book.css">
+
+</head>
+<body>
+<div class="topbar">
+  <button class="drawer-toggle" id="drawerToggle" type="button" aria-label="목차 열기/닫기" aria-expanded="false">☰ 목차</button>
+  <a class="home" href="index.html">📘 CSGP</a>
+  <span class="crumb">콘솔 게임으로 배우는 C · C++</span>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="라이트/다크 전환">🌙</button>
+</div>
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" aria-label="책 목차">
+  <div class="drawer-dash">
+    <div class="dash-title">콘솔 게임으로 배우는 C · C++</div>
+    <div class="dash-sub">학습 목차 · 대시보드</div>
+    <div class="dash-progress"><div class="dash-bar"><i id="dashBar"></i></div><span class="dash-pct" id="dashPct"></span></div>
+    <input class="drawer-search" id="drawerSearch" type="search" placeholder="🔍 챕터 검색…" aria-label="챕터 검색">
+  </div>
+  <nav class="booknav" aria-label="책 목차"><a class="booknav-home" href="index.html">📘 전체 목차</a><ul class="booknav-list"><li class="grp">1부 · C 기본 문법</li><li><a href="Part1_00.html" title="1부 — C 기본 문법: 회사를 키우며 배우는 언어">1부 개요</a></li><li><a href="Part1_01.html" title="A 모듈 · 1–4장 — 값·계산·분기: 회사에 숫자를 세우다">A · 값·계산·분기</a></li><li><a href="Part1_02.html" title="B 모듈 · 5–6장 — 반복문과 함수: 회사에 심장을 달다">B · 반복문·함수</a></li><li><a href="Part1_03.html" title="C 모듈 · 7–8장 — 배열과 문자열: 회사에 사람과 이름을 채우다">C · 배열·문자열</a></li><li><a href="Part1_04.html" title="D 모듈 · 9–10장 — 구조체와 포인터: 데이터에 모양을 주다">D · 구조체·포인터</a></li><li><a href="Part1_05.html" title="E 모듈 · 11–12장 — 동적 메모리와 랜덤: 회사가 자라고, 시장이 살아난다">E · 메모리·랜덤</a></li><li><a href="Part1_06.html" title="F 모듈 · 13–15장 — 파일·모듈·캡스톤: 회사를 저장하고, 게임을 출시하다">F · 파일·모듈·캡스톤</a></li><li class="grp">2부 · C++ 프레임워크</li><li><a href="Part2_00.html" title="2부 — C++ 콘솔 게임 프레임워크: 7개의 게임으로 오르기">2부 개요</a></li><li><a href="Part2_01.html" title="1단계 · Snake — 자료구조·충돌·상태머신">1단계 · Snake</a></li><li><a href="Part2_02.html" title="2단계 · Tetris — 알고리즘과 그리드">2단계 · Tetris</a></li><li><a href="Part2_03.html" title="3단계 · Dino — 물리와 스크롤">3단계 · Dino</a></li><li><a href="Part2_04.html" title="4단계 · Road Fighter — 엔티티 시스템과 리소스">4단계 · Road Fighter</a></li><li><a href="Part2_05.html" title="번외 · GameDevTycoon 이식 — C에서 C++로">번외 · Tycoon 이식</a></li><li class="active"><a href="Part2_06.html" title="5단계 · Galaga — 오브젝트 풀링">5단계 · Galaga</a><ul class="sections">
+<li><a href="#이-단계의-학습-목표" id="toc-이-단계의-학습-목표">이
+단계의 학습 목표</a></li>
+<li><a href="#왜-지금-오브젝트-풀인가"
+id="toc-왜-지금-오브젝트-풀인가">왜 지금, 오브젝트 풀인가</a></li>
+<li><a href="#개념-1--문제-다시-보기--매-프레임-할당의-비용"
+id="toc-개념-1--문제-다시-보기--매-프레임-할당의-비용">개념 1 · 문제
+다시 보기 — 매 프레임 할당의 비용</a></li>
+<li><a href="#개념-2--오브젝트-풀-poolt-n--미리-잡고-재사용"
+id="toc-개념-2--오브젝트-풀-poolt-n--미리-잡고-재사용">개념 2 · 오브젝트
+풀 <code>Pool&lt;T, N&gt;</code> — 미리 잡고 재사용</a></li>
+<li><a href="#개념-3--풀-사용-패턴--스폰순회소멸에-할당이-없다"
+id="toc-개념-3--풀-사용-패턴--스폰순회소멸에-할당이-없다">개념 3 · 풀
+사용 패턴 — 스폰·순회·소멸에 할당이 없다</a></li>
+<li><a href="#개념-4--편대--슬롯-좌표에서-위치를-파생시키다"
+id="toc-개념-4--편대--슬롯-좌표에서-위치를-파생시키다">개념 4 · 편대 —
+슬롯 좌표에서 위치를 파생시키다</a></li>
+<li><a href="#개념-5--풀--풀-충돌--활성-슬롯끼리-검사"
+id="toc-개념-5--풀--풀-충돌--활성-슬롯끼리-검사">개념 5 · 풀 × 풀 충돌 —
+활성 슬롯끼리 검사</a></li>
+<li><a href="#개념-6--측정-후-최적화--선형-탐색에서-o1로"
+id="toc-개념-6--측정-후-최적화--선형-탐색에서-o1로">개념 6 · 측정 후
+최적화 — 선형 탐색에서 O(1)로</a></li>
+<li><a href="#코드-워크스루--oningameupdate-네-풀이-도는-한-프레임"
+id="toc-코드-워크스루--oningameupdate-네-풀이-도는-한-프레임">코드
+워크스루 — <code>OnInGameUpdate</code>, 네 풀이 도는 한 프레임</a></li>
+<li><a href="#그림으로-정리--재할당-vs-슬롯-재사용"
+id="toc-그림으로-정리--재할당-vs-슬롯-재사용">그림으로 정리 — 재할당 vs
+슬롯 재사용</a></li>
+<li><a href="#알려진-이슈에서-배우기-as-built"
+id="toc-알려진-이슈에서-배우기-as-built">알려진 이슈에서 배우기
+(as-built)</a></li>
+<li><a href="#체크포인트--스스로-점검하기"
+id="toc-체크포인트--스스로-점검하기">체크포인트 — 스스로
+점검하기</a></li>
+<li><a href="#실습-미션--총알-풀-만들기-poolc-star"
+id="toc-실습-미션--총알-풀-만들기-poolc-star">실습 미션 — 총알 풀 만들기
+<code>pool.c</code> ⭐</a></li>
+<li><a href="#이-단계를-마치며" id="toc-이-단계를-마치며">이 단계를
+마치며</a></li>
+</ul></li><li><a href="Part2_07.html" title="6단계 · Maze — 알고리즘 심화 (생성 + 탐색)">6단계 · Maze</a></li><li><a href="Part2_08.html" title="7단계 · Battle City — 종합 캡스톤 (맵 생성 + 풀링)">7단계 · Battle City</a></li><li><a href="Part2_09.html" title="확장 · Pac-Man — 유령 AI와 상태머신">확장 · Pac-Man</a></li><li class="grp">부록</li><li><a href="Appendix.html" title="부록 — 용어집 · 핵심 이슈 · 요약">부록</a></li></ul></nav>
+</aside>
+<main class="reader">
+  <article class="page">
+<h1 id="5단계--galaga--오브젝트-풀링">5단계 · Galaga — 오브젝트
+풀링</h1>
+<div class="chapter-badge">
+
+<p><strong>단계 5</strong> ⭐ · 게임 <code>Galaga</code> · 씬 클래스
+<code>GalagaContent : public IGameContent</code> <strong>처음 배우는
+기술</strong> — <code>오브젝트 풀(Pool&lt;T,N&gt;)</code>
+<code>active 플래그·슬롯 재사용</code>
+<code>게임 루프 내 new/delete 0회</code> <code>제네릭 템플릿</code>
+<code>대량 오브젝트 관리</code> <code>편대(파생 좌표)</code>
+<code>풀 × 풀 충돌</code> <code>측정 후 최적화</code> <strong>예상 학습
+시간</strong> — 5–7시간</p>
+</div>
+
+<blockquote>
+<p>지금까지 우리는 오브젝트를 <strong>순진하게</strong> 다뤘다 — Snake는
+마디마다 <code>new/delete</code>, Dino와 Road Fighter는 매 프레임 벡터를
+통째로 다시 만들었다. 오브젝트가 적을 땐 문제없었다. 하지만 갤러그는
+다르다. <strong>총알·적·폭발이 초당 수십 개씩 생겼다 사라진다.</strong>
+매 프레임 힙에서 잡고 놓기를 반복하면 그게 병목이 된다. 이 단계의 배움
+주제는 딱 하나 — <strong>오브젝트 풀(Object Pool)</strong>. 고정 크기
+배열을 미리 잡아 두고, <code>active</code> 플래그로 켜고 끄며 슬롯을
+<strong>재사용</strong>한다. 게임 루프 안에서 <code>new</code>도
+<code>delete</code>도 재할당도 <strong>0회</strong>. "동작하는 코드"에서
+<strong>"성능을 의식하는 코드"</strong> 로 올라서는, 엔지니어링이
+성숙하는 지점이다.</p>
+</blockquote>
+<h2 id="이-단계의-학습-목표">이 단계의 학습 목표</h2>
+<p>이 단계를 마치면 다음을 할 수 있다.</p>
+<ol type="1">
+<li>앞선 게임들의 "매 프레임 할당/재생성"이 왜 대량 오브젝트에서 병목이
+되는지 설명할 수 있다.</li>
+<li><strong>제네릭 오브젝트 풀 <code>Pool&lt;T, N&gt;</code></strong> 을
+직접 만들고, <code>Spawn</code>/<code>Kill</code>/<code>Clear</code> 의
+역할을 안다.</li>
+<li>풀의 <strong>사용 패턴</strong>(스폰·순회·소멸)에서 왜 힙 할당이
+0회인지 설명할 수 있다.</li>
+<li>여러 종류의 단명 오브젝트(총알·적·폭발)를 <strong>각각의
+풀</strong>로 관리할 수 있다.</li>
+<li>적 <strong>편대</strong>를 슬롯 좌표에서 <strong>파생</strong>시켜
+유지하고, <strong>풀 × 풀 충돌</strong>을 처리할 수 있다.</li>
+<li><code>Spawn</code> 의 선형 탐색(O(N))을 <strong>프리
+리스트(O(1))</strong> 로 바꾸는 "측정 후 최적화"의 방향을 안다.</li>
+</ol>
+<h2 id="왜-지금-오브젝트-풀인가">왜 지금, 오브젝트 풀인가</h2>
+<p>이 책의 게임들이 오브젝트를 어떻게 다뤘는지 돌아보자.</p>
+<ul>
+<li><strong>Snake</strong> — 몸통 마디마다 <code>new Snake(...)</code>,
+리셋마다 <code>delete</code>. 아이템 먹을 때마다 힙 할당.</li>
+<li><strong>Dino · Road Fighter</strong> — 장애물·엔티티를
+<code>std::vector</code> 에 담고, 화면 밖으로 나가면 <strong>매 프레임
+새 벡터를 만들어 통째로 교체</strong>(<code>kept.push_back</code>).</li>
+</ul>
+<p>이 방식들의 공통점은 <strong>"필요할 때 만들고, 필요 없으면
+버린다"</strong> 는 것이다. 직관적이고, 오브젝트가 적을 땐 완벽하게 잘
+돈다. 그런데 갤러그를 보자 — 플레이어 총알, 적 총알(강한 적은 3발씩!),
+적 편대, 격추 폭발… <strong>초당 수십 개</strong>의 오브젝트가 생겼다
+사라진다. 이때 매 프레임 <code>new</code>/<code>delete</code> 하거나
+벡터를 통째로 복사하면:</p>
+<ul>
+<li><strong>할당 비용</strong> — 힙에서 메모리를 잡고 놓는 것은 공짜가
+아니다. 초당 수백 번이면 쌓인다.</li>
+<li><strong>메모리 단편화</strong> — 잡고 놓기를 반복하면 힙이
+조각난다.</li>
+<li><strong>예측 불가능한 비용</strong> — 할당이 언제 얼마나 걸릴지
+모른다. 실시간 게임에 치명적.</li>
+</ul>
+<p><strong>해법이 오브젝트 풀이다.</strong> 게임 시작 때 "총알은 최대
+32개"라고 <strong>미리 배열을 잡아 두고</strong>, 총알을 쏠 때 새로
+만드는 게 아니라 <strong>빈 슬롯을 빌려 쓴다.</strong> 총알이 사라지면
+슬롯을 지우는 게 아니라 <strong>"비었다"고 표시만</strong> 한다. 그
+슬롯은 다음 총알이 재사용한다. <strong>게임 루프 안에서 힙을 건드리는
+일이 아예 없다.</strong></p>
+<blockquote>
+<p><strong>커리큘럼의 대조 학습.</strong> Road Fighter의 "매 프레임 벡터
+재생성"을 기억하는가? 그 방식의 한계를 정면으로 드러내고 풀로 고치는 것
+— 이것이 갤러그가 Road Fighter 바로 다음에 오는 이유다.
+<strong>"동작하는 코드"를 먼저 겪은 뒤에 "성능을 의식하는 코드"로
+올라선다.</strong> 불편을 몸으로 안 사람만이 해법의 가치를 안다(1부 병렬
+배열 → 구조체와 같은 정신).</p>
+</blockquote>
+<hr />
+<h2 id="개념-1--문제-다시-보기--매-프레임-할당의-비용">개념 1 · 문제
+다시 보기 — 매 프레임 할당의 비용</h2>
+<p>Road Fighter가 화면 밖 엔티티를 지우던 코드를 다시 보자.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Road Fighter — 매 프레임, 벡터를 새로 만들어 교체</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span>Entity<span class="op">&gt;</span> kept<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">size_t</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> entities<span class="op">.</span>size<span class="op">();</span> i<span class="op">++)</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>entities<span class="op">[</span>i<span class="op">].</span>y <span class="op">&lt;=</span> ROAD_BOTTOM<span class="op">)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        kept<span class="op">.</span>push_back<span class="op">(</span>entities<span class="op">[</span>i<span class="op">]);</span>   <span class="co">// 살아남은 것만 새 벡터로 복사</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>entities <span class="op">=</span> kept<span class="op">;</span>                       <span class="co">// 통째로 교체 (기존 벡터 파괴)</span></span></code></pre></div>
+<p>이 코드는 <strong>매 프레임</strong> 새 벡터를 만들고, 살아남은
+엔티티를 전부 <strong>복사</strong>하고, 옛 벡터를 버린다. 엔티티가
+10개면 별것 아니다. 하지만 총알·적·폭발이 100개, 200개가 되면? 매 프레임
+200번 복사 + 힙 할당/해제가 초당 60번 반복된다. 이것이 실시간 게임에서
+<strong>프레임 드랍(끊김)</strong> 의 흔한 원인이다.</p>
+<p>핵심 통찰 — <strong>단명 오브젝트(짧게 살다 죽는 것)를 매번 새로
+만들고 버리는 것은 낭비다.</strong> 총알은 다 똑같이 생겼다. 죽은 총알의
+메모리를 반납했다가 새 총알을 위해 다시 잡을 이유가 없다. <strong>그
+자리를 그냥 다시 쓰면 된다.</strong></p>
+<hr />
+<h2 id="개념-2--오브젝트-풀-poolt-n--미리-잡고-재사용">개념 2 · 오브젝트
+풀 <code>Pool&lt;T, N&gt;</code> — 미리 잡고 재사용</h2>
+<p>오브젝트 풀은 놀랄 만큼 단순하다. <strong>고정 크기 배열 하나와, 각
+칸이 쓰이는 중인지 표시하는 <code>active</code> 배열 하나.</strong> 그게
+전부다. 이걸 어떤 타입에든 쓸 수 있게 <strong>템플릿</strong>(0단계 개념
+2)으로 만든다.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 제네릭 오브젝트 풀. 고정 크기 N, active 플래그로 재사용.</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span> <span class="op">&lt;</span><span class="kw">typename</span> T<span class="op">,</span> <span class="dt">int</span> N<span class="op">&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Pool</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    T    items<span class="op">[</span>N<span class="op">];</span>      <span class="co">// 실제 오브젝트들 (미리 N개 잡혀 있음)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> active<span class="op">[</span>N<span class="op">];</span>     <span class="co">// 각 칸이 쓰이는 중인가?</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    Pool<span class="op">()</span>       <span class="op">{</span> <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> N<span class="op">;</span> i<span class="op">++)</span> active<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> <span class="kw">false</span><span class="op">;</span> <span class="op">}</span>   <span class="co">// 처음엔 다 비었음</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> Clear<span class="op">()</span> <span class="op">{</span> <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> N<span class="op">;</span> i<span class="op">++)</span> active<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> <span class="kw">false</span><span class="op">;</span> <span class="op">}</span>   <span class="co">// 전부 비우기</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> Spawn<span class="op">()</span>          <span class="co">// 빈 슬롯을 빌린다. 없으면 -1.</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> N<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(!</span>active<span class="op">[</span>i<span class="op">])</span> <span class="op">{</span> active<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> <span class="kw">true</span><span class="op">;</span> <span class="cf">return</span> i<span class="op">;</span> <span class="op">}</span>   <span class="co">// 첫 빈 칸을 켜고 인덱스 반환</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span>                                            <span class="co">// 다 찼음</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> Kill<span class="op">(</span><span class="dt">int</span> i<span class="op">)</span> <span class="op">{</span> active<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> <span class="kw">false</span><span class="op">;</span> <span class="op">}</span>   <span class="co">// ★ 해제가 아니라 &#39;비었음&#39; 표시만!</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>세 함수의 의미를 새기자.</p>
+<ul>
+<li><strong><code>Spawn()</code></strong> — 새 오브젝트를 "만드는" 게
+아니라, <strong>빈 슬롯을 찾아 켜고 그 번호를 준다.</strong>
+<code>new</code> 가 없다. 이미 있는 배열 칸을 빌려주는 것뿐이다.</li>
+<li><strong><code>Kill(i)</code></strong> — 오브젝트를 "지우는" 게
+아니라, <code>active[i] = false</code> 로 <strong>"이 칸 비었다"고
+표시만</strong> 한다. <code>delete</code> 가 없다. 메모리는 그대로 남아
+다음 <code>Spawn</code> 이 재사용한다.</li>
+<li><strong><code>Clear()</code></strong> — 재시작·스테이지 전환 때 전부
+비운다. 역시 배열을 버리지 않는다.</li>
+</ul>
+<p><code>items[N]</code> 는 <code>Pool</code> 이 생길 때 딱 한 번
+잡히고, 게임 내내 그 자리에 있다. <strong>게임 루프 안에서는 이 배열을
+절대 다시 할당하지 않는다.</strong> 총알이 몇천 발 나가도 배열은 N칸
+그대로다 — 슬롯을 돌려 쓸 뿐이다.</p>
+<blockquote>
+<p><strong>왜 템플릿인가.</strong> 총알(<code>Bullet</code>)도,
+적(<code>Enemy</code>)도, 폭발(<code>Fx</code>)도 똑같은 풀 로직이
+필요하다. <code>Pool&lt;Bullet, 32&gt;</code>,
+<code>Pool&lt;Enemy, 40&gt;</code>, <code>Pool&lt;Fx, 32&gt;</code> —
+<strong>타입과 크기만 바꿔</strong> 하나의 풀 코드를 재사용한다. 1부에서
+같은 코드를 함수로 묶었듯, 여기선 같은 자료구조를 템플릿으로 묶는다. 이
+<code>Pool&lt;T,N&gt;</code> 은 갤러그뿐 아니라 <strong>캡스톤 Battle
+City도 공유</strong>한다(<code>FrameWork/Object/Pool.h</code>).</p>
+</blockquote>
+<hr />
+<h2 id="개념-3--풀-사용-패턴--스폰순회소멸에-할당이-없다">개념 3 · 풀
+사용 패턴 — 스폰·순회·소멸에 할당이 없다</h2>
+<p>풀을 실제로 쓰는 모습을 보면, "할당 0회"가 어떻게 실현되는지 보인다.
+갤러그는 네 개의 풀을 멤버로 둔다.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Pool<span class="op">&lt;</span>Bullet<span class="op">,</span> MAX_PBULLET<span class="op">&gt;</span> pBullets<span class="op">;</span>   <span class="co">// 플레이어 총알 (32)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>Pool<span class="op">&lt;</span>Bullet<span class="op">,</span> MAX_EBULLET<span class="op">&gt;</span> eBullets<span class="op">;</span>   <span class="co">// 적 총알 (64)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>Pool<span class="op">&lt;</span>Enemy<span class="op">,</span>  MAX_ENEMY<span class="op">&gt;</span>   enemies<span class="op">;</span>    <span class="co">// 적 (40)</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>Pool<span class="op">&lt;</span>Fx<span class="op">,</span>     MAX_FX<span class="op">&gt;</span>      fxs<span class="op">;</span>         <span class="co">// 폭발 (32)</span></span></code></pre></div>
+<p><strong>스폰</strong> — <code>Spawn()</code> 으로 슬롯을 빌리고, 그
+칸을 채운다.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyStay<span class="op">(</span>VK_SPACE<span class="op">)</span> <span class="op">&amp;&amp;</span> TIMER<span class="op">-&gt;</span>GetTickTimer<span class="op">(</span>FIRE_DELAY<span class="op">))</span>   <span class="co">// 발사 쿨다운</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> i <span class="op">=</span> pBullets<span class="op">.</span>Spawn<span class="op">();</span>          <span class="co">// 빈 슬롯을 빌린다</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>i <span class="op">&gt;=</span> <span class="dv">0</span><span class="op">)</span>                        <span class="co">// 풀이 안 찼으면</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        pBullets<span class="op">.</span>items<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> <span class="op">{</span> px<span class="op">,</span> PLAYER_Y <span class="op">-</span> <span class="dv">1</span><span class="op">,</span> <span class="fl">0.0</span><span class="bu">f</span><span class="op">,</span> <span class="op">-</span>PBULLET_SPEED <span class="op">};</span>  <span class="co">// 그 칸을 채움</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>순회</strong> — <code>active</code> 인 칸만 갱신하고, 화면을
+벗어나면 <code>Kill</code>.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> k <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> k <span class="op">&lt;</span> MAX_PBULLET<span class="op">;</span> k<span class="op">++)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>pBullets<span class="op">.</span>active<span class="op">[</span>k<span class="op">])</span> <span class="cf">continue</span><span class="op">;</span>              <span class="co">// 비었으면 건너뜀</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    pBullets<span class="op">.</span>items<span class="op">[</span>k<span class="op">].</span>y <span class="op">+=</span> pBullets<span class="op">.</span>items<span class="op">[</span>k<span class="op">].</span>vy<span class="op">;</span>    <span class="co">// 위로 이동</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>pBullets<span class="op">.</span>items<span class="op">[</span>k<span class="op">].</span>y <span class="op">&lt;</span> HUD_Y <span class="op">+</span> <span class="dv">1</span><span class="op">)</span>            <span class="co">// 화면 위로 나갔으면</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        pBullets<span class="op">.</span>Kill<span class="op">(</span>k<span class="op">);</span>                           <span class="co">// 슬롯 반납(표시만)</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>이 두 조각을 보라 — 총알을 쏘는 것도(<code>Spawn</code>), 사라지는
+것도(<code>Kill</code>), 이동시키는 것도(순회) <strong>어디에도
+<code>new</code>/<code>delete</code>/<code>push_back</code> 이
+없다.</strong> 총알이 사라진 슬롯은 <code>active[k]=false</code> 가
+되어, 다음 발사 때 <code>Spawn()</code> 이 바로 그 칸을 재사용한다.
+<strong>32칸을 무한히 돌려 쓴다.</strong></p>
+<p>재시작·스테이지 전환도 마찬가지다.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 스테이지 클리어 → 다음 스테이지</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>pBullets<span class="op">.</span>Clear<span class="op">();</span>  eBullets<span class="op">.</span>Clear<span class="op">();</span>  fxs<span class="op">.</span>Clear<span class="op">();</span>   <span class="co">// 전부 비우기 (재할당 아님!)</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>SpawnStage<span class="op">(</span>stage<span class="op">);</span>                                    <span class="co">// 새 편대를 풀에 채움</span></span></code></pre></div>
+<p><code>Clear()</code> 는 <code>active</code> 를 전부
+<code>false</code> 로 만들 뿐, 배열을 버리거나 다시 잡지 않는다.
+<strong>풀의 배열은 게임이 끝날 때까지 한 번 잡은 그대로다.</strong></p>
+<hr />
+<h2 id="개념-4--편대--슬롯-좌표에서-위치를-파생시키다">개념 4 · 편대 —
+슬롯 좌표에서 위치를 파생시키다</h2>
+<p>적 편대는 스페이스 인베이더식으로 좌우로 행진하다 벽에 닿으면 한 칸
+내려온다. 40마리의 좌표를 하나하나 관리하면 복잡하다. 그래서 각 적은
+<strong>편대 내 슬롯 <code>(col, row)</code> 만</strong> 저장하고,
+<strong>실제 화면 위치는 편대 상태에서 계산(파생)</strong> 한다.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Enemy <span class="op">{</span> _EEnemyType type<span class="op">;</span> <span class="dt">int</span> col<span class="op">,</span> row<span class="op">,</span> hp<span class="op">;</span> <span class="op">};</span>   <span class="co">// 절대 좌표가 없다!</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">// 편대 상태</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> formX<span class="op">;</span>    <span class="co">// 0번 열의 x</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span>   formY<span class="op">;</span>    <span class="co">// 지금까지 내려온 행 수</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> GalagaContent<span class="op">::</span>EnemyX<span class="op">(</span><span class="at">const</span> Enemy<span class="op">&amp;</span> e<span class="op">)</span> <span class="at">const</span> <span class="op">{</span> <span class="cf">return</span> <span class="op">(</span><span class="dt">int</span><span class="op">)(</span>formX<span class="op">+</span><span class="fl">0.5</span><span class="bu">f</span><span class="op">)</span> <span class="op">+</span> e<span class="op">.</span>col <span class="op">*</span> SPACING_X<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> GalagaContent<span class="op">::</span>EnemyY<span class="op">(</span><span class="at">const</span> Enemy<span class="op">&amp;</span> e<span class="op">)</span> <span class="at">const</span> <span class="op">{</span> <span class="cf">return</span> FORM_TOP <span class="op">+</span> formY <span class="op">+</span> e<span class="op">.</span>row <span class="op">*</span> SPACING_Y<span class="op">;</span> <span class="op">}</span></span></code></pre></div>
+<p><code>formX</code> 하나만 움직이면 <strong>40마리가 통째로</strong>
+움직인다 — 각자의 위치는 <code>formX + col*간격</code> 으로 그때그때
+계산되니까. 행진은 편대 상태만 갱신한다.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> GalagaContent<span class="op">::</span>UpdateEnemies<span class="op">()</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>TIMER<span class="op">-&gt;</span>GetTickTimer<span class="op">(</span>FormTick<span class="op">()))</span>   <span class="co">// 스테이지별 행진 속도</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">float</span> next <span class="op">=</span> formX <span class="op">+</span> formDir<span class="op">;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> leftX <span class="op">=</span> <span class="op">(</span><span class="dt">int</span><span class="op">)(</span>next <span class="op">+</span> <span class="fl">0.5</span><span class="bu">f</span><span class="op">);</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> rightX <span class="op">=</span> leftX <span class="op">+</span> <span class="op">(</span>formCols <span class="op">-</span> <span class="dv">1</span><span class="op">)</span> <span class="op">*</span> SPACING_X<span class="op">;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>leftX <span class="op">&lt;=</span> PLAY_LEFT <span class="op">||</span> rightX <span class="op">&gt;=</span> PLAY_RIGHT<span class="op">)</span> <span class="op">{</span>   <span class="co">// 벽에 닿으면</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>            formDir <span class="op">=</span> <span class="op">-</span>formDir<span class="op">;</span>    <span class="co">// 방향 반전</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>            formY <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span>            <span class="co">// 한 칸 하강</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>            formX <span class="op">=</span> next<span class="op">;</span>          <span class="co">// 아니면 그냥 옆으로</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 공격: 살아있는 적 중 랜덤 하나가 발사 ...</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>"상태 하나로 여럿을 제어"</strong> 하는 이 발상은 강력하다.
+40마리의 x를 각각 갱신하는 대신, <code>formX</code> 하나만 바꾼다. 벽
+판정도 편대의 좌·우 끝(0번 열과 마지막 열)만 보면 된다. 데이터를
+<strong>파생 가능한 최소 상태</strong>로 줄이는 것 — 좋은 자료구조
+설계의 한 축이다.</p>
+<p>공격은 풀에서 살아있는 적을 모아 랜덤으로 하나 골라 쏜다.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> aliveIdx<span class="op">[</span>MAX_ENEMY<span class="op">],</span> n <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> MAX_ENEMY<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>enemies<span class="op">.</span>active<span class="op">[</span>i<span class="op">])</span> aliveIdx<span class="op">[</span>n<span class="op">++]</span> <span class="op">=</span> i<span class="op">;</span>      <span class="co">// 살아있는 적 인덱스 수집</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>n <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> Enemy<span class="op">&amp;</span> e <span class="op">=</span> enemies<span class="op">.</span>items<span class="op">[</span>aliveIdx<span class="op">[</span>rand<span class="op">()</span> <span class="op">%</span> n<span class="op">]];</span>   <span class="co">// 랜덤 하나</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 그 적 위치에서 eBullets.Spawn()으로 아래로 발사 (강한 적은 3방향)</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<hr />
+<h2 id="개념-5--풀--풀-충돌--활성-슬롯끼리-검사">개념 5 · 풀 × 풀 충돌 —
+활성 슬롯끼리 검사</h2>
+<p>충돌은 <strong>풀과 풀을 겹쳐</strong> 검사한다. 내 총알(풀) ×
+적(풀), 적 총알(풀) × 나, 적(풀) × 나. <code>active</code> 인 것끼리만
+좌표를 비교한다.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 내 총알 → 적</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> k <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> k <span class="op">&lt;</span> MAX_PBULLET<span class="op">;</span> k<span class="op">++)</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>pBullets<span class="op">.</span>active<span class="op">[</span>k<span class="op">])</span> <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> bx <span class="op">=</span> <span class="op">(</span><span class="dt">int</span><span class="op">)(</span>pBullets<span class="op">.</span>items<span class="op">[</span>k<span class="op">].</span>x <span class="op">+</span> <span class="fl">0.5</span><span class="bu">f</span><span class="op">);</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> by <span class="op">=</span> <span class="op">(</span><span class="dt">int</span><span class="op">)(</span>pBullets<span class="op">.</span>items<span class="op">[</span>k<span class="op">].</span>y <span class="op">+</span> <span class="fl">0.5</span><span class="bu">f</span><span class="op">);</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> MAX_ENEMY<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(!</span>enemies<span class="op">.</span>active<span class="op">[</span>i<span class="op">])</span> <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>bx <span class="op">==</span> EnemyX<span class="op">(</span>enemies<span class="op">.</span>items<span class="op">[</span>i<span class="op">])</span> <span class="op">&amp;&amp;</span> by <span class="op">==</span> EnemyY<span class="op">(</span>enemies<span class="op">.</span>items<span class="op">[</span>i<span class="op">]))</span>   <span class="co">// 같은 칸?</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>            enemies<span class="op">.</span>items<span class="op">[</span>i<span class="op">].</span>hp<span class="op">--;</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>            pBullets<span class="op">.</span>Kill<span class="op">(</span>k<span class="op">);</span>                       <span class="co">// 총알 소멸(슬롯 반납)</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>enemies<span class="op">.</span>items<span class="op">[</span>i<span class="op">].</span>hp <span class="op">&lt;=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>                SpawnFx<span class="op">(...);</span>                        <span class="co">// 폭발 풀에서 스폰</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>                score <span class="op">+=</span> ScoreOf<span class="op">(</span>enemies<span class="op">.</span>items<span class="op">[</span>i<span class="op">].</span>type<span class="op">);</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>                enemies<span class="op">.</span>Kill<span class="op">(</span>i<span class="op">);</span>                     <span class="co">// 적 소멸(슬롯 반납)</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>                aliveCount<span class="op">--;</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span>   <span class="co">// 이 총알은 이미 소멸, 다음 총알로</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>충돌에서도 <code>Kill</code> 만 부른다 — 총알도 적도 슬롯을 반납할
+뿐, 아무것도 <code>delete</code> 되지 않는다. 격추 즉시
+<code>SpawnFx</code> 로 폭발 풀에서 이펙트를 스폰하고, 그 폭발도 6프레임
+뒤 <code>Kill</code> 된다(개념 4의 무적 타이머와 같은 "수명" 발상).
+<strong>모든 오브젝트가 풀 위에서 태어나고, 풀 위에서
+죽는다.</strong></p>
+<blockquote>
+<p><strong>비용을 의식하기.</strong> 이 충돌은
+<code>활성 총알 수 × 활성 적 수</code> 만큼 비교한다(이중 루프). 총알 32
+× 적 40 = 최대 1280번. 60fps면 초당 76,800번. 콘솔 게임엔 충분하지만,
+오브젝트가 수백을 넘으면 <strong>공간 분할</strong>(격자로 나눠 가까운
+것만 검사)로 줄인다 — 그건 폴리시의 몫이다. <strong>"지금 충분한가"를 늘
+의식하는 것</strong>이 성능을 다루는 태도다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-6--측정-후-최적화--선형-탐색에서-o1로">개념 6 · 측정 후
+최적화 — 선형 탐색에서 O(1)로</h2>
+<p>우리 <code>Spawn()</code> 을 다시 보자.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> Spawn<span class="op">()</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> N<span class="op">;</span> i<span class="op">++)</span>              <span class="co">// 처음부터 훑으며</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(!</span>active<span class="op">[</span>i<span class="op">])</span> <span class="op">{</span> active<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> <span class="kw">true</span><span class="op">;</span> <span class="cf">return</span> i<span class="op">;</span> <span class="op">}</span>   <span class="co">// 첫 빈 칸을 찾는다</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>이건 <strong>선형 탐색</strong> — 최악의 경우 N칸을 다 훑는다(O(N)).
+총알을 쏠 때마다 32칸을 처음부터 확인할 수 있다. 이걸 <strong>프리
+리스트(free list)</strong> 로 바꾸면 O(1)이 된다: 비어 있는 슬롯의
+번호들을 따로 스택에 쌓아 두고, <code>Spawn</code> 은 스택에서 하나
+꺼내고 <code>Kill</code> 은 스택에 다시 넣는다. 빈 칸을 "찾을" 필요 없이
+"받아" 온다.</p>
+<p><strong>그런데 MVP는 일부러 선형 탐색으로 시작한다.</strong> 왜?
+갤러그 규모(풀 크기 32~64)에선 선형 탐색이 전혀 문제가 안 되기 때문이다.
+초당 76,800번 비교? 현대 CPU엔 순식간이다. <strong>문제가 되지도 않는
+것을 미리 최적화하는 것은 시간 낭비이자 버그의 씨앗이다.</strong></p>
+<p>이것이 <strong>"측정 후 최적화(measure, then optimize)"</strong>
+원칙이다 — 먼저 단순하고 정확하게 만들고, <strong>실제로 느린 곳을
+측정한 뒤</strong>에 그 지점만 고친다. 갤러그의 교훈은 풀 자체뿐 아니라,
+<strong>"언제 최적화할지 판단하는 것"</strong> 이기도 하다.</p>
+<blockquote>
+<p>도널드 크누스의 유명한 말 — <strong>"섣부른 최적화는 만악의
+근원이다."</strong> 선형 탐색 <code>Spawn</code> 은 "충분히 빠른 단순한
+코드"의 예다. 프리 리스트는 "정말 필요할 때"의 개선책으로 GDD가 폴리시로
+남겨 뒀다. 동작하는 단순함을 먼저, 측정된 최적화를 나중에.</p>
+</blockquote>
+<hr />
+<h2 id="코드-워크스루--oningameupdate-네-풀이-도는-한-프레임">코드
+워크스루 — <code>OnInGameUpdate</code>, 네 풀이 도는 한 프레임</h2>
+<p>갤러그의 한 프레임은 <strong>네 개의 풀을 차례로 갱신하고, 풀끼리
+충돌시키는</strong> 파이프라인이다.</p>
+<blockquote>
+<p><strong>실제 파일:</strong>
+<code>Main/Content/GalagaContent.cpp</code> ·
+<code>FrameWork/Object/Pool.h</code></p>
+</blockquote>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> GalagaContent<span class="op">::</span>OnInGameUpdate<span class="op">()</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... ESC · PAUSE · STAGECLEAR · GAMEOVER 처리 ...</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ── PLAYING ──</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    UpdatePlayer<span class="op">();</span>       <span class="co">// ① 이동 · 발사(pBullets.Spawn) · 무적</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    UpdateEnemies<span class="op">();</span>      <span class="co">// ② 편대 행진(formX) · 공격(eBullets.Spawn)</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    UpdateBullets<span class="op">();</span>      <span class="co">// ③ pBullets · eBullets 이동 · 화면 밖 Kill</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    UpdateFx<span class="op">();</span>           <span class="co">// ④ 폭발 프레임++ · 수명 다하면 Kill</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    HandleCollisions<span class="op">();</span>   <span class="co">// ⑤ 풀 × 풀 충돌 → hp--, Kill, 점수, FX</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>aliveCount <span class="op">&lt;=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span>                      <span class="co">// 적 전멸 → 스테이지 클리어</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        score <span class="op">+=</span> <span class="dv">1000</span><span class="op">;</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        gameState <span class="op">=</span> _EGameState<span class="op">::</span>STAGECLEAR<span class="op">;</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>EnemiesBreached<span class="op">())</span>                      <span class="co">// 편대가 플레이어 줄까지 내려옴 → 패배</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>        gameState <span class="op">=</span> _EGameState<span class="op">::</span>GAMEOVER<span class="op">;</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>다섯 단계 전부가 풀 연산이다 — <code>Spawn</code>(①②), 순회 후
+<code>Kill</code>(③④), 충돌 후 <code>Kill</code>(⑤). <strong>이 프레임
+어디에도 힙 할당이 없다.</strong> <code>aliveCount</code> 로 전멸을 즉시
+알고(적을 <code>Kill</code> 할 때마다 감소),
+<code>EnemiesBreached()</code> 로 편대가 바닥에 닿았는지 본다.</p>
+<p><code>SpawnStage</code> 는 풀을 채우는 유일한 곳이다 — 편대 크기만큼
+<code>enemies.Spawn()</code> 을 불러 슬롯을 켜고
+<code>(col, row, type, hp)</code> 를 채운다. 이것도 <code>new</code> 가
+아니라 미리 잡힌 배열의 슬롯을 켜는 것이다.</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> r <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> r <span class="op">&lt;</span> formRows<span class="op">;</span> r<span class="op">++)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> c <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> c <span class="op">&lt;</span> formCols<span class="op">;</span> c<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> i <span class="op">=</span> enemies<span class="op">.</span>Spawn<span class="op">();</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>i <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span> <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        enemies<span class="op">.</span>items<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="co">/* type */</span><span class="op">,</span> c<span class="op">,</span> r<span class="op">,</span> <span class="co">/* hp */</span> <span class="op">};</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>        aliveCount<span class="op">++;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span></code></pre></div>
+<p>렌더도 풀 순회다 — 각 풀을 한 번씩 훑어 <code>active</code> 인 것만
+그린다(적 <code>▼</code>, 총알 <code>|</code>/<code>!</code>, 폭발
+<code>* × +</code>). <strong>활성 개수에 상한이 있으니 최악 렌더 비용도
+예측 가능</strong>하다 — 풀의 또 다른 이점이다.</p>
+<hr />
+<h2 id="그림으로-정리--재할당-vs-슬롯-재사용">그림으로 정리 — 재할당 vs
+슬롯 재사용</h2>
+<blockquote>
+<p>📊 <strong>웹 교육문서에서는 벡터 재생성과 풀 슬롯 재사용이 나란히
+애니메이션(V-P2-5)으로 비교된다.</strong> 책에서는 아래 도식으로
+대신한다.</p>
+</blockquote>
+<p><strong>두 방식의 비교 — 총알이 죽고 새로 생길 때</strong></p>
+<pre><code>  [Road Fighter 방식] 매 프레임 새 벡터 (힙 할당 반복)
+    entities ─┐  kept 새로 만듦 → 살아남은 것 복사 → 옛 벡터 파괴 → 교체
+              └─ 초당 60번 × 오브젝트 수만큼 복사·할당
+
+  [Galaga 풀] 미리 잡은 배열, active 플래그만 토글 (할당 0회)
+    items:   [총알A][총알B][ ---- ][총알C][ ---- ] ...  ← 배열은 그대로
+    active:  [  1  ][  1  ][  0   ][  1  ][  0   ]
+                            ▲                ▲
+                     Kill 로 0 표시    Spawn 이 이 빈 칸을 재사용
+    → new/delete 없이 슬롯을 무한히 돌려 쓴다</code></pre>
+<p><strong>풀의 세 연산</strong></p>
+<pre><code>  Spawn():  active 에서 첫 0 을 찾아 1 로 → 그 index 반환 (칸을 빌림)
+  Kill(i):  active[i] = 0            → 슬롯 반납 (메모리는 그대로)
+  Clear():  active 전부 0            → 재시작 (배열은 안 버림)</code></pre>
+<p>한 문장으로: <strong>오브젝트 풀은 "만들고 버리기"를 "빌리고
+돌려주기"로 바꾼다 — 한 번 잡은 배열을 게임 내내 재사용해, 게임 루프에서
+힙을 지운다.</strong></p>
+<hr />
+<h2 id="알려진-이슈에서-배우기-as-built">알려진 이슈에서 배우기
+(as-built)</h2>
+<p>갤러그의 풀은 <strong>학습용 최소 구현</strong>이다. 의도적으로
+단순하게 둔 부분들이, 오히려 "다음에 무엇을 개선할지"를 가르친다.</p>
+<table>
+<thead>
+<tr>
+<th>이슈</th>
+<th>as-built 상태</th>
+<th>무엇을 배우나</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>Spawn</code> 선형 탐색</strong></td>
+<td>O(N) — 매번 처음부터 빈 칸 탐색</td>
+<td>규모가 작아 충분. <strong>프리 리스트 O(1)</strong> 는 측정 후(개념
+6)</td>
+</tr>
+<tr>
+<td><strong>충돌 O(총알×적)</strong></td>
+<td>이중 루프 전수 비교</td>
+<td>수백 개 넘으면 <strong>공간 분할</strong>. 지금은 충분</td>
+</tr>
+<tr>
+<td><strong>댕글링 인덱스</strong></td>
+<td><code>Kill</code> 후에도 그 index로 접근 가능</td>
+<td>슬롯 번호가 재사용되면 옛 참조가 엉뚱한 걸 가리킴 — <strong>세대
+인덱스</strong>로 방어(심화)</td>
+</tr>
+<tr>
+<td><strong>풀 넘침 = 조용한 실패</strong></td>
+<td><code>Spawn()</code> 이 -1이면 그냥 발사 안 됨</td>
+<td>상한을 넘는 스폰은 무시됨(용량 설계가 중요)</td>
+</tr>
+<tr>
+<td><strong>정수 좌표 충돌</strong></td>
+<td>float 위치를 반올림해 "같은 칸" 비교</td>
+<td>빠른 총알이 한 프레임에 적을 건너뛸 수 있음(터널링)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>"선형 탐색"과 "전수 비교"를 <strong>일부러 남겨 둔 것</strong>에
+주목하자. 이것은 게으름이 아니라 <strong>판단</strong>이다 — 갤러그
+규모에선 이 단순함이 옳고, 최적화는 병목이 측정된 뒤에 한다(개념 6).
+반면 "댕글링 인덱스", "터널링"은 규모와 무관한 <strong>잠재
+함정</strong>이라, 오브젝트 풀을 실무에 쓸 때 알아 둬야 한다.
+<strong>무엇이 "지금 충분한 단순함"이고 무엇이 "언젠가 물릴 함정"인지
+구별하는 눈</strong> — 그것이 이 단계의 진짜 배움이다.</p>
+</blockquote>
+<hr />
+<h2 id="체크포인트--스스로-점검하기">체크포인트 — 스스로 점검하기</h2>
+<p><strong>Q1.</strong> Snake의 <code>new/delete</code>, Road Fighter의
+벡터 재생성이 갤러그에서 문제가 되는 이유는? 오브젝트 풀은 이를 어떻게
+해결하나?</p>
+<p><strong>Q2.</strong> <code>Pool::Kill(i)</code> 는
+<code>delete</code> 를 하지 않고 <code>active[i] = false</code> 만 한다.
+이렇게 해도 되는 이유와, 그 슬롯은 이후 어떻게 되나?</p>
+<p><strong>Q3.</strong> 게임 루프 안에서 총알을 수천 발 쏴도 힙 할당이
+0회인 이유를 <code>Spawn</code>/<code>Kill</code> 로 설명하라.</p>
+<p><strong>Q4.</strong> 적 40마리를 각자 좌표로 저장하지 않고
+<code>(col, row)</code> 슬롯만 저장한다. <code>formX</code> 하나로 편대
+전체를 움직일 수 있는 이유는?</p>
+<p><strong>Q5.</strong> <code>Spawn()</code> 의 선형 탐색(O(N))을 프리
+리스트로 바꾸면 O(1)이 된다. 그런데 MVP가 일부러 선형 탐색으로 시작하는
+이유는?</p>
+<details><summary><b>해설 펼치기</b></summary>
+
+<p><strong>A1.</strong> 총알·적·폭발이 초당 수십 개 생겼다 사라지는데,
+매번 <code>new/delete</code>(힙 할당/해제)나 벡터 통째 복사를 하면 그
+비용이 쌓여 프레임 드랍(끊김)과 메모리 단편화를 부른다. 오브젝트 풀은
+<strong>고정 배열을 미리 잡아 두고 슬롯을 재사용</strong>해, 게임 루프
+안에서 힙 할당을 0회로 만든다.</p>
+<p><strong>A2.</strong> 풀의 <code>items[N]</code> 배열은 이미 잡혀
+있어서, 슬롯을 "지울" 필요가 없다. <code>active[i]=false</code> 는 "이
+칸 비었다"는 표시일 뿐, 메모리는 그대로 남는다. 그 슬롯은 다음
+<code>Spawn()</code> 이 <strong>재사용</strong>한다 — 빌려 줬다 돌려받는
+것이다.</p>
+<p><strong>A3.</strong> <code>Spawn()</code> 은 새로 만드는 게 아니라
+<strong>미리 잡힌 배열의 빈 칸을 켜서 번호를
+준다</strong>(<code>new</code> 없음). <code>Kill(i)</code> 는 그 칸을
+<strong>비었다고 표시만</strong> 한다(<code>delete</code> 없음). 그래서
+총알이 몇천 발이 오가도 배열은 N칸 그대로고, 슬롯만 돌려 쓴다 — 힙을
+건드리지 않는다.</p>
+<p><strong>A4.</strong> 각 적의 실제 위치를 <strong>저장하지 않고
+계산(파생)</strong> 하기 때문이다:
+<code>EnemyX = formX + col*간격</code>. <code>formX</code> 하나만 바꾸면
+모든 적의 파생 위치가 함께 바뀐다. 40개의 x를 각각 갱신할 필요 없이 편대
+상태 하나만 옮기면 된다.</p>
+<p><strong>A5.</strong> 갤러그 규모(풀 32~64)에선 선형 탐색이 전혀
+병목이 아니라서다. 문제되지 않는 것을 미리 최적화하는 것은 시간 낭비이자
+버그의 씨앗이다("섣부른 최적화"). <strong>먼저 단순·정확하게 만들고,
+실제로 느린 곳을 측정한 뒤</strong> 그 지점만 고친다("측정 후
+최적화").</p>
+</details>
+
+<hr />
+<h2 id="실습-미션--총알-풀-만들기-poolc-star">실습 미션 — 총알 풀 만들기
+<code>pool.c</code> ⭐</h2>
+<blockquote>
+<p>Road Fighter의 미션이 "엔티티 시스템"이었다면, 이 미션은
+<strong>오브젝트 풀 그 자체</strong>를 손으로 만든다. 고정 배열 +
+<code>active</code> 플래그로, <code>new/delete</code> 없이 총알을 무한히
+돌려 쓰는 것을 눈으로 확인한다.</p>
+</blockquote>
+<p><strong>드릴 문법</strong> — 고정 배열 + <code>active</code> 플래그 ·
+<code>Spawn</code>(빈 슬롯 찾기) · <code>Kill</code>(표시만) · 순회 ·
+<strong>힙 할당 0회로 슬롯 재사용</strong> <strong>만드는 것</strong> —
+8칸짜리 총알 풀. 매 턴 총알을 발사(스폰)하고 이동시키며, 화면 밖 총알의
+슬롯이 재사용되는 것을 관찰한다. <strong>클리어 조건</strong> — 수십
+발을 쏴도 배열은 8칸 그대로, 슬롯이 재사용된다. <strong>규모</strong> —
+약 50줄, 파일 1개. 표준 C만(템플릿 없이 struct 배열로 개념 구현).</p>
+<h3 id="문제-정의">문제 정의</h3>
+<p>C에는 템플릿이 없으니, <code>Pool&lt;T,N&gt;</code> 대신
+<strong><code>Bullet</code> 구조체 배열 + <code>active</code>
+플래그</strong>로 개념을 그대로 구현한다. <code>Spawn()</code> 은 빈
+칸을 찾아 켜고, <code>Kill()</code> 은 표시만 끈다. 매 턴 총알이 위로
+이동하다 화면 밖으로 나가면 그 슬롯이 비고, 다음 발사가 <strong>바로 그
+칸을 재사용</strong>한다. 총 발사 수를 세어, 배열 크기(8)를 훨씬 넘겨도
+배열은 그대로임을 확인하는 게 핵심이다.</p>
+<h3 id="목표--클리어-조건">목표 / 클리어 조건</h3>
+<ol type="1">
+<li><code>Bullet pool[8]</code> 과 <code>int active[8]</code> (또는
+struct에 active 필드)로 풀을 만든다.</li>
+<li><code>Spawn()</code> — 첫 번째 빈 슬롯을 켜고 인덱스 반환(없으면
+-1).</li>
+<li><code>Kill(i)</code> — <code>active[i] = 0</code> (메모리 안
+건드림).</li>
+<li>매 턴: 발사 요청 수만큼 <code>Spawn</code>, active 총알을 위로 이동,
+화면 밖은 <code>Kill</code>.</li>
+<li>슬롯 상태(어느 칸이 활성인지)와 누적 발사 수를 매 턴 출력.</li>
+</ol>
+<h3 id="힌트">힌트</h3>
+<details><summary><b>힌트 1 — Spawn / Kill</b></summary>
+
+<div class="sourceCode" id="cb16"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define POOL </span><span class="dv">8</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span> <span class="dt">int</span> y<span class="op">;</span> <span class="dt">int</span> active<span class="op">;</span> <span class="op">}</span> Bullet<span class="op">;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>Bullet pool<span class="op">[</span>POOL<span class="op">];</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> Spawn<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> POOL<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(!</span>pool<span class="op">[</span>i<span class="op">].</span>active<span class="op">)</span> <span class="op">{</span> pool<span class="op">[</span>i<span class="op">].</span>active <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> <span class="cf">return</span> i<span class="op">;</span> <span class="op">}</span>  <span class="co">/* 첫 빈 칸 */</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span>                                                  <span class="co">/* 다 참 */</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> Kill<span class="op">(</span><span class="dt">int</span> i<span class="op">)</span> <span class="op">{</span> pool<span class="op">[</span>i<span class="op">].</span>active <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> <span class="op">}</span>   <span class="co">/* 표시만 (free 없음) */</span></span></code></pre></div>
+</details>
+
+<details><summary><b>힌트 2 — 순회 이동 + 슬롯 재사용 관찰</b></summary>
+
+<div class="sourceCode" id="cb17"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> POOL<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>pool<span class="op">[</span>i<span class="op">].</span>active<span class="op">)</span> <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    pool<span class="op">[</span>i<span class="op">].</span>y<span class="op">--;</span>                       <span class="co">/* 위로 이동 */</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>pool<span class="op">[</span>i<span class="op">].</span>y <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span> Kill<span class="op">(</span>i<span class="op">);</span>        <span class="co">/* 화면 밖 → 슬롯 반납 */</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>슬롯 맵을 출력하면(<code>active[i]</code> 를
+<code>#</code>/<code>.</code> 로) 죽은 칸이 다음 스폰에 재사용되는 걸 볼
+수 있다.</p>
+</details>
+
+<h3 id="정답-코드">정답 코드</h3>
+<details><summary><b>정답 펼치기 — <code>pool.c</code></b></summary>
+
+<div class="sourceCode" id="cb18"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define _CRT_SECURE_NO_WARNINGS</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#define POOL   </span><span class="dv">8</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#define TOP_Y  </span><span class="dv">10</span><span class="pp">      </span><span class="co">/* 발사 높이 */</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span> <span class="dt">int</span> y<span class="op">;</span> <span class="dt">int</span> active<span class="op">;</span> <span class="op">}</span> Bullet<span class="op">;</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>Bullet pool<span class="op">[</span>POOL<span class="op">];</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> totalSpawns <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">/* 누적 발사 수 (배열 크기와 비교용) */</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> Spawn<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> POOL<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(!</span>pool<span class="op">[</span>i<span class="op">].</span>active<span class="op">)</span> <span class="op">{</span> pool<span class="op">[</span>i<span class="op">].</span>active <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> pool<span class="op">[</span>i<span class="op">].</span>y <span class="op">=</span> TOP_Y<span class="op">;</span> totalSpawns<span class="op">++;</span> <span class="cf">return</span> i<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span>          <span class="co">/* 풀이 가득 참 → 발사 무시 */</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> Kill<span class="op">(</span><span class="dt">int</span> i<span class="op">)</span> <span class="op">{</span> pool<span class="op">[</span>i<span class="op">].</span>active <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> <span class="op">}</span>   <span class="co">/* 해제 아님, 표시만 */</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> PrintPool<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;  슬롯: &quot;</span><span class="op">);</span></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> POOL<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%c</span><span class="st">&quot;</span><span class="op">,</span> pool<span class="op">[</span>i<span class="op">].</span>active <span class="op">?</span> <span class="ch">&#39;#&#39;</span> <span class="op">:</span> <span class="ch">&#39;.&#39;</span><span class="op">);</span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;   (활성 y: &quot;</span><span class="op">);</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> POOL<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>pool<span class="op">[</span>i<span class="op">].</span>active<span class="op">)</span> printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> &quot;</span><span class="op">,</span> pool<span class="op">[</span>i<span class="op">].</span>y<span class="op">);</span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> turn<span class="op">,</span> fire<span class="op">;</span></span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> POOL<span class="op">;</span> i<span class="op">++)</span> pool<span class="op">[</span>i<span class="op">].</span>active <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">/* Clear */</span></span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;=== 총알 풀 (</span><span class="sc">%d</span><span class="st">칸, new/delete 0회) ===</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> POOL<span class="op">);</span></span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>turn <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> turn <span class="op">&lt;=</span> <span class="dv">20</span><span class="op">;</span> turn<span class="op">++)</span></span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">[턴 </span><span class="sc">%d</span><span class="st">] 발사 수(0~</span><span class="sc">%d</span><span class="st">, -1 종료): &quot;</span><span class="op">,</span> turn<span class="op">,</span> POOL<span class="op">);</span></span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>scanf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>fire<span class="op">)</span> <span class="op">!=</span> <span class="dv">1</span><span class="op">)</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>fire <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> f <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> f <span class="op">&lt;</span> fire<span class="op">;</span> f<span class="op">++)</span></span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>Spawn<span class="op">()</span> <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> printf<span class="op">(</span><span class="st">&quot;  ! 풀이 가득 참 — 발사 무시</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span> <span class="cf">break</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a>        <span class="co">/* 순회 이동 + 화면 밖 제거 (슬롯 재사용) */</span></span>
+<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> POOL<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(!</span>pool<span class="op">[</span>i<span class="op">].</span>active<span class="op">)</span> <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a>            pool<span class="op">[</span>i<span class="op">].</span>y<span class="op">--;</span></span>
+<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>pool<span class="op">[</span>i<span class="op">].</span>y <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span> Kill<span class="op">(</span>i<span class="op">);</span></span>
+<span id="cb18-52"><a href="#cb18-52" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb18-53"><a href="#cb18-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-54"><a href="#cb18-54" aria-hidden="true" tabindex="-1"></a>        PrintPool<span class="op">();</span></span>
+<span id="cb18-55"><a href="#cb18-55" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;  누적 발사 </span><span class="sc">%d</span><span class="st">회 — 그런데 배열은 여전히 </span><span class="sc">%d</span><span class="st">칸 (재사용!)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> totalSpawns<span class="op">,</span> POOL<span class="op">);</span></span>
+<span id="cb18-56"><a href="#cb18-56" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb18-57"><a href="#cb18-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb18-58"><a href="#cb18-58" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>빌드:</strong> <code>cl pool.c</code> (MSVC) 또는
+<code>gcc pool.c -o pool</code></p>
+<p><strong>함정/체크포인트</strong></p>
+<ul>
+<li><strong><code>Kill</code> 은 <code>free</code> 가 아니다.</strong>
+슬롯을 "비었다"고 표시만 한다. 그래서 배열은 절대 줄거나 늘지 않는다 —
+이것이 풀의 핵심이다. <code>누적 발사</code>가 수십이 되어도
+<code>배열은 8칸</code>임을 눈으로 확인하자.</li>
+<li><strong>풀이 가득 차면 <code>Spawn</code> 이 -1.</strong> 8칸이 다
+활성인데 또 쏘면 발사가 무시된다. 상한이 있다는 것 — 용량(N)을 게임에
+맞게 정하는 게 설계다.</li>
+<li><strong>슬롯 재사용 관찰.</strong> 슬롯
+맵(<code>#</code>/<code>.</code>)을 보면, 위로 나가 죽은
+칸(<code>.</code>)이 다음 발사 때 다시 <code>#</code> 이 된다. 그 자리가
+<strong>재사용</strong>되는 것 — <code>new</code> 없이.</li>
+</ul>
+<p><strong>확장 과제</strong></p>
+<ul>
+<li><code>Spawn</code> 을 <strong>프리 리스트</strong>(빈 인덱스 스택)로
+바꿔 O(1)로 만들어 보자(개념 6). 선형 탐색과 결과가 같은지 확인.</li>
+<li>총알에 <code>type</code> 을 추가하면, Road Fighter의 엔티티 시스템 +
+풀이 결합된다 — 그게 바로 캡스톤 Battle City다.</li>
+</ul>
+</details>
+
+<hr />
+<h2 id="이-단계를-마치며">이 단계를 마치며</h2>
+<table>
+<thead>
+<tr>
+<th>얻은 것</th>
+<th>다음에 쓰는 곳</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>오브젝트 풀 <code>Pool&lt;T,N&gt;</code></td>
+<td><strong>7단계 Battle City</strong> 가 그대로 공유</td>
+</tr>
+<tr>
+<td>active 플래그·슬롯 재사용</td>
+<td>대량 단명 오브젝트 관리 전반</td>
+</tr>
+<tr>
+<td>편대(파생 좌표)</td>
+<td>격자·타일 기반 위치 계산</td>
+</tr>
+<tr>
+<td>풀 × 풀 충돌</td>
+<td>Battle City의 총알-탱크-타일</td>
+</tr>
+<tr>
+<td>측정 후 최적화</td>
+<td>모든 성능 개선의 원칙</td>
+</tr>
+</tbody>
+</table>
+<p>갤러그로 우리는 "동작하는 코드"에서 <strong>"성능을 의식하는
+코드"</strong> 로 올라섰다. 초당 수십 개의 총알이 오가도, 미리 잡은 풀
+위에서 슬롯을 돌려 쓰며 힙을 건드리지 않는다. 다음 6단계 Maze는 방향을
+튼다 — 성능이 아니라 <strong>알고리즘 그 자체</strong>를 주제로, 미로를
+만드는 다섯 가지 생성 알고리즘과 길을 찾는 네 가지 탐색 알고리즘을
+다룬다. 그리고 거기서 익힌 생성·탐색이, 마지막 캡스톤 Battle City에서 이
+풀과 만난다.</p>
+<blockquote>
+<p><strong>← 이전:</strong> <a href="Part2_05.html">번외 · GameDevTycoon
+이식 — C에서 C++로</a> | <strong>다음 →</strong> <a
+href="Part2_07.html">6단계 · Maze — 알고리즘 심화</a></p>
+</blockquote>
+  </article>
+</main>
+<footer class="site-footer">
+  <a href="index.html">← 목차로 돌아가기</a>
+  <span>CSGP Learn · 표시용 원고 (코드는 UTF-8 사본)</span>
+</footer>
+<script src="book-nav.js"></script>
+</body>
+</html>

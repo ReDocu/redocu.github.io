@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4단계 · Road Fighter — 엔티티 시스템과 리소스</title>
+<script>try{var _t=localStorage.getItem('csgp-theme');if(_t)document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
+<style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<link rel="stylesheet" href="book.css">
+
+</head>
+<body>
+<div class="topbar">
+  <button class="drawer-toggle" id="drawerToggle" type="button" aria-label="목차 열기/닫기" aria-expanded="false">☰ 목차</button>
+  <a class="home" href="index.html">📘 CSGP</a>
+  <span class="crumb">콘솔 게임으로 배우는 C · C++</span>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="라이트/다크 전환">🌙</button>
+</div>
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" aria-label="책 목차">
+  <div class="drawer-dash">
+    <div class="dash-title">콘솔 게임으로 배우는 C · C++</div>
+    <div class="dash-sub">학습 목차 · 대시보드</div>
+    <div class="dash-progress"><div class="dash-bar"><i id="dashBar"></i></div><span class="dash-pct" id="dashPct"></span></div>
+    <input class="drawer-search" id="drawerSearch" type="search" placeholder="🔍 챕터 검색…" aria-label="챕터 검색">
+  </div>
+  <nav class="booknav" aria-label="책 목차"><a class="booknav-home" href="index.html">📘 전체 목차</a><ul class="booknav-list"><li class="grp">1부 · C 기본 문법</li><li><a href="Part1_00.html" title="1부 — C 기본 문법: 회사를 키우며 배우는 언어">1부 개요</a></li><li><a href="Part1_01.html" title="A 모듈 · 1–4장 — 값·계산·분기: 회사에 숫자를 세우다">A · 값·계산·분기</a></li><li><a href="Part1_02.html" title="B 모듈 · 5–6장 — 반복문과 함수: 회사에 심장을 달다">B · 반복문·함수</a></li><li><a href="Part1_03.html" title="C 모듈 · 7–8장 — 배열과 문자열: 회사에 사람과 이름을 채우다">C · 배열·문자열</a></li><li><a href="Part1_04.html" title="D 모듈 · 9–10장 — 구조체와 포인터: 데이터에 모양을 주다">D · 구조체·포인터</a></li><li><a href="Part1_05.html" title="E 모듈 · 11–12장 — 동적 메모리와 랜덤: 회사가 자라고, 시장이 살아난다">E · 메모리·랜덤</a></li><li><a href="Part1_06.html" title="F 모듈 · 13–15장 — 파일·모듈·캡스톤: 회사를 저장하고, 게임을 출시하다">F · 파일·모듈·캡스톤</a></li><li class="grp">2부 · C++ 프레임워크</li><li><a href="Part2_00.html" title="2부 — C++ 콘솔 게임 프레임워크: 7개의 게임으로 오르기">2부 개요</a></li><li><a href="Part2_01.html" title="1단계 · Snake — 자료구조·충돌·상태머신">1단계 · Snake</a></li><li><a href="Part2_02.html" title="2단계 · Tetris — 알고리즘과 그리드">2단계 · Tetris</a></li><li><a href="Part2_03.html" title="3단계 · Dino — 물리와 스크롤">3단계 · Dino</a></li><li class="active"><a href="Part2_04.html" title="4단계 · Road Fighter — 엔티티 시스템과 리소스">4단계 · Road Fighter</a><ul class="sections">
+<li><a href="#이-단계의-학습-목표" id="toc-이-단계의-학습-목표">이
+단계의 학습 목표</a></li>
+<li><a href="#왜-road-fighter가-이-자리인가"
+id="toc-왜-road-fighter가-이-자리인가">왜 Road Fighter가 이
+자리인가</a></li>
+<li><a href="#개념-1--엔티티-시스템--여러-종류를-한-리스트에"
+id="toc-개념-1--엔티티-시스템--여러-종류를-한-리스트에">개념 1 · 엔티티
+시스템 — 여러 종류를 한 리스트에</a></li>
+<li><a href="#개념-2--충돌의-분기-처리--같은-충돌-다른-결과"
+id="toc-개념-2--충돌의-분기-처리--같은-충돌-다른-결과">개념 2 · 충돌의
+분기 처리 — 같은 충돌, 다른 결과</a></li>
+<li><a href="#개념-3--리소스-관리--연료와-목숨"
+id="toc-개념-3--리소스-관리--연료와-목숨">개념 3 · 리소스 관리 — 연료와
+목숨</a></li>
+<li><a href="#개념-4--일시적-상태--무적에-수명을-주다"
+id="toc-개념-4--일시적-상태--무적에-수명을-주다">개념 4 · 일시적 상태 —
+무적에 수명을 주다</a></li>
+<li><a href="#개념-5--시간-기반-스테이지--갈수록-어려워지기"
+id="toc-개념-5--시간-기반-스테이지--갈수록-어려워지기">개념 5 · 시간
+기반 스테이지 — 갈수록 어려워지기</a></li>
+<li><a
+href="#개념-6--스크롤-누적과-차선--부드러운-세계를-정수-칸에-얹기"
+id="toc-개념-6--스크롤-누적과-차선--부드러운-세계를-정수-칸에-얹기">개념
+6 · 스크롤 누적과 차선 — 부드러운 세계를 정수 칸에 얹기</a></li>
+<li><a
+href="#코드-워크스루--oningameupdate-다섯-시스템이-도는-한-프레임"
+id="toc-코드-워크스루--oningameupdate-다섯-시스템이-도는-한-프레임">코드
+워크스루 — <code>OnInGameUpdate</code>, 다섯 시스템이 도는 한
+프레임</a></li>
+<li><a href="#그림으로-정리--엔티티-시스템과-충돌-분기"
+id="toc-그림으로-정리--엔티티-시스템과-충돌-분기">그림으로 정리 — 엔티티
+시스템과 충돌 분기</a></li>
+<li><a href="#알려진-이슈에서-배우기-as-built"
+id="toc-알려진-이슈에서-배우기-as-built">알려진 이슈에서 배우기
+(as-built)</a></li>
+<li><a href="#체크포인트--스스로-점검하기"
+id="toc-체크포인트--스스로-점검하기">체크포인트 — 스스로
+점검하기</a></li>
+<li><a href="#실습-미션--차선-피하기-dodgec-star"
+id="toc-실습-미션--차선-피하기-dodgec-star">실습 미션 — 차선 피하기
+<code>dodge.c</code> ⭐</a></li>
+<li><a href="#이-단계를-마치며" id="toc-이-단계를-마치며">이 단계를
+마치며</a></li>
+</ul></li><li><a href="Part2_05.html" title="번외 · GameDevTycoon 이식 — C에서 C++로">번외 · Tycoon 이식</a></li><li><a href="Part2_06.html" title="5단계 · Galaga — 오브젝트 풀링">5단계 · Galaga</a></li><li><a href="Part2_07.html" title="6단계 · Maze — 알고리즘 심화 (생성 + 탐색)">6단계 · Maze</a></li><li><a href="Part2_08.html" title="7단계 · Battle City — 종합 캡스톤 (맵 생성 + 풀링)">7단계 · Battle City</a></li><li><a href="Part2_09.html" title="확장 · Pac-Man — 유령 AI와 상태머신">확장 · Pac-Man</a></li><li class="grp">부록</li><li><a href="Appendix.html" title="부록 — 용어집 · 핵심 이슈 · 요약">부록</a></li></ul></nav>
+</aside>
+<main class="reader">
+  <article class="page">
+<h1 id="4단계--road-fighter--엔티티-시스템과-리소스">4단계 · Road
+Fighter — 엔티티 시스템과 리소스</h1>
+<div class="chapter-badge">
+
+<p><strong>단계 4</strong> · 게임 <code>Road Fighter</code> · 씬 클래스
+<code>RoadFighterContent : public IGameContent</code> <strong>처음
+배우는 기술</strong> — <code>엔티티 시스템(이종 집합)</code>
+<code>type 태그로 분기</code> <code>충돌의 분기 처리</code>
+<code>리소스 관리(연료·목숨)</code>
+<code>일시적 상태(무적 타이머)</code> <code>시간 기반 스테이지</code>
+<code>HUD</code> <code>차선 이동</code> <code>스크롤 누적</code>
+<strong>예상 학습 시간</strong> — 4–6시간</p>
+</div>
+
+<blockquote>
+<p>지금까지의 게임에는 "한 종류의 주인공"만 있었다 — 뱀의 몸통, 떨어지는
+블록, 공룡과 장애물. Road Fighter는 다르다. 하나의 도로 위에 <strong>적
+차량·고속 차량·트럭·연료·보너스·장애물</strong>이 뒤섞여 흐른다. 이 여섯
+종류를 어떻게 한꺼번에 다룰까? 답은 <strong>엔티티 시스템</strong> —
+종류를 <code>type</code> 하나로 구분해 <strong>한 리스트에 담고,
+<code>type</code> 에 따라 다르게 처리하는 것</strong>이다. 여기에
+연료·목숨이라는 <strong>자원</strong>, 피격 후 잠깐 무적이 되는
+<strong>일시적 상태</strong>, 시간이 흐를수록 어려워지는
+<strong>스테이지</strong> 가 얽힌다. 여러 시스템이 한 게임 안에서 물려
+도는 — <strong>시스템 설계</strong>를 배우는 단계다.</p>
+</blockquote>
+<h2 id="이-단계의-학습-목표">이 단계의 학습 목표</h2>
+<p>이 단계를 마치면 다음을 할 수 있다.</p>
+<ol type="1">
+<li>서로 다른 여러 종류의 오브젝트를 <strong>하나의 <code>struct</code>
++ <code>type</code> 태그</strong>로 정의해 한 리스트에서 관리할 수
+있다.</li>
+<li>같은 충돌이라도 <code>type</code> 에 따라 <strong>다른
+결과</strong>(획득 vs 피해)로 분기 처리할 수 있다.</li>
+<li><strong>연료·목숨</strong> 같은 자원의 소모·회복을 관리하고, 자원
+고갈을 실패 조건으로 삼을 수 있다.</li>
+<li><strong>무적 타이머</strong> 처럼 상태에 <strong>수명</strong>을
+주어, 시간이 지나면 저절로 풀리게 할 수 있다.</li>
+<li><code>GetContentTime()</code> 기반 <strong>시간 스테이지</strong>로
+난이도(스폰·속도·확률)를 점점 올릴 수 있다.</li>
+<li>여러 시스템(엔티티·자원·스테이지·충돌)이 <strong>한 프레임 안에서
+순서대로</strong> 도는 구조를 설계할 수 있다.</li>
+</ol>
+<h2 id="왜-road-fighter가-이-자리인가">왜 Road Fighter가 이
+자리인가</h2>
+<p>Snake는 자료구조를, Tetris는 알고리즘을, Dino는 물리를 배웠다. 각
+게임은 <strong>하나의 새 기술에 집중</strong>했다. Road Fighter의 임무는
+다르다 — <strong>앞선 기술들을 한 게임 안에서 동시에 쓰며, 여러 시스템이
+얽혀 도는 경험</strong>을 하는 것이다.</p>
+<p>그 얽힘의 중심에 <strong>엔티티 시스템</strong>이 있다. 이전 게임들은
+오브젝트가 사실상 한 종류였다. 뱀 몸통은 다 같은 몸통이고, 블록은 색만
+다른 같은 블록이었다. 하지만 도로 위에는 성격이 전혀 다른 여섯 종류가
+함께 흐른다 — 부딪히면 죽는 적 차량, 주우면 회복되는 연료, 점수를 주는
+보너스. 이들을 각각 별도의 리스트로 관리하면(적 리스트, 연료 리스트,
+보너스 리스트…) 코드가 여섯 배로 늘고 스폰·이동·충돌·제거를 여섯 번씩
+짜야 한다.</p>
+<p><strong>엔티티 시스템은 이 여섯을 하나로 묶는다.</strong> 종류를
+나타내는 <code>type</code> 필드 하나를 두고, 모두를 한 리스트에 담는다.
+이동·스크롤·제거는 종류에 상관없이 똑같이 처리하고, <strong>다르게
+처리해야 할 곳(충돌의 결과)에서만 <code>type</code> 으로
+분기</strong>한다. 이것이 "이종 집합(heterogeneous collection)"을 다루는
+가장 실용적인 방법이자, 이후 Galaga·Battle City가 수많은 오브젝트를
+다루는 토대다.</p>
+<blockquote>
+<p><strong>값 타입 벡터, 그리고 그 다음.</strong> Dino에서 이어진 "값
+타입 <code>std::vector</code>" 설계가 여기서도 그대로다 —
+<code>std::vector&lt;Entity&gt;</code> 하나에 모든 것을 담는다. 그런데
+Road Fighter는 매 프레임 화면 밖으로 나간 엔티티를 지우려고
+<strong>벡터를 새로 만들어 교체</strong>한다(Dino와 같은 방식).
+오브젝트가 적을 땐 괜찮지만, 초당 수십 개가 생겼다 사라지는
+Galaga(5단계)에서는 이 비용이 문제가 된다 — 그것이 <strong>오브젝트
+풀</strong>의 동기다. Road Fighter의 이 방식을 기억해 두자.</p>
+</blockquote>
+<hr />
+<h2 id="개념-1--엔티티-시스템--여러-종류를-한-리스트에">개념 1 · 엔티티
+시스템 — 여러 종류를 한 리스트에</h2>
+<p>도로 위 모든 오브젝트를 <strong>하나의 구조체</strong>로 정의한다.
+종류는 <code>type</code> 필드가 구분한다.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> <span class="kw">class</span> _EEntity <span class="op">{</span> ENEMY_NORMAL<span class="op">,</span> ENEMY_FAST<span class="op">,</span> TRUCK<span class="op">,</span> FUEL<span class="op">,</span> BONUS<span class="op">,</span> OBSTACLE <span class="op">};</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Entity <span class="op">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    _EEntity type<span class="op">;</span>   <span class="co">// ★ 이 하나가 &quot;무엇인지&quot;를 결정한다</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>      lane<span class="op">;</span>   <span class="co">// 소속 차선 (0~4)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span>    y<span class="op">;</span>      <span class="co">// 세로 위치 (스크롤로 내려옴)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>      w<span class="op">,</span> h<span class="op">;</span>   <span class="co">// 히트박스 크기</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span>Entity<span class="op">&gt;</span> entities<span class="op">;</span>   <span class="co">// 적·트럭·아이템·장애물 — 전부 여기 한 리스트에</span></span></code></pre></div>
+<p><code>type</code> 이 <code>ENEMY_NORMAL</code> 이면 빨간 적 차량,
+<code>FUEL</code> 이면 초록 연료 아이템, <code>TRUCK</code> 이면 큰
+트럭이다. <strong>같은 구조체가 <code>type</code> 값에 따라 다른 것이
+된다.</strong> 1부 F 모듈에서 배운 <code>enum</code> 이, 여기서
+"오브젝트의 정체를 태그하는" 핵심 도구가 된다.</p>
+<p><strong>공통 처리는 종류를 안 가린다.</strong> 스크롤로 내리는 것도,
+화면 밖으로 나간 것을 지우는 것도, 종류에 상관없이 똑같다.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> RoadFighterContent<span class="op">::</span>UpdateWorld<span class="op">()</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> step <span class="op">=</span> speed <span class="op">*</span> SCROLL_K<span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">size_t</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> entities<span class="op">.</span>size<span class="op">();</span> i<span class="op">++)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        entities<span class="op">[</span>i<span class="op">].</span>y <span class="op">+=</span> step<span class="op">;</span>          <span class="co">// 모든 엔티티를 똑같이 아래로 (type 안 봄)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 화면 밖으로 나간 것 제거 — 단, 차량을 피해 보냈으면 점수</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>Entity<span class="op">&gt;</span> kept<span class="op">;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">size_t</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> entities<span class="op">.</span>size<span class="op">();</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>entities<span class="op">[</span>i<span class="op">].</span>y <span class="op">&gt;</span> <span class="op">(</span><span class="dt">float</span><span class="op">)</span>ROAD_BOTTOM<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>            _EEntity t <span class="op">=</span> entities<span class="op">[</span>i<span class="op">].</span>type<span class="op">;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>t <span class="op">==</span> ENEMY_NORMAL <span class="op">||</span> t <span class="op">==</span> ENEMY_FAST <span class="op">||</span> t <span class="op">==</span> TRUCK<span class="op">)</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                score <span class="op">+=</span> <span class="dv">20</span><span class="op">;</span>            <span class="co">// 차량 회피 성공 보너스</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>            kept<span class="op">.</span>push_back<span class="op">(</span>entities<span class="op">[</span>i<span class="op">]);</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    entities <span class="op">=</span> kept<span class="op">;</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>여섯 종류를 한 리스트로 다루니, 스폰·이동·제거 코드가 <strong>한
+벌</strong>이면 된다. 종류가 하나 늘어도(예: 오일 웅덩이)
+<code>enum</code> 에 값 하나 추가하고 필요한 분기만 더하면 끝이다.
+이것이 엔티티 시스템의 힘 — <strong>확장이 쉽다.</strong></p>
+<hr />
+<h2 id="개념-2--충돌의-분기-처리--같은-충돌-다른-결과">개념 2 · 충돌의
+분기 처리 — 같은 충돌, 다른 결과</h2>
+<p>엔티티 시스템의 진가는 <strong>충돌</strong>에서 드러난다. 플레이어가
+무언가에 부딪히는 것은 다 같은 AABB 충돌(Dino에서 배운 그것)이다. 하지만
+<strong>부딪힌 것이 무엇이냐에 따라 결과가 완전히 다르다</strong> —
+연료는 회복이고, 적은 피해다. 여기서 <code>type</code> 분기가
+필요하다.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> RoadFighterContent<span class="op">::</span>HandleCollisions<span class="op">()</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 플레이어 히트박스 (차선 중앙, 하단 고정)</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> cx <span class="op">=</span> LaneCenterX<span class="op">(</span>playerLane<span class="op">);</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> pLeft <span class="op">=</span> cx <span class="op">-</span> <span class="dv">1</span><span class="op">,</span> pRight <span class="op">=</span> cx <span class="op">+</span> <span class="dv">1</span><span class="op">,</span> pTop <span class="op">=</span> PLAYER_Y <span class="op">-</span> <span class="dv">2</span><span class="op">,</span> pBottom <span class="op">=</span> PLAYER_Y<span class="op">;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>Entity<span class="op">&gt;</span> kept<span class="op">;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">size_t</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> entities<span class="op">.</span>size<span class="op">();</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        Entity e <span class="op">=</span> entities<span class="op">[</span>i<span class="op">];</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> eLeft <span class="op">=</span> LaneCenterX<span class="op">(</span>e<span class="op">.</span>lane<span class="op">)</span> <span class="op">-</span> e<span class="op">.</span>w <span class="op">/</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> eRight <span class="op">=</span> eLeft <span class="op">+</span> e<span class="op">.</span>w <span class="op">-</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> eTop <span class="op">=</span> <span class="op">(</span><span class="dt">int</span><span class="op">)(</span>e<span class="op">.</span>y <span class="op">+</span> <span class="fl">0.5</span><span class="bu">f</span><span class="op">),</span> eBottom <span class="op">=</span> eTop <span class="op">+</span> e<span class="op">.</span>h <span class="op">-</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        <span class="co">// ── 공통: AABB 겹침 판정 (Dino 개념 5 그대로) ──</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="dt">bool</span> hit <span class="op">=</span> <span class="op">!(</span>pRight <span class="op">&lt;</span> eLeft <span class="op">||</span> pLeft <span class="op">&gt;</span> eRight <span class="op">||</span> pBottom <span class="op">&lt;</span> eTop <span class="op">||</span> pTop <span class="op">&gt;</span> eBottom<span class="op">);</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="co">// ── 분기: 무엇에 부딪혔나? ──</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>hit <span class="op">&amp;&amp;</span> e<span class="op">.</span>type <span class="op">==</span> FUEL<span class="op">)</span>  <span class="op">{</span> fuelF <span class="op">+=</span> <span class="dv">25</span><span class="op">;</span> <span class="cf">if</span> <span class="op">(</span>fuelF <span class="op">&gt;</span> <span class="dv">100</span><span class="op">)</span> fuelF <span class="op">=</span> <span class="dv">100</span><span class="op">;</span> <span class="cf">continue</span><span class="op">;</span> <span class="op">}</span>  <span class="co">// 연료 획득 → 소비</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>hit <span class="op">&amp;&amp;</span> e<span class="op">.</span>type <span class="op">==</span> BONUS<span class="op">)</span> <span class="op">{</span> score <span class="op">+=</span> <span class="dv">500</span><span class="op">;</span> <span class="cf">continue</span><span class="op">;</span> <span class="op">}</span>                               <span class="co">// 보너스 획득 → 소비</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>hit <span class="op">&amp;&amp;</span> <span class="op">!</span>invincible<span class="op">)</span> <span class="op">{</span>                                                             <span class="co">// 차량/장애물 → 피해</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>            life <span class="op">-=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>            speed <span class="op">=</span> SPEED_MIN<span class="op">;</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>            invincible <span class="op">=</span> <span class="kw">true</span><span class="op">;</span>  invTimer <span class="op">=</span> <span class="dv">90</span><span class="op">;</span>   <span class="co">// 무적 시작 (개념 4)</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        kept<span class="op">.</span>push_back<span class="op">(</span>e<span class="op">);</span>   <span class="co">// 획득 아이템(continue)은 여기 안 옴 = 리스트에서 사라짐</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    entities <span class="op">=</span> kept<span class="op">;</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>핵심 구조를 보라 — <strong>충돌 판정은 하나(AABB), 그 뒤 결과가
+<code>type</code> 으로 갈라진다.</strong></p>
+<ul>
+<li><code>FUEL</code> → 연료 +25, <code>continue</code> 로 리스트에서
+제거(소비됨).</li>
+<li><code>BONUS</code> → 점수 +500, 마찬가지로 소비.</li>
+<li>그 밖(차량·장애물) → 무적이 아닐 때만 목숨 -1, 속도 리셋, 무적
+시작.</li>
+</ul>
+<p><code>continue</code> 로 건너뛴 아이템은 <code>kept.push_back</code>
+에 안 담기니 자연히 사라지고, 차량은 담기니 계속 남는다(지나가야 회피
+점수를 받으므로). <strong>하나의 충돌 루프가, <code>type</code> 분기로
+"획득"과 "피해"라는 정반대 결과를 낸다</strong> — 이것이 이종 집합을
+다루는 방식이다.</p>
+<hr />
+<h2 id="개념-3--리소스-관리--연료와-목숨">개념 3 · 리소스 관리 — 연료와
+목숨</h2>
+<p>Road Fighter에는 두 개의 <strong>자원(resource)</strong> 이 있다 —
+소모되다 0이 되면 끝나는 <strong>연료</strong>, 부딪히면 줄어드는
+<strong>목숨</strong>. 이 자원들이 게임에 "관리해야 할 긴장"을 준다.</p>
+<p>연료는 매 프레임 조금씩 준다. 그런데 <strong>빠를수록 더
+많이</strong> 소모된다 — 속도를 올리면 점수는 빨라지지만 연료가 빨리
+마른다(트레이드오프).</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> RoadFighterContent<span class="op">::</span>UpdateFuel<span class="op">()</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 속도가 빠를수록 소모 배수 ↑ (SPEED_MIN에서 1.0배, SPEED_MAX에서 2.0배)</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> factor <span class="op">=</span> <span class="fl">1.0</span><span class="bu">f</span> <span class="op">+</span> <span class="op">(</span>speed <span class="op">-</span> SPEED_MIN<span class="op">)</span> <span class="op">/</span> <span class="op">(</span>SPEED_MAX <span class="op">-</span> SPEED_MIN<span class="op">);</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    fuelF <span class="op">-=</span> FUEL_DRAIN <span class="op">*</span> factor<span class="op">;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>fuelF <span class="op">&lt;</span> <span class="fl">0.0</span><span class="bu">f</span><span class="op">)</span> fuelF <span class="op">=</span> <span class="fl">0.0</span><span class="bu">f</span><span class="op">;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>목숨은 충돌로 줄고(개념 2), 두 자원 중 <strong>하나라도
+바닥나면</strong> 게임 오버다.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>life <span class="op">&lt;=</span> <span class="dv">0</span> <span class="op">||</span> fuelF <span class="op">&lt;=</span> <span class="fl">0.0</span><span class="bu">f</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    gameState <span class="op">=</span> _EGameState<span class="op">::</span>GAMEOVER<span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>score <span class="op">&gt;</span> hiScore<span class="op">)</span> hiScore <span class="op">=</span> score<span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>자원을 회복하는 길도 있다 — 연료 아이템(<code>◆</code>)을 주우면
++25(개념 2). 그래서 플레이어는 끊임없이 저울질한다: <strong>속도를 올려
+점수를 벌까, 연료를 아낄까? 위험을 무릅쓰고 연료 아이템을 주우러 차선을
+바꿀까?</strong> 자원 관리가 곧 게임의 의사결정이다. 1부 타이쿤의
+"자본금 관리"(돈이 곧 게임)와 같은 발상 — 숫자 자원이 만드는
+긴장이다.</p>
+<hr />
+<h2 id="개념-4--일시적-상태--무적에-수명을-주다">개념 4 · 일시적 상태 —
+무적에 수명을 주다</h2>
+<p>부딪혀 목숨이 줄면, 곧바로 또 부딪혀 연속으로 죽는 건 억울하다.
+그래서 피격 직후 <strong>잠깐 무적</strong>이 되어 깜빡이며, 그동안은
+충돌을 무시한다. 이 "잠깐"을 어떻게 구현할까? <strong>상태에
+수명(타이머)을 준다.</strong></p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 피격 시 (개념 2에서):</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>invincible <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>invTimer <span class="op">=</span> <span class="dv">90</span><span class="op">;</span>      <span class="co">// 90프레임 ≈ 1.5초 동안 무적</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">// 매 프레임 (UpdatePlayer에서):</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>invincible<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    invTimer<span class="op">--;</span>                        <span class="co">// 수명을 하나씩 깎는다</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>invTimer <span class="op">&lt;=</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        invincible <span class="op">=</span> <span class="kw">false</span><span class="op">;</span>            <span class="co">// 다 되면 무적 해제</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>invTimer</code> 를 매 프레임 1씩 줄이다 0이 되면 무적이 저절로
+풀린다. 그리고 무적인 동안엔 충돌 분기에서 <code>!invincible</code>
+조건으로 피해를 건너뛴다(개념 2). 렌더는 이 타이머로
+<strong>깜빡임</strong>까지 만든다.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> RoadFighterContent<span class="op">::</span>DrawPlayer<span class="op">()</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>invincible <span class="op">&amp;&amp;</span> <span class="op">(</span>invTimer <span class="op">/</span> <span class="dv">4</span><span class="op">)</span> <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span>   <span class="co">// 4프레임 주기로 켜졌다 꺼졌다</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span>                                   <span class="co">// 이 프레임엔 안 그림 → 깜빡</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... 플레이어 그리기 ...</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>(invTimer / 4) % 2</code> 는 4프레임마다 0↔︎1을 오가는 값이라,
+그리기를 건너뛰며 깜빡이는 효과를 낸다. <strong>"상태에 수명을 주고, 매
+프레임 깎는다"</strong> 는 이 패턴은 게임에서 무수히 쓰인다 — 무적 시간,
+파워업 지속 시간, 폭발 이펙트의 잔존, 쿨다운. 상태가 영원하지 않고
+<strong>시간이 지나면 저절로 사라지게</strong> 하는 것이다. Tetris의 락
+딜레이, Dino의 점수 깜빡도 같은 발상이었다.</p>
+<hr />
+<h2 id="개념-5--시간-기반-스테이지--갈수록-어려워지기">개념 5 · 시간
+기반 스테이지 — 갈수록 어려워지기</h2>
+<p>게임이 시작부터 끝까지 똑같이 어려우면 지루하다. Road Fighter는
+<strong>시간이 흐를수록</strong> 스폰이 잦아지고, 빠른 차·트럭이
+늘어난다. 스테이지는 엔진의 <code>GetContentTime()</code>(콘텐츠 시작 후
+흐른 초)으로 정한다.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> RoadFighterContent<span class="op">::</span>UpdateStage<span class="op">()</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> t <span class="op">=</span> TIMER<span class="op">-&gt;</span>GetContentTime<span class="op">();</span>   <span class="co">// 게임 시작 후 흐른 초</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>      <span class="op">(</span>t <span class="op">&lt;</span> <span class="fl">30.0</span><span class="bu">f</span><span class="op">)</span>  stage <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>t <span class="op">&lt;</span> <span class="fl">60.0</span><span class="bu">f</span><span class="op">)</span>  stage <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>t <span class="op">&lt;</span> <span class="fl">90.0</span><span class="bu">f</span><span class="op">)</span>  stage <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>t <span class="op">&lt;</span> <span class="fl">120.0</span><span class="bu">f</span><span class="op">)</span> stage <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>                 stage <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>stage</code> 하나가 여러 시스템을 동시에 조인다. 스폰 간격이
+짧아지고,</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> interval<span class="op">;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">switch</span> <span class="op">(</span>stage<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">case</span> <span class="dv">1</span><span class="op">:</span>  interval <span class="op">=</span> <span class="fl">1.30</span><span class="bu">f</span><span class="op">;</span> <span class="cf">break</span><span class="op">;</span>   <span class="co">// 스테이지 1: 1.3초마다</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="cf">case</span> <span class="dv">2</span><span class="op">:</span>  interval <span class="op">=</span> <span class="fl">1.05</span><span class="bu">f</span><span class="op">;</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="cf">case</span> <span class="dv">3</span><span class="op">:</span>  interval <span class="op">=</span> <span class="fl">0.85</span><span class="bu">f</span><span class="op">;</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="cf">case</span> <span class="dv">4</span><span class="op">:</span>  interval <span class="op">=</span> <span class="fl">0.70</span><span class="bu">f</span><span class="op">;</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="cf">default</span><span class="op">:</span> interval <span class="op">=</span> <span class="fl">0.60</span><span class="bu">f</span><span class="op">;</span> <span class="cf">break</span><span class="op">;</span>   <span class="co">// 스테이지 5: 0.6초마다 (더 자주!)</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>TIMER<span class="op">-&gt;</span>GetTickTimer<span class="op">(</span>interval<span class="op">))</span> SpawnEntity<span class="op">();</span></span></code></pre></div>
+<p>스폰되는 차량의 종류 확률도 스테이지에 따라 바뀐다(초반엔 일반 차만,
+후반엔 고속·트럭 증가) — Dino의 "점수 게이팅"이 여기선 "시간
+게이팅"이다.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// SpawnEntity 안: 스테이지별 고속·트럭 확률</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> fastP <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> truckP <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>      <span class="op">(</span>stage <span class="op">==</span> <span class="dv">2</span><span class="op">)</span> <span class="op">{</span> fastP <span class="op">=</span> <span class="dv">30</span><span class="op">;</span> truckP <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>  <span class="op">}</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>stage <span class="op">==</span> <span class="dv">3</span><span class="op">)</span> <span class="op">{</span> fastP <span class="op">=</span> <span class="dv">30</span><span class="op">;</span> truckP <span class="op">=</span> <span class="dv">15</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>stage <span class="op">&gt;=</span> <span class="dv">4</span><span class="op">)</span> <span class="op">{</span> fastP <span class="op">=</span> <span class="dv">35</span><span class="op">;</span> truckP <span class="op">=</span> <span class="dv">25</span><span class="op">;</span> <span class="op">}</span></span></code></pre></div>
+<p><strong>하나의 변수(<code>stage</code>)가 스폰 빈도·차량 구성·기준
+속도를 한꺼번에 끌어올린다.</strong> 이것이 난이도 곡선을 설계하는 실전
+방법이다 — 여러 손잡이를 하나의 다이얼로 묶는 것.</p>
+<hr />
+<h2 id="개념-6--스크롤-누적과-차선--부드러운-세계를-정수-칸에-얹기">개념
+6 · 스크롤 누적과 차선 — 부드러운 세계를 정수 칸에 얹기</h2>
+<p>속도는 <code>float</code>(km/h)이고 칸은 정수다. "시속 180으로 달릴
+때 한 프레임에 몇 칸 내려가야 하나?"를 잇는 것이 <strong>스크롤
+누적기</strong> <code>scrollAccum</code> 이다.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> step <span class="op">=</span> speed <span class="op">*</span> SCROLL_K<span class="op">;</span>        <span class="co">// 이번 프레임에 흐를 양 (예: 0.18칸)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>scrollAccum <span class="op">+=</span> step<span class="op">;</span>                  <span class="co">// 누적</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span>scrollAccum <span class="op">&gt;=</span> <span class="fl">1.0</span><span class="bu">f</span><span class="op">)</span> <span class="op">{</span>         <span class="co">// 1칸이 쌓일 때마다</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    scrollAccum <span class="op">-=</span> <span class="fl">1.0</span><span class="bu">f</span><span class="op">;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    distance <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span>                    <span class="co">// 거리 +1</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    score <span class="op">+=</span> <span class="op">(</span>speed <span class="op">&gt;</span> SCORE_HI<span class="op">)</span> <span class="op">?</span> <span class="dv">2</span> <span class="op">:</span> <span class="dv">1</span><span class="op">;</span>   <span class="co">// 고속이면 +2 (위험 보상)</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>한 프레임에 0.18칸씩 쌓다가 1을 넘으면 그때 거리·점수를 1 올린다.
+<strong>연속적인 속도를 정수 칸/점수로 변환</strong>하는 이 누적 패턴은,
+물리(연속)와 격자(이산)를 잇는 다리다(Dino의 float 위치를 반올림하던
+것과 짝을 이룬다).</p>
+<p>차선은 정수 인덱스(0~4)로 다루고, 화면 x는 헬퍼로 계산한다.</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> RoadFighterContent<span class="op">::</span>LaneCenterX<span class="op">(</span><span class="dt">int</span> lane<span class="op">)</span> <span class="at">const</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> laneW <span class="op">=</span> <span class="op">(</span>ROAD_RIGHT <span class="op">-</span> ROAD_LEFT <span class="op">-</span> <span class="dv">1</span><span class="op">)</span> <span class="op">/</span> LANE_COUNT<span class="op">;</span>   <span class="co">// = 7</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ROAD_LEFT <span class="op">+</span> <span class="dv">1</span> <span class="op">+</span> lane <span class="op">*</span> laneW <span class="op">+</span> laneW <span class="op">/</span> <span class="dv">2</span><span class="op">;</span>         <span class="co">// = 5 + 7*lane</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>플레이어의 차선 이동은 엣지 입력에 클램프(벽)를 건다 — Tetris의 좌우
+이동과 같은 정신이다.</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_LEFT<span class="op">)</span>  <span class="op">&amp;&amp;</span> playerLane <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span>              playerLane<span class="op">--;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_RIGHT<span class="op">)</span> <span class="op">&amp;&amp;</span> playerLane <span class="op">&lt;</span> LANE_COUNT <span class="op">-</span> <span class="dv">1</span><span class="op">)</span> playerLane<span class="op">++;</span></span></code></pre></div>
+<blockquote>
+<p><strong>하드코딩을 피하는 습관.</strong> <code>LaneCenterX</code> 가
+<code>laneW</code> 를 상수(<code>LANE_COUNT</code>·도로 폭)에서
+<strong>계산</strong>하는 것을 보라. 차선 수를 바꿔도 이 한 함수가
+자동으로 맞춘다. 1부 F 모듈의 <code>#define</code> 밸런스 상수, Tetris의
+<code>GENRE_COUNT</code> 트릭과 같은 정신 — <strong>매직 넘버 대신
+계산으로.</strong></p>
+</blockquote>
+<hr />
+<h2 id="코드-워크스루--oningameupdate-다섯-시스템이-도는-한-프레임">코드
+워크스루 — <code>OnInGameUpdate</code>, 다섯 시스템이 도는 한
+프레임</h2>
+<p>Road Fighter의 한 프레임은 <strong>여러 시스템이 정해진 순서로 도는
+파이프라인</strong>이다. 1부 타이쿤의 "월 정산 8단계"가 실시간 버전으로
+자란 셈이다.</p>
+<blockquote>
+<p><strong>실제 파일:</strong>
+<code>Main/Content/RoadFighterContent.cpp</code> —
+<code>OnInGameUpdate()</code></p>
+</blockquote>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> RoadFighterContent<span class="op">::</span>OnInGameUpdate<span class="op">()</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_ESCAPE<span class="op">))</span> <span class="op">{</span> currentPhase <span class="op">=</span> _EPhase<span class="op">::</span>TITLE<span class="op">;</span> <span class="cf">return</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span><span class="ch">&#39;P&#39;</span><span class="op">))</span> <span class="op">{</span> <span class="co">/* PLAYING ↔ PAUSE */</span> <span class="op">}</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>gameState <span class="op">==</span> PAUSE<span class="op">)</span>    <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>gameState <span class="op">==</span> GAMEOVER<span class="op">)</span> <span class="op">{</span> <span class="cf">if</span> <span class="op">(</span>SPACE<span class="op">/</span>ENTER<span class="op">)</span> StartGame<span class="op">();</span> <span class="cf">return</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ── PLAYING : 다섯 시스템을 순서대로 ──</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    UpdatePlayer<span class="op">();</span>        <span class="co">// ① 차선 이동 · 가속/감속 · 무적 타이머 (개념 4·6)</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    UpdateStage<span class="op">();</span>         <span class="co">// ② 시간으로 스테이지 갱신 (개념 5)</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    UpdateWorld<span class="op">();</span>         <span class="co">// ③ 스크롤 · 스폰 · 제거 · 회피 점수 (개념 1·5·6)</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    UpdateFuel<span class="op">();</span>          <span class="co">// ④ 연료 소모 (개념 3)</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    HandleCollisions<span class="op">();</span>    <span class="co">// ⑤ 충돌 → 획득/피해 분기 (개념 2)</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>life <span class="op">&lt;=</span> <span class="dv">0</span> <span class="op">||</span> fuelF <span class="op">&lt;=</span> <span class="fl">0.0</span><span class="bu">f</span><span class="op">)</span> <span class="op">{</span>   <span class="co">// ⑥ 실패 판정 (개념 3)</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>        gameState <span class="op">=</span> GAMEOVER<span class="op">;</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>score <span class="op">&gt;</span> hiScore<span class="op">)</span> hiScore <span class="op">=</span> score<span class="op">;</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>이 순서가 곧 설계다.</p>
+<ul>
+<li><strong>입력·상태가 먼저(①②).</strong> 플레이어를 옮기고 스테이지를
+정한 뒤,</li>
+<li><strong>세계를 굴리고(③④)</strong> — 스크롤·스폰·연료 소모,</li>
+<li><strong>그 결과로 충돌을 판정(⑤)</strong> 한다. 세계를 다 움직인
+뒤에 부딪힘을 봐야 정확하다(Dino와 같은 원리).</li>
+<li><strong>마지막에 실패를 확인(⑥).</strong> 목숨이든 연료든 하나만
+바닥나도 끝.</li>
+</ul>
+<p>각 시스템이 자기 일만 하는 <strong>함수 하나</strong>로 분리돼
+있다(1부 6장 함수 분해). <code>OnInGameUpdate</code> 는 "이 프레임에
+무슨 시스템이 어떤 순서로 도는가"의 목차이고, 세부는 각
+<code>Update*</code> 함수에 숨었다. <strong>여러 시스템이 얽힌
+게임일수록, 이 "파이프라인 + 함수 분해" 구조가 코드를 읽을 수 있게
+지킨다.</strong></p>
+<p>렌더(<code>OnInGameRender</code>)도 계층적이다 — 도로(벽·차선) →
+엔티티(type별 색·모양) → 플레이어(무적이면 깜빡) → HUD(SCORE·STAGE·연료
+바·목숨). HUD는 자원을 <strong>시각화</strong>한다: 연료 바는 잔량에
+따라 초록→노랑→빨강으로 색이 변해, 숫자를 안 봐도 위험을 느끼게
+한다.</p>
+<hr />
+<h2 id="그림으로-정리--엔티티-시스템과-충돌-분기">그림으로 정리 — 엔티티
+시스템과 충돌 분기</h2>
+<blockquote>
+<p>📊 <strong>웹 교육문서에서는 엔티티 리스트의 type 분기와 무적
+타이머가 애니메이션(V-P2-4)으로 재생된다.</strong> 책에서는 아래
+도식으로 대신한다.</p>
+</blockquote>
+<p><strong>엔티티 시스템 — 한 리스트, 여러 정체</strong></p>
+<pre><code>  std::vector&lt;Entity&gt; entities
+  ┌──────────┬──────────┬──────────┬──────────┬──────────┐
+  │type=ENEMY│type=FUEL │type=TRUCK│type=BONUS│type=FAST │
+  │lane 2    │lane 0    │lane 3    │lane 4    │lane 1    │
+  └────┬─────┴────┬─────┴────┬─────┴────┬─────┴────┬─────┘
+       │  공통 처리(이동·제거)는 type 안 봄  │
+       ▼                                    ▼
+   충돌 시에만 분기:  FUEL→연료+  BONUS→점수+  ENEMY/TRUCK→목숨-</code></pre>
+<p><strong>무적 타이머 — 상태에 수명을 주다</strong></p>
+<pre><code>  피격!  invincible=true, invTimer=90
+   ▼
+  invTimer:  90 → 89 → ... → 2 → 1 → 0
+             │(매 프레임 -1)         │
+             └ 이 동안 충돌 무시      └ invincible=false (저절로 해제)
+             (invTimer/4)%2 로 깜빡깜빡</code></pre>
+<p>한 문장으로: <strong>엔티티 시스템은 여러 종류를 한 리스트로 묶고,
+충돌 분기는 그 종류에 따라 결과를 가르며, 자원과 타이머와 스테이지가
+얽혀 게임의 긴장을 만든다.</strong></p>
+<hr />
+<h2 id="알려진-이슈에서-배우기-as-built">알려진 이슈에서 배우기
+(as-built)</h2>
+<p>Road Fighter도 MVP다. 여러 시스템을 얽다 보니 생긴 타협과 거친
+부분들이, 실전 시스템 설계의 교훈을 준다.</p>
+<table>
+<thead>
+<tr>
+<th>이슈</th>
+<th>as-built 상태</th>
+<th>무엇을 배우나</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>매 프레임 벡터 재생성</strong></td>
+<td>제거·충돌마다 <code>kept</code> 벡터를 새로 만들어 교체(2번!)</td>
+<td>간단하지만 매 프레임 복사. 엔티티가 많아지면 병목 → <strong>Galaga의
+풀</strong></td>
+</tr>
+<tr>
+<td><strong>차선 스냅 이동</strong></td>
+<td>부드러운 보간 없이 즉시 차선 이동</td>
+<td>MVP는 스냅으로 단순화. 보간은 폴리시</td>
+</tr>
+<tr>
+<td><strong>AABB 코드 중복</strong></td>
+<td>충돌 판정식이 Dino와 거의 동일하게 반복</td>
+<td>공통 로직을 유틸로 뽑을 여지("반복은 추출 신호")</td>
+</tr>
+<tr>
+<td><strong><code>Beep</code> 블로킹</strong></td>
+<td>아이템 획득 시 <code>Beep(1500,20)</code></td>
+<td>Dino와 같은 교훈 — 짧게만</td>
+</tr>
+<tr>
+<td><strong>최고 점수 세션 한정</strong></td>
+<td><code>hiScore</code> 멤버 변수</td>
+<td>파일 저장(1부 F)은 향후 확장</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>"매 프레임 벡터 재생성"이 두 곳(<code>UpdateWorld</code> 제거,
+<code>HandleCollisions</code>)에서 반복된다. 지금은 엔티티가 적어
+괜찮지만, 이 방식이 한계에 부딪히는 게 바로 다음 단계다. <strong>Road
+Fighter의 이 비용이 Galaga 오브젝트 풀의 존재 이유</strong> — "동작하는
+코드"에서 "성능을 의식하는 코드"로 넘어가는 다리다.</p>
+</blockquote>
+<hr />
+<h2 id="체크포인트--스스로-점검하기">체크포인트 — 스스로 점검하기</h2>
+<p><strong>Q1.</strong> 적·연료·트럭·보너스를 각각 별도의 리스트로
+관리하는 것과, 하나의 <code>Entity</code> 리스트에 <code>type</code>
+으로 담는 것의 차이는? 후자의 장점은?</p>
+<p><strong>Q2.</strong> 플레이어가 연료 아이템에 부딪히는 것과 적 차량에
+부딪히는 것은 같은 AABB 충돌이다. 그런데 결과는 정반대다. 이를 코드로
+어떻게 구현하나?</p>
+<p><strong>Q3.</strong> 무적 상태를 "5초 뒤 자동 해제"되게 하려면 무엇이
+필요한가? <code>invTimer</code> 는 어떻게 동작하나?</p>
+<p><strong>Q4.</strong> <code>speed</code> 가 오르면 점수는 빨라지지만
+연료는 빨리 마른다. 이 트레이드오프는 어느 코드에서 나오나?</p>
+<p><strong>Q5.</strong> 스테이지가 오를수록 게임이 어려워지는 것을, 단
+하나의 변수 <code>stage</code> 로 어떻게 여러 시스템에 반영하나?</p>
+<details><summary><b>해설 펼치기</b></summary>
+
+<p><strong>A1.</strong> 별도 리스트면 스폰·이동·제거·충돌·렌더 코드를
+<strong>종류마다 반복</strong>해야 하고, 종류가 늘 때마다 코드가 배로
+는다. <code>type</code> 태그로 한 리스트에 담으면 <strong>공통
+처리(이동·제거)는 한 벌</strong>이면 되고, 다르게 처리할 곳(충돌
+결과)에서만 <code>type</code> 으로 분기한다. 확장이 쉽고 코드가
+준다(엔티티 시스템의 핵심).</p>
+<p><strong>A2.</strong> 충돌 판정(AABB)은 하나로 두고, <strong>판정 뒤에
+<code>type</code> 으로 분기</strong>한다.
+<code>if (hit &amp;&amp; type==FUEL) 연료+; else if (hit &amp;&amp; type==BONUS) 점수+; else if (hit &amp;&amp; !무적) 목숨-;</code>.
+같은 "부딪힘"이 종류에 따라 획득/피해로 갈린다.</p>
+<p><strong>A3.</strong> 상태에 <strong>수명(타이머)</strong> 을 준다.
+피격 시 <code>invincible=true; invTimer=300;</code>(60fps면
+5초=300프레임)로 두고, 매 프레임 <code>invTimer--</code> 해서
+<code>0</code> 이 되면 <code>invincible=false</code>. 그 동안 충돌
+분기에서 <code>!invincible</code> 로 피해를 무시한다.</p>
+<p><strong>A4.</strong> <code>UpdateFuel</code> 에서
+<code>factor = 1.0 + (speed-SPEED_MIN)/(SPEED_MAX-SPEED_MIN)</code> —
+속도가 빠를수록 factor가 1.0→2.0으로 커져
+<code>fuelF -= FUEL_DRAIN * factor</code> 소모가 는다. 한편 스크롤
+누적에서 고속이면 점수 +2. 두 시스템이 만나 "빠르면 이득도 손해도
+크다"는 트레이드오프가 된다.</p>
+<p><strong>A5.</strong> <code>UpdateStage</code> 가 시간으로
+<code>stage</code> 를 정하면, <strong>스폰
+간격</strong>(<code>switch(stage)</code> 로 interval 감소), <strong>차량
+종류 확률</strong>(스테이지별 fast/truck 확률), <strong>기준
+속도</strong>(<code>SPEED_MIN + (stage-1)*20</code>)가 모두
+<code>stage</code> 를 읽어 조정된다. 하나의 다이얼이 여러 손잡이를
+동시에 돌린다.</p>
+</details>
+
+<hr />
+<h2 id="실습-미션--차선-피하기-dodgec-star">실습 미션 — 차선 피하기
+<code>dodge.c</code> ⭐</h2>
+<blockquote>
+<p>Dino의 미션이 "물리+AABB"였다면, 이 미션은 <strong>엔티티 시스템 +
+충돌 분기 + 리소스 관리</strong>를 콕 집어 연습한다. 여러 종류가 한
+배열에 섞인 채 내려오고, 부딪힌 종류에 따라 자원이 변한다 — Road
+Fighter의 심장을 축소했다.</p>
+</blockquote>
+<p><strong>드릴 문법</strong> — <code>struct</code> +
+<code>enum type</code>(이종 집합) · 배열 순회 · <strong>type
+분기</strong>(충돌 결과) · 자원(연료·목숨) 관리 · <code>rand</code>
+<strong>만드는 것</strong> — 5차선 위로 적·연료·보너스가 섞여 내려오고,
+매 턴 차선을 골라 좋은 건 줍고 나쁜 건 피하는 미니 레이서.
+<strong>클리어 조건</strong> — 연료가 마르거나 목숨이 다하면 종료.
+종류별로 다른 결과가 정확히 적용된다. <strong>규모</strong> — 약 65줄,
+파일 1개. 표준 C만. 1부의 구조체·배열·enum이 엔티티 시스템으로
+모인다.</p>
+<h3 id="문제-정의">문제 정의</h3>
+<p>이 게임의 심장은 두 가지다. <strong>① 서로 다른
+종류(적·연료·보너스)를 하나의 구조체 배열에 담고, ② 플레이어와 같은 칸에
+온 엔티티를 <code>type</code> 으로 분기 처리한다.</strong> 적이면 목숨
+-1, 연료면 연료 +, 보너스면 점수 +. 매 턴 연료가 줄어드니, "위험을
+무릅쓰고 연료를 주우러 갈지"를 판단해야 한다 — 리소스 관리다.</p>
+<h3 id="목표--클리어-조건">목표 / 클리어 조건</h3>
+<ol type="1">
+<li><code>struct Entity { int type; int lane; int row; }</code> 배열로
+여러 종류를 함께 관리한다.</li>
+<li>매 턴: 모든 엔티티를 한 행 아래로, 화면 밖은 제거, 새 엔티티를 위에
+랜덤 스폰.</li>
+<li>플레이어 차선을 입력받고(0~4), 플레이어 행에 온 엔티티를
+<strong>type으로 분기</strong>: 적→목숨-1, 연료→연료+30,
+보너스→점수+100.</li>
+<li>매 턴 연료 -10. 연료 0 또는 목숨 0이면 게임 오버.</li>
+<li>매 턴 격자를 출력해 상태를 보여 준다.</li>
+</ol>
+<h3 id="힌트">힌트</h3>
+<details><summary><b>힌트 1 — 엔티티 배열과 스폰</b></summary>
+
+<div class="sourceCode" id="cb17"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">enum</span> <span class="op">{</span> ENEMY<span class="op">,</span> FUEL<span class="op">,</span> BONUS <span class="op">}</span> EType<span class="op">;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span> EType type<span class="op">;</span> <span class="dt">int</span> lane<span class="op">;</span> <span class="dt">int</span> row<span class="op">;</span> <span class="op">}</span> Entity<span class="op">;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>Entity ents<span class="op">[</span><span class="dv">32</span><span class="op">];</span> <span class="dt">int</span> count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">/* 스폰: 랜덤 차선·종류 (적이 흔하게) */</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> Spawn<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>count <span class="op">&gt;=</span> <span class="dv">32</span><span class="op">)</span> <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> r <span class="op">=</span> rand<span class="op">()</span> <span class="op">%</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    EType t <span class="op">=</span> <span class="op">(</span>r <span class="op">&lt;</span> <span class="dv">60</span><span class="op">)</span> <span class="op">?</span> ENEMY <span class="op">:</span> <span class="op">(</span>r <span class="op">&lt;</span> <span class="dv">80</span><span class="op">)</span> <span class="op">?</span> FUEL <span class="op">:</span> BONUS<span class="op">;</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    ents<span class="op">[</span>count<span class="op">].</span>type <span class="op">=</span> t<span class="op">;</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    ents<span class="op">[</span>count<span class="op">].</span>lane <span class="op">=</span> rand<span class="op">()</span> <span class="op">%</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    ents<span class="op">[</span>count<span class="op">].</span>row  <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    count<span class="op">++;</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+
+<details><summary><b>힌트 2 — 충돌 분기</b></summary>
+
+<p>플레이어 행(맨 아래)에 온 엔티티를 종류로 분기한다.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>ents<span class="op">[</span>i<span class="op">].</span>row <span class="op">==</span> PLAYER_ROW <span class="op">&amp;&amp;</span> ents<span class="op">[</span>i<span class="op">].</span>lane <span class="op">==</span> playerLane<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span> <span class="op">(</span>ents<span class="op">[</span>i<span class="op">].</span>type<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> ENEMY<span class="op">:</span> life<span class="op">--;</span>        <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> FUEL<span class="op">:</span>  fuel <span class="op">+=</span> <span class="dv">30</span><span class="op">;</span>    <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> BONUS<span class="op">:</span> score <span class="op">+=</span> <span class="dv">100</span><span class="op">;</span>  <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* 처리한 엔티티는 제거 표시 */</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+
+<h3 id="정답-코드">정답 코드</h3>
+<details><summary><b>정답 펼치기 — <code>dodge.c</code></b></summary>
+
+<div class="sourceCode" id="cb19"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define _CRT_SECURE_NO_WARNINGS</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;time.h&gt;</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#define LANES </span><span class="dv">5</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#define ROWS  </span><span class="dv">6</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#define PLAYER_ROW </span><span class="op">(</span>ROWS<span class="pp"> </span><span class="op">-</span><span class="pp"> </span><span class="dv">1</span><span class="op">)</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MAXE </span><span class="dv">32</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">enum</span> <span class="op">{</span> ENEMY<span class="op">,</span> FUEL<span class="op">,</span> BONUS <span class="op">}</span> EType<span class="op">;</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span> EType type<span class="op">;</span> <span class="dt">int</span> lane<span class="op">;</span> <span class="dt">int</span> row<span class="op">;</span> <span class="op">}</span> Entity<span class="op">;</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>Entity ents<span class="op">[</span>MAXE<span class="op">];</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> Glyph<span class="op">(</span>EType t<span class="op">)</span> <span class="op">{</span> <span class="cf">return</span> t <span class="op">==</span> ENEMY <span class="op">?</span> <span class="ch">&#39;X&#39;</span> <span class="op">:</span> t <span class="op">==</span> FUEL <span class="op">?</span> <span class="ch">&#39;F&#39;</span> <span class="op">:</span> <span class="ch">&#39;$&#39;</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> Spawn<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>count <span class="op">&gt;=</span> MAXE<span class="op">)</span> <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> r <span class="op">=</span> rand<span class="op">()</span> <span class="op">%</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>    ents<span class="op">[</span>count<span class="op">].</span>type <span class="op">=</span> <span class="op">(</span>r <span class="op">&lt;</span> <span class="dv">60</span><span class="op">)</span> <span class="op">?</span> ENEMY <span class="op">:</span> <span class="op">(</span>r <span class="op">&lt;</span> <span class="dv">80</span><span class="op">)</span> <span class="op">?</span> FUEL <span class="op">:</span> BONUS<span class="op">;</span></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>    ents<span class="op">[</span>count<span class="op">].</span>lane <span class="op">=</span> rand<span class="op">()</span> <span class="op">%</span> LANES<span class="op">;</span></span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>    ents<span class="op">[</span>count<span class="op">].</span>row  <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>    count<span class="op">++;</span></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> PrintGrid<span class="op">(</span><span class="dt">int</span> playerLane<span class="op">)</span></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> row <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> row <span class="op">&lt;</span> ROWS<span class="op">;</span> row<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;  &quot;</span><span class="op">);</span></span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> lane <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> lane <span class="op">&lt;</span> LANES<span class="op">;</span> lane<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>            <span class="dt">char</span> ch <span class="op">=</span> <span class="ch">&#39;.&#39;</span><span class="op">;</span></span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> count<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(</span>ents<span class="op">[</span>i<span class="op">].</span>row <span class="op">==</span> row <span class="op">&amp;&amp;</span> ents<span class="op">[</span>i<span class="op">].</span>lane <span class="op">==</span> lane<span class="op">)</span> ch <span class="op">=</span> Glyph<span class="op">(</span>ents<span class="op">[</span>i<span class="op">].</span>type<span class="op">);</span></span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>row <span class="op">==</span> PLAYER_ROW <span class="op">&amp;&amp;</span> lane <span class="op">==</span> playerLane<span class="op">)</span> ch <span class="op">=</span> ch <span class="op">==</span> <span class="ch">&#39;.&#39;</span> <span class="op">?</span> <span class="ch">&#39;A&#39;</span> <span class="op">:</span> ch<span class="op">;</span></span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%c</span><span class="st"> &quot;</span><span class="op">,</span> ch<span class="op">);</span></span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;  0 1 2 3 4  (X=적 F=연료 $=보너스 A=나)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb19-44"><a href="#cb19-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-45"><a href="#cb19-45" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb19-46"><a href="#cb19-46" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb19-47"><a href="#cb19-47" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> playerLane <span class="op">=</span> <span class="dv">2</span><span class="op">,</span> life <span class="op">=</span> <span class="dv">3</span><span class="op">,</span> fuel <span class="op">=</span> <span class="dv">100</span><span class="op">,</span> score <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb19-48"><a href="#cb19-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-49"><a href="#cb19-49" aria-hidden="true" tabindex="-1"></a>    srand<span class="op">((</span><span class="dt">unsigned</span><span class="op">)</span>time<span class="op">(</span>NULL<span class="op">));</span></span>
+<span id="cb19-50"><a href="#cb19-50" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;=== 차선 피하기 (A: 내 위치, X 피하고 F/$ 줍기) ===</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb19-51"><a href="#cb19-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-52"><a href="#cb19-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>life <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">&amp;&amp;</span> fuel <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-53"><a href="#cb19-53" aria-hidden="true" tabindex="-1"></a>        Spawn<span class="op">();</span></span>
+<span id="cb19-54"><a href="#cb19-54" aria-hidden="true" tabindex="-1"></a>        PrintGrid<span class="op">(</span>playerLane<span class="op">);</span></span>
+<span id="cb19-55"><a href="#cb19-55" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;목숨 </span><span class="sc">%d</span><span class="st"> | 연료 </span><span class="sc">%d</span><span class="st"> | 점수 </span><span class="sc">%d</span><span class="st"> | 차선(0~4, 0=유지): &quot;</span><span class="op">,</span> life<span class="op">,</span> fuel<span class="op">,</span> score<span class="op">);</span></span>
+<span id="cb19-56"><a href="#cb19-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-57"><a href="#cb19-57" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> in<span class="op">;</span></span>
+<span id="cb19-58"><a href="#cb19-58" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>scanf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>in<span class="op">)</span> <span class="op">!=</span> <span class="dv">1</span><span class="op">)</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb19-59"><a href="#cb19-59" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>in <span class="op">&gt;=</span> <span class="dv">0</span> <span class="op">&amp;&amp;</span> in <span class="op">&lt;</span> LANES<span class="op">)</span> playerLane <span class="op">=</span> in<span class="op">;</span></span>
+<span id="cb19-60"><a href="#cb19-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-61"><a href="#cb19-61" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 엔티티 한 칸 아래로</span></span>
+<span id="cb19-62"><a href="#cb19-62" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> count<span class="op">;</span> i<span class="op">++)</span> ents<span class="op">[</span>i<span class="op">].</span>row<span class="op">++;</span></span>
+<span id="cb19-63"><a href="#cb19-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-64"><a href="#cb19-64" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 충돌 분기 + 화면 밖 제거 (kept 방식)</span></span>
+<span id="cb19-65"><a href="#cb19-65" aria-hidden="true" tabindex="-1"></a>        Entity kept<span class="op">[</span>MAXE<span class="op">];</span> <span class="dt">int</span> nk <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb19-66"><a href="#cb19-66" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> count<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb19-67"><a href="#cb19-67" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>ents<span class="op">[</span>i<span class="op">].</span>row <span class="op">==</span> PLAYER_ROW <span class="op">&amp;&amp;</span> ents<span class="op">[</span>i<span class="op">].</span>lane <span class="op">==</span> playerLane<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-68"><a href="#cb19-68" aria-hidden="true" tabindex="-1"></a>                <span class="cf">switch</span> <span class="op">(</span>ents<span class="op">[</span>i<span class="op">].</span>type<span class="op">)</span> <span class="op">{</span>              <span class="co">// ★ type 분기</span></span>
+<span id="cb19-69"><a href="#cb19-69" aria-hidden="true" tabindex="-1"></a>                <span class="cf">case</span> ENEMY<span class="op">:</span> life<span class="op">--;</span>       printf<span class="op">(</span><span class="st">&quot;  ! 적 충돌 (목숨 -1)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb19-70"><a href="#cb19-70" aria-hidden="true" tabindex="-1"></a>                <span class="cf">case</span> FUEL<span class="op">:</span>  fuel <span class="op">+=</span> <span class="dv">30</span><span class="op">;</span>   printf<span class="op">(</span><span class="st">&quot;  + 연료 획득 (+30)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>   <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb19-71"><a href="#cb19-71" aria-hidden="true" tabindex="-1"></a>                <span class="cf">case</span> BONUS<span class="op">:</span> score <span class="op">+=</span> <span class="dv">100</span><span class="op">;</span> printf<span class="op">(</span><span class="st">&quot;  + 보너스! (+100)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>    <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb19-72"><a href="#cb19-72" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb19-73"><a href="#cb19-73" aria-hidden="true" tabindex="-1"></a>                <span class="cf">continue</span><span class="op">;</span>                            <span class="co">// 처리한 엔티티는 제거</span></span>
+<span id="cb19-74"><a href="#cb19-74" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb19-75"><a href="#cb19-75" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>ents<span class="op">[</span>i<span class="op">].</span>row <span class="op">&lt;</span> ROWS<span class="op">)</span> kept<span class="op">[</span>nk<span class="op">++]</span> <span class="op">=</span> ents<span class="op">[</span>i<span class="op">];</span>   <span class="co">// 화면 안만 유지</span></span>
+<span id="cb19-76"><a href="#cb19-76" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb19-77"><a href="#cb19-77" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> nk<span class="op">;</span> i<span class="op">++)</span> ents<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> kept<span class="op">[</span>i<span class="op">];</span></span>
+<span id="cb19-78"><a href="#cb19-78" aria-hidden="true" tabindex="-1"></a>        count <span class="op">=</span> nk<span class="op">;</span></span>
+<span id="cb19-79"><a href="#cb19-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-80"><a href="#cb19-80" aria-hidden="true" tabindex="-1"></a>        fuel <span class="op">-=</span> <span class="dv">10</span><span class="op">;</span>   <span class="co">// 매 턴 연료 소모 (리소스 관리)</span></span>
+<span id="cb19-81"><a href="#cb19-81" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb19-82"><a href="#cb19-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-83"><a href="#cb19-83" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&gt;&gt; 게임 오버! 최종 점수 </span><span class="sc">%d</span><span class="st"> (</span><span class="sc">%s</span><span class="st">)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb19-84"><a href="#cb19-84" aria-hidden="true" tabindex="-1"></a>           score<span class="op">,</span> life <span class="op">&lt;=</span> <span class="dv">0</span> <span class="op">?</span> <span class="st">&quot;목숨 소진&quot;</span> <span class="op">:</span> <span class="st">&quot;연료 고갈&quot;</span><span class="op">);</span></span>
+<span id="cb19-85"><a href="#cb19-85" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb19-86"><a href="#cb19-86" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>빌드:</strong> <code>cl dodge.c</code> (MSVC) 또는
+<code>gcc dodge.c -o dodge</code></p>
+<p><strong>함정/체크포인트</strong></p>
+<ul>
+<li><strong>한 배열, 여러 종류.</strong> <code>ents[]</code> 하나에
+적·연료·보너스가 섞여 있고, 이동·제거는 종류를 안 가린다. <strong>결과가
+갈리는 곳(충돌)에서만 <code>type</code> switch</strong> — 엔티티
+시스템의 핵심이다.</li>
+<li><strong>자원 두 개, 실패 조건 두 개.</strong> 목숨과 연료 중 하나만
+0이 돼도 끝난다(<code>while (life&gt;0 &amp;&amp; fuel&gt;0)</code>).
+연료가 매 턴 줄어드니, 적을 피하면서도 연료를 주우러 가야 하는 딜레마가
+생긴다 — 이것이 리소스 관리의 재미다.</li>
+<li><strong><code>kept</code> 배열로 제거.</strong> 처리했거나 화면
+밖으로 나간 엔티티를 빼고 나머지만 남긴다. Road Fighter의 매 프레임 벡터
+재생성과 같은 방식 — 이 비용이 Galaga 풀의 동기임을 기억하자.</li>
+</ul>
+<p><strong>확장 과제</strong></p>
+<ul>
+<li><strong>무적 상태</strong> 추가: 적에 부딪히면 3턴
+무적(<code>invTimer</code>). 개념 4를 붙여 보자.</li>
+<li><strong>트럭</strong>(2차선 차지) 타입을 추가하면, <code>type</code>
+하나로 확장되는 엔티티 시스템의 유연함을 체감한다.</li>
+</ul>
+</details>
+
+<hr />
+<h2 id="이-단계를-마치며">이 단계를 마치며</h2>
+<table>
+<thead>
+<tr>
+<th>얻은 것</th>
+<th>다음에 쓰는 곳</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>엔티티 시스템(이종 집합·type 분기)</td>
+<td>Galaga·Battle City의 대량 오브젝트</td>
+</tr>
+<tr>
+<td>충돌의 분기 처리</td>
+<td>Battle City의 총알-타일-탱크 상호작용</td>
+</tr>
+<tr>
+<td>리소스 관리(연료·목숨)</td>
+<td>Battle City의 기지 HP, 모든 자원 게임</td>
+</tr>
+<tr>
+<td>일시적 상태(타이머 수명)</td>
+<td>무적·파워업·폭발 이펙트, 전 게임</td>
+</tr>
+<tr>
+<td>시간 스테이지·HUD</td>
+<td>난이도 곡선 설계 전반</td>
+</tr>
+</tbody>
+</table>
+<p>Road Fighter로 우리는 "여러 시스템이 얽혀 도는 게임"을 만들었다. 여섯
+종류가 한 리스트에 섞이고, 자원과 타이머와 스테이지가 물려 돈다. 그런데
+이 게임은 매 프레임 벡터를 새로 만들어 오브젝트를 관리했다 — 오브젝트가
+적을 땐 괜찮지만, 다음 5단계 Galaga에서는 초당 수십 개의 총알이 생겼다
+사라진다. 그 부담을 정면으로 만나, <strong>오브젝트 풀</strong>로
+해결한다. "동작하는 코드"에서 <strong>"성능을 의식하는 코드"</strong> 로
+— 엔지니어링이 한 계단 성숙하는 지점이다.</p>
+<blockquote>
+<p><strong>← 이전:</strong> <a href="Part2_03.html">3단계 · Dino — 물리와
+스크롤</a> | <strong>다음 →</strong> <a href="Part2_05.html">번외 ·
+GameDevTycoon 이식 — C에서 C++로</a></p>
+</blockquote>
+  </article>
+</main>
+<footer class="site-footer">
+  <a href="index.html">← 목차로 돌아가기</a>
+  <span>CSGP Learn · 표시용 원고 (코드는 UTF-8 사본)</span>
+</footer>
+<script src="book-nav.js"></script>
+</body>
+</html>

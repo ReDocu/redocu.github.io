@@ -1,0 +1,1009 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2부 — C++ 콘솔 게임 프레임워크: 7개의 게임으로 오르기</title>
+<script>try{var _t=localStorage.getItem('csgp-theme');if(_t)document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
+<style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<link rel="stylesheet" href="book.css">
+
+</head>
+<body>
+<div class="topbar">
+  <button class="drawer-toggle" id="drawerToggle" type="button" aria-label="목차 열기/닫기" aria-expanded="false">☰ 목차</button>
+  <a class="home" href="index.html">📘 CSGP</a>
+  <span class="crumb">콘솔 게임으로 배우는 C · C++</span>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="라이트/다크 전환">🌙</button>
+</div>
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" aria-label="책 목차">
+  <div class="drawer-dash">
+    <div class="dash-title">콘솔 게임으로 배우는 C · C++</div>
+    <div class="dash-sub">학습 목차 · 대시보드</div>
+    <div class="dash-progress"><div class="dash-bar"><i id="dashBar"></i></div><span class="dash-pct" id="dashPct"></span></div>
+    <input class="drawer-search" id="drawerSearch" type="search" placeholder="🔍 챕터 검색…" aria-label="챕터 검색">
+  </div>
+  <nav class="booknav" aria-label="책 목차"><a class="booknav-home" href="index.html">📘 전체 목차</a><ul class="booknav-list"><li class="grp">1부 · C 기본 문법</li><li><a href="Part1_00.html" title="1부 — C 기본 문법: 회사를 키우며 배우는 언어">1부 개요</a></li><li><a href="Part1_01.html" title="A 모듈 · 1–4장 — 값·계산·분기: 회사에 숫자를 세우다">A · 값·계산·분기</a></li><li><a href="Part1_02.html" title="B 모듈 · 5–6장 — 반복문과 함수: 회사에 심장을 달다">B · 반복문·함수</a></li><li><a href="Part1_03.html" title="C 모듈 · 7–8장 — 배열과 문자열: 회사에 사람과 이름을 채우다">C · 배열·문자열</a></li><li><a href="Part1_04.html" title="D 모듈 · 9–10장 — 구조체와 포인터: 데이터에 모양을 주다">D · 구조체·포인터</a></li><li><a href="Part1_05.html" title="E 모듈 · 11–12장 — 동적 메모리와 랜덤: 회사가 자라고, 시장이 살아난다">E · 메모리·랜덤</a></li><li><a href="Part1_06.html" title="F 모듈 · 13–15장 — 파일·모듈·캡스톤: 회사를 저장하고, 게임을 출시하다">F · 파일·모듈·캡스톤</a></li><li class="grp">2부 · C++ 프레임워크</li><li class="active"><a href="Part2_00.html" title="2부 — C++ 콘솔 게임 프레임워크: 7개의 게임으로 오르기">2부 개요</a><ul class="sections">
+<li><a href="#2부를-여는-말--엔진과-콘텐츠를-나누다"
+id="toc-2부를-여는-말--엔진과-콘텐츠를-나누다">2부를 여는 말 — 엔진과
+콘텐츠를 나누다</a></li>
+</ul></li><li><a href="Part2_01.html" title="1단계 · Snake — 자료구조·충돌·상태머신">1단계 · Snake</a></li><li><a href="Part2_02.html" title="2단계 · Tetris — 알고리즘과 그리드">2단계 · Tetris</a></li><li><a href="Part2_03.html" title="3단계 · Dino — 물리와 스크롤">3단계 · Dino</a></li><li><a href="Part2_04.html" title="4단계 · Road Fighter — 엔티티 시스템과 리소스">4단계 · Road Fighter</a></li><li><a href="Part2_05.html" title="번외 · GameDevTycoon 이식 — C에서 C++로">번외 · Tycoon 이식</a></li><li><a href="Part2_06.html" title="5단계 · Galaga — 오브젝트 풀링">5단계 · Galaga</a></li><li><a href="Part2_07.html" title="6단계 · Maze — 알고리즘 심화 (생성 + 탐색)">6단계 · Maze</a></li><li><a href="Part2_08.html" title="7단계 · Battle City — 종합 캡스톤 (맵 생성 + 풀링)">7단계 · Battle City</a></li><li><a href="Part2_09.html" title="확장 · Pac-Man — 유령 AI와 상태머신">확장 · Pac-Man</a></li><li class="grp">부록</li><li><a href="Appendix.html" title="부록 — 용어집 · 핵심 이슈 · 요약">부록</a></li></ul></nav>
+</aside>
+<main class="reader">
+  <article class="page">
+<h1 id="2부--c-콘솔-게임-프레임워크-7개의-게임으로-오르기">2부 — C++
+콘솔 게임 프레임워크: 7개의 게임으로 오르기</h1>
+<blockquote>
+<p><strong>2부는 C++와 Windows 콘솔 API 위에서, 실시간으로 돌아가는 게임
+7종을 하나씩 만든다.</strong> 1부의 타이쿤이 <code>scanf</code> 를
+기다리며 멈춰 있는 턴제 게임이었다면, 2부의 게임들은 <strong>매 초 60번
+스스로 화면을 다시 그리는 살아 있는 세계</strong>다. 뱀이 기어가고,
+블록이 떨어지고, 공룡이 뛰고, 탱크가 서로를 쏜다.</p>
+<p>게임 하나가 곧 하나의 학습 단계다. <strong>이전 단계에서 익힌 기술
+위에 새 기술을 한 겹씩 쌓는다.</strong> 그래서 게임의 순서가 곧 난이도의
+순서다.</p>
+</blockquote>
+<hr />
+<h2 id="2부를-여는-말--엔진과-콘텐츠를-나누다">2부를 여는 말 — 엔진과
+콘텐츠를 나누다</h2>
+<p>1부에서 우리는 "값·분기·반복·데이터의 모양"이라는 프로그래밍의 뼈대를
+세웠다. 2부에서 그 뼈대 위에 두 가지 새로운 세계를 얹는다.</p>
+<p>첫째, <strong>C++</strong>. 구조체는 클래스가 되고, 함수는 메서드가
+되며, <code>typedef</code> 는 상속과 인터페이스로 자란다. 1부의
+<code>Company *c</code> 를 주고받던 감각이, 2부의 "객체가 자기 데이터를
+스스로 관리한다"는 감각으로 이어진다.</p>
+<p>둘째, <strong>실시간 게임의 구조</strong>. 턴제에는 없던 것들이
+필요해진다 — 매 프레임 화면을 다시 그리는 <strong>게임 루프</strong>,
+깜빡임을 없애는 <strong>더블 버퍼링</strong>, 키를 폴링하는 <strong>입력
+시스템</strong>, 시간을 재는 <strong>타이머</strong>, 화면을 갈아 끼우는
+<strong>씬 시스템</strong>.</p>
+<p>이 실시간 토대는 게임마다 새로 만들지 않는다. <strong>모든 게임이
+공유하는 하나의 엔진(프레임워크)</strong> 으로 한 번 만들어 두고, 게임은
+그 위에서 자기 로직만 채운다. 이것이 2부의 핵심 설계다.</p>
+<blockquote>
+<p><strong>엔진(Framework)과 콘텐츠(Content)를 나눈다.</strong></p>
+<ul>
+<li><strong>엔진</strong> (<code>FrameWork/</code>) — 게임
+루프·렌더링·입력·타이머·씬. 어느 게임에도 종속되지 않는 공용 계층.</li>
+<li><strong>콘텐츠</strong> (<code>Main/Content/</code>) — Snake,
+Tetris… 각 게임. 엔진이 제공하는 껍데기(<code>IGameContent</code>)를
+상속해 "그 게임만의 로직"이라는 빈칸만 채운다.</li>
+</ul>
+<p>그래서 엔진을 한 번 이해하면, 이후 모든 게임은 <strong>오직 그 게임
+고유의 로직에만 집중</strong>할 수 있다.</p>
+</blockquote>
+<h3 id="2부-로드맵-0단계-엔진--게임-7종">2부 로드맵 (0단계 엔진 + 게임
+7종)</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">단계</th>
+<th>게임</th>
+<th>이 단계에서 <strong>처음 배우는</strong> 핵심 기술</th>
+<th>파일</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>0</strong></td>
+<td><strong>엔진 (FrameWork)</strong></td>
+<td>게임 루프, 싱글턴, 더블 버퍼링, 폴링 입력, 틱 타이머, 씬 시스템,
+인터페이스/상태머신</td>
+<td>(이 파일)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>1</strong></td>
+<td><strong>Snake</strong></td>
+<td>동적 자료구조(<code>vector</code>+포인터), 충돌, 방향 입력,
+상태머신</td>
+<td><a href="Part2_01.html">Part2_01</a></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>2</strong></td>
+<td><strong>Tetris</strong></td>
+<td>2D 그리드, 회전/월킥, 라인 클리어, 7-bag 랜덤, DAS</td>
+<td><a href="Part2_02.html">Part2_02</a></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>3</strong></td>
+<td><strong>Dino</strong></td>
+<td>물리(중력/점프), 월드 스크롤, 절차적 생성, AABB, 스프라이트</td>
+<td><a href="Part2_03.html">Part2_03</a></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>4</strong></td>
+<td><strong>Road Fighter</strong></td>
+<td>엔티티 시스템(이종 집합), 리소스 관리, 무적 상태, 시간 기반
+스테이지</td>
+<td><a href="Part2_04.html">Part2_04</a></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>번외</strong></td>
+<td><strong>GameDevTycoon 이식</strong></td>
+<td>1부 C 타이쿤을 C++ 프레임워크로 — 구조체→클래스,
+동적배열→<code>vector</code>, <code>enum</code>→<code>enum class</code>,
+턴제 씬</td>
+<td><a href="Part2_05.html">Part2_05</a></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>5</strong></td>
+<td><strong>Galaga</strong> ⭐</td>
+<td>오브젝트 풀링(<code>Pool&lt;T,N&gt;</code>), 대량 오브젝트</td>
+<td><a href="Part2_06.html">Part2_06</a></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>6</strong></td>
+<td><strong>Maze</strong> ⭐</td>
+<td>맵 생성 5종 + 경로탐색 4종, union-find, 분할정복</td>
+<td><a href="Part2_07.html">Part2_07</a></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>7</strong></td>
+<td><strong>Battle City</strong> 🏁</td>
+<td>맵 생성 + 풀링 <strong>결합</strong>, 파괴 지형, 적 AI — 종합
+캡스톤</td>
+<td><a href="Part2_08.html">Part2_08</a></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>확장</strong></td>
+<td><strong>Pac-Man</strong> 👻</td>
+<td>유령 4마리의 성격별 추적 AI, 스캐터/체이스/프라이트 FSM, 격자
+미로</td>
+<td><a href="Part2_09.html">Part2_09</a></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>읽는 순서.</strong> 2부는 반드시 <strong>0단계 엔진을
+먼저</strong> 읽는다. 1단계 이후 모든 게임은 이 엔진이 제공하는
+껍데기(<code>IGameContent</code>)를 상속해 빈칸만 채우는 방식이라,
+엔진을 모르면 어느 게임 코드도 읽히지 않는다. 엔진을 이해하고 나면, 이후
+게임들은 "그 게임만의 새 기술"에만 집중하면 된다.</p>
+</blockquote>
+<hr />
+<h1 id="0단계--엔진-framework--실시간-게임의-심장을-짓다">0단계 · 엔진
+(FrameWork) — 실시간 게임의 심장을 짓다</h1>
+<div class="chapter-badge">
+
+<p><strong>0단계</strong> · 엔진 계층 <code>FrameWork/</code> ·
+<code>main.cpp</code> · <code>framework.h</code> <strong>처음 배우는
+기술</strong> — <code>게임 루프</code> <code>클래스·메서드</code>
+<code>템플릿 싱글턴</code> <code>정적 멤버</code>
+<code>더블 버퍼링</code> <code>전각 좌표(x*2)</code>
+<code>폴링 입력(엣지/레벨)</code> <code>틱 타이머</code>
+<code>프레임 제한</code> <code>씬 시스템·소유권</code>
+<code>순수 가상 함수·인터페이스</code>
+<code>상태머신(_EPhase)</code></p>
+</div>
+
+<blockquote>
+<p>게임을 만들기 <strong>전에</strong> 갖춰야 할 공통 토대가 있다. 매
+프레임 스스로 도는 심장(게임 루프), 깜빡임 없는 화면(더블 버퍼), 매 순간
+키를 묻는 손(폴링 입력), 시간을 재는 시계(타이머), 화면을 갈아 끼우는
+무대 장치(씬). 이 다섯을 하나의 <strong>엔진</strong>으로 만들어 두면,
+이후 7개 게임은 이 엔진 위에서 자기 로직만 채운다. 0단계는 그 엔진을
+해부하는 장이다. 여기서 배운 것이 Snake부터 Battle City까지 <strong>모든
+게임의 바닥</strong>이 된다.</p>
+</blockquote>
+<h2 id="이-단계의-학습-목표">이 단계의 학습 목표</h2>
+<p>이 단계를 마치면 다음을 할 수 있다.</p>
+<ol type="1">
+<li>실시간 게임의 <strong>게임 루프</strong>(입력→갱신→렌더→교체→대기)를
+읽고, 각 단계가 왜 그 순서인지 설명할 수 있다.</li>
+<li><strong>템플릿 싱글턴</strong>으로 매니저를 하나만 존재하게 만드는
+원리를 이해하고,
+<code>SCREEN</code>/<code>TIMER</code>/<code>INPUT</code>/<code>SCENE</code>
+매크로를 쓸 수 있다.</li>
+<li><strong>더블 버퍼링</strong>이 깜빡임을 없애는 원리를 그림으로
+설명하고, <strong>전각 문자 = 콘솔 2칸</strong>이라 <code>x*2</code> 로
+변환하는 이유를 안다.</li>
+<li><strong>폴링 입력</strong>의 엣지(<code>OnKeyDown</code>)와
+레벨(<code>OnKeyStay</code>)을 구분해, 상황에 맞게 쓸 수 있다.</li>
+<li><strong>틱 타이머</strong>(<code>GetTickTimer</code>)와
+<strong>프레임 제한</strong>(<code>SetFrame</code>)으로 게임의 속도를
+제어할 수 있다.</li>
+<li><strong>씬 시스템</strong>의 등록·전환·소유권을 이해하고,
+<strong>인터페이스</strong>(<code>IContent</code>)와
+<strong>상태머신</strong>(<code>IGameContent</code>)이 게임의 뼈대임을
+안다.</li>
+</ol>
+<h2 id="왜-엔진부터인가">왜 엔진부터인가</h2>
+<p>1부의 타이쿤을 떠올려 보자. 그 게임은 <code>scanf</code> 앞에서
+<strong>멈춰</strong> 사람을 기다렸다. 사람이 숫자를 입력해야만 한 달이
+흘렀다. 실시간 게임은 정반대다 — 아무도 입력하지 않아도 <strong>뱀은
+계속 기어가고, 블록은 계속 떨어진다.</strong> 시간이 스스로 흐른다.</p>
+<p>이 "스스로 흐름"을 만들려면, 턴제에는 없던 장치들이 필요하다. 매 순간
+화면을 다시 그려야 하고(그런데 그냥 그리면 깜빡인다 → 더블 버퍼링), 매
+순간 키 상태를 확인해야 하며(폴링 입력), 시간의 흐름을 재야
+한다(타이머). 그리고 이 모든 것을 초당 수십 번 반복하는 심장(게임
+루프)이 있어야 한다.</p>
+<p>문제는, 이 장치들을 게임마다 새로 만들면 낭비라는 것이다. Snake도
+Tetris도 똑같은 게임 루프, 똑같은 더블 버퍼가 필요하다. 그래서 우리는
+이것들을 <strong>한 번만</strong> 만들어 <code>FrameWork/</code> 라는
+엔진에 넣어 두고, 게임은 그 위에서 "이 게임만의 로직"만 채운다.
+<strong>엔진을 한 번 이해하면, 이후 모든 게임은 빈칸 채우기가
+된다</strong> — 이것이 0단계를 맨 앞에 두는 이유다.</p>
+<blockquote>
+<p><strong>1부와의 다리.</strong> 이 엔진은 1부에서 배운 것들의 C++
+버전이다. 1부의 <code>while</code> 월 루프 → 2부의 게임 루프, 1부의
+구조체 → 2부의 클래스, 1부의 함수 포인터로 상태 넘기기 → 2부의 "객체가
+자기 상태를 가짐", 1부의 <code>enum Ending</code> → 2부의
+<code>_EPhase</code>. 낯선 C++ 문법이 나와도, 그 밑에는 1부에서 이미
+익힌 발상이 흐른다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-1--게임-루프--게임의-심장-maincpp">개념 1 · 게임 루프 —
+게임의 심장 (<code>main.cpp</code>)</h2>
+<p>모든 실시간 게임의 심장은 <code>main.cpp</code> 의 <code>while</code>
+루프다. 이 루프가 초당 60번 돌며 <strong>입력을 받고 → 상태를 갱신하고 →
+화면을 그리고 → 잠깐 쉰다.</strong> 1부의 월
+루프(<code>while (!gameOver)</code>)와 같은 심장이지만, 이번엔 사람을
+기다리지 않고 시계에 맞춰 스스로 돈다.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    srand<span class="op">(</span>time<span class="op">(</span>NULL<span class="op">));</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    SCREEN<span class="op">-&gt;</span>OnInit<span class="op">();</span>  TIMER<span class="op">-&gt;</span>OnInit<span class="op">();</span>  INPUT<span class="op">-&gt;</span>OnInit<span class="op">();</span>  SCENE<span class="op">-&gt;</span>OnInit<span class="op">();</span>  <span class="co">// ① 매니저 초기화</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    MainContent<span class="op">*</span> main <span class="op">=</span> <span class="kw">new</span> MainContent<span class="op">();</span>   <span class="co">// 게임 콘텐츠 생성</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    main<span class="op">-&gt;</span>OnInit<span class="op">();</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> gameState <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>gameState<span class="op">)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        SCREEN<span class="op">-&gt;</span>ClearBuffer<span class="op">();</span>               <span class="co">// ② 뒷화면(백버퍼)을 지운다</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        main<span class="op">-&gt;</span>OnUpdate<span class="op">();</span>                    <span class="co">// ③ 입력·로직: 게임 상태를 갱신</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_ESCAPE<span class="op">))</span> <span class="cf">break</span><span class="op">;</span>   <span class="co">// ESC 로 루프 종료</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>SCENE<span class="op">-&gt;</span>IsQuitRequested<span class="op">())</span> <span class="cf">break</span><span class="op">;</span>      <span class="co">// 타이틀 EXIT → 종료</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        main<span class="op">-&gt;</span>OnRender<span class="op">();</span>                    <span class="co">// ④ 뒷화면에 새 그림을 그린다</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        SCREEN<span class="op">-&gt;</span>FlippingBuffer<span class="op">();</span>            <span class="co">// ⑤ 뒷화면 ↔ 앞화면 교체 (한순간에)</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        TIMER<span class="op">-&gt;</span>SetFrame<span class="op">(</span><span class="fl">1000.0</span><span class="bu">f</span> <span class="op">/</span> <span class="fl">60.0</span><span class="bu">f</span><span class="op">);</span>    <span class="co">// ⑥ 다음 프레임까지 대기 (초당 60프레임)</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    main<span class="op">-&gt;</span>OnRelease<span class="op">();</span>  <span class="kw">delete</span> main<span class="op">;</span>         <span class="co">// 역순 해제</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    SCENE<span class="op">-&gt;</span>OnRelease<span class="op">();</span>  SCENE<span class="op">-&gt;</span>ReleaseSingleton<span class="op">();</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    INPUT<span class="op">-&gt;</span>OnRelease<span class="op">();</span>  INPUT<span class="op">-&gt;</span>ReleaseSingleton<span class="op">();</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    TIMER<span class="op">-&gt;</span>OnRelease<span class="op">();</span>  TIMER<span class="op">-&gt;</span>ReleaseSingleton<span class="op">();</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    SCREEN<span class="op">-&gt;</span>OnRelease<span class="op">();</span> SCREEN<span class="op">-&gt;</span>ReleaseSingleton<span class="op">();</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>이 짧은 함수가 게임의 전부다. 세 가지를 눈여겨보자.</p>
+<ul>
+<li><strong>생명주기가 대칭이다.</strong> 위에서 매니저를
+<code>SCREEN → TIMER → INPUT → SCENE</code> 순으로
+초기화(<code>OnInit</code>)했다면, 아래에서는 <strong>역순</strong>으로
+해제(<code>OnRelease</code>/<code>ReleaseSingleton</code>)한다. 나중에
+만든 것을 먼저 정리하는 이 대칭은, 자원 관리의 기본 예절이다(1부의
+<code>malloc</code>/<code>free</code> 짝맞춤과 같은 정신).</li>
+<li><strong>루프 안은 다섯 박자다.</strong> 지우고(②) → 갱신하고(③) →
+그리고(④) → 교체하고(⑤) → 쉰다(⑥). 이 다섯 박자가 모든 게임에서 똑같다.
+Snake가 하는 일은 결국 ③의 <code>OnUpdate</code> 와 ④의
+<code>OnRender</code> 안을 채우는 것뿐이다.</li>
+<li><strong><code>main</code> 은 게임을 모른다.</strong> 이
+<code>main.cpp</code> 어디에도 "뱀"이나 "블록"이 없다. <code>main</code>
+은 그저 <code>MainContent</code> 에게 "갱신해", "그려"라고 시킬 뿐이다.
+무엇을 갱신하고 그릴지는 각 게임이 정한다 — 이 <strong>분리</strong>가
+엔진의 핵심이다.</li>
+</ul>
+<blockquote>
+<p><strong><code>SCREEN-&gt;OnInit()</code> 의 <code>-&gt;</code> 는 1부
+그대로.</strong> <code>SCREEN</code> 은 화면 매니저 객체(정확히는 그
+포인터)이고, <code>-&gt;</code> 는 "포인터가 가리키는 객체의 메서드를
+부른다"는 뜻이다. 1부에서 <code>c-&gt;money</code> 로 구조체 포인터의
+멤버에 닿았듯, 2부에서는 <code>SCREEN-&gt;OnInit()</code> 로 객체
+포인터의 메서드를 부른다. 문법은 같고, 멤버가 함수(메서드)로 바뀌었을
+뿐이다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-2--싱글턴-매니저--하나만-존재하는-객체-singletonh">개념 2 ·
+싱글턴 매니저 — 하나만 존재하는 객체 (<code>singleton.h</code>)</h2>
+<p>위 코드의 <code>SCREEN</code>, <code>TIMER</code>,
+<code>INPUT</code>, <code>SCENE</code> 는 각각 화면·시간·입력·씬을
+관리하는 <strong>매니저</strong>다. 이들은 게임 전체에서 <strong>딱
+하나만</strong> 존재해야 한다 — 화면 버퍼가 둘이면 곤란하니까. "전역에서
+접근 가능한, 하나뿐인 객체"를 만드는 방법이 <strong>싱글턴(singleton)
+패턴</strong>이다.</p>
+<p>CSGP는 이걸 <strong>템플릿</strong>으로 만들어 모든 매니저가
+재사용한다. 여기서 C++의 두 새 문법 — <strong>클래스</strong>와
+<strong>템플릿</strong> — 을 만난다.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span> <span class="op">&lt;</span><span class="kw">typename</span> T<span class="op">&gt;</span>        <span class="co">// T 자리에 어떤 타입이든 끼울 수 있는 &#39;틀&#39;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> singleton</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">protected</span><span class="op">:</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> T<span class="op">*</span> instance<span class="op">;</span>      <span class="co">// 하나뿐인 인스턴스 (정적 멤버 — 클래스당 하나만 존재)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    singleton<span class="op">()</span> <span class="op">{};</span>          <span class="co">// 생성자를 감춰 외부에서 new 못 하게</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> T<span class="op">*</span> GetSingleton<span class="op">();</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> ReleaseSingleton<span class="op">();</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span> <span class="op">&lt;</span><span class="kw">typename</span> T<span class="op">&gt;</span> T<span class="op">*</span> singleton<span class="op">&lt;</span>T<span class="op">&gt;::</span>instance <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">// 정적 멤버 초기화 (처음엔 없음)</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span> <span class="op">&lt;</span><span class="kw">typename</span> T<span class="op">&gt;</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>T<span class="op">*</span> singleton<span class="op">&lt;</span>T<span class="op">&gt;::</span>GetSingleton<span class="op">()</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>instance<span class="op">)</span>               <span class="co">// 아직 없으면</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        instance <span class="op">=</span> <span class="kw">new</span> T<span class="op">;</span>        <span class="co">// 그때 딱 한 번 만든다 (지연 생성)</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> instance<span class="op">;</span>             <span class="co">// 있으면 그걸 그대로 돌려준다</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>핵심은 <code>GetSingleton()</code> 이다. 처음 부르면 객체를
+<code>new</code> 로 만들고, 두 번째부터는 <strong>이미 만든 그
+하나</strong>를 돌려준다. 그래서 어디서 몇 번을 불러도 늘 같은 객체에
+닿는다. <code>static</code>(정적)은 "클래스마다 하나만 존재하는
+멤버"라는 뜻으로, 그 하나뿐인 인스턴스를 담기에 딱 맞는다.</p>
+<p><code>ScreenManager</code> 는 이
+<code>singleton&lt;ScreenManager&gt;</code> 를 상속하므로,
+<code>ScreenManager::GetSingleton()</code> 으로 그 하나뿐인 화면
+매니저를 얻는다. 매번 이렇게 길게 쓰긴 번거로우니,
+<code>framework.h</code> 가 짧은 매크로를 준다.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define SCREEN </span>ScreenManager<span class="op">::</span>GetSingleton<span class="op">()</span><span class="pp">   </span><span class="co">// 화면(더블 버퍼)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#define TIMER  </span>TimerManager<span class="op">::</span>GetSingleton<span class="op">()</span><span class="pp">    </span><span class="co">// 시간·프레임·틱 타이머</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#define INPUT  </span>InputManager<span class="op">::</span>GetSingleton<span class="op">()</span><span class="pp">    </span><span class="co">// 키보드 폴링</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#define SCENE  </span>SceneManager<span class="op">::</span>GetSingleton<span class="op">()</span><span class="pp">    </span><span class="co">// 씬(게임) 등록·전환</span></span></code></pre></div>
+<p>이제 코드 어디서든 <code>SCREEN-&gt;OnDraw(...)</code> 라고 쓰면, 그
+하나뿐인 화면 매니저에 닿는다. <code>#define</code> 은 1부 F 모듈에서
+배운 그 매크로 — "긴 것에 짧은 이름을 붙이기"의 확장이다.</p>
+<blockquote>
+<p><strong>템플릿 = 타입을 나중에 정하는 틀.</strong>
+<code>template &lt;typename T&gt;</code> 는 "T 자리에 나중에 아무
+타입이나 끼워 넣겠다"는 선언이다.
+<code>singleton&lt;ScreenManager&gt;</code>,
+<code>singleton&lt;TimerManager&gt;</code> … 같은 싱글턴 코드를 타입만
+바꿔 네 매니저가 공유한다. 1부에서 같은 코드를 반복하지 않으려 함수로
+묶었듯, C++에서는 같은 코드를 타입만 바꿔 쓰려고 템플릿으로 묶는다. 2부
+Galaga의 <code>Pool&lt;T, N&gt;</code> 도 이 템플릿의 힘을 쓴다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-3--더블-버퍼링과-전각-좌표-screenmanager">개념 3 · 더블
+버퍼링과 전각 좌표 (<code>ScreenManager</code>)</h2>
+<p>콘솔에 직접 한 글자씩 그리면 화면이 <strong>깜빡인다.</strong> 그리는
+도중이 눈에 보이기 때문이다. 그래서 엔진은 화면 버퍼를
+<strong>둘</strong> 준비한다.</p>
+<h3 id="더블-버퍼링--완성된-그림만-보여-주기">더블 버퍼링 — 완성된
+그림만 보여 주기</h3>
+<p>안 보이는 <strong>백버퍼</strong>에 이번 프레임을 다 그린 뒤, 앞뒤를
+<strong>한순간에</strong> 바꿔 끼운다. 그리는 과정은 감춰지고 완성된
+그림만 보이니 깜빡임이 없다. <code>ScreenManager</code> 는 콘솔 화면
+버퍼 두 개(<code>hBuffer[0]</code>, <code>hBuffer[1]</code>)와 "지금
+그리는 쪽"을 가리키는 <code>nScreenIndex</code> 를 갖는다.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> ScreenManager<span class="op">::</span>ClearBuffer<span class="op">()</span>   <span class="co">// ① 백버퍼를 공백으로 지운다</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    COORD Coor <span class="op">=</span> <span class="op">{</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span> <span class="op">};</span>  DWORD dw<span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    FillConsoleOutputCharacter<span class="op">(</span>hBuffer<span class="op">[</span>nScreenIndex<span class="op">],</span> <span class="ch">&#39; &#39;</span><span class="op">,</span> SCREEN_SIZE_X <span class="op">*</span> SCREEN_SIZE_Y<span class="op">,</span> Coor<span class="op">,</span> <span class="op">&amp;</span>dw<span class="op">);</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    FillConsoleOutputAttribute<span class="op">(</span>hBuffer<span class="op">[</span>nScreenIndex<span class="op">],</span> <span class="co">/* 기본색 */</span><span class="op">,</span> SCREEN_SIZE_X <span class="op">*</span> SCREEN_SIZE_Y<span class="op">,</span> Coor<span class="op">,</span> <span class="op">&amp;</span>dw<span class="op">);</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> ScreenManager<span class="op">::</span>FlippingBuffer<span class="op">()</span>   <span class="co">// ③ 백버퍼를 화면에 띄우고, 그리는 쪽을 반대로</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    SetConsoleActiveScreenBuffer<span class="op">(</span>hBuffer<span class="op">[</span>nScreenIndex<span class="op">]);</span>  <span class="co">// 방금 그린 버퍼를 화면에!</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    nScreenIndex <span class="op">=</span> <span class="op">!</span>nScreenIndex<span class="op">;</span>                          <span class="co">// 다음엔 반대 버퍼에 그린다</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>nScreenIndex = !nScreenIndex</code> 한 줄이 0↔︎1을 오간다.
+이번에 1번 버퍼에 그려 화면에 띄웠으면, 다음 프레임은 0번 버퍼에 그린다
+— 화면에 보이는 동안 뒤에서 조용히 다음 장면을 준비하는 것이다. 이것이
+<strong>더블 버퍼링</strong>이다.</p>
+<h3 id="그리기와-색">그리기와 색</h3>
+<p>그림은 <code>OnDrawColor</code> 로 그린다. 커서를
+옮기고(<code>SetConsoleCursorPosition</code>), 색을
+설정하고(<code>SetConsoleTextAttribute</code>), 글자를
+쓴다(<code>WriteFile</code>).</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>SCREEN<span class="op">-&gt;</span>OnDrawColor<span class="op">(</span>x<span class="op">,</span> y<span class="op">,</span> <span class="st">&quot;■&quot;</span><span class="op">,</span> GREEN<span class="op">);</span>   <span class="co">// (x, y)에 초록색 ■ 를 그린다</span></span></code></pre></div>
+<p>색은 <code>framework.h</code> 의
+상수(<code>BLACK</code>~<code>WHITE</code>, 0~15)로 지정한다. 배경색을
+생략(255)하면 기존 배경을 유지한다.</p>
+<h3 id="전각-문자--콘솔-2칸--x--2">전각 문자 = 콘솔 2칸 —
+<code>x * 2</code></h3>
+<p>여기 콘솔 특유의 함정이 있다. <strong>전각 문자(<code>■ ★ ♠</code>)는
+콘솔에서 가로 2칸을 차지한다.</strong> 그래서 게임 로직은 논리 좌표
+<code>(x, y)</code> 로 계산하되, <strong>그릴 때는 x를 2배</strong>로
+변환한다. <code>ScreenManager</code> 는 이걸 <code>DrawCell</code> 로
+묶어 둔다.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> ScreenManager<span class="op">::</span>DrawCell<span class="op">(</span><span class="dt">short</span> lx<span class="op">,</span> <span class="dt">short</span> y<span class="op">,</span> <span class="at">const</span> <span class="dt">char</span><span class="op">*</span> glyph<span class="op">,</span> <span class="op">...)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    OnDrawColor<span class="op">(</span>lx <span class="op">*</span> <span class="dv">2</span><span class="op">,</span> y<span class="op">,</span> glyph<span class="op">,</span> <span class="op">...);</span>   <span class="co">// ★ 논리 x → 화면 x*2</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>논리 해상도는 <code>GAME_SIZE_X(40) × GAME_SIZE_Y(25)</code> 지만,
+전각 글리프 때문에 화면은 가로 80칸이다. <code>framework.h</code> 의
+주석이 이를 명확히 한다 — <em>"한글은 2Byte, 영문은 1Byte이므로 가로줄의
+폭을 80으로 정의한다."</em></p>
+<blockquote>
+<p><strong>1부의 그림자가 여기 있다.</strong> 1부 C 모듈에서 "한글 한
+글자는 여러 바이트라 <code>strlen</code> 이 눈에 보이는 글자 수와
+다르다"고 했다. 그 바이트-글자 불일치가, 2부에서는 "전각 1글자가 화면
+2칸"이라는 <strong>좌표 문제</strong>로 나타난다. 인코딩은 1부와 2부를
+관통하는 그림자 주제다. 게임 코드에 <code>xPos * 2</code> 가 자주 보이는
+이유가 바로 이것이다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-4--폴링-입력--엣지와-레벨-inputmanager">개념 4 · 폴링 입력
+— 엣지와 레벨 (<code>InputManager</code>)</h2>
+<p>턴제 게임은 <code>scanf</code> 로 입력을 <strong>기다렸다.</strong>
+실시간 게임은 기다리지 않는다. 매 프레임 "지금 이 키가 눌려 있나?"를
+<strong>물어본다</strong>(폴링). <code>InputManager</code> 는
+<code>GetAsyncKeyState</code> 로 키 상태를 확인한다.</p>
+<p>여기서 중요한 구분이 하나 있다 — <strong>엣지(edge)</strong> 와
+<strong>레벨(level)</strong> 이다.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> InputManager<span class="op">::</span>OnKeyDown<span class="op">(</span><span class="dt">int</span> key<span class="op">)</span>     <span class="co">// 엣지: &#39;막 눌린 순간&#39;만 true</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>GetAsyncKeyState<span class="op">(</span>key<span class="op">)</span> <span class="op">&amp;</span> <span class="bn">0x8000</span><span class="op">)</span>   <span class="co">// 지금 눌려 있는가?</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(!</span>keyDown<span class="op">[</span>key<span class="op">])</span>                <span class="co">// 그런데 직전엔 안 눌려 있었나?</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>            keyDown<span class="op">[</span>key<span class="op">]</span> <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="kw">true</span><span class="op">;</span>                  <span class="co">// → 방금 막 눌렸다! (딱 한 번 true)</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        keyDown<span class="op">[</span>key<span class="op">]</span> <span class="op">=</span> <span class="kw">false</span><span class="op">;</span>             <span class="co">// 떼면 상태 리셋</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> InputManager<span class="op">::</span>OnKeyStay<span class="op">(</span><span class="dt">int</span> key<span class="op">)</span>     <span class="co">// 레벨: &#39;눌려 있는 동안&#39; 계속 true</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>GetAsyncKeyState<span class="op">(</span>key<span class="op">)</span> <span class="op">&amp;</span> <span class="bn">0x8001</span><span class="op">);</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>둘의 차이가 게임의 조작감을 만든다.</p>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>언제 <code>true</code></th>
+<th>쓰는 곳</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>OnKeyDown</code></strong> (엣지)</td>
+<td>키가 <strong>막 눌린 순간</strong> 딱 한 번</td>
+<td>방향 전환, 메뉴 이동, 점프 — "한 번 누르면 한 번"</td>
+</tr>
+<tr>
+<td><strong><code>OnKeyStay</code></strong> (레벨)</td>
+<td>키가 <strong>눌려 있는 내내</strong> 계속</td>
+<td>이동 유지, 발사 연사 — "누르는 동안 계속"</td>
+</tr>
+</tbody>
+</table>
+<p>메뉴에서 <code>OnKeyDown</code> 을 쓰는 이유가 분명하다 — 방향키를 한
+번 눌렀는데 커서가 열 칸 내려가면 곤란하니까. <code>OnKeyDown</code> 은
+"직전 프레임엔 안 눌려 있었나"(<code>!keyDown[key]</code>)를 확인해,
+누르고 있는 동안엔 <strong>처음 한 번만</strong> <code>true</code> 를
+낸다. 이 "엣지 감지"가 실시간 입력의 핵심 기법이다.</p>
+<blockquote>
+<p><strong>1부의 "입력을 그대로 믿지 않는다".</strong> 1부
+Snake(2부지만)의 역주행 차단처럼, 실시간 게임은 입력을 가공해서 쓴다.
+엣지/레벨 구분도 그 일종이다 — "눌림"이라는 날것의 상태를 "막 눌림/계속
+눌림"으로 나눠, 게임이 원하는 반응만 골라 쓴다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-5--틱-타이머와-프레임-제한-timermanager">개념 5 · 틱
+타이머와 프레임 제한 (<code>TimerManager</code>)</h2>
+<p>실시간 게임에는 두 종류의 시간 제어가 필요하다. <strong>"전체 게임을
+초당 60프레임으로 고정"</strong>(프레임 제한)과, <strong>"이 동작은
+0.1초마다 한 번"</strong>(틱 타이머)이다. <code>TimerManager</code> 는
+<code>GetTickCount64</code>(밀리초 단위 시각)를 바탕으로 둘 다
+제공한다.</p>
+<h3 id="프레임-제한--setframe">프레임 제한 — <code>SetFrame</code></h3>
+<p>게임 루프가 너무 빨리 돌면 CPU를 낭비하고 게임이 지나치게 빨라진다.
+<code>SetFrame(ms)</code> 은 한 프레임에 걸린 시간을 재, 목표 시간에
+모자란 만큼 <code>Sleep</code> 으로 쉰다.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> TimerManager<span class="op">::</span>SetFrame<span class="op">(</span><span class="dt">float</span> frame<span class="op">)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">long</span> <span class="dt">long</span> elapsed <span class="op">=</span> GetTickCount64<span class="op">()</span> <span class="op">-</span> frameTime<span class="op">;</span>  <span class="co">// 이번 프레임에 걸린 시간</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">((</span><span class="dt">float</span><span class="op">)</span>elapsed <span class="op">&lt;</span> frame<span class="op">)</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        Sleep<span class="op">((</span>DWORD<span class="op">)(</span>frame <span class="op">-</span> <span class="op">(</span><span class="dt">float</span><span class="op">)</span>elapsed<span class="op">));</span>                 <span class="co">// 모자란 만큼 쉰다</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    frameTime <span class="op">=</span> GetTickCount64<span class="op">();</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>SetFrame(1000.0f / 60.0f)</code> 은 "한 프레임을 약 16.7ms로" —
+즉 초당 60프레임으로 고정한다.</p>
+<h3 id="틱-타이머--getticktimer">틱 타이머 —
+<code>GetTickTimer</code></h3>
+<p>뱀이 초당 60칸씩 기어가면 눈으로 못 쫓는다. "이 동작은 0.1초마다 한
+번"이 필요하다. <code>GetTickTimer(초)</code> 는 그 간격이 지났을 때만
+<code>true</code> 를 돌려준다.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> TimerManager<span class="op">::</span>GetTickTimer<span class="op">(</span><span class="dt">float</span> timer<span class="op">)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>timerMap<span class="op">.</span>find<span class="op">(</span>timer<span class="op">)</span> <span class="op">!=</span> timerMap<span class="op">.</span>end<span class="op">())</span>          <span class="co">// 이 타이머가 등록돼 있으면</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">((</span><span class="dt">double</span><span class="op">)(</span>GetTickCount64<span class="op">()</span> <span class="op">-</span> timerMap<span class="op">[</span>timer<span class="op">])</span> <span class="op">/</span> <span class="fl">1000.0</span> <span class="op">&gt;</span> timer<span class="op">)</span>  <span class="co">// 간격이 지났나?</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>            timerMap<span class="op">[</span>timer<span class="op">]</span> <span class="op">=</span> GetTickCount64<span class="op">();</span>          <span class="co">// 시각 갱신</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="kw">true</span><span class="op">;</span>                                 <span class="co">// → 지났다!</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    AddTimer<span class="op">(</span>timer<span class="op">);</span>   <span class="co">// 처음 보는 타이머면 등록만</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>TIMER<span class="op">-&gt;</span>GetTickTimer<span class="op">(</span><span class="fl">0.1</span><span class="bu">f</span><span class="op">))</span>   <span class="co">// 0.1초마다 한 번 (초당 10칸)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 뱀을 한 칸 이동 ...</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>timerMap</code> 은 <code>map&lt;float, ...&gt;</code> 이라,
+<strong>같은 float 값이 곧 타이머의 키</strong>다. 그래서 서로 다른
+용도엔 서로 다른 값을 써야 한다(<code>0.1f</code> 이동,
+<code>0.5f</code> 애니메이션처럼). <code>GetTickCount64</code> 의
+해상도는 10~16ms라, 그보다 짧은 간격은 의미가 없다.</p>
+<blockquote>
+<p><strong>"입력 주기 ≠ 상태 변화 주기".</strong> 게임 루프는 초당 60번
+도는데(입력은 매 프레임 받음), 뱀 이동은 <code>GetTickTimer(0.1f)</code>
+로 초당 10번만 일어난다. 이 분리가 콘솔 게임의 조작감을 만든다 — 조작은
+즉각 반응하되, 몸은 일정 속도로 움직인다. 이 감각은 2부 Tetris의 DAS,
+Dino의 물리 적분으로 계속 이어진다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-6--씬-시스템과-소유권-scenemanager">개념 6 · 씬 시스템과
+소유권 (<code>SceneManager</code>)</h2>
+<p>게임에는 여러 <strong>화면(씬)</strong> 이 있다 — 인트로, 타이틀,
+로딩, 그리고 각 게임. <code>SceneManager</code> 는 이 씬들을 등록해
+두고, 필요할 때 갈아 끼운다. 씬들을
+<code>map&lt;int, IContent*&gt;</code>(번호 → 씬)에 담아 관리한다.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> SceneManager<span class="op">::</span>AddContent<span class="op">(</span><span class="dt">int</span> key<span class="op">,</span> IContent<span class="op">*</span> content<span class="op">)</span>   <span class="co">// 씬 등록</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>contentMap<span class="op">.</span>find<span class="op">(</span>key<span class="op">)</span> <span class="op">==</span> contentMap<span class="op">.</span>end<span class="op">())</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>        contentMap<span class="op">.</span>insert<span class="op">(</span><span class="bu">std::</span>make_pair<span class="op">(</span>key<span class="op">,</span> content<span class="op">));</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> SceneManager<span class="op">::</span>ChangeContent<span class="op">(</span><span class="dt">int</span> key<span class="op">)</span>                   <span class="co">// 씬 전환</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>curContent <span class="op">!=</span> <span class="kw">nullptr</span><span class="op">)</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        curContent<span class="op">-&gt;</span>OnRelease<span class="op">();</span>     <span class="co">// ① 이전 씬을 정리하고</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>contentMap<span class="op">.</span>find<span class="op">(</span>key<span class="op">)</span> <span class="op">!=</span> contentMap<span class="op">.</span>end<span class="op">())</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>        curContent <span class="op">=</span> contentMap<span class="op">[</span>key<span class="op">];</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>        curContent<span class="op">-&gt;</span>OnInit<span class="op">();</span>        <span class="co">// ② 새 씬을 초기화한다</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>씬 전환의 리듬이 중요하다 — <strong>이전 씬 <code>OnRelease()</code>
+→ 새 씬 <code>OnInit()</code>.</strong> 그래서 씬의 멤버 초기화는
+생성자가 아니라 <code>OnInit</code> 에서 한다(씬에 다시 들어올 때 다시
+불리는 곳이 <code>OnInit</code> 뿐이므로). 1부 F 모듈의
+<code>enum Ending</code> 상태 전환이, 여기서는 "화면을 통째로 갈아
+끼우는" 씬 전환으로 자랐다.</p>
+<h3 id="소유권--누가-delete-하는가">소유권 — 누가 <code>delete</code>
+하는가</h3>
+<p><code>AddContent</code> 에 <code>new</code> 로 만든 씬을 넘기고 나면,
+그 씬의 <strong>소유권은 <code>SceneManager</code> 에게</strong>
+넘어간다. 그래서 프로그램이 끝날 때 <code>SceneManager</code> 가 등록된
+모든 씬을 <code>delete</code> 한다.</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> SceneManager<span class="op">::</span>OnRelease<span class="op">()</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>curContent <span class="op">!=</span> <span class="kw">nullptr</span><span class="op">)</span> <span class="op">{</span> curContent<span class="op">-&gt;</span>OnRelease<span class="op">();</span> curContent <span class="op">=</span> <span class="kw">nullptr</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="kw">auto</span><span class="op">&amp;</span> content <span class="op">:</span> contentMap<span class="op">)</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">delete</span> content<span class="op">.</span>second<span class="op">;</span>      <span class="co">// 등록된 모든 씬을 해제 (소유권)</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    contentMap<span class="op">.</span>clear<span class="op">();</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>1부에서 "<code>new</code> 한 것은 누군가
+<code>free</code>/<code>delete</code> 해야 한다"고 배웠다(동적 메모리).
+그 규칙이 2부에서는 <strong>소유권</strong>이라는 개념으로 명확해진다 —
+"이 객체를 만든 자가 아니라, <strong>소유하기로 한 자</strong>가
+정리한다." <code>SceneManager</code> 가 씬을 소유하고, 각 씬은 자기가
+<code>new</code> 한 게임 오브젝트를 소유해 자기 <code>OnRelease</code>
+에서 정리한다. 이 소유권 사슬이 2부 전체의 메모리 관리 원칙이다.</p>
+<hr />
+<h2 id="개념-7--인터페이스와-상태머신-icontent--igamecontent">개념 7 ·
+인터페이스와 상태머신 (<code>IContent</code> /
+<code>IGameContent</code>)</h2>
+<p>엔진의 마지막 조각이자, 모든 게임이 딛고 설
+<strong>계약서</strong>다. 엔진은 각 게임에게 "너는 이 네 가지 메서드를
+반드시 구현해야 한다"고 요구한다. 그 계약이 <strong>인터페이스</strong>
+<code>IContent</code> 다.</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> IContent abstract          <span class="co">// abstract: 이 클래스 자체로는 객체를 못 만든다</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="op">~</span>IContent<span class="op">()</span> <span class="op">=</span> <span class="cf">default</span><span class="op">;</span>   <span class="co">// 가상 소멸자 — 자식을 안전하게 delete</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnInit<span class="op">()</span>    <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>    <span class="co">// = 0: 순수 가상. 자식이 반드시 구현</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnRelease<span class="op">()</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnUpdate<span class="op">()</span>  <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnRender<span class="op">()</span>  <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<ul>
+<li><strong><code>= 0</code>(순수 가상 함수)</strong> 은 "선언만 있고
+몸통은 없다. 자식이 반드시 채워라"는 뜻이다. 그래서
+<code>IContent</code> 는 그 자체로 객체를 만들 수 없는 <strong>추상
+클래스</strong>다. 게임 루프가 요구하는 4개 메서드의 계약서인 셈이다.
+1부의 함수 "선언"(헤더)과 "정의"(소스)의 분리가, 여기서는 "인터페이스가
+요구하고 자식이 구현한다"로 자랐다.</li>
+<li><strong><code>virtual ~IContent()</code></strong> — 소멸자가
+<code>virtual</code> 이어야, <code>IContent*</code> 포인터로 자식을
+<code>delete</code> 할 때 자식의 소멸자가 제대로 불린다. 힙 멤버를 가진
+씬에서 이건 필수다.</li>
+</ul>
+<p>그 위에 <strong><code>IGameContent</code></strong> 가 있다. 대부분의
+게임은 "타이틀 화면 → 인게임"이라는 공통 흐름을 가지므로, 그 공통 부분을
+여기서 한 번 구현해 둔다. 게임의 큰 상태를 <code>_EPhase</code> 로 두고,
+현재 페이즈에 따라 적절한 함수로 갈라 준다.</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> IGameContent <span class="op">:</span> <span class="kw">public</span> IContent</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">enum</span> <span class="kw">class</span> _EPhase <span class="op">{</span> NONE<span class="op">,</span> TITLE<span class="op">,</span> INGAME <span class="op">};</span>   <span class="co">// 게임의 큰 상태 (1부 enum Ending 의 후예)</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="kw">protected</span><span class="op">:</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    _EPhase currentPhase <span class="op">=</span> _EPhase<span class="op">::</span>NONE<span class="op">;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnUpdate<span class="op">();</span>   <span class="co">// currentPhase 를 보고 OnTitleUpdate/OnInGameUpdate 로 분기</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 게임마다 다른 부분은 다시 순수 가상으로 자식에게 넘긴다</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnTitleUpdate<span class="op">()</span>  <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnInGameUpdate<span class="op">()</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnTitleRender<span class="op">()</span>  <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnInGameRender<span class="op">()</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p><code>IGameContent::OnUpdate</code> 는 "지금이 타이틀인가
+인게임인가"만 판단하는 <strong>교통정리</strong>만 하고, 실제 내용은 각
+게임에게 맡긴다. 1부의 <code>enum Ending</code> 으로 엔딩을 갈랐듯,
+여기서는 <code>_EPhase</code> 로 화면을 가른다 — <strong>상태를 변수에
+담고, 그 변수로 흐름을 정한다</strong>는 발상이 그대로 이어진다.</p>
+<blockquote>
+<p><strong>이 구조의 힘 — "빈칸 채우기".</strong> Snake도, Tetris도,
+Battle City도 전부 <code>IGameContent</code> 를 상속해 네 개의
+빈칸(<code>OnTitleUpdate/Render</code>,
+<code>OnInGameUpdate/Render</code>)을 채우는 방식으로 만든다. 게임
+루프도, 페이즈 분기도, 렌더 타이밍도 다시 짤 필요가 없다. <strong>엔진이
+뼈대를 주고, 게임은 살을 붙인다.</strong> 1단계 Snake에서 이 패턴을 처음
+직접 보게 된다 — 이 인터페이스가 어떻게 실제 게임이 되는지는 다음
+파일(Snake)이 자세히 다룬다.</p>
+</blockquote>
+<hr />
+<h2 id="코드-워크스루--maincpp-한-바퀴">코드 워크스루 —
+<code>main.cpp</code> 한 바퀴</h2>
+<p>엔진의 일곱 조각이 실제로 어떻게 맞물려 도는지, 게임 루프 한 바퀴를
+따라가 보자.</p>
+<blockquote>
+<p><strong>실제 파일:</strong> <code>main.cpp</code> ·
+<code>framework.h</code> · <code>FrameWork/</code> 의 매니저 4종</p>
+</blockquote>
+<pre><code>  [프로그램 시작]
+    srand → 매니저 4종 OnInit → MainContent 생성·OnInit
+                         │
+    ┌────────────────────▼──────────────────── while (gameState) ───────────┐
+    │  SCREEN-&gt;ClearBuffer()      백버퍼를 지운다            (개념 3)         │
+    │  main-&gt;OnUpdate()           INPUT 폴링 + 게임 로직     (개념 1·4·7)     │
+    │      └ 현재 씬의 OnUpdate → _EPhase 로 분기            (개념 6·7)       │
+    │  if (ESC) break             입력으로 종료              (개념 4)         │
+    │  main-&gt;OnRender()           백버퍼에 이번 장면을 그린다 (개념 3·7)      │
+    │      └ SCREEN-&gt;OnDrawColor(x*2, y, ...)  전각 좌표 변환 (개념 3)        │
+    │  SCREEN-&gt;FlippingBuffer()   백↔앞 교체 (깜빡임 없음)   (개념 3)         │
+    │  TIMER-&gt;SetFrame(16.7ms)    초당 60프레임으로 고정      (개념 5)         │
+    └───────────────────────────────────────────────────────────────────────┘
+                         │  (루프 탈출)
+    MainContent OnRelease·delete → 매니저 역순 해제         (개념 1·2·6)</code></pre>
+<p>이 한 바퀴에 일곱 개념이 전부 들어 있다.
+<code>SCREEN</code>·<code>TIMER</code>·<code>INPUT</code>·<code>SCENE</code>
+는 싱글턴(개념 2)이라 어디서든 같은 하나에 닿고, 화면은 더블 버퍼(개념
+3)로 깜빡임 없이 그려지며, 입력은 폴링(개념 4)으로 매 프레임 확인되고,
+속도는 타이머(개념 5)로 제어된다. <code>MainContent</code> 는
+<code>SceneManager</code>(개념 6)를 통해 현재 씬에 갱신·렌더를 위임하고,
+각 씬은 <code>IContent</code>/<code>IGameContent</code>(개념 7)의 계약을
+구현한다. <strong>엔진이 무대를 돌리고, 게임은 그 무대 위에서
+연기한다.</strong></p>
+<hr />
+<h2 id="그림으로-정리--더블-버퍼와-게임-루프">그림으로 정리 — 더블
+버퍼와 게임 루프</h2>
+<blockquote>
+<p>📊 <strong>웹 교육문서에서는 더블 버퍼의 flip과 게임 루프 한 바퀴가
+애니메이션(V-P2-0)으로 재생된다.</strong> 책에서는 아래 도식으로
+대신한다.</p>
+</blockquote>
+<p><strong>더블 버퍼링 — 뒤에서 그리고, 한순간에 교체</strong></p>
+<pre><code>  프레임 N:                          프레임 N+1:
+  ┌─ hBuffer[0] (화면에 보임) ─┐      ┌─ hBuffer[0] (뒤에서 그림) ─┐
+  │  ■···★                    │      │  ·■··★  ← 다음 장면 준비   │
+  └───────────────────────────┘      └────────────────────────────┘
+  ┌─ hBuffer[1] (뒤에서 그림) ─┐      ┌─ hBuffer[1] (화면에 보임) ─┐
+  │  ·■··★  ← 다음 장면 준비   │      │  ·■··★                    │
+  └───────────────────────────┘      └────────────────────────────┘
+        FlippingBuffer() 로 nScreenIndex = !nScreenIndex  →  0↔1 교체
+   그리는 과정은 늘 숨겨진 버퍼에서. 완성된 것만 화면에 → 깜빡임 없음.</code></pre>
+<p><strong>전각 좌표 — 논리 40칸, 화면 80칸</strong></p>
+<pre><code>  논리 좌표 (게임 로직):   x = 0  1  2  3 ...  (GAME_SIZE_X = 40)
+                             │
+                DrawCell(x,y) → OnDrawColor(x*2, y)
+                             ▼
+  화면 좌표 (콘솔):        col = 0  2  4  6 ...  (전각 1글자 = 2칸, 총 80)
+     ■ 하나가 두 칸을 먹으므로, 논리 x 를 2배 해야 제자리에 그려진다.</code></pre>
+<p>한 문장으로: <strong>게임 루프는 게임을 초당 60번 되살리는 심장이고,
+매니저들은 그 심장이 부리는 손·눈·시계이며, 인터페이스는 게임과 엔진이
+맺은 계약이다.</strong></p>
+<hr />
+<h2 id="체크포인트--스스로-점검하기">체크포인트 — 스스로 점검하기</h2>
+<p><strong>Q1.</strong> 게임 루프의 다섯
+박자(Clear→Update→Render→Flip→SetFrame)에서, <code>FlippingBuffer</code>
+를 <code>Render</code> <strong>앞에</strong> 두면 무슨 일이 생기나?</p>
+<p><strong>Q2.</strong> <code>SCREEN</code>, <code>TIMER</code> 같은
+매니저를 싱글턴으로 만드는 이유는? <code>GetSingleton()</code> 을 두 번
+부르면 서로 다른 객체가 나오나?</p>
+<p><strong>Q3.</strong> 논리 좌표 <code>(5, 3)</code> 에 전각 글리프를
+그리려면 실제로 콘솔 어느 열(column)에 써야 하나? 왜인가?</p>
+<p><strong>Q4.</strong> 메뉴에서 방향키로 커서를 옮길 때
+<code>OnKeyDown</code> 과 <code>OnKeyStay</code> 중 무엇을 써야 하나?
+반대로 쓰면 어떻게 되나?</p>
+<p><strong>Q5.</strong> <code>IContent</code> 의 네 메서드에
+<code>= 0</code> 이 붙어 있다. 이것이 뜻하는 바와, <code>IContent</code>
+로 직접 객체를 만들 수 있는지 답하라.</p>
+<details><summary><b>해설 펼치기</b></summary>
+
+<p><strong>A1.</strong> <code>FlippingBuffer</code> 는 "지금까지
+백버퍼에 그린 것을 화면에 띄우는" 동작이다. <code>Render</code> 앞에
+두면 <strong>아직 이번 프레임을 안 그린 백버퍼</strong>(직전에 지워진 빈
+화면)를 띄우게 되어, 화면이 비거나 한 프레임 늦게 갱신되며 깜빡인다.
+반드시 다 그린 뒤(<code>Render</code>) 교체(<code>Flip</code>)해야
+한다.</p>
+<p><strong>A2.</strong> 화면 버퍼·입력 상태 같은 자원은 게임 전체에서
+<strong>하나만</strong> 존재해야 하기 때문이다(둘이면 상태가 갈라진다).
+<code>GetSingleton()</code> 은 처음 부를 때 딱 한 번 <code>new</code>
+하고, 이후엔 그 하나를 돌려주므로, 몇 번을 불러도 <strong>늘 같은
+객체</strong>가 나온다.</p>
+<p><strong>A3.</strong> 콘솔 열 <strong>10</strong>(= 5 × 2)에 써야
+한다. 전각 글리프 하나가 콘솔 2칸을 차지하므로, 논리 x를 2배 해야
+제자리에 그려진다. 엔진의 <code>DrawCell</code> 이
+<code>OnDrawColor(lx*2, y, ...)</code> 로 이 변환을 대신해 준다.</p>
+<p><strong>A4.</strong> <code>OnKeyDown</code>(엣지)을 써야 한다 — 한 번
+누르면 커서가 한 칸만 움직인다. <code>OnKeyStay</code>(레벨)를 쓰면 키를
+누르고 있는 매 프레임(초당 60번) 커서가 움직여, 한 번 눌러도 커서가
+끝까지 훌쩍 넘어가 버린다.</p>
+<p><strong>A5.</strong> <code>= 0</code> 은 <strong>순수 가상
+함수</strong> — 선언만 있고 구현이 없어 자식이 반드시 채워야 한다.
+그래서 <code>IContent</code> 는 <strong>추상 클래스</strong>이고 직접
+객체를 만들 수 없다(<code>abstract</code> 로도 명시됨). 게임 루프가
+요구하는 4개 메서드의 계약서 역할을 한다.</p>
+</details>
+
+<hr />
+<h2 id="실습-미션--엔진-감-잡기-움직이는-점-dotcontent-star">실습 미션 —
+엔진 감 잡기: 움직이는 점 <code>DotContent</code> ⭐</h2>
+<blockquote>
+<p>1단계 Snake로 뛰어들기 전에, <strong>엔진만으로 점 하나를
+움직여</strong> 보자. 게임 루프·폴링 입력·전각 좌표·틱 타이머가 어떻게
+맞물리는지 손으로 느끼는 게 목표다.</p>
+</blockquote>
+<p><strong>드릴 기술</strong> — <code>IGameContent</code> 상속 ·
+<code>OnInGameUpdate/Render</code> 채우기 ·
+<code>INPUT-&gt;OnKeyDown</code> ·
+<code>SCREEN-&gt;OnDrawColor(x*2, y)</code> ·
+<code>TIMER-&gt;GetTickTimer</code> <strong>만드는 것</strong> —
+방향키로 화면 위 점(<code>●</code>) 하나를 움직이는 최소 씬. 벽 밖으로는
+못 나간다. <strong>클리어 조건</strong> — 방향키 입력에 점이 반응하고,
+깜빡임 없이 그려진다. <strong>규모</strong> — 약 40줄, 씬 클래스 하나.
+(실제 CSGP 프로젝트에 새 씬으로 붙여 실행.)</p>
+<h3 id="문제-정의">문제 정의</h3>
+<p>이 미션은 "게임"이라기보다 <strong>엔진 사용법 드릴</strong>이다. 새
+씬(<code>IGameContent</code> 상속)을 만들어 <code>OnInGameUpdate</code>
+에서 방향키를 읽어 점 좌표를 바꾸고, <code>OnInGameRender</code> 에서 그
+점을 <code>x*2</code> 좌표에 그린다. 엔진이 게임 루프·더블 버퍼를 알아서
+돌려 주니, 우리는 "이 씬만의 로직"인 점의 이동과 그리기만 채우면 된다 —
+그것이 바로 엔진의 힘이다.</p>
+<h3 id="목표--클리어-조건">목표 / 클리어 조건</h3>
+<ol type="1">
+<li><code>DotContent : public IGameContent</code> 를 만들고, 점 좌표
+<code>int x, y</code> 를 멤버로 둔다.</li>
+<li><code>OnInit</code> 에서 점을 화면 중앙(20, 12)에 놓고
+<code>currentPhase = _EPhase::INGAME</code> 로 설정.</li>
+<li><code>OnInGameUpdate</code> 에서 방향키(<code>OnKeyDown</code>)로
+<code>x</code>/<code>y</code> 를 ±1. 벽(0~39, 0~24) 밖으로는 안
+나가게.</li>
+<li><code>OnInGameRender</code> 에서
+<code>SCREEN-&gt;OnDrawColor(x*2, y, "●", YELLOW)</code> 로 그린다.</li>
+<li><code>framework.h</code> 의 <code>_ECONTENT</code> 에 값을 추가하고
+<code>MainContent</code> 에서 씬을 등록·시작.</li>
+</ol>
+<h3 id="힌트">힌트</h3>
+<details><summary><b>힌트 1 — 이동과 벽 막기</b></summary>
+
+<p><code>OnKeyDown</code> 은 "막 눌린 순간"만 true라, 한 번 누르면 한 칸
+움직인다. 벽은 좌표를 범위로 자른다.</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_RIGHT<span class="op">)</span> <span class="op">&amp;&amp;</span> x <span class="op">&lt;</span> GAME_SIZE_X <span class="op">-</span> <span class="dv">1</span><span class="op">)</span> x<span class="op">++;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_LEFT<span class="op">)</span>  <span class="op">&amp;&amp;</span> x <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span>               x<span class="op">--;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_UP<span class="op">)</span>    <span class="op">&amp;&amp;</span> y <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span>               y<span class="op">--;</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_DOWN<span class="op">)</span>  <span class="op">&amp;&amp;</span> y <span class="op">&lt;</span> GAME_SIZE_Y <span class="op">-</span> <span class="dv">1</span><span class="op">)</span> y<span class="op">++;</span></span></code></pre></div>
+</details>
+
+<details><summary><b>힌트 2 — 전각 좌표로 그리기</b></summary>
+
+<p>논리 x를 2배 해서 그린다. 이걸 빠뜨리면 점이 절반 위치에 찍혀
+어긋난다.</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>SCREEN<span class="op">-&gt;</span>OnDrawColor<span class="op">(</span>x <span class="op">*</span> <span class="dv">2</span><span class="op">,</span> y<span class="op">,</span> <span class="st">&quot;●&quot;</span><span class="op">,</span> YELLOW<span class="op">);</span>   <span class="co">// ★ x * 2 (개념 3)</span></span></code></pre></div>
+</details>
+
+<h3 id="정답-코드">정답 코드</h3>
+<details><summary><b>정답 펼치기 — <code>DotContent</code> (핵심부)</b></summary>
+
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">// DotContent.h</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#pragma once</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;Content/Interface/IGameContent.h&quot;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> DotContent <span class="op">:</span> <span class="kw">public</span> IGameContent</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> x<span class="op">,</span> y<span class="op">;</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnInit<span class="op">();</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnRelease<span class="op">()</span> <span class="op">{}</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnTitleUpdate<span class="op">()</span>  <span class="op">{}</span>   <span class="co">// 이 미션은 타이틀 없이 바로 인게임</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnTitleRender<span class="op">()</span>  <span class="op">{}</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnInGameUpdate<span class="op">();</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnInGameRender<span class="op">();</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">// DotContent.cpp</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;DotContent.h&quot;</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;../../framework.h&quot;</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> DotContent<span class="op">::</span>OnInit<span class="op">()</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> GAME_SIZE_X <span class="op">/</span> <span class="dv">2</span><span class="op">;</span>      <span class="co">// 중앙 (20, 12)</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> GAME_SIZE_Y <span class="op">/</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    currentPhase <span class="op">=</span> _EPhase<span class="op">::</span>INGAME<span class="op">;</span>   <span class="co">// 바로 인게임으로</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> DotContent<span class="op">::</span>OnInGameUpdate<span class="op">()</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_RIGHT<span class="op">)</span> <span class="op">&amp;&amp;</span> x <span class="op">&lt;</span> GAME_SIZE_X <span class="op">-</span> <span class="dv">1</span><span class="op">)</span> x<span class="op">++;</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_LEFT<span class="op">)</span>  <span class="op">&amp;&amp;</span> x <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span>               x<span class="op">--;</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_UP<span class="op">)</span>    <span class="op">&amp;&amp;</span> y <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span>               y<span class="op">--;</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_DOWN<span class="op">)</span>  <span class="op">&amp;&amp;</span> y <span class="op">&lt;</span> GAME_SIZE_Y <span class="op">-</span> <span class="dv">1</span><span class="op">)</span> y<span class="op">++;</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> DotContent<span class="op">::</span>OnInGameRender<span class="op">()</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>    SCREEN<span class="op">-&gt;</span>OnDrawColor<span class="op">(</span>x <span class="op">*</span> <span class="dv">2</span><span class="op">,</span> y<span class="op">,</span> <span class="st">&quot;●&quot;</span><span class="op">,</span> YELLOW<span class="op">);</span>   <span class="co">// 전각 → x*2</span></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">// framework.h 의 _ECONTENT 에 DOT 추가, MainContent::OnInit 에서:</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>SCENE<span class="op">-&gt;</span>AddContent<span class="op">((</span><span class="dt">int</span><span class="op">)</span>_ECONTENT<span class="op">::</span>DOT<span class="op">,</span> <span class="kw">new</span> DotContent<span class="op">());</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>SCENE<span class="op">-&gt;</span>ChangeContent<span class="op">((</span><span class="dt">int</span><span class="op">)</span>_ECONTENT<span class="op">::</span>DOT<span class="op">);</span>   <span class="co">// 시작 씬으로</span></span></code></pre></div>
+<p><strong>빌드:</strong> 실제 CSGP 프로젝트(<code>CSGP.sln</code>)에 위
+파일을 추가하고 <code>.vcxproj</code>/<code>.filters</code> 에 등록한 뒤
+빌드한다. 콘솔 창에서 실행해야 스크린 버퍼가 동작한다.</p>
+<p><strong>함정/체크포인트</strong></p>
+<ul>
+<li><code>x * 2</code> 를 빠뜨리면 점이 논리 좌표 그대로 찍혀, 화면 왼쪽
+절반에만 몰리고 위치가 어긋난다. <strong>전각 = 2칸</strong>을 잊지
+말자.</li>
+<li><code>OnKeyDown</code> 대신 <code>OnKeyStay</code> 를 쓰면 한 번
+눌러도 점이 화면 끝까지 훅 날아간다(매 프레임 이동). 한 칸씩 움직이려면
+엣지 입력.</li>
+<li>씬 초기화(중앙 배치)를 생성자가 아니라 <code>OnInit</code> 에 둔다 —
+씬에 다시 들어올 때 다시 불리는 곳이 <code>OnInit</code> 이다(개념
+6).</li>
+</ul>
+<p><strong>확장 과제</strong></p>
+<ul>
+<li><code>TIMER-&gt;GetTickTimer(0.05f)</code> 를 걸어
+<code>OnKeyStay</code> 로 "누르는 동안 일정 속도로 미끄러지는" 이동으로
+바꿔 보자.</li>
+<li>점이 지나간 자리에 잔상을 남기면 — 그게 바로 다음 단계
+<strong>Snake의 몸통</strong>이다.</li>
+</ul>
+</details>
+
+<hr />
+<h2 id="이-단계를-마치며">이 단계를 마치며</h2>
+<table>
+<thead>
+<tr>
+<th>얻은 것</th>
+<th>다음에 쓰는 곳</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>게임 루프·생명주기</td>
+<td><strong>7개 게임 전부</strong> — 모두 이 루프 위에서 돈다</td>
+</tr>
+<tr>
+<td>싱글턴 매니저 4종</td>
+<td>전 게임 —
+<code>SCREEN</code>/<code>TIMER</code>/<code>INPUT</code>/<code>SCENE</code></td>
+</tr>
+<tr>
+<td>더블 버퍼·전각 좌표(x*2)</td>
+<td>전 게임의 렌더링</td>
+</tr>
+<tr>
+<td>폴링 입력·틱 타이머</td>
+<td>전 게임의 조작·속도 제어</td>
+</tr>
+<tr>
+<td><code>IContent</code>/<code>IGameContent</code> 상속</td>
+<td>전 게임 — "빈칸 채우기"로 새 게임</td>
+</tr>
+</tbody>
+</table>
+<p>엔진을 손에 넣었다. 게임 루프가 초당 60번 심장을 뛰고, 매니저들이
+화면·입력·시간·씬을 관리하며, 인터페이스가 게임과 엔진의 계약을 맺는다.
+이제 이 무대 위에 첫 배우를 올릴 차례다. 다음 1단계 Snake에서, 우리는
+<code>IGameContent</code> 를 처음 상속해 — 입력이 자료구조를 바꾸고,
+충돌이 규칙을 만드는 — 살아있는 게임의 최소 완성형을 만든다.</p>
+<blockquote>
+<p><strong>← 이전:</strong> <a href="Part1_06.html">1부 F 모듈 · 13–15장 —
+파일·모듈·캡스톤</a> | <strong>다음 →</strong> <a
+href="Part2_01.html">1단계 · Snake — 자료구조·충돌·상태머신</a></p>
+</blockquote>
+  </article>
+</main>
+<footer class="site-footer">
+  <a href="index.html">← 목차로 돌아가기</a>
+  <span>CSGP Learn · 표시용 원고 (코드는 UTF-8 사본)</span>
+</footer>
+<script src="book-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1단계 · Snake — 자료구조·충돌·상태머신</title>
+<script>try{var _t=localStorage.getItem('csgp-theme');if(_t)document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
+<style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<link rel="stylesheet" href="book.css">
+
+</head>
+<body>
+<div class="topbar">
+  <button class="drawer-toggle" id="drawerToggle" type="button" aria-label="목차 열기/닫기" aria-expanded="false">☰ 목차</button>
+  <a class="home" href="index.html">📘 CSGP</a>
+  <span class="crumb">콘솔 게임으로 배우는 C · C++</span>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="라이트/다크 전환">🌙</button>
+</div>
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" aria-label="책 목차">
+  <div class="drawer-dash">
+    <div class="dash-title">콘솔 게임으로 배우는 C · C++</div>
+    <div class="dash-sub">학습 목차 · 대시보드</div>
+    <div class="dash-progress"><div class="dash-bar"><i id="dashBar"></i></div><span class="dash-pct" id="dashPct"></span></div>
+    <input class="drawer-search" id="drawerSearch" type="search" placeholder="🔍 챕터 검색…" aria-label="챕터 검색">
+  </div>
+  <nav class="booknav" aria-label="책 목차"><a class="booknav-home" href="index.html">📘 전체 목차</a><ul class="booknav-list"><li class="grp">1부 · C 기본 문법</li><li><a href="Part1_00.html" title="1부 — C 기본 문법: 회사를 키우며 배우는 언어">1부 개요</a></li><li><a href="Part1_01.html" title="A 모듈 · 1–4장 — 값·계산·분기: 회사에 숫자를 세우다">A · 값·계산·분기</a></li><li><a href="Part1_02.html" title="B 모듈 · 5–6장 — 반복문과 함수: 회사에 심장을 달다">B · 반복문·함수</a></li><li><a href="Part1_03.html" title="C 모듈 · 7–8장 — 배열과 문자열: 회사에 사람과 이름을 채우다">C · 배열·문자열</a></li><li><a href="Part1_04.html" title="D 모듈 · 9–10장 — 구조체와 포인터: 데이터에 모양을 주다">D · 구조체·포인터</a></li><li><a href="Part1_05.html" title="E 모듈 · 11–12장 — 동적 메모리와 랜덤: 회사가 자라고, 시장이 살아난다">E · 메모리·랜덤</a></li><li><a href="Part1_06.html" title="F 모듈 · 13–15장 — 파일·모듈·캡스톤: 회사를 저장하고, 게임을 출시하다">F · 파일·모듈·캡스톤</a></li><li class="grp">2부 · C++ 프레임워크</li><li><a href="Part2_00.html" title="2부 — C++ 콘솔 게임 프레임워크: 7개의 게임으로 오르기">2부 개요</a></li><li class="active"><a href="Part2_01.html" title="1단계 · Snake — 자료구조·충돌·상태머신">1단계 · Snake</a><ul class="sections">
+<li><a href="#이-단계의-학습-목표" id="toc-이-단계의-학습-목표">이
+단계의 학습 목표</a></li>
+<li><a href="#왜-snake가-출발점인가" id="toc-왜-snake가-출발점인가">왜
+Snake가 출발점인가</a></li>
+<li><a href="#개념-1--게임-위에-게임-얹기--상속-구조"
+id="toc-개념-1--게임-위에-게임-얹기--상속-구조">개념 1 · 게임 위에 게임
+얹기 — 상속 구조</a></li>
+<li><a href="#개념-2--상태머신--타이틀과-인게임을-오가다"
+id="toc-개념-2--상태머신--타이틀과-인게임을-오가다">개념 2 · 상태머신 —
+타이틀과 인게임을 오가다</a></li>
+<li><a href="#개념-3--동적-자료구조--vectorsnake-와-소유권"
+id="toc-개념-3--동적-자료구조--vectorsnake-와-소유권">개념 3 · 동적
+자료구조 — <code>vector&lt;Snake*&gt;</code> 와 소유권</a></li>
+<li><a href="#개념-4--몸통-팔로우-이동--뱀은-어떻게-기어가는가"
+id="toc-개념-4--몸통-팔로우-이동--뱀은-어떻게-기어가는가">개념 4 · 몸통
+팔로우 이동 — 뱀은 어떻게 기어가는가</a></li>
+<li><a href="#개념-5--충돌-판정--머리가-무엇에-닿았는가"
+id="toc-개념-5--충돌-판정--머리가-무엇에-닿았는가">개념 5 · 충돌 판정 —
+머리가 무엇에 닿았는가</a></li>
+<li><a href="#개념-6--방향-입력과-역주행-차단"
+id="toc-개념-6--방향-입력과-역주행-차단">개념 6 · 방향 입력과 역주행
+차단</a></li>
+<li><a href="#개념-7--이동-틱--입력은-매-프레임-이동은-01초마다"
+id="toc-개념-7--이동-틱--입력은-매-프레임-이동은-01초마다">개념 7 · 이동
+틱 — 입력은 매 프레임, 이동은 0.1초마다</a></li>
+<li><a href="#코드-워크스루--oningameupdate-전체-읽기"
+id="toc-코드-워크스루--oningameupdate-전체-읽기">코드 워크스루 —
+<code>OnInGameUpdate</code> 전체 읽기</a></li>
+<li><a href="#알려진-이슈에서-배우기-as-built"
+id="toc-알려진-이슈에서-배우기-as-built">알려진 이슈에서 배우기
+(as-built)</a></li>
+<li><a href="#체크포인트--스스로-점검하기"
+id="toc-체크포인트--스스로-점검하기">체크포인트 — 스스로
+점검하기</a></li>
+<li><a href="#이-단계를-마치며" id="toc-이-단계를-마치며">이 단계를
+마치며</a></li>
+</ul></li><li><a href="Part2_02.html" title="2단계 · Tetris — 알고리즘과 그리드">2단계 · Tetris</a></li><li><a href="Part2_03.html" title="3단계 · Dino — 물리와 스크롤">3단계 · Dino</a></li><li><a href="Part2_04.html" title="4단계 · Road Fighter — 엔티티 시스템과 리소스">4단계 · Road Fighter</a></li><li><a href="Part2_05.html" title="번외 · GameDevTycoon 이식 — C에서 C++로">번외 · Tycoon 이식</a></li><li><a href="Part2_06.html" title="5단계 · Galaga — 오브젝트 풀링">5단계 · Galaga</a></li><li><a href="Part2_07.html" title="6단계 · Maze — 알고리즘 심화 (생성 + 탐색)">6단계 · Maze</a></li><li><a href="Part2_08.html" title="7단계 · Battle City — 종합 캡스톤 (맵 생성 + 풀링)">7단계 · Battle City</a></li><li><a href="Part2_09.html" title="확장 · Pac-Man — 유령 AI와 상태머신">확장 · Pac-Man</a></li><li class="grp">부록</li><li><a href="Appendix.html" title="부록 — 용어집 · 핵심 이슈 · 요약">부록</a></li></ul></nav>
+</aside>
+<main class="reader">
+  <article class="page">
+<h1 id="1단계--snake--자료구조충돌상태머신">1단계 · Snake —
+자료구조·충돌·상태머신</h1>
+<div class="chapter-badge">
+
+<p><strong>단계 1</strong> · 게임 <code>Snake</code> · 씬 클래스
+<code>SnakeContent : public IGameContent</code> <strong>처음 배우는
+기술</strong> — <code>vector&lt;T*&gt;</code>
+<code>new/delete·소유권</code> <code>이터레이터 순회</code>
+<code>충돌 판정</code> <code>방향 입력·역주행 차단</code>
+<code>상태머신(페이즈)</code> <code>이동 틱 타이머</code> <strong>예상
+학습 시간</strong> — 3–5시간</p>
+</div>
+
+<blockquote>
+<p>Snake는 커리큘럼의 <strong>출발점</strong>이다. "플레이어의 입력이
+자료구조를 바꾸고 → 충돌이 규칙을 만드는" 상호작용의 최소 완성형을
+만든다. 여기서 익힌 "오브젝트를 리스트로 관리 + 충돌 + 상태머신"이, 이후
+모든 게임의 토대가 된다.</p>
+</blockquote>
+<h2 id="이-단계의-학습-목표">이 단계의 학습 목표</h2>
+<p>이 챕터를 마치면 다음을 할 수 있다.</p>
+<ol type="1">
+<li><code>IContent</code> → <code>IGameContent</code> →
+<code>SnakeContent</code> 로 이어지는 <strong>상속 구조</strong>를 읽고,
+각 계층이 무엇을 책임지는지 설명할 수 있다.</li>
+<li><code>std::vector&lt;Snake*&gt;</code> 로 뱀의 몸통을 관리하고,
+<code>new</code>/<code>delete</code> 로 <strong>힙 메모리와
+소유권</strong>을 직접 다룰 수 있다.</li>
+<li>"몸통 팔로우 이동" 알고리즘 — 각 마디가 앞 마디의 직전 위치를
+물려받는 방식 — 을 그림으로 설명할 수 있다.</li>
+<li>머리 vs (벽 / 몸 / 아이템 / 트랩 / 터널)의 <strong>충돌
+판정</strong>을 좌표 비교로 구현할 수 있다.</li>
+<li><code>lastDirect</code> 로 <strong>역주행 입력을 막는</strong>
+이유와 방법을 안다.</li>
+<li><code>_EPhase(TITLE/INGAME)</code> 와 서브 메뉴로
+<strong>상태머신</strong>을 구성할 수 있다.</li>
+</ol>
+<h2 id="왜-snake가-출발점인가">왜 Snake가 출발점인가</h2>
+<p>2부의 첫 게임으로 Snake를 고른 데는 이유가 있다. Snake는 <strong>가장
+적은 개념으로 "게임이란 무엇인가"의 본질</strong>을 담기 때문이다.</p>
+<p>게임은 결국 세 가지가 맞물려 돈다. <strong>① 상태(자료구조)</strong>
+가 있고, <strong>② 입력이 그 상태를 바꾸고</strong>, <strong>③
+규칙(충돌)이 승패를 만든다.</strong> Snake에서는 이 셋이 가장 순수하게
+드러난다 — 뱀의 몸통이 상태(리스트)이고, 방향키가 입력이며, "머리가
+무엇에 닿았는가"가 규칙이다. 여기에 화면 전환을 담당하는 상태머신(타이틀
+↔︎ 인게임)을 얹으면, 이후 모든 게임이 공유할 <strong>표준 게임
+구조</strong>가 완성된다.</p>
+<p>또 하나 — Snake는 오브젝트를 <strong>가장 순진한 방법</strong>으로
+관리한다. 몸통 마디, 아이템, 트랩을 전부 <code>new</code> 로 힙에 만들고
+<code>delete</code> 로 지운다. 이 "순진한 관리"를 먼저 겪어야, 5단계
+Galaga에서 배울 <strong>오브젝트 풀링</strong>의 가치를 체감할 수 있다.
+Snake는 그 대조 학습의 출발점이기도 하다.</p>
+<blockquote>
+<p><strong>누적의 시작점.</strong> Snake의
+<code>vector&lt;Snake*&gt;</code> 관리 → Dino·Road Fighter의 값 타입
+벡터 → Galaga·Battle City의 오브젝트 풀. 이 발전의 첫 계단이 여기다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-1--게임-위에-게임-얹기--상속-구조">개념 1 · 게임 위에 게임
+얹기 — 상속 구조</h2>
+<p>Snake는 <code>main.cpp</code> 의 게임 루프를 직접 건드리지 않는다.
+대신 엔진이 정해 둔 <strong>인터페이스를 상속</strong>해, 정해진
+빈칸(<code>OnUpdate</code>, <code>OnRender</code> …)만 채운다. 이 상속
+사슬을 이해하는 것이 첫걸음이다.</p>
+<p><strong>맨 아래 — <code>IContent</code> (순수 인터페이스).</strong>
+모든 씬이 지켜야 할 최소 약속이다. 네 개의 순수 가상 함수와 가상
+소멸자뿐, 구현은 하나도 없다.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> IContent abstract       <span class="co">// abstract: 이 클래스 자체로는 객체를 못 만든다</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="op">~</span>IContent<span class="op">()</span> <span class="op">=</span> <span class="cf">default</span><span class="op">;</span>   <span class="co">// 가상 소멸자 — 자식을 안전하게 delete</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnInit<span class="op">()</span>   <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>     <span class="co">// = 0: 순수 가상. 자식이 반드시 구현</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnRelease<span class="op">()=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnUpdate<span class="op">()</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnRender<span class="op">()</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<ul>
+<li><strong><code>= 0</code>(순수 가상 함수)</strong> 은 "선언만 있고
+몸통은 없다. 자식이 반드시 채워라"는 뜻이다. 그래서
+<code>IContent</code> 는 그 자체로 객체를 만들 수 없는 <strong>추상
+클래스</strong>다. 게임 루프가 요구하는 4개 메서드의
+<strong>계약서</strong>인 셈이다.</li>
+<li><strong><code>virtual ~IContent()</code></strong> — 소멸자가
+<code>virtual</code> 이어야, <code>IContent*</code> 포인터로
+자식(Snake)을 <code>delete</code> 할 때 자식의 소멸자가 제대로 불린다.
+힙 멤버를 가진 씬(Snake의 벡터들)에서 이건 필수다.</li>
+</ul>
+<p><strong>중간 — <code>IGameContent</code> (게임용 껍데기).</strong>
+대부분의 게임은 "타이틀 화면 → 인게임"이라는 공통 흐름을 가진다. 그 공통
+부분을 여기서 한 번 구현해 둔다.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> IGameContent <span class="op">:</span> <span class="kw">public</span> IContent</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">enum</span> <span class="kw">class</span> _EPhase <span class="op">{</span> NONE<span class="op">,</span> TITLE<span class="op">,</span> INGAME <span class="op">};</span>   <span class="co">// 게임의 큰 상태</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">protected</span><span class="op">:</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    _EPhase currentPhase <span class="op">=</span> _EPhase<span class="op">::</span>NONE<span class="op">;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnUpdate<span class="op">();</span>   <span class="co">// IContent 의 순수 가상을 여기서 &#39;구현&#39;한다</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnRender<span class="op">();</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 게임마다 다른 부분은 다시 순수 가상으로 자식에게 넘긴다</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnTitleUpdate<span class="op">()</span>  <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnTitleRender<span class="op">()</span>  <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnInGameUpdate<span class="op">()</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnInGameRender<span class="op">()</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p><code>IGameContent::OnUpdate</code> 는 무엇을 할까? 현재 페이즈에
+따라 <strong>적절한 함수로 갈라 주는 교통정리</strong> 만 한다.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> IGameContent<span class="op">::</span>OnUpdate<span class="op">()</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span> <span class="op">(</span>currentPhase<span class="op">)</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> _EPhase<span class="op">::</span>TITLE<span class="op">:</span>  OnTitleUpdate<span class="op">();</span>  <span class="cf">break</span><span class="op">;</span>   <span class="co">// 타이틀이면 타이틀 갱신</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> _EPhase<span class="op">::</span>INGAME<span class="op">:</span> OnInGameUpdate<span class="op">();</span> <span class="cf">break</span><span class="op">;</span>   <span class="co">// 인게임이면 인게임 갱신</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">default</span><span class="op">:</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>OnRender</code> 도 똑같이 <code>currentPhase</code> 를 보고
+<code>OnTitleRender</code> 또는 <code>OnInGameRender</code> 를 부른다.
+<strong>엔진은 "지금이 타이틀인가 인게임인가"만 판단하고, 그 안에서
+무엇을 그릴지는 게임에게 맡긴다.</strong></p>
+<p><strong>맨 위 — <code>SnakeContent</code> (실제 게임).</strong> 이제
+Snake는 <code>IGameContent</code> 를 상속해, 남은 네 개의
+빈칸(<code>OnTitleUpdate/Render</code>,
+<code>OnInGameUpdate/Render</code>)과 초기화/해제(<code>OnInit</code>,
+<code>OnRelease</code>)만 채우면 된다.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SnakeContent <span class="op">:</span> <span class="kw">public</span> IGameContent</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... 뱀·아이템·트랩·터널 데이터 ...</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnInit<span class="op">();</span>          <span class="co">// 씬 진입 시 1회</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnRelease<span class="op">();</span>       <span class="co">// 씬 이탈/종료 시</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnTitleUpdate<span class="op">();</span>   <span class="co">// 타이틀 메뉴 조작</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnTitleRender<span class="op">();</span>   <span class="co">// 타이틀 화면</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnInGameUpdate<span class="op">();</span>  <span class="co">// ★ 게임 로직의 심장</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="dt">void</span> OnInGameRender<span class="op">();</span>  <span class="co">// 게임 화면</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<blockquote>
+<p><strong>이 구조의 힘.</strong> Tetris도, Dino도, Battle City도 전부
+이 네 칸을 채우는 방식으로 만든다. 게임 루프도, 페이즈 분기도, 렌더
+타이밍도 다시 짤 필요가 없다. <strong>"빈칸 채우기"만으로 새 게임이
+태어난다.</strong> 이것이 1부의 함수·구조체가 2부의 상속·인터페이스로
+자란 모습이다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-2--상태머신--타이틀과-인게임을-오가다">개념 2 · 상태머신 —
+타이틀과 인게임을 오가다</h2>
+<p>Snake는 두 개의 큰 상태를 가진다. <strong>타이틀</strong>(시작/종료
+메뉴)과 <strong>인게임</strong>(실제 플레이). 그 위에 타이틀 안에서만
+쓰는 서브 상태 <code>_ESELECT</code>(커서가 START에 있나 EXIT에 있나)가
+얹힌다.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> <span class="kw">class</span> _ESELECT <span class="op">{</span> NONE<span class="op">,</span> START<span class="op">,</span> EXIT<span class="op">,</span> END <span class="op">};</span>   <span class="co">// 타이틀 메뉴 커서</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> <span class="kw">class</span> _EDIRECT <span class="op">{</span> NONE<span class="op">,</span> RIGHT<span class="op">,</span> LEFT<span class="op">,</span> UP<span class="op">,</span> DOWN <span class="op">};</span> <span class="co">// 뱀 진행 방향</span></span></code></pre></div>
+<p>타이틀에서 위아래 키로 커서를 옮기고, Enter로 확정한다.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> SnakeContent<span class="op">::</span>OnTitleUpdate<span class="op">()</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_DOWN<span class="op">))</span> <span class="op">{</span>                 <span class="co">// ↓ : 커서 아래로</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        select <span class="op">=</span> <span class="op">(</span>_ESELECT<span class="op">)((</span><span class="dt">int</span><span class="op">)</span>select <span class="op">+</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>select <span class="op">==</span> _ESELECT<span class="op">::</span>END<span class="op">)</span> select <span class="op">=</span> _ESELECT<span class="op">::</span>START<span class="op">;</span>  <span class="co">// 끝이면 처음으로 (순환)</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_UP<span class="op">))</span> <span class="op">{</span>                   <span class="co">// ↑ : 커서 위로</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        select <span class="op">=</span> <span class="op">(</span>_ESELECT<span class="op">)((</span><span class="dt">int</span><span class="op">)</span>select <span class="op">-</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>select <span class="op">==</span> _ESELECT<span class="op">::</span>NONE<span class="op">)</span> select <span class="op">=</span> _ESELECT<span class="op">::</span>EXIT<span class="op">;</span>  <span class="co">// 처음보다 위면 끝으로</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_RETURN<span class="op">))</span> <span class="op">{</span>               <span class="co">// Enter : 확정</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">switch</span> <span class="op">(</span>select<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> _ESELECT<span class="op">::</span>START<span class="op">:</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>            currentPhase <span class="op">=</span> _EPhase<span class="op">::</span>INGAME<span class="op">;</span>          <span class="co">// → 인게임으로 전환</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> _ESELECT<span class="op">::</span>EXIT<span class="op">:</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>            SCENE<span class="op">-&gt;</span>ChangeContentWithLoading<span class="op">(</span>         <span class="co">// → 로딩 연출 거쳐 프레임워크 타이틀 씬으로</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>                <span class="op">(</span><span class="dt">int</span><span class="op">)</span>_ECONTENT<span class="op">::</span>LOAD<span class="op">,</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span>_ECONTENT<span class="op">::</span>TITLE<span class="op">);</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">default</span><span class="op">:</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>핵심은 <code>currentPhase = _EPhase::INGAME;</code> 한 줄이다. 이
+대입 하나로 다음 프레임부터 엔진의 <code>OnUpdate</code> 가
+<code>OnTitleUpdate</code> 대신 <code>OnInGameUpdate</code> 를 부르게
+된다 — <strong>상태 전환은 곧 변수 하나를 바꾸는 일</strong>이다. 1부
+타이쿤의 <code>gameOver</code> 플래그가 상태의 전부였던 것과 같은
+원리이지만, 이제는 페이즈가 여럿이다.</p>
+<p>반대로 인게임에서 타이틀로 돌아가는 길도 두 개다.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> SnakeContent<span class="op">::</span>OnInGameUpdate<span class="op">()</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_SPACE<span class="op">))</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        currentPhase <span class="op">=</span> _EPhase<span class="op">::</span>TITLE<span class="op">;</span>   <span class="co">// SPACE: 수동으로 타이틀 복귀</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... (플레이 로직) ...</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>life <span class="op">&lt;=</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        currentPhase <span class="op">=</span> _EPhase<span class="op">::</span>TITLE<span class="op">;</span>   <span class="co">// 생명 0: 게임 오버 → 타이틀</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>상태 전이도</strong></p>
+<pre><code>        Enter(START)
+  TITLE ───────────────▶ INGAME
+    ▲                      │
+    │  SPACE / life&lt;=0     │
+    └──────────────────────┘
+    │
+    │ Enter(EXIT)
+    ▼
+  프레임워크 타이틀 씬 (다른 게임 선택)</code></pre>
+<hr />
+<h2 id="개념-3--동적-자료구조--vectorsnake-와-소유권">개념 3 · 동적
+자료구조 — <code>vector&lt;Snake*&gt;</code> 와 소유권</h2>
+<p>뱀의 몸통은 길이가 변한다. 아이템을 먹을 때마다 한 마디씩 는다.
+<strong>길이가 실행 중에 변하는 목록</strong> — 이것이
+<code>std::vector</code> 를 쓰는 이유다. 1부의 고정
+배열(<code>Employee staff[4]</code>)과 동적 배열(<code>realloc</code>)을
+지나온 우리에게, <code>vector</code> 는 그 자연스러운 다음 단계다.
+<code>vector</code> 는 "필요하면 알아서 커지는 배열"이다.</p>
+<p>Snake는 몸통 마디 하나를 작은 클래스로 정의한다.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Snake <span class="op">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> xPos<span class="op">,</span> yPos<span class="op">;</span>         <span class="co">// 타일 좌표</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>string shape<span class="op">;</span>      <span class="co">// 글리프 (&quot;■&quot;)</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">short</span> color<span class="op">;</span>   <span class="co">// 색</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    Snake<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">,</span> <span class="bu">std::</span>string s<span class="op">,</span> <span class="dt">unsigned</span> <span class="dt">short</span> c<span class="op">)</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">:</span> xPos<span class="op">(</span>x<span class="op">),</span> yPos<span class="op">(</span>y<span class="op">),</span> shape<span class="op">(</span>s<span class="op">),</span> color<span class="op">(</span>c<span class="op">)</span> <span class="op">{}</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span>Snake<span class="op">*&gt;</span> snake<span class="op">;</span>  <span class="co">// 몸통: 머리=맨 앞, 꼬리=맨 뒤. 포인터를 담는다</span></span></code></pre></div>
+<p><code>vector&lt;Snake*&gt;</code> — <strong>객체가 아니라 포인터를
+담는</strong> 벡터다. 각 마디는 <code>new</code> 로 힙에 만들고, 그
+주소를 벡터에 넣는다. 이건 1부에서 배운 포인터의 실전이다: 각
+<code>Snake*</code> 는 힙 어딘가에 사는 마디 하나를 가리킨다.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> SnakeContent<span class="op">::</span>SnakeInit<span class="op">()</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 기존 몸통을 전부 해제 (delete)</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>snakeIter <span class="op">=</span> snake<span class="op">.</span>begin<span class="op">();</span> snakeIter <span class="op">!=</span> snake<span class="op">.</span>end<span class="op">();</span> snakeIter<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">delete</span> <span class="op">(*</span>snakeIter<span class="op">);</span>        <span class="co">// 힙 메모리 반납</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">(*</span>snakeIter<span class="op">)</span> <span class="op">=</span> <span class="kw">nullptr</span><span class="op">;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    snake<span class="op">.</span>clear<span class="op">();</span>                  <span class="co">// 벡터 비우기</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    Snake<span class="op">*</span> head <span class="op">=</span> <span class="kw">new</span> Snake<span class="op">(</span>SPAWN_X<span class="op">,</span> SPAWN_Y<span class="op">,</span> <span class="st">&quot;■&quot;</span><span class="op">,</span> GREEN<span class="op">);</span>  <span class="co">// 머리 하나로 리셋</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    snake<span class="op">.</span>push_back<span class="op">(</span>head<span class="op">);</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    direct <span class="op">=</span> lastDirect <span class="op">=</span> _EDIRECT<span class="op">::</span>NONE<span class="op">;</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>여기서 <strong>소유권(ownership)</strong> 이라는 개념이 처음
+등장한다. <code>new</code> 로 만든 것은 누군가 반드시
+<code>delete</code> 해야 한다 — 안 그러면 <strong>메모리
+누수</strong>다. Snake의 규칙은 명확하다: <strong>씬이 자기가
+<code>new</code> 한 모든 오브젝트를 책임지고 해제한다.</strong> 그래서
+씬이 사라질 때 <code>OnRelease</code> 가 벡터를 전부 순회하며
+<code>delete</code> 한다.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> SnakeContent<span class="op">::</span>OnRelease<span class="op">()</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    IGameContent<span class="op">::</span>OnRelease<span class="op">();</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>snakeIter <span class="op">=</span> snake<span class="op">.</span>begin<span class="op">();</span> snakeIter <span class="op">!=</span> snake<span class="op">.</span>end<span class="op">();</span> snakeIter<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">delete</span> <span class="op">(*</span>snakeIter<span class="op">);</span>        <span class="co">// 몸통 마디마다 해제</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">(*</span>snakeIter<span class="op">)</span> <span class="op">=</span> <span class="kw">nullptr</span><span class="op">;</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    snake<span class="op">.</span>clear<span class="op">();</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// itemList, trapList, tunnelList 도 같은 방식으로 delete + clear ...</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<blockquote>
+<p><strong>⚠️ 이 방식의 한계 — 커리큘럼의 복선.</strong> 매 아이템마다
+<code>new</code>, 리셋마다 <code>delete</code> … 이 "순진한 관리"는
+Snake처럼 오브젝트가 적을 땐 문제없다. 하지만 초당 총알 수십 개가 생겼다
+사라지는 Galaga(5단계)에서는 이 방식이 성능 병목이 된다. 그때 배우는
+것이 <strong>오브젝트 풀</strong> — 미리 잡아 둔 슬롯을 켜고 끄며
+재사용해 <code>new/delete</code> 를 0회로 만드는 기법이다. Snake의
+<code>new/delete</code> 를 똑똑히 기억해 두자. 5단계에서 정확히 이
+지점을 개선한다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-4--몸통-팔로우-이동--뱀은-어떻게-기어가는가">개념 4 · 몸통
+팔로우 이동 — 뱀은 어떻게 기어가는가</h2>
+<p>뱀 이동의 고전 알고리즘은 우아하다. <strong>머리를 한 칸 옮기고, 각
+마디는 바로 앞 마디가 방금 전까지 있던 자리로 따라간다.</strong>
+꼬리부터 옮기는 게 아니라 "앞 마디의 직전 위치를 물려받는" 방식이다.</p>
+<p><strong>그림으로 보는 팔로우 이동</strong> (머리 <code>H</code>, 몸통
+<code>1 2</code>, 오른쪽으로 이동)</p>
+<pre><code>  이동 전:   H 1 2               (H는 (5,5), 1은 (4,5), 2는 (3,5))
+                 │
+             각 마디가 &#39;앞 마디의 직전 위치&#39;를 계승:
+               2 ← 1의 옛 자리(4,5)
+               1 ← H의 옛 자리(5,5)
+             그 다음 머리만 진행 방향으로 +1:
+               H → (6,5)
+  이동 후:     1 2 H  →  화면상:   2 1 H   (한 칸 오른쪽으로 전체가 흐른 것처럼 보인다)</code></pre>
+<p>코드로는 이렇게 구현된다. 벡터를 머리부터 순회하며 "직전에 저장해 둔
+위치"를 다음 마디에 넘겨준다.</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> saveXPos <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> saveYPos <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">// &#39;앞 마디의 옛 위치&#39;를 잠시 담아 두는 변수</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>snakeIter <span class="op">=</span> snake<span class="op">.</span>begin<span class="op">();</span> snakeIter <span class="op">!=</span> snake<span class="op">.</span>end<span class="op">();</span> snakeIter<span class="op">++)</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>snakeIter <span class="op">==</span> snake<span class="op">.</span>begin<span class="op">())</span> <span class="op">{</span>          <span class="co">// 머리(맨 앞)라면</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        saveXPos <span class="op">=</span> <span class="op">(*</span>snakeIter<span class="op">)-&gt;</span>xPos<span class="op">;</span>         <span class="co">// 머리의 현재 위치만 저장하고</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>        saveYPos <span class="op">=</span> <span class="op">(*</span>snakeIter<span class="op">)-&gt;</span>yPos<span class="op">;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span><span class="op">;</span>                              <span class="co">// 머리 자신은 아직 안 옮긴다</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> xPos <span class="op">=</span> saveXPos<span class="op">,</span> yPos <span class="op">=</span> saveYPos<span class="op">;</span>      <span class="co">// 앞 마디의 옛 위치를 가져와</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    saveXPos <span class="op">=</span> <span class="op">(*</span>snakeIter<span class="op">)-&gt;</span>xPos<span class="op">;</span>             <span class="co">// 이 마디의 현재 위치를 다음을 위해 저장</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    saveYPos <span class="op">=</span> <span class="op">(*</span>snakeIter<span class="op">)-&gt;</span>yPos<span class="op">;</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">(*</span>snakeIter<span class="op">)-&gt;</span>xPos <span class="op">=</span> xPos<span class="op">;</span>                 <span class="co">// 이 마디를 앞 마디의 옛 자리로 이동</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">(*</span>snakeIter<span class="op">)-&gt;</span>yPos <span class="op">=</span> yPos<span class="op">;</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>MoveSnake<span class="op">();</span>          <span class="co">// 마지막으로 머리를 진행 방향으로 1칸</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>lastDirect <span class="op">=</span> direct<span class="op">;</span>  <span class="co">// 이번 프레임의 방향을 기록 (역주행 차단에 사용)</span></span></code></pre></div>
+<p><code>MoveSnake()</code> 는 방향에 따라 머리만 옮긴다.</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> SnakeContent<span class="op">::</span>MoveSnake<span class="op">()</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span> <span class="op">(</span>direct<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> _EDIRECT<span class="op">::</span>RIGHT<span class="op">:</span> <span class="op">(*</span>snake<span class="op">.</span>begin<span class="op">())-&gt;</span>xPos<span class="op">++;</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> _EDIRECT<span class="op">::</span>LEFT<span class="op">:</span>  <span class="op">(*</span>snake<span class="op">.</span>begin<span class="op">())-&gt;</span>xPos<span class="op">--;</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> _EDIRECT<span class="op">::</span>UP<span class="op">:</span>    <span class="op">(*</span>snake<span class="op">.</span>begin<span class="op">())-&gt;</span>yPos<span class="op">--;</span> <span class="cf">break</span><span class="op">;</span>   <span class="co">// 콘솔 y는 아래로 증가</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> _EDIRECT<span class="op">::</span>DOWN<span class="op">:</span>  <span class="op">(*</span>snake<span class="op">.</span>begin<span class="op">())-&gt;</span>yPos<span class="op">++;</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">default</span><span class="op">:</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>(*snake.begin())</code> 이 머리다. <code>snake.begin()</code>
+은 벡터의 첫 원소를 가리키는 이터레이터, <code>*</code> 로 역참조하면 그
+<code>Snake*</code>, 다시 <code>-&gt;xPos</code> 로 머리의 좌표에
+닿는다. 1부의 포인터·역참조가 여기서 그대로 쓰인다.</p>
+<hr />
+<h2 id="개념-5--충돌-판정--머리가-무엇에-닿았는가">개념 5 · 충돌 판정 —
+머리가 무엇에 닿았는가</h2>
+<p>Snake의 규칙은 전부 "머리가 무엇과 같은 칸에 있는가"로 정해진다.
+오브젝트는 모두 정수 타일 좌표라, 충돌은 단순한 좌표 일치 비교다.</p>
+<table>
+<thead>
+<tr>
+<th>대상</th>
+<th>머리가 닿으면</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>아이템 <code>★</code></td>
+<td>성장(+1마디), 점수 +10, 아이템 재배치</td>
+</tr>
+<tr>
+<td>트랩 <code>♠</code></td>
+<td>생명 -1, 뱀 리셋</td>
+</tr>
+<tr>
+<td>터널 <code>□</code></td>
+<td>짝지어진 반대쪽으로 순간이동</td>
+</tr>
+<tr>
+<td>자기 몸</td>
+<td>생명 -1, 뱀 리셋</td>
+</tr>
+<tr>
+<td>벽</td>
+<td>생명 -1, 뱀 리셋</td>
+</tr>
+</tbody>
+</table>
+<p><strong>아이템 — 성장.</strong> 머리가 아이템 칸에 들어가면, 아이템을
+옮기고 꼬리 위치에 새 마디를 붙인다.</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>itemListIter <span class="op">=</span> itemList<span class="op">.</span>begin<span class="op">();</span> itemListIter <span class="op">!=</span> itemList<span class="op">.</span>end<span class="op">();</span> itemListIter<span class="op">++)</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">((*</span>itemListIter<span class="op">)-&gt;</span>xPos <span class="op">==</span> <span class="op">(*</span>snake<span class="op">.</span>begin<span class="op">())-&gt;</span>xPos <span class="op">&amp;&amp;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">(*</span>itemListIter<span class="op">)-&gt;</span>yPos <span class="op">==</span> <span class="op">(*</span>snake<span class="op">.</span>begin<span class="op">())-&gt;</span>yPos<span class="op">)</span>      <span class="co">// 머리 == 아이템?</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>        MoveItem<span class="op">(*</span>itemListIter<span class="op">);</span>                              <span class="co">// 아이템 재배치</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>        snake<span class="op">.</span>push_back<span class="op">(</span><span class="kw">new</span> Snake<span class="op">(</span>                            <span class="co">// 꼬리에 새 마디 추가</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>            snake<span class="op">.</span>back<span class="op">()-&gt;</span>xPos<span class="op">,</span> snake<span class="op">.</span>back<span class="op">()-&gt;</span>yPos<span class="op">,</span> <span class="st">&quot;■&quot;</span><span class="op">,</span> DARKGREEN<span class="op">));</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>        score <span class="op">+=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>snake.back()</code> 이 꼬리다. 새 마디를 꼬리 위치에
+<code>new</code> 로 만들어 벡터에 <code>push_back</code> 한다 —
+<strong>개념 3의 소유권 규칙대로, 이 <code>new</code> 도 언젠가
+<code>OnRelease</code>/<code>SnakeInit</code> 에서 <code>delete</code>
+된다.</strong></p>
+<p><strong>자기 몸 충돌.</strong> 머리를 몸통(두 번째 마디부터)과 하나씩
+비교한다.</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>snakeIter <span class="op">=</span> snake<span class="op">.</span>begin<span class="op">()</span> <span class="op">+</span> <span class="dv">1</span><span class="op">;</span> snakeIter <span class="op">!=</span> snake<span class="op">.</span>end<span class="op">();</span> snakeIter<span class="op">++)</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">((*</span>snakeIter<span class="op">)-&gt;</span>xPos <span class="op">==</span> <span class="op">(*</span>snake<span class="op">.</span>begin<span class="op">())-&gt;</span>xPos <span class="op">&amp;&amp;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">(*</span>snakeIter<span class="op">)-&gt;</span>yPos <span class="op">==</span> <span class="op">(*</span>snake<span class="op">.</span>begin<span class="op">())-&gt;</span>yPos<span class="op">)</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>        SnakeInit<span class="op">();</span>   <span class="co">// 길이 1로 리셋</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>        life<span class="op">--;</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>snake.begin() + 1</code> 로 머리(자기 자신)는 건너뛴다. 머리를
+머리와 비교하면 항상 충돌이니, 두 번째 마디부터 봐야 한다.</p>
+<p><strong>벽 충돌.</strong> 좌표가 경계를 벗어났는지 비교한다.</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">((*</span>snake<span class="op">.</span>begin<span class="op">())-&gt;</span>xPos <span class="op">&lt;=</span> wallPosX <span class="op">||</span> <span class="op">(*</span>snake<span class="op">.</span>begin<span class="op">())-&gt;</span>yPos <span class="op">&lt;=</span> wallPosY <span class="op">||</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">(*</span>snake<span class="op">.</span>begin<span class="op">())-&gt;</span>xPos <span class="op">&gt;=</span> WALL_X <span class="op">-</span> <span class="dv">1</span> <span class="op">-</span> wallPosX <span class="op">||</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">(*</span>snake<span class="op">.</span>begin<span class="op">())-&gt;</span>yPos <span class="op">&gt;=</span> WALL_Y <span class="op">-</span> <span class="dv">1</span> <span class="op">-</span> wallPosY<span class="op">)</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    SnakeInit<span class="op">();</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    life<span class="op">--;</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>터널 워프.</strong> 각 터널은 입구·출구 한
+쌍(<code>TunnelConnect</code>)이다. 머리가 한쪽에 닿으면 반대쪽 좌표로
+옮긴 뒤 <code>MoveSnake()</code> 를 한 번 더 불러 터널에서 빠져나오게
+한다.</p>
+<hr />
+<h2 id="개념-6--방향-입력과-역주행-차단">개념 6 · 방향 입력과 역주행
+차단</h2>
+<p>뱀 게임의 고전 규칙 하나 — <strong>진행 방향의 정반대로는 꺾을 수
+없다.</strong> 오른쪽으로 가는데 왼쪽 키를 누르면 머리가 곧장 자기
+몸으로 파고들어 즉사하기 때문이다. Snake는
+<code>lastDirect</code>(직전에 실제로 이동한 방향)와 비교해 이를
+막는다.</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_RIGHT<span class="op">))</span> <span class="op">{</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>lastDirect <span class="op">!=</span> _EDIRECT<span class="op">::</span>LEFT <span class="op">||</span> snake<span class="op">.</span>size<span class="op">()</span> <span class="op">==</span> <span class="dv">1</span><span class="op">)</span>  <span class="co">// 왼쪽으로 가던 중이면 무시</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>        direct <span class="op">=</span> _EDIRECT<span class="op">::</span>RIGHT<span class="op">;</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_LEFT<span class="op">))</span> <span class="op">{</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>lastDirect <span class="op">!=</span> _EDIRECT<span class="op">::</span>RIGHT <span class="op">||</span> snake<span class="op">.</span>size<span class="op">()</span> <span class="op">==</span> <span class="dv">1</span><span class="op">)</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>        direct <span class="op">=</span> _EDIRECT<span class="op">::</span>LEFT<span class="op">;</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co">// UP / DOWN 도 같은 방식 ...</span></span></code></pre></div>
+<p>두 가지를 눈여겨보자.</p>
+<ul>
+<li><strong><code>lastDirect</code> 와 비교하지 <code>direct</code> 와
+비교하지 않는다.</strong> 한 이동 틱 안에 방향키를 두 번 누르면(예: ↑
+그리고 →) <code>direct</code> 는 중간에 바뀔 수 있다. 하지만 실제로 몸이
+움직인 마지막 방향은 <code>lastDirect</code> 다. 그래서 "직전에 정말로
+간 방향"의 반대만 막아야 안전하다.</li>
+<li><strong><code>|| snake.size() == 1</code></strong> — 길이가
+1(머리뿐)이면 몸이 없으니 어느 쪽으로 꺾어도 자기 몸에 부딪힐 수 없다.
+그래서 이때는 역주행을 허용한다.</li>
+</ul>
+<p>입력을 그대로 믿지 않고 걸러 내는 이 태도는, 1부 Snake의 표현을
+빌리면 "<strong>입력을 그대로 믿지 않는다</strong>"는 게임 프로그래밍의
+기본 감각이다.</p>
+<hr />
+<h2 id="개념-7--이동-틱--입력은-매-프레임-이동은-01초마다">개념 7 · 이동
+틱 — 입력은 매 프레임, 이동은 0.1초마다</h2>
+<p>여기까지의 이동·충돌 코드는 전부 <strong>하나의 <code>if</code>
+안</strong>에 들어 있다.</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>TIMER<span class="op">-&gt;</span>GetTickTimer<span class="op">(</span><span class="fl">0.1</span><span class="bu">f</span><span class="op">))</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 몸통 팔로우 이동 → MoveSnake → 충돌 판정들 ...</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>게임 루프는 초당 60번 도는데, 뱀이 초당 60칸씩 기어가면 눈으로 쫓을
+수 없다. 그래서 <strong>이동만 <code>GetTickTimer(0.1f)</code> 로
+0.1초(초당 10칸)에 한 번</strong>으로 제한한다. 반면 방향키 입력(개념
+6)은 이 <code>if</code> <strong>바깥</strong>에 있어 매 프레임 받는다.
+그래서 조작은 즉각 반응하고, 몸은 일정한 속도로 움직인다.</p>
+<p>이 분리가 콘솔 게임의 조작감을 만든다. <strong>"입력을 받는 주기"와
+"상태가 변하는 주기"는 달라도 된다</strong> — 이 감각은 이후 Tetris의
+DAS, Dino의 물리 적분으로 이어진다.</p>
+<hr />
+<h2 id="코드-워크스루--oningameupdate-전체-읽기">코드 워크스루 —
+<code>OnInGameUpdate</code> 전체 읽기</h2>
+<p>이제 조각들을 하나로 모아, 게임의 심장인 <code>OnInGameUpdate</code>
+의 흐름을 통째로 따라가자.</p>
+<blockquote>
+<p><strong>실제 파일:</strong>
+<code>Main/Content/SnakeContent.cpp</code> —
+<code>OnInGameUpdate()</code></p>
+</blockquote>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> SnakeContent<span class="op">::</span>OnInGameUpdate<span class="op">()</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ── ① 입력: 매 프레임 (역주행 차단 포함) ──────────────</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_SPACE<span class="op">))</span> currentPhase <span class="op">=</span> _EPhase<span class="op">::</span>TITLE<span class="op">;</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ← → ↑ ↓ : lastDirect 와 비교해 direct 갱신 (개념 6)</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ── ② 이동 틱: 0.1초마다 한 번 ────────────────────────</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>TIMER<span class="op">-&gt;</span>GetTickTimer<span class="op">(</span><span class="fl">0.1</span><span class="bu">f</span><span class="op">))</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>        <span class="co">//   a. 몸통 팔로우 이동 (개념 4)</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>        <span class="co">//   b. MoveSnake() 로 머리 1칸, lastDirect = direct</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>        <span class="co">//   c. 충돌 판정 (개념 5) — 순서가 중요하다:</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>        <span class="co">//      아이템(성장) → 트랩(리셋) → 터널(워프) → 자기 몸(리셋) → 벽(리셋)</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ── ③ 게임 오버 판정 ──────────────────────────────────</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>life <span class="op">&lt;=</span> <span class="dv">0</span><span class="op">)</span> currentPhase <span class="op">=</span> _EPhase<span class="op">::</span>TITLE<span class="op">;</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>세 구역의 <strong>위치</strong>가 설계다.</p>
+<ul>
+<li><strong>① 입력은 틱 바깥</strong> — 매 프레임 즉각 반응(개념
+7).</li>
+<li><strong>② 이동·충돌은 틱 안</strong> — 일정 속도로만 상태가 변한다.
+충돌을 이동 <strong>직후</strong> 판정하는 것도 중요하다. 머리를 옮긴 그
+자리에서 무엇에 닿았는지 봐야 하기 때문이다.</li>
+<li><strong>③ 게임 오버는 틱 바깥</strong> — <code>life</code> 가 0이 된
+즉시(틱을 기다리지 않고) 타이틀로 넘긴다.</li>
+</ul>
+<p>렌더(<code>OnInGameRender</code>)는 이 상태를 화면에 옮기기만 한다.
+우측 UI 패널(SCORE·LIFE·TIME)을 그리고, 뱀 → 아이템 → 트랩 → 터널 → 벽
+순서로 <code>OnDrawColor((*it)-&gt;xPos * 2, (*it)-&gt;yPos, …)</code>
+를 부른다. <strong>여기서도 <code>xPos * 2</code></strong> — 전각
+글리프의 콘솔 2칸 규칙(0단계 미리보기 ③)이 그대로 적용된다.</p>
+<hr />
+<h2 id="알려진-이슈에서-배우기-as-built">알려진 이슈에서 배우기
+(as-built)</h2>
+<p>Snake는 "설계 후 구현"이 아니라 <strong>이미 구현된 코드를
+문서화</strong>한 게임이라, 실제 코드에 남은 거친 부분들이 있다. 이걸
+감추지 않는 이유는, <strong>진짜 코드의 미완성에서 배우는 것이 교과서적
+완성품보다 많기 때문</strong>이다.</p>
+<table>
+<thead>
+<tr>
+<th>이슈</th>
+<th>무엇이 문제인가</th>
+<th>무엇을 배우나</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>멤버 이터레이터</strong></td>
+<td><code>snakeIter</code> 등을 클래스 멤버로 둬서, 중첩 순회 시 서로
+간섭할 위험</td>
+<td>이터레이터/인덱스는 <strong>지역 변수</strong>로 두거나 범위 기반
+<code>for</code> 를 쓰는 게 안전하다</td>
+</tr>
+<tr>
+<td><strong>재시작 시 상태 미리셋</strong></td>
+<td><code>life&lt;=0 → TITLE</code> 후 다시 START를 골라도
+<code>life/score</code> 가 리셋 안 됨 → 즉시 튕김</td>
+<td>상태 전환 시 <strong>무엇을 초기화해야 하는지</strong>를 명시적으로
+챙겨야 한다</td>
+</tr>
+<tr>
+<td><strong>stage 미증가</strong></td>
+<td>HUD에 <code>STAGE 1</code> 표시만 있고 증가 로직 없음</td>
+<td>"표시"와 "로직"은 별개다. 보이는 것이 구현된 것은 아니다</td>
+</tr>
+<tr>
+<td><strong>ESC 처리 부재</strong></td>
+<td>인게임 ESC를 소비하지 않아 <code>main.cpp</code> 로 전달 → 프로그램
+종료</td>
+<td>입력을 <strong>어느 계층이 소비하는가</strong>가 중요하다(이후
+게임은 "인게임 ESC → 타이틀" 규칙으로 통일)</td>
+</tr>
+<tr>
+<td><strong>오브젝트 풀 미사용</strong></td>
+<td><code>new/delete</code> 방식</td>
+<td>커리큘럼상 의도된 "순진한 관리". 5단계에서
+<code>Pool&lt;T,N&gt;</code> 로 개선</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>이 표는 결함 목록이 아니라 <strong>다음 게임들의 개선 항목
+목록</strong>이다. "재시작 시 상태 리셋"은 모든 게임이 챙겨야 할
+문제이고, "ESC 규칙 통일"은 Road Fighter 이후 도입되며, "오브젝트 풀"은
+Galaga의 주제다. Snake의 미완성이 곧 이후 커리큘럼의 예고편이다.</p>
+</blockquote>
+<hr />
+<h2 id="체크포인트--스스로-점검하기">체크포인트 — 스스로 점검하기</h2>
+<p><strong>Q1.</strong> <code>IContent</code> 의 네 메서드에
+<code>= 0</code> 이 붙어 있다. 이것이 뜻하는 바는? 그리고
+<code>IContent</code> 로 직접 객체를 만들 수 있는가?</p>
+<p><strong>Q2.</strong> <code>IGameContent::OnUpdate</code> 는 게임
+로직을 직접 실행하지 않는다. 그럼 무엇을 하는가?</p>
+<p><strong>Q3.</strong> 몸통 팔로우 이동에서, 왜 머리를 먼저 옮기지 않고
+몸통부터 "앞 마디의 옛 위치"로 옮기는가?</p>
+<p><strong>Q4.</strong> 역주행 차단에서 <code>direct</code> 가 아니라
+<code>lastDirect</code> 와 비교하는 이유는?</p>
+<p><strong>Q5.</strong> <code>new</code> 로 만든 뱀 마디는 어디서
+<code>delete</code> 되는가? (두 곳)</p>
+<details><summary><b>해설 펼치기</b></summary>
+
+<p><strong>A1.</strong> <code>= 0</code> 은 <strong>순수 가상
+함수</strong> — 선언만 있고 구현이 없으니 자식이 반드시 채워야 한다.
+그래서 <code>IContent</code> 는 <strong>추상 클래스</strong>이고, 직접
+객체를 만들 수 없다(<code>abstract</code> 로도 명시돼 있다). 게임 루프가
+요구하는 4개 메서드의 계약서 역할을 한다.</p>
+<p><strong>A2.</strong> <strong>교통정리(dispatch)</strong>.
+<code>currentPhase</code> 를 보고 타이틀이면 <code>OnTitleUpdate</code>,
+인게임이면 <code>OnInGameUpdate</code> 를 부른다. "지금이 어느
+페이즈인가"만 판단하고, 실제 내용은 게임(자식)에게 맡긴다.</p>
+<p><strong>A3.</strong> 머리를 먼저 옮기면 머리의 <strong>옛 위치가
+사라져</strong> 다음 마디가 물려받을 자리가 없어진다. 그래서 "앞 마디의
+직전 위치를 물려받기"를 먼저 하고, 맨 마지막에 머리를 진행 방향으로
+옮긴다.</p>
+<p><strong>A4.</strong> 한 이동 틱 안에 방향키를 여러 번 누르면
+<code>direct</code> 는 중간에 바뀔 수 있다. 실제로 몸이 움직인 마지막
+방향은 <code>lastDirect</code> 다. "직전에 정말 간 방향"의 반대만
+막아야, ↑→↓ 를 빠르게 눌러 몸으로 파고드는 사고를 정확히 막을 수
+있다.</p>
+<p><strong>A5.</strong> ① 씬이 사라질 때 <code>OnRelease()</code>, ②
+뱀이 리셋될 때 <code>SnakeInit()</code>. 두 곳 모두 벡터를 순회하며
+<code>delete</code> 하고 <code>clear()</code> 한다. <code>new</code> 한
+주체가 <code>delete</code> 도 책임진다 — <strong>소유권</strong>
+규칙.</p>
+</details>
+
+<hr />
+<h2 id="이-단계를-마치며">이 단계를 마치며</h2>
+<table>
+<thead>
+<tr>
+<th>얻은 것</th>
+<th>다음에 쓰는 곳</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IGameContent</code> 상속으로 게임 만들기</td>
+<td><strong>7개 게임 전부</strong> — 빈칸 채우기 패턴</td>
+</tr>
+<tr>
+<td><code>vector&lt;T*&gt;</code> + <code>new/delete</code> +
+소유권</td>
+<td>Dino·RF(값 벡터)로 개선 → Galaga·BC(풀)</td>
+</tr>
+<tr>
+<td>충돌 판정(좌표 일치)</td>
+<td>Dino·RF·BC의 AABB·타일 충돌로 심화</td>
+</tr>
+<tr>
+<td>상태머신(페이즈)</td>
+<td>모든 게임 + 각자의 서브 상태</td>
+</tr>
+</tbody>
+</table>
+<p>Snake로 우리는 "살아 있는 게임"의 최소 완성형을 만들었다. 입력이
+자료구조를 바꾸고, 충돌이 규칙을 만들고, 상태머신이 화면을 오간다. 다음
+단계 Tetris는 여기에 <strong>명시적 규칙과 알고리즘</strong>(회전·라인
+클리어·7-bag)을 얹는다. 직관적 충돌에서 설계된 알고리즘으로 — 한 계단
+오른다.</p>
+<blockquote>
+<p><strong>← 이전:</strong> <a href="Part2_00.html">0단계 — 엔진
+(FrameWork)</a> | <strong>다음 →</strong> <a href="Part2_02.html">2단계 —
+Tetris: 알고리즘과 그리드</a></p>
+</blockquote>
+  </article>
+</main>
+<footer class="site-footer">
+  <a href="index.html">← 목차로 돌아가기</a>
+  <span>CSGP Learn · 표시용 원고 (코드는 UTF-8 사본)</span>
+</footer>
+<script src="book-nav.js"></script>
+</body>
+</html>

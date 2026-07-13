@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>E 모듈 · 11–12장 — 동적 메모리와 랜덤: 회사가 자라고, 시장이
+살아난다</title>
+<script>try{var _t=localStorage.getItem('csgp-theme');if(_t)document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
+<style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<link rel="stylesheet" href="book.css">
+
+</head>
+<body>
+<div class="topbar">
+  <button class="drawer-toggle" id="drawerToggle" type="button" aria-label="목차 열기/닫기" aria-expanded="false">☰ 목차</button>
+  <a class="home" href="index.html">📘 CSGP</a>
+  <span class="crumb">콘솔 게임으로 배우는 C · C++</span>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="라이트/다크 전환">🌙</button>
+</div>
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" aria-label="책 목차">
+  <div class="drawer-dash">
+    <div class="dash-title">콘솔 게임으로 배우는 C · C++</div>
+    <div class="dash-sub">학습 목차 · 대시보드</div>
+    <div class="dash-progress"><div class="dash-bar"><i id="dashBar"></i></div><span class="dash-pct" id="dashPct"></span></div>
+    <input class="drawer-search" id="drawerSearch" type="search" placeholder="🔍 챕터 검색…" aria-label="챕터 검색">
+  </div>
+  <nav class="booknav" aria-label="책 목차"><a class="booknav-home" href="index.html">📘 전체 목차</a><ul class="booknav-list"><li class="grp">1부 · C 기본 문법</li><li><a href="Part1_00.html" title="1부 — C 기본 문법: 회사를 키우며 배우는 언어">1부 개요</a></li><li><a href="Part1_01.html" title="A 모듈 · 1–4장 — 값·계산·분기: 회사에 숫자를 세우다">A · 값·계산·분기</a></li><li><a href="Part1_02.html" title="B 모듈 · 5–6장 — 반복문과 함수: 회사에 심장을 달다">B · 반복문·함수</a></li><li><a href="Part1_03.html" title="C 모듈 · 7–8장 — 배열과 문자열: 회사에 사람과 이름을 채우다">C · 배열·문자열</a></li><li><a href="Part1_04.html" title="D 모듈 · 9–10장 — 구조체와 포인터: 데이터에 모양을 주다">D · 구조체·포인터</a></li><li class="active"><a href="Part1_05.html" title="E 모듈 · 11–12장 — 동적 메모리와 랜덤: 회사가 자라고, 시장이 살아난다">E · 메모리·랜덤</a><ul class="sections">
+<li><a href="#이-모듈의-학습-목표" id="toc-이-모듈의-학습-목표">이
+모듈의 학습 목표</a></li>
+<li><a href="#왜-지금-동적-메모리와-랜덤인가"
+id="toc-왜-지금-동적-메모리와-랜덤인가">왜 지금, 동적 메모리와
+랜덤인가</a></li>
+<li><a href="#11장--동적-메모리--필요한-만큼-자란다"
+id="toc-11장--동적-메모리--필요한-만큼-자란다">11장 · 동적 메모리 —
+필요한 만큼 자란다</a></li>
+<li><a href="#12장--랜덤과-시간--게임이-살아나다"
+id="toc-12장--랜덤과-시간--게임이-살아나다">12장 · 랜덤과 시간 — 게임이
+살아나다</a></li>
+<li><a href="#코드-워크스루--실제-소스에서-보는-힙과-난수"
+id="toc-코드-워크스루--실제-소스에서-보는-힙과-난수">코드 워크스루 —
+실제 소스에서 보는 힙과 난수</a></li>
+<li><a href="#그림으로-정리--힙-배열의-성장과-확률의-눈금"
+id="toc-그림으로-정리--힙-배열의-성장과-확률의-눈금">그림으로 정리 — 힙
+배열의 성장과 확률의 눈금</a></li>
+<li><a href="#체크포인트--스스로-점검하기"
+id="toc-체크포인트--스스로-점검하기">체크포인트 — 스스로
+점검하기</a></li>
+<li><a href="#실습-미션--뽑기가챠-시뮬레이터-gachac-star"
+id="toc-실습-미션--뽑기가챠-시뮬레이터-gachac-star">실습 미션 —
+뽑기(가챠) 시뮬레이터 <code>gacha.c</code> ⭐</a></li>
+<li><a href="#이-모듈을-마치며" id="toc-이-모듈을-마치며">이 모듈을
+마치며</a></li>
+</ul></li><li><a href="Part1_06.html" title="F 모듈 · 13–15장 — 파일·모듈·캡스톤: 회사를 저장하고, 게임을 출시하다">F · 파일·모듈·캡스톤</a></li><li class="grp">2부 · C++ 프레임워크</li><li><a href="Part2_00.html" title="2부 — C++ 콘솔 게임 프레임워크: 7개의 게임으로 오르기">2부 개요</a></li><li><a href="Part2_01.html" title="1단계 · Snake — 자료구조·충돌·상태머신">1단계 · Snake</a></li><li><a href="Part2_02.html" title="2단계 · Tetris — 알고리즘과 그리드">2단계 · Tetris</a></li><li><a href="Part2_03.html" title="3단계 · Dino — 물리와 스크롤">3단계 · Dino</a></li><li><a href="Part2_04.html" title="4단계 · Road Fighter — 엔티티 시스템과 리소스">4단계 · Road Fighter</a></li><li><a href="Part2_05.html" title="번외 · GameDevTycoon 이식 — C에서 C++로">번외 · Tycoon 이식</a></li><li><a href="Part2_06.html" title="5단계 · Galaga — 오브젝트 풀링">5단계 · Galaga</a></li><li><a href="Part2_07.html" title="6단계 · Maze — 알고리즘 심화 (생성 + 탐색)">6단계 · Maze</a></li><li><a href="Part2_08.html" title="7단계 · Battle City — 종합 캡스톤 (맵 생성 + 풀링)">7단계 · Battle City</a></li><li><a href="Part2_09.html" title="확장 · Pac-Man — 유령 AI와 상태머신">확장 · Pac-Man</a></li><li class="grp">부록</li><li><a href="Appendix.html" title="부록 — 용어집 · 핵심 이슈 · 요약">부록</a></li></ul></nav>
+</aside>
+<main class="reader">
+  <article class="page">
+<h1
+id="e-모듈--1112장--동적-메모리와-랜덤-회사가-자라고-시장이-살아난다">E
+모듈 · 11–12장 — 동적 메모리와 랜덤: 회사가 자라고, 시장이 살아난다</h1>
+<div class="chapter-badge">
+
+<p><strong>모듈 E</strong> · 11–12장 · 게임 버전 <strong>v0.5 →
+v0.7</strong> · 예상 학습 시간 <strong>4–6시간</strong> <strong>처음
+배우는 기술</strong> — <code>malloc</code> <code>calloc</code>
+<code>free</code> <code>realloc</code> <code>sizeof</code>
+<code>힙과 스택</code> <code>메모리 누수</code>
+<code>NULL 검사(실전)</code> <code>rand</code> <code>srand</code>
+<code>time</code> <code>범위 난수</code> <code>확률 분기</code></p>
+</div>
+
+<blockquote>
+<p>D 모듈에서 우리는 구조체와 포인터로 게임의 뼈대를 완성했다. 하지만 두
+가지가 아직 게임의 발목을 잡는다. <strong>직원은 4명이
+한계</strong>이고(고정 배열), <strong>매달 결과가 완전히 예측
+가능하다</strong>(랜덤이 없다). 이 모듈에서 그 둘을 푼다. <strong>동적
+메모리</strong>로 직원 수 제한을 없애 회사가 원하는 만큼 커지게 하고,
+<strong>랜덤</strong>으로 평점·지원자·유행·이벤트에 변수를 넣어 시장이
+살아 숨 쉬게 한다.</p>
+</blockquote>
+<h2 id="이-모듈의-학습-목표">이 모듈의 학습 목표</h2>
+<p>이 모듈을 마치면 다음을 할 수 있다.</p>
+<ol type="1">
+<li><strong>스택과 힙</strong>의 차이를 설명하고, 왜 "실행 중에 크기가
+변하는" 배열은 힙이 필요한지 안다.</li>
+<li><code>malloc</code>/<code>free</code> 로 힙 메모리를 잡고 돌려주며,
+<code>sizeof</code> 로 필요한 바이트를 계산할 수 있다.</li>
+<li><code>realloc</code> 로 배열을 키우고, 반환값을 <strong>임시
+포인터</strong>로 받아 안전하게 교체할 수 있다.</li>
+<li><strong>메모리 누수</strong>가 무엇인지 알고, <code>NULL</code>
+검사와 <code>free</code> 로 이를 막을 수 있다.</li>
+<li><code>srand(time(NULL))</code> 로 난수를 초기화하고,
+<code>rand() % n</code> · <code>min + rand() % k</code> 로 <strong>범위
+난수</strong>를 만들 수 있다.</li>
+<li><code>rand() % 100 &lt; 확률</code> 패턴으로 <strong>확률
+분기</strong>를 짜서 랜덤 이벤트를 구현할 수 있다.</li>
+</ol>
+<h2 id="왜-지금-동적-메모리와-랜덤인가">왜 지금, 동적 메모리와
+랜덤인가</h2>
+<p>C 모듈에서 우리는 직원을 4칸 배열에 담았고, 5번째를 뽑으려다
+"사무실이 좁습니다"라며 거절당했다. 그 벽이 아직 그대로다. 배열 크기는
+컴파일 시점에 못 박히니, 회사가 아무리 성공해도 직원은 4명뿐이다.
+<strong>실행 중에 필요한 만큼 커지는 저장 공간</strong> — 그것이 11장
+동적 메모리다. D 모듈 말미에 우리는 이미 <code>Employee *staff</code> 를
+포인터로 선언해 두었다. 그 포인터가 이제 진짜 힘을 발휘한다.</p>
+<p>또 하나. 지금까지 우리 게임은 <strong>완전히 예측 가능</strong>하다.
+같은 게임을 만들면 평점이 항상 똑같고, 매달 아무 일도 안 일어난다.
+계산기처럼 정확하지만, 그래서 <strong>재미가 없다.</strong> 현실의 게임
+시장은 흥행이 도박이고, 정부 지원금이 뚝 떨어지기도 하며, 유행이
+돌변한다. 이 예측 불가능성을 코드로 만드는 것이 12장 랜덤이다. GDD의
+표현을 빌리면 — <strong>"12장에서 게임이 갑자기 살아난다."</strong></p>
+<blockquote>
+<p><strong>이 모듈에서 만드는 것.</strong> 직원을 원하는 만큼 고용할 수
+있고(v0.6, <code>realloc</code> 로 배열이 자란다), 게임 평점이 매번
+조금씩 흔들리며, 매달 30% 확률로 랜덤 이벤트(정부 지원금·게임쇼
+호황·버그 사태·월급 인상 요구·악성 리뷰·스카우트)가 터지는 — GDD
+마일스톤 <strong>v0.7 "살아있는 시장"</strong> 이다. 이 모듈을 지나면
+게임은 두 판이 결코 같지 않게 된다.</p>
+</blockquote>
+<hr />
+<h2 id="11장--동적-메모리--필요한-만큼-자란다">11장 · 동적 메모리 —
+필요한 만큼 자란다</h2>
+<h3 id="111-스택과-힙--메모리의-두-방">11.1 스택과 힙 — 메모리의 두
+방</h3>
+<p>지금까지 우리가 만든 변수·배열은 모두 <strong>스택(stack)</strong> 에
+살았다. 스택은 함수가 실행되는 동안 지역 변수가 자동으로 잡혔다 사라지는
+공간이다. 빠르고 편하지만 두 가지 제약이 있다 — 크기가 <strong>컴파일
+시점에 정해져야</strong> 하고, 함수가 끝나면
+<strong>사라진다</strong>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> staff<span class="op">[</span><span class="dv">4</span><span class="op">];</span>    <span class="co">/* 스택 — 크기 4로 고정, main 안에서만 산다 */</span></span></code></pre></div>
+<p><strong>힙(heap)</strong> 은 다르다. 프로그램이 실행 중에 "이만큼
+주세요"라고 <strong>요청해서</strong> 얻고, "다 썼습니다"라고
+<strong>돌려줄 때까지</strong> 유지되는 공간이다. 크기를 실행 중에 정할
+수 있고, 함수가 끝나도 살아 있다. 대신 잡은 사람이 직접 돌려줘야
+한다(자동으로 안 사라진다). "실행 중에 크기가 변하는 직원 배열"에는 힙이
+필요하다.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>스택 (지금까지)</th>
+<th>힙 (이번 장)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>크기 결정</td>
+<td>컴파일 시점(고정)</td>
+<td><strong>실행 중</strong>(가변)</td>
+</tr>
+<tr>
+<td>수명</td>
+<td>함수와 함께</td>
+<td><code>free</code> 할 때까지</td>
+</tr>
+<tr>
+<td>정리</td>
+<td>자동</td>
+<td><strong>직접 <code>free</code></strong></td>
+</tr>
+<tr>
+<td>얻는 법</td>
+<td>그냥 선언</td>
+<td><code>malloc</code>/<code>realloc</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="112-malloc-과-free--빌리고-돌려주기">11.2 <code>malloc</code> 과
+<code>free</code> — 빌리고 돌려주기</h3>
+<p><code>malloc(바이트 수)</code> 은 힙에서 그만큼의 메모리를 잡아 그
+<strong>주소</strong>를 돌려준다. 다 쓰면 <code>free(주소)</code> 로
+반납한다. 필요한 바이트 수는 <code>sizeof</code> 로 계산한다.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span><span class="pp">       </span><span class="co">/* malloc, free, rand 등 */</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>arr <span class="op">=</span> <span class="op">(</span><span class="dt">int</span> <span class="op">*)</span>malloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">)</span> <span class="op">*</span> <span class="dv">4</span><span class="op">);</span>   <span class="co">/* int 4칸 = 16바이트를 힙에 */</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>arr <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span>                            <span class="co">/* 할당 실패 검사 (11.4) */</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;메모리 부족</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>arr<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="dv">7</span><span class="op">;</span>                                   <span class="co">/* 배열처럼 그대로 쓴다 */</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>arr<span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">/* ... 사용 ... */</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>free<span class="op">(</span>arr<span class="op">);</span>                                    <span class="co">/* 다 쓰면 반드시 반납 */</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>arr <span class="op">=</span> NULL<span class="op">;</span>                                   <span class="co">/* 반납 후 포인터를 NULL 로 (안전) */</span></span></code></pre></div>
+<p><code>malloc</code> 이 돌려준 것은 <strong>힙에 잡힌 배열의 첫
+주소</strong>다. D 모듈에서 배운 대로, <strong>배열 이름처럼 동작하는
+포인터</strong>이므로 <code>arr[0]</code>, <code>arr[1]</code> 로 배열과
+똑같이 쓴다. 그래서 <code>Employee *staff</code> 하나로 "직원 배열"을
+가리킬 수 있는 것이다.</p>
+<blockquote>
+<p><strong><code>sizeof</code> 로 계산하는 습관.</strong>
+<code>malloc(16)</code> 이라고 바이트를 직접 쓰지 말고
+<code>malloc(sizeof(int) * 4)</code> 라고 쓰자. <code>int</code> 크기가
+환경마다 다를 수 있고, <code>Employee</code> 처럼 구조체는 크기를 눈으로
+못 세기 때문이다. <code>sizeof(Employee) * cap</code> 은 "Employee 몇
+개분"이라는 의도를 그대로 드러낸다.</p>
+</blockquote>
+<h3 id="113-realloc--배열을-키우다">11.3 <code>realloc</code> — 배열을
+키우다</h3>
+<p>동적 메모리의 진짜 힘은 <code>realloc</code> 에 있다. 이미 잡은
+배열을 <strong>더 큰 배열로 늘려</strong> 준다(기존 내용은 그대로
+유지된다). 직원이 꽉 차면 배열을 2배로 키우는 것 — 이것이 "무제한
+고용"의 비밀이다.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* staff 배열이 꽉 찼을 때 2배로 늘린다 */</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>Employee <span class="op">*</span>tmp <span class="op">=</span> <span class="op">(</span>Employee <span class="op">*)</span>realloc<span class="op">(</span>staff<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>Employee<span class="op">)</span> <span class="op">*</span> cap <span class="op">*</span> <span class="dv">2</span><span class="op">);</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>tmp <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* 실패: 기존 staff 는 그대로 살아 있다. 확장만 포기 */</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;확장 실패</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    staff <span class="op">=</span> tmp<span class="op">;</span>      <span class="co">/* 성공: 더 큰 배열의 주소로 교체 */</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    cap  <span class="op">*=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>여기 <strong>결정적인 안전 규칙</strong>이 있다 —
+<code>realloc</code> 의 결과를 <strong>원래 포인터에 바로 대입하지 말고,
+임시 포인터(<code>tmp</code>)로 먼저 받는다.</strong> 왜냐하면
+<code>realloc</code> 이 실패하면 <code>NULL</code> 을 돌려주는데, 그걸
+<code>staff = realloc(staff, ...)</code> 로 바로 받으면 <strong>원래
+배열의 주소를 잃어버려</strong>(NULL로 덮여) 이미 있던 직원 데이터가
+통째로 새어 나간다. <code>tmp</code> 로 받아 성공을 확인한 뒤에 교체하는
+것이 철칙이다.</p>
+<p>이 코드가 바로 D 모듈 마지막에 "11장 미리보기"로 예고했던 그것이다.
+그때 "다 이해 못 해도 좋다"고 했던 코드를, 이제 우리는 완전히 읽을 수
+있다.</p>
+<h3 id="114-메모리-누수와-null-검사">11.4 메모리 누수와
+<code>NULL</code> 검사</h3>
+<p>힙은 <strong>직접 돌려줘야</strong> 한다고 했다. <code>malloc</code>
+으로 잡고 <code>free</code> 를 안 하면, 그 메모리는 프로그램이 끝날
+때까지 붙잡힌 채 아무도 못 쓴다 — 이것이 <strong>메모리 누수(memory
+leak)</strong> 다. 작은 프로그램에선 티가 안 나지만, 오래 도는
+프로그램(서버·게임)에선 누수가 쌓여 결국 메모리가 바닥난다.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Employee <span class="op">*</span>staff <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span>Employee<span class="op">)</span> <span class="op">*</span> <span class="dv">4</span><span class="op">);</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">/* ... 게임 내내 사용 ... */</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">/* 프로그램 종료 전 반드시: */</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>free<span class="op">(</span>staff<span class="op">);</span>        <span class="co">/* 안 하면 누수 */</span></span></code></pre></div>
+<p>그리고 <code>malloc</code>/<code>realloc</code> 은 <strong>실패할 수
+있다</strong>(메모리가 부족하면 <code>NULL</code> 반환). D 모듈에서 배운
+<code>NULL</code> 검사가 여기서 실전이 된다. 반환값을 <code>NULL</code>
+과 비교해, 실패하면 안전하게 대처한다.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>staff <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span>Employee<span class="op">)</span> <span class="op">*</span> <span class="dv">4</span><span class="op">);</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>staff <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span>          <span class="co">/* 잡기 실패 */</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;메모리 할당 실패</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    exit<span class="op">(</span><span class="dv">1</span><span class="op">);</span>                  <span class="co">/* 더 진행할 수 없으니 종료 */</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>세 가지를 한 세트로 기억하자 — <strong>① <code>sizeof</code> 로 잡고,
+② <code>NULL</code> 인지 확인하고, ③ 다 쓰면 <code>free</code>.</strong>
+힙을 쓰는 모든 코드가 이 리듬을 탄다.</p>
+<h3 id="115-게임에-적용--무제한-고용">11.5 게임에 적용 — 무제한
+고용</h3>
+<p>이제 직원 배열을 힙으로 옮긴다. C 모듈의 병렬 배열도, D 모듈의 고정
+배열 감각도 넘어, <strong><code>Employee *staff</code> 를
+<code>malloc</code> 으로 잡고 꽉 차면 <code>realloc</code> 로
+키운다.</strong> 회사가 성공하는 만큼 직원 배열이 자란다.</p>
+<p>회사를 시작할 때 초기 용량(4명분)을 잡는다.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> InitCompany<span class="op">(</span>Company <span class="op">*</span>c<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>name<span class="op">)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* ... 이름·자본금 초기화 ... */</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    c<span class="op">-&gt;</span>staff <span class="op">=</span> <span class="op">(</span>Employee <span class="op">*)</span>malloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span>Employee<span class="op">)</span> <span class="op">*</span> START_STAFF_CAP<span class="op">);</span>  <span class="co">/* 4명분 */</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>c<span class="op">-&gt;</span>staff <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;메모리 할당 실패</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        exit<span class="op">(</span><span class="dv">1</span><span class="op">);</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    c<span class="op">-&gt;</span>staffCap   <span class="op">=</span> START_STAFF_CAP<span class="op">;</span>   <span class="co">/* 현재 용량 = 4 */</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    c<span class="op">-&gt;</span>staffCount <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>                 <span class="co">/* 현재 인원 = 0 */</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>고용할 때, 인원이 용량에 도달했으면 용량을 2배로 늘린 뒤 새 직원을
+넣는다.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> Hire<span class="op">(</span>Company <span class="op">*</span>c<span class="op">,</span> <span class="dt">const</span> Employee <span class="op">*</span>e<span class="op">)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>c<span class="op">-&gt;</span>staffCount <span class="op">==</span> c<span class="op">-&gt;</span>staffCap<span class="op">)</span> <span class="op">{</span>           <span class="co">/* 꽉 찼다 → 확장 */</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> newCap <span class="op">=</span> c<span class="op">-&gt;</span>staffCap <span class="op">*</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        Employee <span class="op">*</span>tmp <span class="op">=</span> <span class="op">(</span>Employee <span class="op">*)</span>realloc<span class="op">(</span>c<span class="op">-&gt;</span>staff<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>Employee<span class="op">)</span> <span class="op">*</span> newCap<span class="op">);</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>tmp <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span>                        <span class="co">/* 확장 실패: 기존 배열 유지 */</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;  ! 메모리가 부족해 사무실을 확장할 수 없습니다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        c<span class="op">-&gt;</span>staff   <span class="op">=</span> tmp<span class="op">;</span>                         <span class="co">/* 더 큰 배열로 교체 */</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        c<span class="op">-&gt;</span>staffCap <span class="op">=</span> newCap<span class="op">;</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;  * 사무실을 확장했습니다! (최대 </span><span class="sc">%d</span><span class="st">명)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> newCap<span class="op">);</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    c<span class="op">-&gt;</span>staff<span class="op">[</span>c<span class="op">-&gt;</span>staffCount<span class="op">++]</span> <span class="op">=</span> <span class="op">*</span>e<span class="op">;</span>               <span class="co">/* 새 직원을 넣고 인원 +1 */</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;  * [</span><span class="sc">%s</span><span class="st">] 을(를) 고용했습니다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> e<span class="op">-&gt;</span>name<span class="op">);</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>그리고 게임이 끝날 때 반드시 반납한다.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> FreeCompany<span class="op">(</span>Company <span class="op">*</span>c<span class="op">)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    free<span class="op">(</span>c<span class="op">-&gt;</span>staff<span class="op">);</span>       <span class="co">/* 힙에 잡은 직원 배열 반납 (누수 방지) */</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    c<span class="op">-&gt;</span>staff <span class="op">=</span> NULL<span class="op">;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    c<span class="op">-&gt;</span>staffCount <span class="op">=</span> c<span class="op">-&gt;</span>staffCap <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>이제 5번째 직원을 뽑아도 거절당하지 않는다. 4명이 차면 배열이
+8칸으로, 8명이 차면 16칸으로 — <strong>회사가 커지는 만큼 배열이 따라
+자란다.</strong> C 모듈에서 부딪혔던 "사무실이 좁습니다"의 벽이 마침내
+무너졌다.</p>
+<blockquote>
+<p><strong>고정 배열 → 동적 배열, 그리고 그 너머.</strong> 커리큘럼의 큰
+줄기 하나가 여기서 매듭지어진다. 7장 고정 배열(한계) → 11장 동적
+배열(해방). 그런데 2부에서는 이 방향이 다시 뒤집힌다.
+Galaga(5단계)에서는 "총알이 초당 수십 개씩
+<code>malloc</code>/<code>free</code> 되니 오히려 느리다"는 문제를 만나,
+<strong>미리 잡아 둔 고정 배열을 재활용하는 오브젝트 풀</strong>로
+되돌아간다. 동적이 항상 옳은 게 아니라, <strong>상황이 도구를
+정한다</strong> — 이 감각이 초급과 중급을 가른다.</p>
+</blockquote>
+<hr />
+<h2 id="12장--랜덤과-시간--게임이-살아나다">12장 · 랜덤과 시간 — 게임이
+살아나다</h2>
+<p>직원 문제를 풀었으니, 이제 게임에 <strong>예측 불가능성</strong>을
+넣는다. 12장 전까지 우리 게임은 계산기처럼 정확했다 — 같은 입력이면 항상
+같은 결과. 랜덤이 그 정확함을 깨고, 게임을 도박과 놀라움이 있는 살아있는
+세계로 만든다.</p>
+<h3 id="121-rand-srand-time--난수의-삼총사">12.1 <code>rand</code>,
+<code>srand</code>, <code>time</code> — 난수의 삼총사</h3>
+<p>C의 난수는 <code>stdlib.h</code> 의 <code>rand()</code> 로 얻는다.
+<code>rand()</code> 는 0부터 아주 큰 수(<code>RAND_MAX</code>) 사이의
+정수를 돌려준다.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span><span class="pp">       </span><span class="co">/* rand, srand */</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;time.h&gt;</span><span class="pp">         </span><span class="co">/* time */</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> rand<span class="op">();</span>           <span class="co">/* 0 ~ RAND_MAX 사이의 &#39;무작위&#39; 정수 */</span></span></code></pre></div>
+<p>그런데 <code>rand()</code> 는 사실 <strong>가짜
+난수(의사난수)</strong> 다. 정해진 규칙으로 숫자를 만들어 내는데, 그
+출발점을 <strong>씨앗(seed)</strong> 이라 한다. 씨앗이 같으면 난수
+순서도 똑같다 — 그래서 씨앗을 안 정하면 프로그램을 켤 때마다
+<strong>똑같은 "무작위"</strong> 가 나온다. 이걸 막으려고, 프로그램 시작
+시 <code>srand</code> 로 씨앗을 심는다. 매번 다른 씨앗을 얻으려면 현재
+시각(<code>time(NULL)</code>)을 쓴다.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    srand<span class="op">((</span><span class="dt">unsigned</span><span class="op">)</span>time<span class="op">(</span>NULL<span class="op">));</span>   <span class="co">/* ★ 시각을 씨앗으로 — 실행마다 다른 난수 */</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* ... 게임 ... */</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<blockquote>
+<p><strong>⚠️ <code>srand</code> 는 <code>main</code> 에서 딱 한
+번.</strong> 12장의 단골 실수가 "난수를 뽑을 때마다 <code>srand</code>
+를 부르는 것"이다. 그러면 <code>time(NULL)</code> 이 1초 안에는 같은
+값이라, 되레 같은 수만 나온다. <code>srand</code> 는 프로그램 전체에서
+<strong><code>main</code> 시작 시 한 번만</strong> 호출한다. 씨앗을 심는
+건 한 번, 열매(<code>rand</code>)를 따는 건 여러 번이다.</p>
+</blockquote>
+<h3 id="122-범위-난수---로-구간-자르기">12.2 범위 난수 — <code>%</code>
+로 구간 자르기</h3>
+<p><code>rand()</code> 가 주는 큰 수를 원하는 범위로 접을 땐 나머지
+연산자 <code>%</code>(A 모듈!)를 쓴다.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>rand<span class="op">()</span> <span class="op">%</span> <span class="dv">6</span>            <span class="co">/* 0 ~ 5  (6가지) */</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="op">+</span> rand<span class="op">()</span> <span class="op">%</span> <span class="dv">6</span>        <span class="co">/* 1 ~ 6  (주사위) */</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>rand<span class="op">()</span> <span class="op">%</span> <span class="dv">100</span>          <span class="co">/* 0 ~ 99 (백분율 확률용) */</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="op">+</span> rand<span class="op">()</span> <span class="op">%</span> <span class="dv">10</span>       <span class="co">/* 1 ~ 10 (직원 능력치!) */</span></span></code></pre></div>
+<p>공식은 간단하다 —
+<strong><code>min + rand() % (개수)</code>.</strong>
+<code>rand() % n</code> 이 <code>0 ~ n-1</code> 을 주니, 시작값
+<code>min</code> 을 더해 원하는 구간으로 옮긴다. 우리 게임의 지원자
+능력치가 정확히 이 패턴이다.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* 랜덤 지원자 한 명 생성 (C 모듈에선 직접 입력받던 것을 이제 난수로) */</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> RandomEmployee<span class="op">(</span>Employee <span class="op">*</span>e<span class="op">)</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    e<span class="op">-&gt;</span>dev    <span class="op">=</span> <span class="dv">1</span> <span class="op">+</span> rand<span class="op">()</span> <span class="op">%</span> <span class="dv">10</span><span class="op">;</span>                  <span class="co">/* 개발력 1~10 */</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    e<span class="op">-&gt;</span>cre    <span class="op">=</span> <span class="dv">1</span> <span class="op">+</span> rand<span class="op">()</span> <span class="op">%</span> <span class="dv">10</span><span class="op">;</span>                  <span class="co">/* 창의력 1~10 */</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    e<span class="op">-&gt;</span>salary <span class="op">=</span> <span class="op">(</span>e<span class="op">-&gt;</span>dev <span class="op">+</span> e<span class="op">-&gt;</span>cre<span class="op">)</span> <span class="op">*</span> SALARY_RATE<span class="op">;</span>  <span class="co">/* 월급은 능력에 비례 */</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    e<span class="op">-&gt;</span>months <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>C 모듈에서 지원자의 능력치를 사람이 직접 입력했다면, 이제 매달
+능력치가 다른 지원자가 <strong>저절로</strong> 나타난다. 이름도 이름
+후보 배열에서 <code>NAME_POOL[rand() % 개수]</code> 로 무작위로
+고른다.</p>
+<h3 id="123-확률-분기--rand--100--확률">12.3 확률 분기 —
+<code>rand() % 100 &lt; 확률</code></h3>
+<p>"30% 확률로 무슨 일이 일어난다"는 게임의 단골 표현이다.
+<code>rand() % 100</code>(0~99)을 뽑아 목표 확률과 비교하면 된다.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>rand<span class="op">()</span> <span class="op">%</span> <span class="dv">100</span> <span class="op">&lt;</span> <span class="dv">30</span><span class="op">)</span>        <span class="co">/* 0~99 중 0~29 → 30% 확률 */</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;이벤트 발생!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<p>여러 결과에 서로 다른 확률을 주려면, 구간을 나눠 검사한다. 우리
+게임의 랜덤 이벤트가 이 방식이다.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> roll <span class="op">=</span> rand<span class="op">()</span> <span class="op">%</span> <span class="dv">100</span><span class="op">;</span>       <span class="co">/* 0 ~ 99 */</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>      <span class="op">(</span>roll <span class="op">&lt;</span> <span class="dv">15</span><span class="op">)</span> <span class="op">{</span> <span class="co">/* 0~14  : 15% — 정부 지원금 */</span> <span class="op">}</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>roll <span class="op">&lt;</span> <span class="dv">30</span><span class="op">)</span> <span class="op">{</span> <span class="co">/* 15~29 : 15% — 게임쇼 호황 */</span> <span class="op">}</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>roll <span class="op">&lt;</span> <span class="dv">50</span><span class="op">)</span> <span class="op">{</span> <span class="co">/* 30~49 : 20% — 버그 사태 */</span> <span class="op">}</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>roll <span class="op">&lt;</span> <span class="dv">70</span><span class="op">)</span> <span class="op">{</span> <span class="co">/* 50~69 : 20% — 월급 인상 요구 */</span> <span class="op">}</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>roll <span class="op">&lt;</span> <span class="dv">85</span><span class="op">)</span> <span class="op">{</span> <span class="co">/* 70~84 : 15% — 악성 리뷰 */</span> <span class="op">}</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>                <span class="op">{</span> <span class="co">/* 85~99 : 15% — 스카우트 제의 */</span> <span class="op">}</span></span></code></pre></div>
+<p><code>roll</code> 하나로 100칸의 눈금을 만들고, 그 눈금을 확률
+비중대로 나눠 가진 셈이다. 15+15+20+20+15+15 = 100. 이 구간 나누기가
+확률 설계의 기본이다.</p>
+<h3 id="124-게임에-적용--살아나는-시장">12.4 게임에 적용 — 살아나는
+시장</h3>
+<p>랜덤을 세 곳에 넣어 게임을 살린다.</p>
+<p><strong>① 평점에 랜덤 항.</strong> D 모듈에선 평점이 품질·재미로만
+정해져 같은 게임은 늘 같은 점수였다. 이제 <code>-0.5 ~ +1.0</code> 의
+랜덤 항을 더해, <strong>같은 게임도 운에 따라 흥행이
+갈린다.</strong></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> r <span class="op">=</span> base <span class="op">/</span> <span class="fl">10.0</span><span class="bu">f</span><span class="op">;</span>                 <span class="co">/* 품질·재미 기반 점수 (D 모듈) */</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>p<span class="op">-&gt;</span>genre <span class="op">==</span> c<span class="op">-&gt;</span>trend<span class="op">)</span>  r <span class="op">+=</span> <span class="fl">0.5</span><span class="bu">f</span><span class="op">;</span>   <span class="co">/* 유행 장르 일치 보너스 */</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>r <span class="op">+=</span> <span class="op">(</span>rand<span class="op">()</span> <span class="op">%</span> <span class="dv">16</span> <span class="op">-</span> <span class="dv">5</span><span class="op">)</span> <span class="op">/</span> <span class="fl">10.0</span><span class="bu">f</span><span class="op">;</span>         <span class="co">/* ★ 랜덤 항: -0.5 ~ +1.0 (12장에서 추가) */</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>r <span class="op">&lt;</span> <span class="fl">0.0</span><span class="bu">f</span><span class="op">)</span>  r <span class="op">=</span> <span class="fl">0.0</span><span class="bu">f</span><span class="op">;</span>                <span class="co">/* 0~10 범위로 자르기 */</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>r <span class="op">&gt;</span> <span class="fl">10.0</span><span class="bu">f</span><span class="op">)</span> r <span class="op">=</span> <span class="fl">10.0</span><span class="bu">f</span><span class="op">;</span></span></code></pre></div>
+<p><code>rand() % 16</code> 은 0~15, 거기서 5를 빼면 −5~+10, 10으로
+나누면 <strong>−0.5 ~ +1.0</strong>. 평균적으로 살짝 플러스(운이 좋으면
+대박)인 이 랜덤 항이, 출시 때마다 손에 땀을 쥐게 한다.</p>
+<p><strong>② 유행 장르.</strong> 분기마다(3·6·9·12월) 유행 장르를 다시
+뽑는다. 유행에 맞춘 게임은 판매가 1.5배가 되니, 유행은 전략의 축이
+된다.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> UpdateTrend<span class="op">(</span>Company <span class="op">*</span>c<span class="op">)</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    c<span class="op">-&gt;</span>trend <span class="op">=</span> <span class="op">(</span>Genre<span class="op">)(</span>rand<span class="op">()</span> <span class="op">%</span> GENRE_COUNT<span class="op">);</span>   <span class="co">/* 5개 장르 중 무작위 */</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>③ 랜덤 이벤트.</strong> 매달 30% 확률로 사건 하나가 터진다.
+12.3의 구간 분기로 6종을 나눈다.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> MonthlyEvent<span class="op">(</span>Company <span class="op">*</span>c<span class="op">)</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>rand<span class="op">()</span> <span class="op">%</span> <span class="dv">100</span> <span class="op">&gt;=</span> EVENT_CHANCE<span class="op">)</span>     <span class="co">/* 70%는 아무 일 없음 */</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> roll <span class="op">=</span> rand<span class="op">()</span> <span class="op">%</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>roll <span class="op">&lt;</span> <span class="dv">15</span><span class="op">)</span> <span class="op">{</span>                       <span class="co">/* 정부 지원금 +500 */</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">  [이벤트] 정부 지원금 500만원!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>        Report<span class="op">(</span><span class="st">&quot;이벤트: 정부 지원금&quot;</span><span class="op">,</span> <span class="dv">500</span><span class="op">);</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>roll <span class="op">&lt;</span> <span class="dv">30</span><span class="op">)</span> <span class="op">{</span>                <span class="co">/* 게임쇼 호황: 이번 달 판매 2배 */</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>        Report<span class="op">(</span><span class="st">&quot;이벤트: 게임쇼 호황&quot;</span><span class="op">,</span> s_monthRevenue<span class="op">);</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>roll <span class="op">&lt;</span> <span class="dv">50</span><span class="op">)</span> <span class="op">{</span>                <span class="co">/* 버그 사태: 개발 중 품질 -20 */</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>c<span class="op">-&gt;</span>proj<span class="op">.</span>active<span class="op">)</span> c<span class="op">-&gt;</span>proj<span class="op">.</span>quality <span class="op">-=</span> <span class="dv">20</span><span class="op">;</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* ... 월급 인상 요구 / 악성 리뷰 / 스카우트 ... */</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>이 세 가지가 들어가는 순간, 우리 게임은 <strong>두 판이 결코 같지
+않게</strong> 된다. 좋은 게임을 만들어도 랜덤 항이 나쁘면 평점이 아쉽고,
+파산 직전 정부 지원금이 회사를 살리기도 한다. 예측 불가능성이 곧
+재미다.</p>
+<blockquote>
+<p><strong>랜덤은 두 얼굴을 가진다.</strong> 랜덤은 재미를 주지만,
+게임을 <strong>디버깅하기 어렵게</strong> 만들기도 한다. "가끔만
+재현되는 버그"의 대부분이 랜덤 때문이다. 그래서 실제 게임의
+<code>main</code> 은 명령줄 인자로 씨앗을 고정할 수 있게 해
+뒀다(<code>srand(atoi(argv[1]))</code>) — 같은 씨앗을 주면 같은 전개가
+재현되어 디버깅이 된다. 이 "재현 가능한 랜덤"은 실무의 중요한
+기법이다.</p>
+</blockquote>
+<hr />
+<h2 id="코드-워크스루--실제-소스에서-보는-힙과-난수">코드 워크스루 —
+실제 소스에서 보는 힙과 난수</h2>
+<p>우리가 배운 동적 메모리와 랜덤이, <code>Study/Tycoon/</code>
+완성본에서 어떻게 맞물리는지 보자.</p>
+<blockquote>
+<p><strong>실제 파일:</strong>
+<code>Study/Tycoon/company.c</code>(할당·해제) ·
+<code>Study/Tycoon/employee.c</code>(확장 고용) ·
+<code>Study/Tycoon/market.c</code>(랜덤 이벤트) ·
+<code>Study/Tycoon/project.c</code>(평점)</p>
+</blockquote>
+<p><strong>① 할당과 해제 (<code>company.c</code>)</strong> — 회사 생성
+시 <code>malloc</code>, 종료 시 <code>free</code>. 11.5에서 본 그대로다.
+<code>NULL</code> 검사로 실패에 대비하는 것도 빠지지 않는다.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>c<span class="op">-&gt;</span>staff <span class="op">=</span> <span class="op">(</span>Employee <span class="op">*)</span>malloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span>Employee<span class="op">)</span> <span class="op">*</span> START_STAFF_CAP<span class="op">);</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>c<span class="op">-&gt;</span>staff <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span> printf<span class="op">(</span><span class="st">&quot;메모리 할당 실패</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span> exit<span class="op">(</span><span class="dv">1</span><span class="op">);</span> <span class="op">}</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">/* ... 게임 내내 사용 ... */</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> FreeCompany<span class="op">(</span>Company <span class="op">*</span>c<span class="op">)</span> <span class="op">{</span> free<span class="op">(</span>c<span class="op">-&gt;</span>staff<span class="op">);</span> c<span class="op">-&gt;</span>staff <span class="op">=</span> NULL<span class="op">;</span> <span class="op">}</span></span></code></pre></div>
+<p><strong>② 확장 고용 (<code>employee.c</code> ·
+<code>Hire</code>)</strong> — D 모듈의 "미리보기"가 완성본의 실제
+코드다. <code>realloc</code> 결과를 <code>tmp</code> 로 받아 성공을
+확인한 뒤 교체하는 안전 규칙(11.3)이 그대로 지켜진다.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>c<span class="op">-&gt;</span>staffCount <span class="op">==</span> c<span class="op">-&gt;</span>staffCap<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    Employee <span class="op">*</span>tmp <span class="op">=</span> <span class="op">(</span>Employee <span class="op">*)</span>realloc<span class="op">(</span>c<span class="op">-&gt;</span>staff<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>Employee<span class="op">)</span> <span class="op">*</span> c<span class="op">-&gt;</span>staffCap <span class="op">*</span> <span class="dv">2</span><span class="op">);</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>tmp <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span> printf<span class="op">(</span><span class="st">&quot;  ! 메모리가 부족해...</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span> <span class="cf">return</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    c<span class="op">-&gt;</span>staff <span class="op">=</span> tmp<span class="op">;</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    c<span class="op">-&gt;</span>staffCap <span class="op">*=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>c<span class="op">-&gt;</span>staff<span class="op">[</span>c<span class="op">-&gt;</span>staffCount<span class="op">++]</span> <span class="op">=</span> <span class="op">*</span>e<span class="op">;</span></span></code></pre></div>
+<p><strong>③ 랜덤 이벤트 (<code>market.c</code> ·
+<code>MonthlyEvent</code>)</strong> — 12.3의 확률 분기 실전판.
+<code>roll</code> 을 구간으로 나눠 6종을 처리하되, "조건이 안 맞는
+이벤트"(예: 개발 중 프로젝트가 없는데 버그 사태)는 <code>continue</code>
+로 건너뛰고 다시 뽑는다 — B 모듈의 <code>continue</code> 가 여기서
+쓰인다.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>rand<span class="op">()</span> <span class="op">%</span> <span class="dv">100</span> <span class="op">&gt;=</span> EVENT_CHANCE<span class="op">)</span> <span class="cf">return</span><span class="op">;</span>      <span class="co">/* 70%는 무사 */</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>tries <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> tries <span class="op">&lt;</span> <span class="dv">10</span><span class="op">;</span> tries<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    roll <span class="op">=</span> rand<span class="op">()</span> <span class="op">%</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>roll <span class="op">&lt;</span> <span class="dv">15</span><span class="op">)</span> <span class="op">{</span> Report<span class="op">(</span><span class="st">&quot;정부 지원금&quot;</span><span class="op">,</span> <span class="dv">500</span><span class="op">);</span> <span class="cf">return</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>roll <span class="op">&lt;</span> <span class="dv">30</span><span class="op">)</span> <span class="op">{</span> <span class="cf">if</span> <span class="op">(</span>s_monthRevenue <span class="op">&lt;=</span> <span class="dv">0</span><span class="op">)</span> <span class="cf">continue</span><span class="op">;</span> <span class="co">/* 판매 없으면 호황 무의미 */</span> <span class="op">...</span> <span class="op">}</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>roll <span class="op">&lt;</span> <span class="dv">50</span><span class="op">)</span> <span class="op">{</span> <span class="cf">if</span> <span class="op">(!</span>c<span class="op">-&gt;</span>proj<span class="op">.</span>active<span class="op">)</span> <span class="cf">continue</span><span class="op">;</span>     <span class="co">/* 개발 중이 없으면 버그 무의미 */</span> <span class="op">...</span> <span class="op">}</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* ... */</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>④ 평점의 랜덤 항 (<code>project.c</code> ·
+<code>CalcRating</code>)</strong> — 12.4의 그 한 줄. 품질·재미로 만든
+기본 점수에 유행 보너스와 랜덤 항을 더하고, 0~10으로 자른다.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> base <span class="op">/</span> <span class="fl">10.0</span><span class="bu">f</span><span class="op">;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>p<span class="op">-&gt;</span>genre <span class="op">==</span> c<span class="op">-&gt;</span>trend<span class="op">)</span> r <span class="op">+=</span> <span class="fl">0.5</span><span class="bu">f</span><span class="op">;</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>r <span class="op">+=</span> <span class="op">(</span>rand<span class="op">()</span> <span class="op">%</span> <span class="dv">16</span> <span class="op">-</span> <span class="dv">5</span><span class="op">)</span> <span class="op">/</span> <span class="fl">10.0</span><span class="bu">f</span><span class="op">;</span>        <span class="co">/* -0.5 ~ +1.0 */</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>r <span class="op">&lt;</span> <span class="fl">0.0</span><span class="bu">f</span><span class="op">)</span> r <span class="op">=</span> <span class="fl">0.0</span><span class="bu">f</span><span class="op">;</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>r <span class="op">&gt;</span> <span class="fl">10.0</span><span class="bu">f</span><span class="op">)</span> r <span class="op">=</span> <span class="fl">10.0</span><span class="bu">f</span><span class="op">;</span></span></code></pre></div>
+<p>이 네 조각을 관통하는 사실 — <strong>동적 메모리는 게임의 "크기"를,
+랜덤은 게임의 "표정"을 결정한다.</strong> 회사는 힙 위에서 원하는 만큼
+커지고, 시장은 난수로 매번 다른 얼굴을 보인다.</p>
+<hr />
+<h2 id="그림으로-정리--힙-배열의-성장과-확률의-눈금">그림으로 정리 — 힙
+배열의 성장과 확률의 눈금</h2>
+<blockquote>
+<p>📊 <strong>웹 교육문서에서는 <code>realloc</code> 로 배열이 2배
+커지는 과정과, 확률 분기의 눈금이 애니메이션(V-P1-E)으로
+재생된다.</strong> 책에서는 아래 도식으로 대신한다.</p>
+</blockquote>
+<p><strong>동적 배열의 성장 — 꽉 차면 2배로</strong></p>
+<pre><code>  staffCap 4, 꽉 참:  [김][이][박][최]
+                          │ Hire() → realloc(×2)
+                          ▼
+  staffCap 8:         [김][이][박][최][정][ ][ ][ ]   ← 기존 4명 유지 + 새 직원
+                                        ▲
+                           realloc 은 옛 내용을 그대로 옮겨 준다
+   ⚠ tmp 로 받고 NULL 확인 후 교체! staff=realloc(staff,..) 로 바로 받으면
+     실패 시 옛 주소를 잃어 4명이 통째로 샌다(메모리 누수).</code></pre>
+<p><strong>확률 분기 — 100칸 눈금을 비중대로 나누기</strong></p>
+<pre><code>  roll = rand() % 100    (0 ─────────────────────────────── 99)
+  ┌──────┬──────┬────────┬────────┬──────┬──────┐
+  │ 0-14 │15-29 │ 30-49  │ 50-69  │70-84 │85-99 │
+  │ 지원금│ 호황 │ 버그   │ 월급   │ 리뷰 │스카우트│
+  │ 15%  │ 15%  │  20%   │  20%   │ 15%  │ 15%  │
+  └──────┴──────┴────────┴────────┴──────┴──────┘
+   roll 이 어느 칸에 떨어지느냐로 이벤트가 정해진다. 합 = 100.</code></pre>
+<p>한 문장으로: <strong>동적 메모리는 "얼마나 담을지"를 실행 중에 정하게
+하고, 랜덤은 "무엇이 일어날지"를 매번 다르게 정한다.</strong></p>
+<hr />
+<h2 id="체크포인트--스스로-점검하기">체크포인트 — 스스로 점검하기</h2>
+<p><strong>Q1.</strong> 스택 배열(<code>int a[4];</code>)과 힙
+배열(<code>malloc(sizeof(int)*4)</code>)의 결정적 차이 두 가지는?</p>
+<p><strong>Q2.</strong> <code>staff = realloc(staff, newSize);</code>
+처럼 원래 포인터에 바로 대입하면 왜 위험한가?</p>
+<p><strong>Q3.</strong> <code>malloc</code> 으로 잡은 메모리를
+<code>free</code> 하지 않으면 무슨 일이 생기나? 그 현상의 이름은?</p>
+<p><strong>Q4.</strong> 프로그램을 실행할 때마다 "무작위"가 똑같이
+나온다. 무엇을 빠뜨렸나?</p>
+<p><strong>Q5.</strong> 1~6 주사위를 만드는 식은? 그리고 "25% 확률로
+참"인 조건식은?</p>
+<details><summary><b>해설 펼치기</b></summary>
+
+<p><strong>A1.</strong> ① 크기 결정 시점 — 스택은 컴파일 시점에 고정,
+힙은 <strong>실행 중에</strong> 정할 수 있고 <code>realloc</code> 로
+바꿀 수 있다. ② 수명과 정리 — 스택은 함수가 끝나면 자동으로 사라지고,
+힙은 <strong><code>free</code> 할 때까지</strong> 살아 있으며 직접
+반납해야 한다.</p>
+<p><strong>A2.</strong> <code>realloc</code> 이 실패하면
+<code>NULL</code> 을 반환하는데,
+<code>staff = realloc(staff, ...)</code> 로 바로 받으면
+<code>staff</code> 가 <code>NULL</code> 로 덮여 <strong>원래 배열의
+주소를 잃는다.</strong> 그 배열은 아무도 못 가리키게 되어 통째로
+누수된다. <code>tmp</code> 로 먼저 받아 <code>NULL</code> 이 아님을
+확인한 뒤 교체해야 한다.</p>
+<p><strong>A3.</strong> 그 메모리는 프로그램이 끝날 때까지 반납되지 않고
+붙잡힌 채 아무도 못 쓴다. 이런 낭비가 쌓이는 현상을 <strong>메모리
+누수(memory leak)</strong> 라 한다. 오래 도는 프로그램에선 결국 메모리가
+바닥난다.</p>
+<p><strong>A4.</strong> <code>srand</code> 로 씨앗을 심는 것을 빠뜨렸다.
+<code>rand</code> 는 씨앗이 같으면 같은 순서를 내므로, <code>main</code>
+시작 시 <code>srand((unsigned)time(NULL));</code> 로 매번 다른 씨앗을
+심어야 한다. (단, <code>srand</code> 는 한 번만.)</p>
+<p><strong>A5.</strong> 주사위:
+<code>1 + rand() % 6</code>(<code>rand()%6</code> 이 0~5, +1 해서 1~6).
+25% 확률: <code>rand() % 100 &lt; 25</code>(또는
+<code>rand() % 4 == 0</code>).</p>
+</details>
+
+<hr />
+<h2 id="실습-미션--뽑기가챠-시뮬레이터-gachac-star">실습 미션 —
+뽑기(가챠) 시뮬레이터 <code>gacha.c</code> ⭐</h2>
+<blockquote>
+<p>본편(타이쿤)이 "한 게임을 계속 키우는 세로 축"이라면, 실습 미션은
+<strong>이 모듈의 새 문법만 콕 집어 연습하는 독립 미니게임(가로
+축)</strong> 이다. 먼저 직접 짜 보고, 막히면 힌트를, 그래도 막히면
+정답을 펼쳐 대조하자.</p>
+</blockquote>
+<p><strong>드릴 문법</strong> — <code>rand</code> 확률 분기 ·
+<code>srand(time)</code> ·
+<code>malloc</code>/<code>realloc</code>/<code>free</code> ·
+<code>NULL</code> 검사 · 동적 배열 성장 <strong>만드는 것</strong> —
+뽑을 때마다 확률로 등급(R/SR/SSR)이 나오고, 뽑은 결과가 <strong>동적
+배열 인벤토리</strong>에 쌓이는 뽑기 게임. <strong>클리어 조건</strong>
+— 원하는 만큼 뽑고, 인벤토리를 힙 배열로 관리하며(꽉 차면 2배 확장),
+끝에 등급별 통계를 낸 뒤 <code>free</code>. <strong>규모</strong> — 약
+55줄, 파일 1개. 이 모듈의 두 기둥(동적 메모리 + 랜덤)이 한 게임에서
+만난다.</p>
+<h3 id="문제-정의">문제 정의</h3>
+<p>이 게임은 E 모듈의 두 기술을 정확히 반씩 쓴다.
+<strong>랜덤</strong>으로 매 뽑기의 등급을 정하고(확률 분기),
+<strong>동적 메모리</strong>로 뽑은 결과가 몇 개가 될지 모르는
+인벤토리를 관리한다(꽉 차면 <code>realloc</code>). 뽑기 횟수를 미리 알
+수 없으니 고정 배열로는 안 되고, 힙 배열이 자라야 한다 — 11장이 필요한
+이유가 게임 규칙에 그대로 박혀 있다.</p>
+<h3 id="목표--클리어-조건">목표 / 클리어 조건</h3>
+<ol type="1">
+<li><code>srand(time(NULL))</code> 로 난수를 초기화한다(한 번만!).</li>
+<li>등급을 확률로 뽑는 함수: SSR 3% / SR 17% / R 80%.</li>
+<li>인벤토리를 <code>malloc</code> 으로 4칸 잡고, 뽑을 때마다 결과를
+저장. 꽉 차면 <code>realloc</code> 로 2배.</li>
+<li>사용자가 "그만"을 고를 때까지 반복해서 뽑는다.</li>
+<li>끝에 총 뽑기 수와 등급별 개수를 출력하고 <code>free</code>.</li>
+</ol>
+<h3 id="힌트">힌트</h3>
+<details><summary><b>힌트 1 — 등급 뽑기 함수</b></summary>
+
+<div class="sourceCode" id="cb24"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> PullOne<span class="op">(</span><span class="dt">void</span><span class="op">)</span>      <span class="co">/* 3=SSR, 2=SR, 1=R */</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> roll <span class="op">=</span> rand<span class="op">()</span> <span class="op">%</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>roll <span class="op">&lt;</span> <span class="dv">3</span><span class="op">)</span>  <span class="cf">return</span> <span class="dv">3</span><span class="op">;</span>   <span class="co">/* 0~2   : 3%  */</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>roll <span class="op">&lt;</span> <span class="dv">20</span><span class="op">)</span> <span class="cf">return</span> <span class="dv">2</span><span class="op">;</span>   <span class="co">/* 3~19  : 17% */</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span>                  <span class="co">/* 20~99 : 80% */</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+
+<details><summary><b>힌트 2 — 인벤토리 확장</b></summary>
+
+<p>11.3의 안전한 <code>realloc</code> 패턴을 그대로 쓴다.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>count <span class="op">==</span> cap<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> <span class="op">*</span>tmp <span class="op">=</span> <span class="op">(</span><span class="dt">int</span> <span class="op">*)</span>realloc<span class="op">(</span>inv<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">)</span> <span class="op">*</span> cap <span class="op">*</span> <span class="dv">2</span><span class="op">);</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>tmp <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span> printf<span class="op">(</span><span class="st">&quot;메모리 부족</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span> <span class="cf">break</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    inv <span class="op">=</span> tmp<span class="op">;</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    cap <span class="op">*=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>inv<span class="op">[</span>count<span class="op">++]</span> <span class="op">=</span> grade<span class="op">;</span></span></code></pre></div>
+</details>
+
+<details><summary><b>힌트 3 — 등급별 통계</b></summary>
+
+<p>인벤토리를 <code>for</code> 로 순회하며 등급별로 센다(배열 순회 — C
+모듈).</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> cnt<span class="op">[</span><span class="dv">4</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span>        <span class="co">/* cnt[1]=R, cnt[2]=SR, cnt[3]=SSR */</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> count<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    cnt<span class="op">[</span>inv<span class="op">[</span>i<span class="op">]]++;</span></span></code></pre></div>
+</details>
+
+<h3 id="정답-코드">정답 코드</h3>
+<details><summary><b>정답 펼치기 — <code>gacha.c</code></b></summary>
+
+<div class="sourceCode" id="cb27"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define _CRT_SECURE_NO_WARNINGS</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;time.h&gt;</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co">/* 등급 뽑기: 3=SSR(3%), 2=SR(17%), 1=R(80%) */</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> PullOne<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> roll <span class="op">=</span> rand<span class="op">()</span> <span class="op">%</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>roll <span class="op">&lt;</span> <span class="dv">3</span><span class="op">)</span>  <span class="cf">return</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>roll <span class="op">&lt;</span> <span class="dv">20</span><span class="op">)</span> <span class="cf">return</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>GradeName<span class="op">(</span><span class="dt">int</span> g<span class="op">)</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>g <span class="op">==</span> <span class="dv">3</span><span class="op">)</span> <span class="op">?</span> <span class="st">&quot;SSR&quot;</span> <span class="op">:</span> <span class="op">(</span>g <span class="op">==</span> <span class="dv">2</span><span class="op">)</span> <span class="op">?</span> <span class="st">&quot;SR&quot;</span> <span class="op">:</span> <span class="st">&quot;R&quot;</span><span class="op">;</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> <span class="op">*</span>inv<span class="op">,</span> cap <span class="op">=</span> <span class="dv">4</span><span class="op">,</span> count <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> i<span class="op">,</span> cmd<span class="op">;</span></span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> cnt<span class="op">[</span><span class="dv">4</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="dv">0</span> <span class="op">};</span></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>    srand<span class="op">((</span><span class="dt">unsigned</span><span class="op">)</span>time<span class="op">(</span>NULL<span class="op">));</span>          <span class="co">/* 난수 초기화 — main 에서 한 번만 */</span></span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>    inv <span class="op">=</span> <span class="op">(</span><span class="dt">int</span> <span class="op">*)</span>malloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">)</span> <span class="op">*</span> cap<span class="op">);</span>   <span class="co">/* 인벤토리 힙 배열 */</span></span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>inv <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span> printf<span class="op">(</span><span class="st">&quot;메모리 할당 실패</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span> <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;=== 뽑기 시뮬레이터 (SSR 3</span><span class="sc">%%</span><span class="st"> / SR 17</span><span class="sc">%%</span><span class="st"> / R 80</span><span class="sc">%%</span><span class="st">) ===</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(;;)</span> <span class="op">{</span></span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;[</span><span class="sc">%d</span><span class="st">회] 뽑기 [1] 한 번   [0] 그만 : &quot;</span><span class="op">,</span> count<span class="op">);</span></span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>        scanf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>cmd<span class="op">);</span></span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>cmd <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> g <span class="op">=</span> PullOne<span class="op">();</span></span>
+<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>count <span class="op">==</span> cap<span class="op">)</span> <span class="op">{</span>                        <span class="co">/* 꽉 차면 2배 확장 */</span></span>
+<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a>            <span class="dt">int</span> <span class="op">*</span>tmp <span class="op">=</span> <span class="op">(</span><span class="dt">int</span> <span class="op">*)</span>realloc<span class="op">(</span>inv<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">)</span> <span class="op">*</span> cap <span class="op">*</span> <span class="dv">2</span><span class="op">);</span></span>
+<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>tmp <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span> printf<span class="op">(</span><span class="st">&quot;메모리 부족, 종료</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span> <span class="cf">break</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a>            inv <span class="op">=</span> tmp<span class="op">;</span></span>
+<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a>            cap <span class="op">*=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb27-43"><a href="#cb27-43" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb27-44"><a href="#cb27-44" aria-hidden="true" tabindex="-1"></a>        inv<span class="op">[</span>count<span class="op">++]</span> <span class="op">=</span> g<span class="op">;</span>                          <span class="co">/* 결과 저장 */</span></span>
+<span id="cb27-45"><a href="#cb27-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-46"><a href="#cb27-46" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;  &gt;&gt; [</span><span class="sc">%s</span><span class="st">]</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> GradeName<span class="op">(</span>g<span class="op">),</span> g <span class="op">==</span> <span class="dv">3</span> <span class="op">?</span> <span class="st">&quot; ★대박!&quot;</span> <span class="op">:</span> <span class="st">&quot;&quot;</span><span class="op">);</span></span>
+<span id="cb27-47"><a href="#cb27-47" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb27-48"><a href="#cb27-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-49"><a href="#cb27-49" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* 통계 (배열 순회) */</span></span>
+<span id="cb27-50"><a href="#cb27-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> count<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb27-51"><a href="#cb27-51" aria-hidden="true" tabindex="-1"></a>        cnt<span class="op">[</span>inv<span class="op">[</span>i<span class="op">]]++;</span></span>
+<span id="cb27-52"><a href="#cb27-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-53"><a href="#cb27-53" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">== 결과 : 총 </span><span class="sc">%d</span><span class="st">회 (배열 용량 </span><span class="sc">%d</span><span class="st">) ==</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> count<span class="op">,</span> cap<span class="op">);</span></span>
+<span id="cb27-54"><a href="#cb27-54" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;  SSR </span><span class="sc">%d</span><span class="st">개 / SR </span><span class="sc">%d</span><span class="st">개 / R </span><span class="sc">%d</span><span class="st">개</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> cnt<span class="op">[</span><span class="dv">3</span><span class="op">],</span> cnt<span class="op">[</span><span class="dv">2</span><span class="op">],</span> cnt<span class="op">[</span><span class="dv">1</span><span class="op">]);</span></span>
+<span id="cb27-55"><a href="#cb27-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-56"><a href="#cb27-56" aria-hidden="true" tabindex="-1"></a>    free<span class="op">(</span>inv<span class="op">);</span>                             <span class="co">/* 반드시 반납 (누수 방지) */</span></span>
+<span id="cb27-57"><a href="#cb27-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb27-58"><a href="#cb27-58" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>빌드:</strong> <code>cl gacha.c</code> (MSVC) 또는
+<code>gcc gacha.c -o gacha</code></p>
+<p><strong>함정/체크포인트</strong></p>
+<ul>
+<li><code>srand</code> 를 뽑기 루프 <strong>안</strong>에 넣으면(흔한
+실수), 1초 안의 뽑기가 같은 씨앗이라 결과가 다양하지 않다.
+<code>main</code> 시작 시 딱 한 번이어야 한다.</li>
+<li><code>realloc</code> 을 <code>inv = realloc(inv, ...)</code> 로 바로
+받으면 실패 시 인벤토리를 통째로 잃는다. <code>tmp</code> 로 받아 확인
+후 교체하는 이유를 코드에서 확인하자.</li>
+<li><code>free(inv)</code> 를 빼먹으면 메모리 누수다. 짧은 프로그램이라
+티는 안 나지만, "잡았으면 반드시 반납"의 습관을 여기서 들이자.</li>
+<li><code>cnt[4]</code> 를 <code>{0}</code> 으로 초기화하지 않으면
+쓰레기 값에 더해져 통계가 엉킨다(C 모듈 배열 초기화).</li>
+</ul>
+<p><strong>확장 과제</strong></p>
+<ul>
+<li><strong>천장(pity) 시스템</strong>: SSR 없이 20회를 넘기면 21회째
+SSR을 확정으로. 카운터 하나로 구현.</li>
+<li>등급별 확률을 <code>#define</code> 상수로 빼서, 15장의 밸런싱처럼
+한곳에서 조절.</li>
+</ul>
+</details>
+
+<hr />
+<h2 id="이-모듈을-마치며">이 모듈을 마치며</h2>
+<table>
+<thead>
+<tr>
+<th>얻은 것</th>
+<th>다음에 쓰는 곳</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>malloc</code>/<code>realloc</code>/<code>free</code> 동적
+배열</td>
+<td>무제한 고용, 세이브 후 재구축(F 모듈)</td>
+</tr>
+<tr>
+<td><code>NULL</code> 검사·메모리 누수 방지</td>
+<td>파일 열기 실패 검사(F 모듈), 2부 전반</td>
+</tr>
+<tr>
+<td><code>rand</code>/<code>srand</code>/<code>time</code> 난수</td>
+<td>평점·지원자·유행·이벤트, 2부 7-bag·절차적 생성</td>
+</tr>
+<tr>
+<td>확률 분기(<code>rand()%100&lt;p</code>)</td>
+<td>이벤트 6종, 2부 적 스폰·아이템 드롭</td>
+</tr>
+</tbody>
+</table>
+<p>동적 메모리로 회사는 원하는 만큼 커지고, 랜덤으로 시장은 매번 다른
+얼굴을 갖게 되었다. 이제 게임은 두 판이 결코 같지 않다. 다음 F
+모듈에서는 이 살아있는 회사를 <strong>파일에 저장</strong>해 이어하기를
+만들고, 커진 코드를 <strong>여러 파일로 분리</strong>하며,
+<code>enum</code> 과 엔딩으로 게임을 <strong>v1.0 출시</strong>까지
+마무리한다. 1부의 마지막 모듈이다.</p>
+<blockquote>
+<p><strong>← 이전:</strong> <a href="Part1_04.html">D 모듈 · 9–10장 —
+구조체와 포인터</a> | <strong>다음 →</strong> F 모듈 · 13–15장 —
+파일·모듈·캡스톤</p>
+</blockquote>
+  </article>
+</main>
+<footer class="site-footer">
+  <a href="index.html">← 목차로 돌아가기</a>
+  <span>CSGP Learn · 표시용 원고 (코드는 UTF-8 사본)</span>
+</footer>
+<script src="book-nav.js"></script>
+</body>
+</html>

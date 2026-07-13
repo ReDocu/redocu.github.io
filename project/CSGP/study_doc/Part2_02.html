@@ -1,0 +1,920 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2단계 · Tetris — 알고리즘과 그리드</title>
+<script>try{var _t=localStorage.getItem('csgp-theme');if(_t)document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
+<style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<link rel="stylesheet" href="book.css">
+
+</head>
+<body>
+<div class="topbar">
+  <button class="drawer-toggle" id="drawerToggle" type="button" aria-label="목차 열기/닫기" aria-expanded="false">☰ 목차</button>
+  <a class="home" href="index.html">📘 CSGP</a>
+  <span class="crumb">콘솔 게임으로 배우는 C · C++</span>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="라이트/다크 전환">🌙</button>
+</div>
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" aria-label="책 목차">
+  <div class="drawer-dash">
+    <div class="dash-title">콘솔 게임으로 배우는 C · C++</div>
+    <div class="dash-sub">학습 목차 · 대시보드</div>
+    <div class="dash-progress"><div class="dash-bar"><i id="dashBar"></i></div><span class="dash-pct" id="dashPct"></span></div>
+    <input class="drawer-search" id="drawerSearch" type="search" placeholder="🔍 챕터 검색…" aria-label="챕터 검색">
+  </div>
+  <nav class="booknav" aria-label="책 목차"><a class="booknav-home" href="index.html">📘 전체 목차</a><ul class="booknav-list"><li class="grp">1부 · C 기본 문법</li><li><a href="Part1_00.html" title="1부 — C 기본 문법: 회사를 키우며 배우는 언어">1부 개요</a></li><li><a href="Part1_01.html" title="A 모듈 · 1–4장 — 값·계산·분기: 회사에 숫자를 세우다">A · 값·계산·분기</a></li><li><a href="Part1_02.html" title="B 모듈 · 5–6장 — 반복문과 함수: 회사에 심장을 달다">B · 반복문·함수</a></li><li><a href="Part1_03.html" title="C 모듈 · 7–8장 — 배열과 문자열: 회사에 사람과 이름을 채우다">C · 배열·문자열</a></li><li><a href="Part1_04.html" title="D 모듈 · 9–10장 — 구조체와 포인터: 데이터에 모양을 주다">D · 구조체·포인터</a></li><li><a href="Part1_05.html" title="E 모듈 · 11–12장 — 동적 메모리와 랜덤: 회사가 자라고, 시장이 살아난다">E · 메모리·랜덤</a></li><li><a href="Part1_06.html" title="F 모듈 · 13–15장 — 파일·모듈·캡스톤: 회사를 저장하고, 게임을 출시하다">F · 파일·모듈·캡스톤</a></li><li class="grp">2부 · C++ 프레임워크</li><li><a href="Part2_00.html" title="2부 — C++ 콘솔 게임 프레임워크: 7개의 게임으로 오르기">2부 개요</a></li><li><a href="Part2_01.html" title="1단계 · Snake — 자료구조·충돌·상태머신">1단계 · Snake</a></li><li class="active"><a href="Part2_02.html" title="2단계 · Tetris — 알고리즘과 그리드">2단계 · Tetris</a><ul class="sections">
+<li><a href="#이-단계의-학습-목표" id="toc-이-단계의-학습-목표">이
+단계의 학습 목표</a></li>
+<li><a href="#왜-tetris가-이-자리인가"
+id="toc-왜-tetris가-이-자리인가">왜 Tetris가 이 자리인가</a></li>
+<li><a href="#개념-1--2d-그리드-보드--배열이-주인공이-되다"
+id="toc-개념-1--2d-그리드-보드--배열이-주인공이-되다">개념 1 · 2D 그리드
+보드 — 배열이 주인공이 되다</a></li>
+<li><a href="#개념-2--테트로미노와-사전-정의-회전-테이블"
+id="toc-개념-2--테트로미노와-사전-정의-회전-테이블">개념 2 ·
+테트로미노와 사전 정의 회전 테이블</a></li>
+<li><a href="#개념-3--충돌-판정-canmove--모든-조작의-심판"
+id="toc-개념-3--충돌-판정-canmove--모든-조작의-심판">개념 3 · 충돌 판정
+<code>CanMove</code> — 모든 조작의 심판</a></li>
+<li><a href="#개념-4--회전과-월킥--벽을-밀어내며-돌기"
+id="toc-개념-4--회전과-월킥--벽을-밀어내며-돌기">개념 4 · 회전과 월킥 —
+벽을 밀어내며 돌기</a></li>
+<li><a href="#개념-5--라인-클리어--배열-조작의-정석"
+id="toc-개념-5--라인-클리어--배열-조작의-정석">개념 5 · 라인 클리어 —
+배열 조작의 정석</a></li>
+<li><a href="#개념-6--7-bag-랜덤--무작위를-공정하게"
+id="toc-개념-6--7-bag-랜덤--무작위를-공정하게">개념 6 · 7-bag 랜덤 —
+무작위를 공정하게</a></li>
+<li><a href="#개념-7--das--누르고-있으면-미끄러지는-이동"
+id="toc-개념-7--das--누르고-있으면-미끄러지는-이동">개념 7 · DAS —
+누르고 있으면 미끄러지는 이동</a></li>
+<li><a href="#코드-워크스루--oningameupdate-한-프레임"
+id="toc-코드-워크스루--oningameupdate-한-프레임">코드 워크스루 —
+<code>OnInGameUpdate</code> 한 프레임</a></li>
+<li><a href="#그림으로-정리--회전-테이블과-라인-클리어"
+id="toc-그림으로-정리--회전-테이블과-라인-클리어">그림으로 정리 — 회전
+테이블과 라인 클리어</a></li>
+<li><a href="#알려진-이슈에서-배우기-as-built"
+id="toc-알려진-이슈에서-배우기-as-built">알려진 이슈에서 배우기
+(as-built)</a></li>
+<li><a href="#체크포인트--스스로-점검하기"
+id="toc-체크포인트--스스로-점검하기">체크포인트 — 스스로
+점검하기</a></li>
+<li><a href="#실습-미션--한-칸-블록-쌓기-dropc-star"
+id="toc-실습-미션--한-칸-블록-쌓기-dropc-star">실습 미션 — 한 칸 블록
+쌓기 <code>drop.c</code> ⭐</a></li>
+<li><a href="#이-단계를-마치며" id="toc-이-단계를-마치며">이 단계를
+마치며</a></li>
+</ul></li><li><a href="Part2_03.html" title="3단계 · Dino — 물리와 스크롤">3단계 · Dino</a></li><li><a href="Part2_04.html" title="4단계 · Road Fighter — 엔티티 시스템과 리소스">4단계 · Road Fighter</a></li><li><a href="Part2_05.html" title="번외 · GameDevTycoon 이식 — C에서 C++로">번외 · Tycoon 이식</a></li><li><a href="Part2_06.html" title="5단계 · Galaga — 오브젝트 풀링">5단계 · Galaga</a></li><li><a href="Part2_07.html" title="6단계 · Maze — 알고리즘 심화 (생성 + 탐색)">6단계 · Maze</a></li><li><a href="Part2_08.html" title="7단계 · Battle City — 종합 캡스톤 (맵 생성 + 풀링)">7단계 · Battle City</a></li><li><a href="Part2_09.html" title="확장 · Pac-Man — 유령 AI와 상태머신">확장 · Pac-Man</a></li><li class="grp">부록</li><li><a href="Appendix.html" title="부록 — 용어집 · 핵심 이슈 · 요약">부록</a></li></ul></nav>
+</aside>
+<main class="reader">
+  <article class="page">
+<h1 id="2단계--tetris--알고리즘과-그리드">2단계 · Tetris — 알고리즘과
+그리드</h1>
+<div class="chapter-badge">
+
+<p><strong>단계 2</strong> · 게임 <code>Tetris</code> · 씬 클래스
+<code>TetrisContent : public IGameContent</code> <strong>처음 배우는
+기술</strong> — <code>2D 그리드 보드(board[H][W])</code>
+<code>사전 정의 회전 테이블</code> <code>충돌 판정(CanMove)</code>
+<code>회전·월킥</code> <code>라인 클리어(배열 shift)</code>
+<code>7-bag 랜덤(Fisher-Yates)</code> <code>DAS(자동 반복 이동)</code>
+<code>홀드·고스트·하드드롭</code> <code>내부 상태 enum</code>
+<strong>예상 학습 시간</strong> — 4–6시간</p>
+</div>
+
+<blockquote>
+<p>Snake가 "직관적 충돌"의 게임이었다면, Tetris는 <strong>명시적 규칙과
+알고리즘</strong>의 게임이다. 뱀은 그저 머리가 무엇에 닿았는지만 보면
+됐지만, 테트리스는 회전할 때 벽을 밀어내고(월킥), 가득 찬 줄을 찾아
+지우고 위를 끌어내리고(라인 클리어), 7개 피스를 공정하게 섞어(7-bag)
+내보낸다. 여기서 배열은 게임의 <strong>메인 자료구조</strong>로
+승격하고, 그 배열 위에서 돌아가는 <strong>알고리즘</strong>을 본격적으로
+설계한다.</p>
+</blockquote>
+<h2 id="이-단계의-학습-목표">이 단계의 학습 목표</h2>
+<p>이 단계를 마치면 다음을 할 수 있다.</p>
+<ol type="1">
+<li><code>int board[20][10]</code> <strong>2D 그리드</strong>로 게임판을
+표현하고, 보드 좌표와 화면 좌표(<code>x*2</code>)를 구분할 수 있다.</li>
+<li>테트로미노의 4가지 회전 상태를 <strong>사전 정의 테이블</strong>로
+저장하는 이유를 설명하고, <code>(dx, dy)</code> 오프셋으로 피스를 표현할
+수 있다.</li>
+<li><code>CanMove</code> <strong>충돌 판정</strong> 하나가 어떻게
+이동·회전·낙하·고정 모두의 심판이 되는지 안다.</li>
+<li>회전 시 벽·블록에 막히면 밀어내는 <strong>월킥(wall kick)</strong>
+을 구현할 수 있다.</li>
+<li><strong>라인 클리어</strong> — 가득 찬 행을 찾아 지우고 위 행을
+끌어내리는 배열 조작을 짤 수 있다.</li>
+<li><strong>7-bag</strong> Fisher-Yates 셔플로 "무작위를 공정하게"
+만들고, <strong>DAS</strong> 로 입력 반복을 제어할 수 있다.</li>
+</ol>
+<h2 id="왜-tetris가-이-자리인가">왜 Tetris가 이 자리인가</h2>
+<p>1단계 Snake에서 우리는 "살아있는 게임"의 최소 완성형을 만들었다.
+하지만 Snake의 규칙은 <strong>직관적</strong>이었다 — 머리가 무엇과 같은
+칸에 있는가, 그것뿐이었다. 자료구조도 "자라나는
+목록"(<code>vector</code>) 하나로 충분했다.</p>
+<p>Tetris는 다르다. 여기서 게임은 <strong>설계된 규칙과
+알고리즘</strong>의 집합이 된다.</p>
+<ul>
+<li>"이 피스를 여기 놓을 수 있는가?"는 4칸을 보드와 대조하는
+<strong>충돌 판정</strong>이고,</li>
+<li>"회전했더니 벽에 걸린다"는 후보 위치를 순서대로 시도하는
+<strong>월킥</strong>이며,</li>
+<li>"한 줄이 꽉 찼다"는 배열을 스캔해 지우고 끌어내리는 <strong>라인
+클리어</strong>이고,</li>
+<li>"다음 피스는 무엇인가"는 7개를 공정하게 섞는 <strong>셔플
+알고리즘</strong>이다.</li>
+</ul>
+<p>그리고 이 모든 것의 무대가 <strong>2D 배열</strong>이다. 1부 C
+모듈에서 배운 <code>board[H][W]</code> 가, Snake의 동적 리스트를
+밀어내고 게임의 <strong>메인 자료구조</strong>로 올라선다. Snake가
+"자료구조 위의 상호작용"이었다면, Tetris는 <strong>"자료구조 위의
+알고리즘"</strong> 이다 — 커리큘럼이 한 계단 오르는 지점이다.</p>
+<blockquote>
+<p><strong>자료구조의 진화.</strong> Snake는 몸통을
+<code>vector&lt;Snake*&gt;</code> 로 관리하며 <code>new/delete</code> 로
+마디를 늘렸다(순진한 관리). Tetris는 정반대다 — 보드도, 7-bag도, 피스도
+전부 <strong>값 타입·고정 배열</strong>이라 동적 할당이 거의
+없다(<code>board[20][10]</code>, <code>struct Tetromino</code>). 그래서
+<code>OnRelease</code> 가 거의 빈다. 이 "값 타입으로 단순하게"가
+Dino·Road Fighter로 이어지고, 결국 Galaga의 오브젝트 풀로 완성된다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-1--2d-그리드-보드--배열이-주인공이-되다">개념 1 · 2D 그리드
+보드 — 배열이 주인공이 되다</h2>
+<p>테트리스의 심장은 게임판을 나타내는 2차원 배열 하나다.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="at">const</span> <span class="dt">int</span> BOARD_W <span class="op">=</span> <span class="dv">10</span><span class="op">;</span>   <span class="co">// 가로 10칸</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="at">const</span> <span class="dt">int</span> BOARD_H <span class="op">=</span> <span class="dv">20</span><span class="op">;</span>   <span class="co">// 세로 20칸</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> board<span class="op">[</span>BOARD_H<span class="op">][</span>BOARD_W<span class="op">];</span>     <span class="co">// 0 = 빈칸, 1~7 = 고정된 블록(색 = 종류)</span></span></code></pre></div>
+<p><code>board[r][c]</code> 의 값이 그 칸의 상태다 — <code>0</code> 이면
+비어 있고, <code>1~7</code> 이면 그 색의 블록이 고정돼 있다. 게임의 거의
+모든 판단이 이 배열을 읽고 쓰는 일이다. 떨어지는 피스가 놓일 수 있는지,
+한 줄이 꽉 찼는지, 어디까지 내려갈 수 있는지 — 전부 <code>board</code>
+를 들여다본다.</p>
+<p><strong>보드 좌표와 화면 좌표를 구분하라.</strong> 게임 로직은 보드
+인덱스 <code>(col, row)</code> 로만 계산한다. 화면에 그릴 때만 0단계에서
+배운 변환을 거친다.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> TetrisContent<span class="op">::</span>DrawCell<span class="op">(</span><span class="dt">int</span> col<span class="op">,</span> <span class="dt">int</span> row<span class="op">,</span> <span class="dt">int</span> color<span class="op">)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>row <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span> <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    SCREEN<span class="op">-&gt;</span>OnDrawColor<span class="op">((</span>ORIGIN_X <span class="op">+</span> col<span class="op">)</span> <span class="op">*</span> <span class="dv">2</span><span class="op">,</span> ORIGIN_Y <span class="op">+</span> row<span class="op">,</span> <span class="st">&quot;■&quot;</span><span class="op">,</span> color<span class="op">);</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">//                   └─ 보드 원점 더하고 ─┘ └ 전각이라 ×2 (0단계 개념 3)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>보드 셀 <code>(col, row)</code> → 논리 좌표
+<code>(ORIGIN_X + col, ORIGIN_Y + row)</code> → 화면
+<code>((ORIGIN_X+col)*2, ...)</code>. <strong>보드 인덱스와 화면 좌표를
+혼동하지 않는 것</strong> 이 2D 게임의 기본 규율이다.</p>
+<hr />
+<h2 id="개념-2--테트로미노와-사전-정의-회전-테이블">개념 2 ·
+테트로미노와 사전 정의 회전 테이블</h2>
+<p>떨어지는 피스(테트로미노)는 작은 구조체 하나다.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Tetromino <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> type<span class="op">;</span>   <span class="co">// 0~6 = I,O,T,S,Z,J,L</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> rot<span class="op">;</span>    <span class="co">// 0~3 회전 상태</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> x<span class="op">,</span> y<span class="op">;</span>   <span class="co">// 보드 좌표 (피스의 기준점)</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>문제는 "회전한 모양"을 어떻게 아느냐다. 회전을 실시간으로 계산(좌표
+회전 공식)할 수도 있지만, 콘솔 게임에선 <strong>4가지 회전 상태를 미리
+표로 저장</strong>하는 것이 가장 안전하고 단순하다. 각 회전 상태는 4×4
+상자 안 블록 4칸의 <code>(dx, dy)</code> 오프셋 목록이다.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// SHAPES[피스종류][회전상태][블록4개] = { dx, dy }</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="at">const</span> <span class="dt">int</span> SHAPES<span class="op">[</span><span class="dv">7</span><span class="op">][</span><span class="dv">4</span><span class="op">][</span><span class="dv">4</span><span class="op">][</span><span class="dv">2</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// I 피스</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span> <span class="op">{</span><span class="dv">0</span><span class="op">,</span><span class="dv">1</span><span class="op">},{</span><span class="dv">1</span><span class="op">,</span><span class="dv">1</span><span class="op">},{</span><span class="dv">2</span><span class="op">,</span><span class="dv">1</span><span class="op">},{</span><span class="dv">3</span><span class="op">,</span><span class="dv">1</span><span class="op">}</span> <span class="op">},</span>   <span class="co">// rot 0 : 가로 막대</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span> <span class="op">{</span><span class="dv">2</span><span class="op">,</span><span class="dv">0</span><span class="op">},{</span><span class="dv">2</span><span class="op">,</span><span class="dv">1</span><span class="op">},{</span><span class="dv">2</span><span class="op">,</span><span class="dv">2</span><span class="op">},{</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span><span class="op">}</span> <span class="op">},</span>   <span class="co">// rot 1 : 세로 막대</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span> <span class="op">{</span><span class="dv">0</span><span class="op">,</span><span class="dv">2</span><span class="op">},{</span><span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">},{</span><span class="dv">2</span><span class="op">,</span><span class="dv">2</span><span class="op">},{</span><span class="dv">3</span><span class="op">,</span><span class="dv">2</span><span class="op">}</span> <span class="op">},</span>   <span class="co">// rot 2</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span> <span class="op">{</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">},{</span><span class="dv">1</span><span class="op">,</span><span class="dv">1</span><span class="op">},{</span><span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">},{</span><span class="dv">1</span><span class="op">,</span><span class="dv">3</span><span class="op">}</span> <span class="op">},</span>   <span class="co">// rot 3</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// O 피스 — 4상태가 모두 같다(정사각형은 회전해도 그대로)</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span> <span class="op">{</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">},{</span><span class="dv">2</span><span class="op">,</span><span class="dv">0</span><span class="op">},{</span><span class="dv">1</span><span class="op">,</span><span class="dv">1</span><span class="op">},{</span><span class="dv">2</span><span class="op">,</span><span class="dv">1</span><span class="op">}</span> <span class="op">},</span> <span class="op">{</span> <span class="op">{</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">},{</span><span class="dv">2</span><span class="op">,</span><span class="dv">0</span><span class="op">},{</span><span class="dv">1</span><span class="op">,</span><span class="dv">1</span><span class="op">},{</span><span class="dv">2</span><span class="op">,</span><span class="dv">1</span><span class="op">}</span> <span class="op">},</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span> <span class="op">{</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">},{</span><span class="dv">2</span><span class="op">,</span><span class="dv">0</span><span class="op">},{</span><span class="dv">1</span><span class="op">,</span><span class="dv">1</span><span class="op">},{</span><span class="dv">2</span><span class="op">,</span><span class="dv">1</span><span class="op">}</span> <span class="op">},</span> <span class="op">{</span> <span class="op">{</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">},{</span><span class="dv">2</span><span class="op">,</span><span class="dv">0</span><span class="op">},{</span><span class="dv">1</span><span class="op">,</span><span class="dv">1</span><span class="op">},{</span><span class="dv">2</span><span class="op">,</span><span class="dv">1</span><span class="op">}</span> <span class="op">},</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">// T, S, Z, J, L ... (SRS 표준 4상태를 같은 방식으로 하드코딩)</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p><code>SHAPES[current.type][current.rot]</code> 하나로 "지금 이 피스의
+지금 회전 상태에서 블록 4칸이 어디에 있는지"를 얻는다. 피스의 실제 보드
+위치는 여기에 <code>current.x</code>, <code>current.y</code> 를 더한
+것이다.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 현재 피스의 i번째 블록의 보드 좌표</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> c <span class="op">=</span> current<span class="op">.</span>x <span class="op">+</span> SHAPES<span class="op">[</span>current<span class="op">.</span>type<span class="op">][</span>current<span class="op">.</span>rot<span class="op">][</span>i<span class="op">][</span><span class="dv">0</span><span class="op">];</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> r <span class="op">=</span> current<span class="op">.</span>y <span class="op">+</span> SHAPES<span class="op">[</span>current<span class="op">.</span>type<span class="op">][</span>current<span class="op">.</span>rot<span class="op">][</span>i<span class="op">][</span><span class="dv">1</span><span class="op">];</span></span></code></pre></div>
+<blockquote>
+<p><strong>왜 테이블인가.</strong> 회전
+공식(<code>(x,y) → (-y,x)</code>)으로 매번 계산하면 코드가 복잡하고, SRS
+표준의 미묘한 회전 중심을 맞추기 어렵다. <strong>미리 계산된 표를 읽는
+것</strong>이 빠르고, 정확하고, 디버깅하기 쉽다. "계산 대신
+조회(lookup)"는 게임 프로그래밍의 흔한 최적화이자 단순화 기법이다 — 1부
+F 모듈의 <code>enum</code> 도, 결국 "숫자에 이름을 붙인 표"였다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-3--충돌-판정-canmove--모든-조작의-심판">개념 3 · 충돌 판정
+<code>CanMove</code> — 모든 조작의 심판</h2>
+<p>테트리스에서 가장 많이 불리는 함수 하나가 <code>CanMove</code> 다.
+"이 피스를 <code>(dx, dy)</code> 만큼 옮기고 <code>newRot</code> 로
+회전하면, 놓을 수 있는가?"를 답한다.
+이동·회전·낙하·하드드롭·고스트·게임오버 판정이 <strong>전부 이 함수
+하나</strong>를 쓴다.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> TetrisContent<span class="op">::</span>CanMove<span class="op">(</span><span class="at">const</span> Tetromino<span class="op">&amp;</span> p<span class="op">,</span> <span class="dt">int</span> dx<span class="op">,</span> <span class="dt">int</span> dy<span class="op">,</span> <span class="dt">int</span> newRot<span class="op">)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">4</span><span class="op">;</span> i<span class="op">++)</span>   <span class="co">// 피스의 4칸을 각각 검사</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> c <span class="op">=</span> p<span class="op">.</span>x <span class="op">+</span> dx <span class="op">+</span> SHAPES<span class="op">[</span>p<span class="op">.</span>type<span class="op">][</span>newRot<span class="op">][</span>i<span class="op">][</span><span class="dv">0</span><span class="op">];</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> r <span class="op">=</span> p<span class="op">.</span>y <span class="op">+</span> dy <span class="op">+</span> SHAPES<span class="op">[</span>p<span class="op">.</span>type<span class="op">][</span>newRot<span class="op">][</span>i<span class="op">][</span><span class="dv">1</span><span class="op">];</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>c <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">||</span> c <span class="op">&gt;=</span> BOARD_W <span class="op">||</span> r <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">||</span> r <span class="op">&gt;=</span> BOARD_H<span class="op">)</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span>         <span class="co">// ① 보드 밖으로 나감</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>board<span class="op">[</span>r<span class="op">][</span>c<span class="op">]</span> <span class="op">!=</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span>         <span class="co">// ② 이미 고정된 블록과 겹침</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">true</span><span class="op">;</span>                  <span class="co">// 4칸 모두 이상 없음 → 놓을 수 있다</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>핵심은 <strong>"옮겨 본 뒤 판단한다"</strong> 는 발상이다. 실제로
+피스를 옮기기 전에, <code>dx/dy/newRot</code> 를 가정해 4칸의 최종
+위치를 계산하고, 그 자리가 (a)보드 안이고 (b)비어 있는지 확인한다.
+하나라도 걸리면 <code>false</code>. 이 "가정 → 검사 → 통과하면 실제
+적용" 패턴이 모든 조작의 뼈대다.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> TetrisContent<span class="op">::</span>MoveHorizontal<span class="op">(</span><span class="dt">int</span> dx<span class="op">)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>CanMove<span class="op">(</span>current<span class="op">,</span> dx<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> current<span class="op">.</span>rot<span class="op">))</span>   <span class="co">// 옮길 수 있으면</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        current<span class="op">.</span>x <span class="op">+=</span> dx<span class="op">;</span>                        <span class="co">// 실제로 옮긴다</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>CanMove</code> 하나에 규칙을 모아 둔 덕분에, 이동·회전·낙하가
+전부 "먼저 물어보고 움직인다"로 통일된다. <strong>판단 로직을 한 곳에
+모으는 것</strong> — 이것이 Snake의 흩어진 충돌 검사보다 한 단계 성숙한
+설계다.</p>
+<hr />
+<h2 id="개념-4--회전과-월킥--벽을-밀어내며-돌기">개념 4 · 회전과 월킥 —
+벽을 밀어내며 돌기</h2>
+<p>회전은 회전 상태 인덱스를
+<code>+1</code>(시계)/<code>+3</code>(반시계, = −1) 하는 것이다. 그런데
+벽이나 다른 블록에 붙어 회전하면 4칸 중 일부가 벽을 뚫는다. 그럴 때 그냥
+포기하지 않고, 피스를 살짝 밀어 <strong>놓을 수 있는 자리를
+찾아</strong> 주는 것이 <strong>월킥(wall kick)</strong> 이다.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 회전 시 시도할 밀어내기 오프셋들 (0,0 부터 순서대로)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="at">const</span> <span class="dt">int</span> KICKS<span class="op">[</span><span class="dv">8</span><span class="op">][</span><span class="dv">2</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">},</span> <span class="op">{-</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">},</span> <span class="op">{</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">},</span> <span class="op">{-</span><span class="dv">2</span><span class="op">,</span><span class="dv">0</span><span class="op">},</span> <span class="op">{</span><span class="dv">2</span><span class="op">,</span><span class="dv">0</span><span class="op">},</span> <span class="op">{</span><span class="dv">0</span><span class="op">,-</span><span class="dv">1</span><span class="op">},</span> <span class="op">{-</span><span class="dv">1</span><span class="op">,-</span><span class="dv">1</span><span class="op">},</span> <span class="op">{</span><span class="dv">1</span><span class="op">,-</span><span class="dv">1</span><span class="op">}</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> TetrisContent<span class="op">::</span>Rotate<span class="op">(</span><span class="dt">int</span> dir<span class="op">)</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> newRot <span class="op">=</span> <span class="op">(</span>current<span class="op">.</span>rot <span class="op">+</span> <span class="op">(</span>dir <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="dv">3</span><span class="op">))</span> <span class="op">%</span> <span class="dv">4</span><span class="op">;</span>   <span class="co">// CW=+1, CCW=+3</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> k <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> k <span class="op">&lt;</span> <span class="dv">8</span><span class="op">;</span> k<span class="op">++)</span>   <span class="co">// 킥 후보를 순서대로 시도</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>CanMove<span class="op">(</span>current<span class="op">,</span> KICKS<span class="op">[</span>k<span class="op">][</span><span class="dv">0</span><span class="op">],</span> KICKS<span class="op">[</span>k<span class="op">][</span><span class="dv">1</span><span class="op">],</span> newRot<span class="op">))</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>            current<span class="op">.</span>x <span class="op">+=</span> KICKS<span class="op">[</span>k<span class="op">][</span><span class="dv">0</span><span class="op">];</span>   <span class="co">// 처음 성공한 자리로 밀어 회전 확정</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>            current<span class="op">.</span>y <span class="op">+=</span> KICKS<span class="op">[</span>k<span class="op">][</span><span class="dv">1</span><span class="op">];</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>            current<span class="op">.</span>rot <span class="op">=</span> newRot<span class="op">;</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 8개 모두 실패하면 회전을 취소(아무 일도 안 일어남)</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>동작은 이렇다 — 먼저 제자리 회전(<code>{0,0}</code>)을 시도하고, 안
+되면 왼쪽 1칸, 오른쪽 1칸, 왼쪽 2칸… 순서로 밀며 <code>CanMove</code> 로
+확인한다. 처음 성공하는 자리로 밀어 회전을 확정하고, 8개 모두 실패하면
+회전을 없던 일로 한다. 벽에 붙은 I 피스가 회전하며 살짝 튕겨 세워지는 그
+감각이 이 표에서 나온다.</p>
+<blockquote>
+<p><strong>as-built 참고 — 기본 킥 vs 정식 SRS.</strong> 이 코드의
+<code>KICKS</code> 는 SRS(Super Rotation System)의 <strong>단순화
+버전</strong>이다. 정식 SRS는 피스 종류와 회전 방향마다 다른 킥 테이블을
+쓰지만, 콘솔 MVP에서는 이 8개 오프셋으로도 충분히 자연스럽다. "완벽한
+규격보다 동작하는 단순함을 먼저" — GDD가 정식 킥을 폴리시 단계로 미룬
+이유다.</p>
+</blockquote>
+<hr />
+<h2 id="개념-5--라인-클리어--배열-조작의-정석">개념 5 · 라인 클리어 —
+배열 조작의 정석</h2>
+<p>한 줄이 가득 차면 지우고, 그 위의 모든 줄을 한 칸씩 끌어내린다.
+이것이 테트리스의 카타르시스이자, <strong>2D 배열 조작의 교과서적
+알고리즘</strong>이다.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> TetrisContent<span class="op">::</span>ClearLines<span class="op">()</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> cleared <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> r <span class="op">=</span> BOARD_H <span class="op">-</span> <span class="dv">1</span><span class="op">;</span> r <span class="op">&gt;=</span> <span class="dv">0</span><span class="op">;</span> r<span class="op">--)</span>   <span class="co">// 아래 행부터 위로 스캔</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="dt">bool</span> full <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> c <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> c <span class="op">&lt;</span> BOARD_W<span class="op">;</span> c<span class="op">++)</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>board<span class="op">[</span>r<span class="op">][</span>c<span class="op">]</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> full <span class="op">=</span> <span class="kw">false</span><span class="op">;</span> <span class="cf">break</span><span class="op">;</span> <span class="op">}</span>   <span class="co">// 빈칸 있으면 안 참</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>full<span class="op">)</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>            <span class="co">// r행 위의 모든 행을 한 칸씩 아래로 끌어내린다</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> rr <span class="op">=</span> r<span class="op">;</span> rr <span class="op">&gt;</span> <span class="dv">0</span><span class="op">;</span> rr<span class="op">--)</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> c <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> c <span class="op">&lt;</span> BOARD_W<span class="op">;</span> c<span class="op">++)</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>                    board<span class="op">[</span>rr<span class="op">][</span>c<span class="op">]</span> <span class="op">=</span> board<span class="op">[</span>rr <span class="op">-</span> <span class="dv">1</span><span class="op">][</span>c<span class="op">];</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> c <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> c <span class="op">&lt;</span> BOARD_W<span class="op">;</span> c<span class="op">++)</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>                board<span class="op">[</span><span class="dv">0</span><span class="op">][</span>c<span class="op">]</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">// 맨 위 행은 빈칸으로</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>            cleared<span class="op">++;</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>            r<span class="op">++;</span>   <span class="co">// ★ 끌어내린 새 행을 같은 위치에서 다시 검사</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cleared<span class="op">;</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>두 곳을 눈여겨보자.</p>
+<ul>
+<li><strong>끌어내리기(shift).</strong>
+<code>board[rr][c] = board[rr-1][c]</code> 로 위 행을 아래 행에 복사하며
+내려온다. 1부 C 모듈에서 직원을 해고할 때 배열을 한 칸씩 당기던 그 조작
+— 그것의 2차원 버전이다.</li>
+<li><strong><code>r++</code> 의 함정 회피.</strong> 한 줄을 지우고 위를
+끌어내리면, 방금 <code>r</code> 자리에 <strong>새로운 행</strong>(원래
+<code>r-1</code>이던 행)이 내려온다. 그 새 행도 꽉 찼을 수 있으니,
+<code>r++</code> 로 인덱스를 되돌려 <strong>같은 자리를 다시
+검사</strong>한다(다음 루프의 <code>r--</code> 와 상쇄되어 제자리). 이
+한 줄을 빠뜨리면, 4줄을 동시에 지우는 "테트리스"에서 줄이 새어 나간다.
+<strong>배열을 조작하며 순회할 때, 인덱스가 어긋나지 않는지 항상
+의심하라.</strong></li>
+</ul>
+<p>지운 줄 수에 따라 점수가 붙는다 — 많이 한 번에 지울수록 이득이
+크다(도박의 유혹).</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="at">const</span> <span class="dt">int</span> lineScore<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">100</span><span class="op">,</span> <span class="dv">300</span><span class="op">,</span> <span class="dv">500</span><span class="op">,</span> <span class="dv">800</span> <span class="op">};</span>  <span class="co">// 0·1·2·3·4줄</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>score <span class="op">+=</span> lineScore<span class="op">[</span>cleared<span class="op">]</span> <span class="op">*</span> <span class="op">(</span>level <span class="op">+</span> <span class="dv">1</span><span class="op">);</span>   <span class="co">// 레벨이 높을수록 배점 ↑</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>lines <span class="op">+=</span> cleared<span class="op">;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>level <span class="op">=</span> lines <span class="op">/</span> <span class="dv">10</span><span class="op">;</span>                          <span class="co">// 10줄마다 레벨업 → 빨라진다</span></span></code></pre></div>
+<hr />
+<h2 id="개념-6--7-bag-랜덤--무작위를-공정하게">개념 6 · 7-bag 랜덤 —
+무작위를 공정하게</h2>
+<p>피스를 매번 순수 랜덤(<code>rand() % 7</code>)으로 뽑으면, 운 나쁘면
+I 피스가 20번 안 나올 수도 있다. 그래서 현대 테트리스는
+<strong>7-bag</strong> 을 쓴다 — 7개 피스를 봉지에 넣고 섞어 하나씩
+꺼내고, 봉지가 비면 다시 채운다. 한 사이클에 <strong>각 피스가 정확히 한
+번씩</strong> 나오니, 무작위이면서도 공정하다.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> TetrisContent<span class="op">::</span>RefillBag<span class="op">()</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    bag<span class="op">.</span>clear<span class="op">();</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">7</span><span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        bag<span class="op">.</span>push_back<span class="op">(</span>i<span class="op">);</span>           <span class="co">// 0~6 (7종) 을 봉지에 넣고</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Fisher-Yates 셔플 — 뒤에서부터 임의의 앞 원소와 교환</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">6</span><span class="op">;</span> i <span class="op">&gt;</span> <span class="dv">0</span><span class="op">;</span> i<span class="op">--)</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> j <span class="op">=</span> rand<span class="op">()</span> <span class="op">%</span> <span class="op">(</span>i <span class="op">+</span> <span class="dv">1</span><span class="op">);</span>   <span class="co">// 0 ~ i 중 하나</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> tmp <span class="op">=</span> bag<span class="op">[</span>i<span class="op">];</span> bag<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> bag<span class="op">[</span>j<span class="op">];</span> bag<span class="op">[</span>j<span class="op">]</span> <span class="op">=</span> tmp<span class="op">;</span>   <span class="co">// 교환</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> TetrisContent<span class="op">::</span>DrawNext<span class="op">()</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>bag<span class="op">.</span>empty<span class="op">())</span> RefillBag<span class="op">();</span>   <span class="co">// 봉지 비면 다시 채워 섞는다</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> t <span class="op">=</span> bag<span class="op">.</span>back<span class="op">();</span>             <span class="co">// 뒤에서 하나 꺼내기</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    bag<span class="op">.</span>pop_back<span class="op">();</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> t<span class="op">;</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>Fisher-Yates 셔플</strong>은 배열을 공정하게 섞는 표준
+알고리즘이다. 뒤에서부터 각 원소를, 자기 포함 앞쪽 임의의 원소와
+교환한다. 이렇게 하면 모든 순열이 같은 확률로 나온다 — 카드를 섞는
+정석이다. 1부 E 모듈의 <code>rand()</code> 가, 여기서 "공정한 섞기"라는
+알고리즘으로 자란다.</p>
+<p><code>nextQueue</code> 에 미리 몇 개를 뽑아 두면 NEXT 미리보기가
+된다.</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> TetrisContent<span class="op">::</span>SpawnPiece<span class="op">()</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">((</span><span class="dt">int</span><span class="op">)</span>nextQueue<span class="op">.</span>size<span class="op">()</span> <span class="op">&lt;</span> <span class="dv">4</span><span class="op">)</span>     <span class="co">// 큐를 4개 이상으로 유지</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>        nextQueue<span class="op">.</span>push_back<span class="op">(</span>DrawNext<span class="op">());</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> t <span class="op">=</span> nextQueue<span class="op">.</span>front<span class="op">();</span>            <span class="co">// 맨 앞을 꺼내 스폰</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    nextQueue<span class="op">.</span>erase<span class="op">(</span>nextQueue<span class="op">.</span>begin<span class="op">());</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    current <span class="op">=</span> <span class="op">{</span> t<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">0</span> <span class="op">};</span>             <span class="co">// 상단 중앙(col 3, row 0)에</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>CanMove<span class="op">(</span>current<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> current<span class="op">.</span>rot<span class="op">))</span>   <span class="co">// 스폰 자리가 막혔으면</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        gameState <span class="op">=</span> _EGameState<span class="op">::</span>GAMEOVER<span class="op">;</span>      <span class="co">// → 게임 오버</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>스폰하자마자 <code>CanMove</code> 로 놓을 수 있는지 확인한다. 이미
+블록이 쌓여 스폰 자리가 막혔으면 그것이 곧 <strong>게임
+오버</strong>다.</p>
+<hr />
+<h2 id="개념-7--das--누르고-있으면-미끄러지는-이동">개념 7 · DAS —
+누르고 있으면 미끄러지는 이동</h2>
+<p>방향키를 한 번 누르면 한 칸, <strong>꾹 누르고 있으면</strong> 처음엔
+잠깐 멈췄다가 이후 빠르게 반복 이동한다. 이 "초기 지연 후 자동 반복"을
+<strong>DAS(Delayed Auto Shift)</strong> 라 한다. 키보드로 문자를 꾹
+누를 때 "ㄱ … ㄱㄱㄱㄱ" 하는 그 감각이다.</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> downL <span class="op">=</span> INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_LEFT<span class="op">);</span>    <span class="co">// 막 눌림(엣지)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> stayL <span class="op">=</span> INPUT<span class="op">-&gt;</span>OnKeyStay<span class="op">(</span>VK_LEFT<span class="op">);</span>    <span class="co">// 눌려 있음(레벨)</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> now  <span class="op">=</span> TIMER<span class="op">-&gt;</span>GetContentTime<span class="op">();</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>downL<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    MoveHorizontal<span class="op">(-</span><span class="dv">1</span><span class="op">);</span>              <span class="co">// 즉시 한 칸</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    dasDir <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    dasNextMove <span class="op">=</span> now <span class="op">+</span> <span class="fl">0.16</span><span class="bu">f</span><span class="op">;</span>       <span class="co">// 초기 지연 0.16초 (첫 반복까지 뜸)</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>dasDir <span class="op">==</span> <span class="op">-</span><span class="dv">1</span> <span class="op">&amp;&amp;</span> stayL<span class="op">)</span> <span class="op">{</span>    <span class="co">// 계속 누르고 있으면</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>now <span class="op">&gt;=</span> dasNextMove<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        MoveHorizontal<span class="op">(-</span><span class="dv">1</span><span class="op">);</span>          <span class="co">// 반복 이동</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        dasNextMove <span class="op">=</span> now <span class="op">+</span> <span class="fl">0.05</span><span class="bu">f</span><span class="op">;</span>   <span class="co">// 반복 간격 0.05초 (빠르게)</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    dasDir <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>                      <span class="co">// 손 떼면 리셋</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>0단계에서 배운 <strong>엣지(<code>OnKeyDown</code>)와
+레벨(<code>OnKeyStay</code>)</strong> 이 여기서 함께 쓰인다. 막 눌린
+순간(엣지)엔 즉시 한 칸 옮기고 초기 지연을 걸고, 눌려 있는 동안(레벨)엔
+정해진 간격마다 반복한다. 초기 지연(0.16초)이 있어야 "한 칸만 톡" 과 "쭉
+미끄러짐"을 손가락이 구분할 수 있다 — 이 미세한 타이밍이 조작감을
+좌우한다.</p>
+<blockquote>
+<p><strong>"입력 주기 ≠ 상태 변화 주기"의 심화.</strong> 0단계에서
+"입력은 매 프레임, 이동은 틱마다"를 배웠다. DAS는 여기서 한 걸음 더
+나아가, <strong>같은 키라도 "막 눌림"과 "계속 눌림"에 다른
+타이밍</strong>을 준다. 이런 입력 타이밍 설계가 Dino의 점프 버퍼, Road
+Fighter의 조작으로 이어진다.</p>
+</blockquote>
+<hr />
+<h2 id="코드-워크스루--oningameupdate-한-프레임">코드 워크스루 —
+<code>OnInGameUpdate</code> 한 프레임</h2>
+<p>이제 조각들이 한 프레임에서 어떻게 맞물리는지, 게임의 심장
+<code>OnInGameUpdate</code> 를 따라가자.</p>
+<blockquote>
+<p><strong>실제 파일:</strong>
+<code>Main/Content/TetrisContent.cpp</code> —
+<code>OnInGameUpdate()</code></p>
+</blockquote>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> TetrisContent<span class="op">::</span>OnInGameUpdate<span class="op">()</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_ESCAPE<span class="op">))</span> <span class="op">{</span> currentPhase <span class="op">=</span> _EPhase<span class="op">::</span>TITLE<span class="op">;</span> <span class="cf">return</span><span class="op">;</span> <span class="op">}</span>  <span class="co">// 타이틀로</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span><span class="ch">&#39;P&#39;</span><span class="op">))</span> <span class="op">{</span> <span class="co">/* PLAYING ↔ PAUSE 토글 */</span> <span class="op">}</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>gameState <span class="op">==</span> _EGameState<span class="op">::</span>PAUSE<span class="op">)</span>    <span class="cf">return</span><span class="op">;</span>                  <span class="co">// 일시정지면 멈춤</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>gameState <span class="op">==</span> _EGameState<span class="op">::</span>GAMEOVER<span class="op">)</span> <span class="op">{</span> <span class="co">/* Enter → 타이틀 */</span> <span class="cf">return</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ── PLAYING ──</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ① 좌우 이동 + DAS (개념 7)</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ② 회전 (개념 4)</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_UP<span class="op">)</span> <span class="op">||</span> INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span><span class="ch">&#39;X&#39;</span><span class="op">))</span> Rotate<span class="op">(</span><span class="dv">1</span><span class="op">);</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span><span class="ch">&#39;Z&#39;</span><span class="op">))</span> Rotate<span class="op">(-</span><span class="dv">1</span><span class="op">);</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ③ 홀드 / 하드드롭</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span><span class="ch">&#39;C&#39;</span><span class="op">))</span> Hold<span class="op">();</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>INPUT<span class="op">-&gt;</span>OnKeyDown<span class="op">(</span>VK_SPACE<span class="op">))</span> <span class="op">{</span> HardDrop<span class="op">();</span> <span class="cf">return</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ④ 중력 낙하 (레벨별 속도, 소프트 드롭이면 빠르게)</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> soft <span class="op">=</span> INPUT<span class="op">-&gt;</span>OnKeyStay<span class="op">(</span>VK_DOWN<span class="op">);</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> speed <span class="op">=</span> soft <span class="op">?</span> <span class="fl">0.04</span><span class="bu">f</span> <span class="op">:</span> GRAVITY<span class="op">[</span>level <span class="op">&lt;</span> <span class="dv">14</span> <span class="op">?</span> level <span class="op">:</span> <span class="dv">14</span><span class="op">];</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>TIMER<span class="op">-&gt;</span>GetTickTimer<span class="op">(</span>speed<span class="op">))</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>CanMove<span class="op">(</span>current<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> current<span class="op">.</span>rot<span class="op">))</span>   <span class="co">// 아래로 갈 수 있으면</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>            current<span class="op">.</span>y<span class="op">++;</span>                            <span class="co">// 한 칸 낙하</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>soft<span class="op">)</span> score <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span>                   <span class="co">// 소프트 드롭 보너스</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>            LockPiece<span class="op">();</span>                            <span class="co">// 못 내려가면 고정 + 라인 검사 + 다음 피스</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>한 프레임의 순서가 곧 설계다.</p>
+<ul>
+<li><strong>입력이 먼저, 중력이 나중.</strong> 이동·회전·홀드·하드드롭을
+다 처리한 뒤, 마지막에 중력으로 한 칸 떨어뜨린다. 그래서 "떨어지기
+직전에 옮기고 돌리는" 조작이 자연스럽게 반영된다.</li>
+<li><strong>중력만 틱 타이머 안에.</strong> 조작(①~③)은 매 프레임 즉각
+반응하지만, 낙하(④)는 <code>GetTickTimer(speed)</code> 로 레벨별 속도에
+맞춰서만 일어난다. 0단계의 "입력은 매 프레임, 이동은 틱마다"가
+그대로다.</li>
+<li><strong><code>LockPiece</code> 가 연쇄를 부른다.</strong> 못
+내려가면 <code>LockPiece</code> 하나가 [보드에 고정 → 라인 클리어 →
+점수·레벨 갱신 → 홀드 리셋 → 다음 피스 스폰]을 줄줄이 처리한다(6장 함수
+분해의 정신). 그 스폰이 막히면 게임 오버로 이어진다.</li>
+</ul>
+<p>렌더(<code>OnInGameRender</code>)는 이 상태를 그리기만 한다 — 프레임
+벽 → 고정 블록(<code>board</code> 순회) → <strong>고스트
+피스</strong>(<code>DARKGRAY</code>, 착지 위치 미리보기) → 현재 피스 →
+UI 패널(NEXT·HOLD·SCORE). 고스트는 매 프레임 <code>GetGhost()</code> 로
+"현재 피스를 끝까지 떨어뜨린 위치"를 계산해 옅게 그린다.</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>TetrisContent<span class="op">::</span>Tetromino TetrisContent<span class="op">::</span>GetGhost<span class="op">()</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    Tetromino g <span class="op">=</span> current<span class="op">;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>CanMove<span class="op">(</span>g<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> g<span class="op">.</span>rot<span class="op">))</span> g<span class="op">.</span>y<span class="op">++;</span>   <span class="co">// 더 못 내려갈 때까지 낙하</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> g<span class="op">;</span>                                 <span class="co">// 착지 위치</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>GetGhost</code> 도, <code>HardDrop</code> 도 결국
+<code>CanMove</code> 를 반복 호출할 뿐이다 — <strong>하나의 충돌 판정이
+온 게임을 지탱한다</strong>(개념 3).</p>
+<hr />
+<h2 id="그림으로-정리--회전-테이블과-라인-클리어">그림으로 정리 — 회전
+테이블과 라인 클리어</h2>
+<blockquote>
+<p>📊 <strong>웹 교육문서에서는 회전·월킥·라인 클리어가 단계별
+애니메이션(V-P2-2)으로 재생된다.</strong> 책에서는 아래 도식으로
+대신한다.</p>
+</blockquote>
+<p><strong>회전 테이블 — 미리 저장된 4상태 (T 피스)</strong></p>
+<pre><code>  rot0      rot1      rot2      rot3
+  . ■ .     . ■ .     . . .     . ■ .
+  ■ ■ ■     . ■ ■     ■ ■ ■     ■ ■ .
+  . . .     . ■ .     . ■ .     . ■ .
+  SHAPES[T][rot] 이 이 4칸의 (dx,dy) 를 담는다. 계산 대신 조회.</code></pre>
+<p><strong>라인 클리어 — 지우고 끌어내리기</strong></p>
+<pre><code>  꽉 찬 행 발견 (r):          지운 뒤 위를 끌어내림:
+  . ■ . . ■                  . . . . .   ← board[0] 은 빈칸
+  ■ ■ ■ . ■        →         . ■ . . ■   ← 위 행들이
+  ■ ■ ■ ■ ■ ← full           ■ ■ ■ . ■      한 칸씩 내려옴
+  ┌─────────────────────────────────────────┐
+  │ board[rr][c] = board[rr-1][c]  (rr: r→1) │
+  │ 그리고 r++ 로 같은 자리 재검사 (4줄 대비) │
+  └─────────────────────────────────────────┘</code></pre>
+<p>한 문장으로: <strong>2D 배열이 게임판이고, <code>CanMove</code> 가 그
+위의 모든 움직임을 심판하며, 회전 테이블·월킥·라인 클리어·7-bag은 그
+배열을 다루는 알고리즘들이다.</strong></p>
+<hr />
+<h2 id="알려진-이슈에서-배우기-as-built">알려진 이슈에서 배우기
+(as-built)</h2>
+<p>Tetris도 Snake처럼 "완벽한 규격"이 아니라 <strong>동작하는
+MVP</strong>로 구현됐다. GDD가 설계한 것 중 일부는 폴리시 단계로
+미뤄졌다. 이 간극을 감추지 않는 이유는, <strong>무엇을 먼저 만들고
+무엇을 미룰지 판단하는 것</strong>도 개발 기술이기 때문이다.</p>
+<table>
+<thead>
+<tr>
+<th>이슈</th>
+<th>as-built 상태</th>
+<th>무엇을 배우나</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>락 딜레이(lock delay)</strong></td>
+<td>없음 — 낙하 틱에 못 내려가면 즉시 고정</td>
+<td>바닥에서 좌우로 미끄러뜨리는 여유가 없다. "즉시 고정"이 가장 단순한
+구현</td>
+</tr>
+<tr>
+<td><strong>라인 클리어 연출</strong></td>
+<td>없음 — 즉시 지우고 끌어내림</td>
+<td>GDD의 <code>LINECLEAR</code> 상태(깜빡임)는 미구현. 재미 없어도
+규칙은 완결</td>
+</tr>
+<tr>
+<td><strong>정식 SRS 킥</strong></td>
+<td>8개 기본 오프셋으로 단순화</td>
+<td>"완벽한 규격보다 동작하는 단순함 먼저"(개념 4)</td>
+</tr>
+<tr>
+<td><strong>T-Spin·콤보</strong></td>
+<td>없음</td>
+<td>GDD §13 향후 확장. MVP는 핵심 규칙에 집중</td>
+</tr>
+<tr>
+<td><strong>렌더 최적화</strong></td>
+<td>매 프레임 전체 렌더(200셀)</td>
+<td>60fps에서 충분. "측정 후 최적화" — 느려지면 그때</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>이 표는 결함 목록이 아니라 <strong>우선순위 결정의 기록</strong>이다.
+"락 딜레이 없이도 게임은 완결된다"는 판단, "SRS 킥은 단순화해도
+자연스럽다"는 타협 — MVP를 만든다는 것은 이런 결정의 연속이다. 1부
+타이쿤이 v0.1부터 자랐듯, 게임은 완벽한 설계를 한 번에 짓는 게 아니라
+<strong>동작하는 핵심을 먼저 세우고 살을 붙인다.</strong></p>
+</blockquote>
+<hr />
+<h2 id="체크포인트--스스로-점검하기">체크포인트 — 스스로 점검하기</h2>
+<p><strong>Q1.</strong> <code>board[r][c]</code> 의 값 <code>0</code> 과
+<code>1~7</code> 은 각각 무엇을 뜻하나? 왜
+<code>bool</code>(찼다/비었다)이 아니라 정수인가?</p>
+<p><strong>Q2.</strong> <code>CanMove</code> 하나로
+이동·회전·낙하·하드드롭·게임오버를 모두 판정할 수 있는 이유는?</p>
+<p><strong>Q3.</strong> 라인 클리어에서 한 줄을 지운 뒤 <code>r++</code>
+를 하는 이유는? 빼먹으면 어떤 상황에서 버그가 나나?</p>
+<p><strong>Q4.</strong> 순수 <code>rand() % 7</code> 대신 7-bag을 쓰는
+이유는? Fisher-Yates 셔플은 무엇을 보장하나?</p>
+<p><strong>Q5.</strong> 방향키를 꾹 누르면 "한 칸 → 잠깐 멈춤 → 빠르게
+반복"으로 움직인다. <code>OnKeyDown</code> 과 <code>OnKeyStay</code> 를
+각각 어디에 쓰나?</p>
+<details><summary><b>해설 펼치기</b></summary>
+
+<p><strong>A1.</strong> <code>0</code> 은 빈칸, <code>1~7</code> 은 그
+칸에 고정된 블록의 <strong>종류(색)</strong> 다(피스 type + 1).
+<code>bool</code> 이 아니라 정수인 이유는 "찼는지"뿐 아니라
+<strong>"무슨 색인지"</strong> 까지 담아야 렌더 시 색을 결정할 수 있기
+때문이다. 하나의 배열이 상태와 색을 겸한다.</p>
+<p><strong>A2.</strong> <code>CanMove(p, dx, dy, newRot)</code> 가
+"피스를 그렇게 옮기고 돌리면 4칸이 보드 안이고 비어 있는가"라는
+<strong>하나의 질문</strong>에 답하기 때문이다. 이동은
+<code>(dx,0)</code>, 회전은 <code>newRot</code>, 낙하는
+<code>(0,1)</code>, 하드드롭은 <code>(0,1)</code> 반복, 게임오버는 스폰
+자리 <code>(0,0)</code> — 전부 이 질문의 특수한 경우다. 규칙을 한 곳에
+모으면 재사용된다.</p>
+<p><strong>A3.</strong> 한 줄을 지우고 위를 끌어내리면, 방금 그
+자리(<code>r</code>)에 새로운 행이 내려온다. 그 새 행도 꽉 찼을 수
+있으므로 <code>r++</code> 로 인덱스를 되돌려 <strong>같은 자리를 다시
+검사</strong>해야 한다. 빼먹으면 <strong>연속으로 붙어 꽉 찬
+줄들</strong>(특히 4줄 테트리스)에서 아래 줄만 지우고 위 줄을 건너뛰는
+버그가 난다.</p>
+<p><strong>A4.</strong> 순수 랜덤은 특정 피스가 오래 안 나오는 "가뭄"이
+생겨 불공정하다. 7-bag은 7개를 섞어 하나씩 꺼내므로 <strong>한 사이클에
+각 피스가 정확히 한 번씩</strong> 나온다(공정). Fisher-Yates는 그 7개를
+<strong>모든 순열이 같은 확률</strong>이 되도록 고르게 섞는 것을
+보장한다.</p>
+<p><strong>A5.</strong> <code>OnKeyDown</code>(엣지) — 키가 막 눌린 순간
+<strong>즉시 한 칸</strong> 옮기고 초기 지연 타이머를 건다.
+<code>OnKeyStay</code>(레벨) — 키가 눌려 있는 동안, 정해진
+간격(0.05초)마다 <strong>반복 이동</strong>시킨다. 초기 지연(0.16초)이
+"한 칸만"과 "쭉 미끄러짐"을 구분해 준다.</p>
+</details>
+
+<hr />
+<h2 id="실습-미션--한-칸-블록-쌓기-dropc-star">실습 미션 — 한 칸 블록
+쌓기 <code>drop.c</code> ⭐</h2>
+<blockquote>
+<p>Snake의 미션이 "리스트·충돌"이었다면, 이 미션은 <strong>2D 배열과
+라인 클리어 알고리즘</strong>을 콕 집어 연습한다. 회전·피스 없이,
+테트리스의 심장인 "쌓고 → 꽉 찬 줄 지우고 → 끌어내리기"만 순수하게
+구현한다.</p>
+</blockquote>
+<p><strong>드릴 문법</strong> — 2D 배열 <code>board[H][W]</code> · 배열
+순회(이중 for) · 열 낙하(landing 계산) · <strong>라인 클리어 +
+shift</strong>(개념 5의 핵심) <strong>만드는 것</strong> — 열 번호를
+입력하면 그 열 맨 아래에 블록 한 칸이 쌓이고, 한 줄이 꽉 차면 지워지며
+위가 내려오는 미니 퍼즐. <strong>클리어 조건</strong> — 줄이 채워질
+때마다 지워지고 점수가 오른다. 한 열이 넘치면 게임 오버.
+<strong>규모</strong> — 약 55줄, 파일 1개. 표준 C만. 1부의
+배열·반복·조건이 테트리스의 핵심 알고리즘으로 모인다.</p>
+<h3 id="문제-정의">문제 정의</h3>
+<p>이 게임의 심장은 딱 두 가지다. <strong>① 블록이 열의 맨 아래(빈칸 중
+가장 아래)에 안착하고, ② 꽉 찬 줄을 지우고 위를 끌어내린다.</strong> ②가
+바로 개념 5의 <code>ClearLines</code> 를 축소한 것이다. 회전도 피스도
+없이 이 알고리즘만 순수하게 짜 보면, 테트리스의 진짜 뼈대가 손에
+남는다.</p>
+<h3 id="목표--클리어-조건">목표 / 클리어 조건</h3>
+<ol type="1">
+<li><code>int board[H][W]</code> 를 <code>0</code> 으로
+초기화한다(빈칸).</li>
+<li>열 번호(1~W)를 입력받아, 그 열의 <strong>가장 아래 빈칸</strong>에
+블록(<code>1</code>)을 놓는다.</li>
+<li>놓은 뒤, <strong>꽉 찬 행</strong>을 찾아 지우고 위 행을 한 칸씩
+끌어내린다(지운 수만큼 점수).</li>
+<li>어떤 열이 넘치면(맨 위까지 참) 게임 오버.</li>
+<li>매번 보드를 출력해 상태를 보여 준다.</li>
+</ol>
+<h3 id="힌트">힌트</h3>
+<details><summary><b>힌트 1 — 열 낙하(안착 위치 찾기)</b></summary>
+
+<p>그 열을 아래에서 위로 훑어, 처음 만나는 빈칸이 안착 위치다.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> landRow <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> r <span class="op">=</span> H <span class="op">-</span> <span class="dv">1</span><span class="op">;</span> r <span class="op">&gt;=</span> <span class="dv">0</span><span class="op">;</span> r<span class="op">--)</span>   <span class="co">// 맨 아래부터</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>board<span class="op">[</span>r<span class="op">][</span>col<span class="op">]</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> landRow <span class="op">=</span> r<span class="op">;</span> <span class="cf">break</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>landRow <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> <span class="co">/* 열이 꽉 참 → 게임 오버 */</span> <span class="op">}</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> board<span class="op">[</span>landRow<span class="op">][</span>col<span class="op">]</span> <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span></code></pre></div>
+</details>
+
+<details><summary><b>힌트 2 — 라인 클리어 (개념 5 축소판)</b></summary>
+
+<div class="sourceCode" id="cb19"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> ClearFull<span class="op">(</span><span class="dt">int</span> board<span class="op">[][</span>W<span class="op">])</span> <span class="op">{</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> cleared <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> r <span class="op">=</span> H <span class="op">-</span> <span class="dv">1</span><span class="op">;</span> r <span class="op">&gt;=</span> <span class="dv">0</span><span class="op">;</span> r<span class="op">--)</span> <span class="op">{</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> full <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> c <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> c <span class="op">&lt;</span> W<span class="op">;</span> c<span class="op">++)</span> <span class="cf">if</span> <span class="op">(!</span>board<span class="op">[</span>r<span class="op">][</span>c<span class="op">])</span> <span class="op">{</span> full <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> <span class="cf">break</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>full<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> rr <span class="op">=</span> r<span class="op">;</span> rr <span class="op">&gt;</span> <span class="dv">0</span><span class="op">;</span> rr<span class="op">--)</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> c <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> c <span class="op">&lt;</span> W<span class="op">;</span> c<span class="op">++)</span> board<span class="op">[</span>rr<span class="op">][</span>c<span class="op">]</span> <span class="op">=</span> board<span class="op">[</span>rr<span class="op">-</span><span class="dv">1</span><span class="op">][</span>c<span class="op">];</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> c <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> c <span class="op">&lt;</span> W<span class="op">;</span> c<span class="op">++)</span> board<span class="op">[</span><span class="dv">0</span><span class="op">][</span>c<span class="op">]</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>            cleared<span class="op">++;</span> r<span class="op">++;</span>      <span class="co">/* 같은 자리 재검사 */</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cleared<span class="op">;</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+
+<h3 id="정답-코드">정답 코드</h3>
+<details><summary><b>정답 펼치기 — <code>drop.c</code></b></summary>
+
+<div class="sourceCode" id="cb20"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define _CRT_SECURE_NO_WARNINGS</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#define W </span><span class="dv">6</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#define H </span><span class="dv">8</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> board<span class="op">[</span>H<span class="op">][</span>W<span class="op">];</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> PrintBoard<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> r <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> r <span class="op">&lt;</span> H<span class="op">;</span> r<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;  |&quot;</span><span class="op">);</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> c <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> c <span class="op">&lt;</span> W<span class="op">;</span> c<span class="op">++)</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%c</span><span class="st">&quot;</span><span class="op">,</span> board<span class="op">[</span>r<span class="op">][</span>c<span class="op">]</span> <span class="op">?</span> <span class="ch">&#39;#&#39;</span> <span class="op">:</span> <span class="ch">&#39;.&#39;</span><span class="op">);</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;|</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;   &quot;</span><span class="op">);</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> c <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> c <span class="op">&lt;</span> W<span class="op">;</span> c<span class="op">++)</span> printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> c <span class="op">+</span> <span class="dv">1</span><span class="op">);</span>   <span class="co">/* 열 번호 */</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="co">/* 꽉 찬 행을 지우고 위를 끌어내림 → 지운 수 반환 (개념 5) */</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> ClearFull<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> cleared <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> r <span class="op">=</span> H <span class="op">-</span> <span class="dv">1</span><span class="op">;</span> r <span class="op">&gt;=</span> <span class="dv">0</span><span class="op">;</span> r<span class="op">--)</span> <span class="op">{</span></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> full <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> c <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> c <span class="op">&lt;</span> W<span class="op">;</span> c<span class="op">++)</span> <span class="cf">if</span> <span class="op">(!</span>board<span class="op">[</span>r<span class="op">][</span>c<span class="op">])</span> <span class="op">{</span> full <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> <span class="cf">break</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>full<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> rr <span class="op">=</span> r<span class="op">;</span> rr <span class="op">&gt;</span> <span class="dv">0</span><span class="op">;</span> rr<span class="op">--)</span></span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> c <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> c <span class="op">&lt;</span> W<span class="op">;</span> c<span class="op">++)</span> board<span class="op">[</span>rr<span class="op">][</span>c<span class="op">]</span> <span class="op">=</span> board<span class="op">[</span>rr <span class="op">-</span> <span class="dv">1</span><span class="op">][</span>c<span class="op">];</span></span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> c <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> c <span class="op">&lt;</span> W<span class="op">;</span> c<span class="op">++)</span> board<span class="op">[</span><span class="dv">0</span><span class="op">][</span>c<span class="op">]</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>            cleared<span class="op">++;</span></span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>            r<span class="op">++;</span>                    <span class="co">/* 끌어내린 새 행을 같은 자리에서 재검사 */</span></span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cleared<span class="op">;</span></span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> col<span class="op">,</span> score <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> r <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> r <span class="op">&lt;</span> H<span class="op">;</span> r<span class="op">++)</span></span>
+<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> c <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> c <span class="op">&lt;</span> W<span class="op">;</span> c<span class="op">++)</span></span>
+<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a>            board<span class="op">[</span>r<span class="op">][</span>c<span class="op">]</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;=== 한 칸 블록 쌓기 (열 1~</span><span class="sc">%d</span><span class="st">, 0=종료) ===</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> W<span class="op">);</span></span>
+<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(;;)</span> <span class="op">{</span></span>
+<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a>        PrintBoard<span class="op">();</span></span>
+<span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;점수 </span><span class="sc">%d</span><span class="st"> | 떨어뜨릴 열: &quot;</span><span class="op">,</span> score<span class="op">);</span></span>
+<span id="cb20-53"><a href="#cb20-53" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>scanf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>col<span class="op">)</span> <span class="op">!=</span> <span class="dv">1</span><span class="op">)</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb20-54"><a href="#cb20-54" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>col <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb20-55"><a href="#cb20-55" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>col <span class="op">&lt;</span> <span class="dv">1</span> <span class="op">||</span> col <span class="op">&gt;</span> W<span class="op">)</span> <span class="op">{</span> printf<span class="op">(</span><span class="st">&quot;  ! 1~</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> W<span class="op">);</span> <span class="cf">continue</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb20-56"><a href="#cb20-56" aria-hidden="true" tabindex="-1"></a>        col<span class="op">--;</span>                       <span class="co">/* 1~W → 0~W-1 */</span></span>
+<span id="cb20-57"><a href="#cb20-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-58"><a href="#cb20-58" aria-hidden="true" tabindex="-1"></a>        <span class="co">/* 열 낙하: 맨 아래 빈칸 찾기 */</span></span>
+<span id="cb20-59"><a href="#cb20-59" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> landRow <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb20-60"><a href="#cb20-60" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> r <span class="op">=</span> H <span class="op">-</span> <span class="dv">1</span><span class="op">;</span> r <span class="op">&gt;=</span> <span class="dv">0</span><span class="op">;</span> r<span class="op">--)</span></span>
+<span id="cb20-61"><a href="#cb20-61" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>board<span class="op">[</span>r<span class="op">][</span>col<span class="op">]</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> landRow <span class="op">=</span> r<span class="op">;</span> <span class="cf">break</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb20-62"><a href="#cb20-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-63"><a href="#cb20-63" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>landRow <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span>           <span class="co">/* 열이 꽉 참 → 게임 오버 */</span></span>
+<span id="cb20-64"><a href="#cb20-64" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&gt;&gt; </span><span class="sc">%d</span><span class="st">번 열이 넘쳤습니다. 게임 오버! 최종 점수 </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> col <span class="op">+</span> <span class="dv">1</span><span class="op">,</span> score<span class="op">);</span></span>
+<span id="cb20-65"><a href="#cb20-65" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb20-66"><a href="#cb20-66" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb20-67"><a href="#cb20-67" aria-hidden="true" tabindex="-1"></a>        board<span class="op">[</span>landRow<span class="op">][</span>col<span class="op">]</span> <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb20-68"><a href="#cb20-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-69"><a href="#cb20-69" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> cleared <span class="op">=</span> ClearFull<span class="op">();</span>   <span class="co">/* 꽉 찬 줄 처리 */</span></span>
+<span id="cb20-70"><a href="#cb20-70" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>cleared <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb20-71"><a href="#cb20-71" aria-hidden="true" tabindex="-1"></a>            score <span class="op">+=</span> cleared <span class="op">*</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb20-72"><a href="#cb20-72" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;  &gt;&gt; </span><span class="sc">%d</span><span class="st">줄 클리어! (+</span><span class="sc">%d</span><span class="st">)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> cleared<span class="op">,</span> cleared <span class="op">*</span> <span class="dv">100</span><span class="op">);</span></span>
+<span id="cb20-73"><a href="#cb20-73" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb20-74"><a href="#cb20-74" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb20-75"><a href="#cb20-75" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb20-76"><a href="#cb20-76" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>빌드:</strong> <code>cl drop.c</code> (MSVC) 또는
+<code>gcc drop.c -o drop</code></p>
+<p><strong>함정/체크포인트</strong></p>
+<ul>
+<li><strong><code>ClearFull</code> 의 <code>r++</code></strong> 를 빼면,
+위아래로 붙어 꽉 찬 두 줄을 한 번에 지울 때 위 줄을 놓친다 — 개념 5의 그
+함정이 이 미니게임에도 그대로 있다. 두 줄을 동시에 채워 확인해
+보자.</li>
+<li><strong>열 낙하는 아래에서 위로</strong> 훑어 첫 빈칸을 찾는다.
+위에서 아래로 훑으면 이미 쌓인 블록 위에 얹혀 버린다.</li>
+<li>2D 배열을 함수에 넘길 때 <code>int board[][W]</code> 처럼 <strong>열
+크기는 반드시 명시</strong>해야 한다(행은 생략 가능). 여기선 전역
+배열이라 그냥 접근했다.</li>
+</ul>
+<p><strong>확장 과제</strong></p>
+<ul>
+<li>블록에 색(1~7)을 주고, 같은 색 3개가 인접하면 지우는 규칙으로 바꾸면
+<strong>뿌요뿌요</strong>에 가까워진다.</li>
+<li>열이 아니라 <strong>가로 2칸짜리 조각</strong>을 떨어뜨리게 하면,
+회전 없는 테트리스로 한 발 더 나아간다.</li>
+</ul>
+</details>
+
+<hr />
+<h2 id="이-단계를-마치며">이 단계를 마치며</h2>
+<table>
+<thead>
+<tr>
+<th>얻은 것</th>
+<th>다음에 쓰는 곳</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2D 그리드 보드(<code>board[H][W]</code>)</td>
+<td>Maze 격자, Battle City 타일맵</td>
+</tr>
+<tr>
+<td>하나의 충돌 판정(<code>CanMove</code>)</td>
+<td>전 게임의 충돌 — 판단을 한 곳에</td>
+</tr>
+<tr>
+<td>배열 조작 알고리즘(라인 클리어)</td>
+<td>Maze 맵 생성·경로탐색의 격자 조작</td>
+</tr>
+<tr>
+<td>7-bag·Fisher-Yates 셔플</td>
+<td>절차적 생성의 무작위(Dino·Maze)</td>
+</tr>
+<tr>
+<td>DAS 입력 타이밍</td>
+<td>Dino 점프 버퍼, 모든 게임의 조작감</td>
+</tr>
+</tbody>
+</table>
+<p>Tetris로 우리는 "직관적 충돌"에서 <strong>"설계된 알고리즘"</strong>
+으로 올라섰다. 배열이 게임의 주인공이 되고, 그 위에서 회전·클리어·셔플이
+돌아간다. 다음 3단계 Dino는 여기에 <strong>시간과 물리</strong>를 더한다
+— 정지된 격자를 떠나, 중력으로 점프하고 세계가 스스로 흐르는 실시간
+물리의 세계로.</p>
+<blockquote>
+<p><strong>← 이전:</strong> <a href="Part2_01.html">1단계 · Snake —
+자료구조·충돌·상태머신</a> | <strong>다음 →</strong> <a
+href="Part2_03.html">3단계 · Dino — 물리와 스크롤</a></p>
+</blockquote>
+  </article>
+</main>
+<footer class="site-footer">
+  <a href="index.html">← 목차로 돌아가기</a>
+  <span>CSGP Learn · 표시용 원고 (코드는 UTF-8 사본)</span>
+</footer>
+<script src="book-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,922 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>B 모듈 · 5–6장 — 반복문과 함수: 회사에 심장을 달다</title>
+<script>try{var _t=localStorage.getItem('csgp-theme');if(_t)document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
+<style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<link rel="stylesheet" href="book.css">
+
+</head>
+<body>
+<div class="topbar">
+  <button class="drawer-toggle" id="drawerToggle" type="button" aria-label="목차 열기/닫기" aria-expanded="false">☰ 목차</button>
+  <a class="home" href="index.html">📘 CSGP</a>
+  <span class="crumb">콘솔 게임으로 배우는 C · C++</span>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="라이트/다크 전환">🌙</button>
+</div>
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" aria-label="책 목차">
+  <div class="drawer-dash">
+    <div class="dash-title">콘솔 게임으로 배우는 C · C++</div>
+    <div class="dash-sub">학습 목차 · 대시보드</div>
+    <div class="dash-progress"><div class="dash-bar"><i id="dashBar"></i></div><span class="dash-pct" id="dashPct"></span></div>
+    <input class="drawer-search" id="drawerSearch" type="search" placeholder="🔍 챕터 검색…" aria-label="챕터 검색">
+  </div>
+  <nav class="booknav" aria-label="책 목차"><a class="booknav-home" href="index.html">📘 전체 목차</a><ul class="booknav-list"><li class="grp">1부 · C 기본 문법</li><li><a href="Part1_00.html" title="1부 — C 기본 문법: 회사를 키우며 배우는 언어">1부 개요</a></li><li><a href="Part1_01.html" title="A 모듈 · 1–4장 — 값·계산·분기: 회사에 숫자를 세우다">A · 값·계산·분기</a></li><li class="active"><a href="Part1_02.html" title="B 모듈 · 5–6장 — 반복문과 함수: 회사에 심장을 달다">B · 반복문·함수</a><ul class="sections">
+<li><a href="#이-모듈의-학습-목표" id="toc-이-모듈의-학습-목표">이
+모듈의 학습 목표</a></li>
+<li><a href="#왜-지금-반복문과-함수인가"
+id="toc-왜-지금-반복문과-함수인가">왜 지금, 반복문과 함수인가</a></li>
+<li><a href="#5장--반복문--게임에-심장을-달다"
+id="toc-5장--반복문--게임에-심장을-달다">5장 · 반복문 — 게임에 심장을
+달다</a></li>
+<li><a href="#6장--함수--커진-코드를-정리하다"
+id="toc-6장--함수--커진-코드를-정리하다">6장 · 함수 — 커진 코드를
+정리하다</a></li>
+<li><a href="#코드-워크스루--실제-소스에서-보는-루프와-함수"
+id="toc-코드-워크스루--실제-소스에서-보는-루프와-함수">코드 워크스루 —
+실제 소스에서 보는 루프와 함수</a></li>
+<li><a href="#그림으로-정리--루프와-함수-호출"
+id="toc-그림으로-정리--루프와-함수-호출">그림으로 정리 — 루프와 함수
+호출</a></li>
+<li><a href="#체크포인트--스스로-점검하기"
+id="toc-체크포인트--스스로-점검하기">체크포인트 — 스스로
+점검하기</a></li>
+<li><a href="#실습-미션--숫자-맞히기-updownc-star"
+id="toc-실습-미션--숫자-맞히기-updownc-star">실습 미션 — 숫자 맞히기
+<code>updown.c</code> ⭐</a></li>
+<li><a href="#이-모듈을-마치며" id="toc-이-모듈을-마치며">이 모듈을
+마치며</a></li>
+</ul></li><li><a href="Part1_03.html" title="C 모듈 · 7–8장 — 배열과 문자열: 회사에 사람과 이름을 채우다">C · 배열·문자열</a></li><li><a href="Part1_04.html" title="D 모듈 · 9–10장 — 구조체와 포인터: 데이터에 모양을 주다">D · 구조체·포인터</a></li><li><a href="Part1_05.html" title="E 모듈 · 11–12장 — 동적 메모리와 랜덤: 회사가 자라고, 시장이 살아난다">E · 메모리·랜덤</a></li><li><a href="Part1_06.html" title="F 모듈 · 13–15장 — 파일·모듈·캡스톤: 회사를 저장하고, 게임을 출시하다">F · 파일·모듈·캡스톤</a></li><li class="grp">2부 · C++ 프레임워크</li><li><a href="Part2_00.html" title="2부 — C++ 콘솔 게임 프레임워크: 7개의 게임으로 오르기">2부 개요</a></li><li><a href="Part2_01.html" title="1단계 · Snake — 자료구조·충돌·상태머신">1단계 · Snake</a></li><li><a href="Part2_02.html" title="2단계 · Tetris — 알고리즘과 그리드">2단계 · Tetris</a></li><li><a href="Part2_03.html" title="3단계 · Dino — 물리와 스크롤">3단계 · Dino</a></li><li><a href="Part2_04.html" title="4단계 · Road Fighter — 엔티티 시스템과 리소스">4단계 · Road Fighter</a></li><li><a href="Part2_05.html" title="번외 · GameDevTycoon 이식 — C에서 C++로">번외 · Tycoon 이식</a></li><li><a href="Part2_06.html" title="5단계 · Galaga — 오브젝트 풀링">5단계 · Galaga</a></li><li><a href="Part2_07.html" title="6단계 · Maze — 알고리즘 심화 (생성 + 탐색)">6단계 · Maze</a></li><li><a href="Part2_08.html" title="7단계 · Battle City — 종합 캡스톤 (맵 생성 + 풀링)">7단계 · Battle City</a></li><li><a href="Part2_09.html" title="확장 · Pac-Man — 유령 AI와 상태머신">확장 · Pac-Man</a></li><li class="grp">부록</li><li><a href="Appendix.html" title="부록 — 용어집 · 핵심 이슈 · 요약">부록</a></li></ul></nav>
+</aside>
+<main class="reader">
+  <article class="page">
+<h1 id="b-모듈--56장--반복문과-함수-회사에-심장을-달다">B 모듈 · 5–6장 —
+반복문과 함수: 회사에 심장을 달다</h1>
+<div class="chapter-badge">
+
+<p><strong>모듈 B</strong> · 5–6장 · 게임 버전 <strong>v0.2 →
+v0.3</strong> · 예상 학습 시간 <strong>3–5시간</strong> <strong>처음
+배우는 기술</strong> — <code>while</code> <code>for</code>
+<code>do-while</code> <code>break</code> <code>continue</code> 무한 루프
+<code>함수 정의·호출</code> <code>매개변수·반환값</code>
+<code>void</code> <code>지역 변수</code> <code>전역 변수</code>
+<code>스코프</code> <code>함수 분해(리팩터링)</code></p>
+</div>
+
+<blockquote>
+<p>A 모듈에서 만든 게임은 딱 한 번만 돌고 끝났다. 한 달을 정산하면
+프로그램이 종료됐다. 이 모듈에서 그 한 달을 <strong>반복문</strong>으로
+감싸 "다음 달, 또 다음 달…"이 이어지게 만든다. 그 순간 우리 회사는
+비로소 <strong>살아 움직이기 시작한다</strong> — 게임에 심장이 달리는
+것이다. 그리고 루프가 생기며 부풀어 오른 <code>main</code> 을
+<strong>함수</strong>로 나눠, 다시 읽을 수 있는 코드로 정리한다.</p>
+</blockquote>
+<h2 id="이-모듈의-학습-목표">이 모듈의 학습 목표</h2>
+<p>이 모듈을 마치면 다음을 할 수 있다.</p>
+<ol type="1">
+<li><code>while</code> · <code>for</code> · <code>do-while</code> 세
+반복문의 차이를 알고, 상황에 맞게 고를 수 있다.</li>
+<li><code>break</code> 로 반복을 즉시 끝내고, <code>continue</code> 로
+이번 회차만 건너뛸 수 있다.</li>
+<li>게임의 <strong>메인 루프</strong>(<code>while (!gameOver)</code>)를
+짜서, 한 턴짜리 프로그램을 "계속 도는 게임"으로 만들 수 있다.</li>
+<li>반복되는 코드 조각을 <strong>함수</strong>로 묶고, 매개변수로 값을
+넘기며 반환값으로 결과를 받을 수 있다.</li>
+<li><strong>지역 변수와 전역 변수</strong>의 수명·범위(스코프) 차이를
+설명하고, 왜 게임 상태를 전역에 두는지(그리고 그게 왜 임시방편인지)
+안다.</li>
+<li>비대해진 <code>main</code> 을 역할별 함수로
+<strong>분해(리팩터링)</strong> 해, 같은 동작을 더 읽기 좋은 구조로 바꿀
+수 있다.</li>
+</ol>
+<h2 id="왜-지금-반복문과-함수인가">왜 지금, 반복문과 함수인가</h2>
+<p>A 모듈의 도착점을 떠올려 보자. 우리는 현황판을 그리고, 메뉴를 받고,
+한 달을 정산하고, 파산을 판정했다. 완벽한 게임의 <strong>한
+순간</strong>이다. 문제는 딱 하나 — 그 순간이 <strong>한 번밖에</strong>
+일어나지 않는다는 것이다.</p>
+<pre><code>A 모듈:   [현황판 → 메뉴 → 정산 → 판정]   ← 여기서 프로그램 끝
+B 모듈:   ┌─────────────────────────────┐
+          │ [현황판 → 메뉴 → 정산 → 판정] │ ← 반복!
+          └──────────────┬──────────────┘
+                    파산할 때까지 계속</code></pre>
+<p>게임이란 결국 <strong>같은 흐름을 조건이 끝날 때까지 반복하는
+것</strong>이다. 뱀은 매 순간 한 칸씩 움직이고(2부), 우리 회사는 매달
+정산을 한다. 이 "매 순간"을 만드는 문법이 <strong>반복문</strong>이다.
+5장에서 반복문을 배우는 순간, 우리 게임은 처음으로 "게임"이라 부를 만한
+것이 된다.</p>
+<p>그런데 반복문을 <code>main</code> 에 그냥 쑤셔 넣으면, 안 그래도 길던
+<code>main</code> 이 감당 못 할 만큼 부푼다. 현황판 출력, 메뉴 분기, 월
+정산이 전부 한 함수 안에 뒤엉킨다. 그래서 6장에서
+<strong>함수</strong>를 배워, 이 덩어리를 <code>PrintHeader()</code>,
+<code>MainMenu()</code>, <code>AdvanceMonth()</code> 같은 역할별
+조각으로 나눈다. 반복이 코드를 키우고, 함수가 그 코드를 다시 정리한다 —
+5장과 6장이 짝을 이루는 이유다.</p>
+<blockquote>
+<p><strong>이 모듈에서 만드는 것.</strong> 실행하면 회사 현황판이 뜨고,
+메뉴에서 "다음 달 진행"을 고를 때마다 한 달씩 흐르며, 고정 수입에서
+임대료가 빠져 자본금이 오르내리고, 자본금이 음수가 되면 <strong>파산
+엔딩</strong>으로 게임이 끝나는 — GDD 마일스톤 <strong>v0.3 "돌아가는
+회사"</strong>, 즉 처음으로 <strong>끝까지 플레이되는 최소
+게임</strong>이다.</p>
+</blockquote>
+<hr />
+<h2 id="5장--반복문--게임에-심장을-달다">5장 · 반복문 — 게임에 심장을
+달다</h2>
+<h3 id="51-while--조건이-참인-동안-반복">5.1 <code>while</code> — 조건이
+참인 동안 반복</h3>
+<p><code>while</code> 은 가장 기본적인 반복문이다. "괄호 안 조건이 참인
+동안, 블록을 계속 실행하라."</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> month <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span>month <span class="op">&lt;=</span> <span class="dv">3</span><span class="op">)</span> <span class="op">{</span>          <span class="co">/* month 가 3 이하인 동안 */</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">월</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> month<span class="op">);</span>  <span class="co">/* 실행 */</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    month<span class="op">++;</span>                  <span class="co">/* 그리고 month 를 늘린다 */</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">/* 출력: 1월  2월  3월 */</span></span></code></pre></div>
+<p>동작을 단계로 보면 이렇다.</p>
+<pre><code>  ① 조건 검사(month &lt;= 3)  ──참──▶  ② 블록 실행  ──▶  ③ ①로 돌아감
+            │
+           거짓
+            ▼
+        루프 밖으로 (반복 종료)</code></pre>
+<p><code>while</code> 에서 가장 흔한 실수는 <strong>조건을 바꾸는 코드를
+빠뜨리는 것</strong>이다. 위에서 <code>month++</code> 를 빼면
+<code>month</code> 는 영원히 1이라 조건이 늘 참 — <strong>무한
+루프</strong>에 빠진다. "이 루프는 언제 끝나는가?"를 항상 자문하자.</p>
+<blockquote>
+<p><strong>의도한 무한 루프.</strong> 반대로, 일부러 끝나지 않게 만들고
+안에서 <code>break</code> 로 빠져나오는 방식도 흔하다.
+<code>while (1) { … }</code> 또는 <code>for (;;) { … }</code> 는 "조건이
+항상 참"인 무한 루프다. 우리 게임의 실제 완성본이 바로 이
+<code>for(;;)</code> 형태를 쓴다(5.5·워크스루에서 다시 본다).</p>
+</blockquote>
+<h3 id="52-for--횟수가-정해진-반복">5.2 <code>for</code> — 횟수가 정해진
+반복</h3>
+<p>반복 횟수가 정해져 있을 땐 <code>for</code> 가 깔끔하다.
+<code>while</code> 에 흩어져 있던 세 요소 — 초기화·조건·증감 — 를 한
+줄에 모은다.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span>     <span class="co">/* 초기화; 조건; 증감 */</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span>        <span class="co">/* 0  1  2 */</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>for (i = 0; i &lt; 3; i++)</code> 는 정확히 아래
+<code>while</code> 과 같다. 셋을 한 줄에 모아 두니, "이 루프가 몇 번
+도는지"가 한눈에 보인다.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>              <span class="co">/* 초기화 */</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span>i <span class="op">&lt;</span> <span class="dv">3</span><span class="op">)</span> <span class="op">{</span>     <span class="co">/* 조건 */</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    i<span class="op">++;</span>            <span class="co">/* 증감 */</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>언제 무엇을 쓰나?</strong> — "정해진 횟수"면
+<code>for</code>(직원 4명 순회, 게이지 20칸 그리기), "조건이 끝날
+때까지"면 <code>while</code>(파산할 때까지 월 진행). 게임 루프는 후자라
+<code>while</code> 계열이다.</p>
+<h3 id="53-do-while--최소-한-번은-실행">5.3 <code>do-while</code> — 최소
+한 번은 실행</h3>
+<p><code>do-while</code> 은 조건을 <strong>끝에서</strong> 검사한다.
+그래서 블록이 <strong>최소 한 번은</strong> 실행된다. 메뉴 입력처럼
+"일단 한 번은 보여 주고, 잘못 고르면 다시"인 상황에 맞는다.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sel<span class="op">;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span> <span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;메뉴 (0~6): &quot;</span><span class="op">);</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    scanf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>sel<span class="op">);</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">while</span> <span class="op">(</span>sel <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">||</span> sel <span class="op">&gt;</span> <span class="dv">6</span><span class="op">);</span>   <span class="co">/* 범위 밖이면 다시 입력받는다 */</span></span></code></pre></div>
+<p>세 반복문을 한 표로 정리하면.</p>
+<table>
+<thead>
+<tr>
+<th>반복문</th>
+<th>조건 검사 시점</th>
+<th>최소 실행</th>
+<th>잘 맞는 상황</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>while</code></td>
+<td>시작 전</td>
+<td>0번 가능</td>
+<td>조건이 끝날 때까지 (월 루프)</td>
+</tr>
+<tr>
+<td><code>for</code></td>
+<td>시작 전</td>
+<td>0번 가능</td>
+<td>정해진 횟수 (배열 순회)</td>
+</tr>
+<tr>
+<td><code>do-while</code></td>
+<td>끝난 후</td>
+<td><strong>최소 1번</strong></td>
+<td>일단 한 번은 하고 재시도 (입력 검증)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="54-break-와-continue--흐름을-끊고-건너뛰기">5.4
+<code>break</code> 와 <code>continue</code> — 흐름을 끊고 건너뛰기</h3>
+<p>반복 안에서 흐름을 세밀히 제어하는 두 키워드가 있다.</p>
+<ul>
+<li><strong><code>break</code></strong> — 반복문을 <strong>즉시
+완전히</strong> 빠져나온다.</li>
+<li><strong><code>continue</code></strong> — 이번 회차의 남은 부분만
+건너뛰고, <strong>다음 회차로</strong> 넘어간다.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> i <span class="op">&lt;=</span> <span class="dv">10</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>i <span class="op">==</span> <span class="dv">5</span><span class="op">)</span> <span class="cf">break</span><span class="op">;</span>        <span class="co">/* i 가 5 가 되면 루프 자체를 끝냄 → 1 2 3 4 */</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> &quot;</span><span class="op">,</span> i<span class="op">);</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> i <span class="op">&lt;=</span> <span class="dv">5</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>i <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="cf">continue</span><span class="op">;</span> <span class="co">/* 짝수면 출력만 건너뜀 → 1 3 5 */</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> &quot;</span><span class="op">,</span> i<span class="op">);</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>break</code> 는 4장의 <code>switch</code> 에서도 만났다(각
+<code>case</code> 를 끝내는 그 <code>break</code>). 반복문 안의
+<code>break</code> 도 같은 정신 — "여기서 그만" 이다. 우리 게임에선
+"사용자가 종료를 고르면 <code>break</code> 로 게임 루프를
+빠져나온다".</p>
+<h3 id="55-게임에-적용--월-루프-while-gameover">5.5 게임에 적용 — 월
+루프 (<code>while (!gameOver)</code>)</h3>
+<p>이제 5장을 게임에 적용한다. A 모듈의 "한 턴"을 <code>while</code> 로
+감싸, 파산할 때까지 매달 반복되게 만든다. 게임의 상태는 아직 구조체가
+없으므로(구조체는 9장) <strong>전역 변수</strong>로 둔다. 그리고 게임이
+끝났는지를 나타내는 <code>gameOver</code> 플래그 하나가 루프의 조건이
+된다.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define _CRT_SECURE_NO_WARNINGS</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#define RENT </span><span class="dv">100</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">/* --- 게임 상태 : 전역 변수 (구조체는 9장, 포인터로 정리는 10장) --- */</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> money <span class="op">=</span> <span class="dv">5000</span><span class="op">,</span> fame <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> year <span class="op">=</span> <span class="dv">2026</span><span class="op">,</span> month <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> gameOver <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>              <span class="co">/* 0 = 진행 중, 1 = 게임 끝 */</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> sel<span class="op">,</span> income<span class="op">;</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(!</span>gameOver<span class="op">)</span> <span class="op">{</span>                 <span class="co">/* ★ 게임의 심장 — 파산 전까지 매달 반복 */</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        <span class="co">/* 현황판 */</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">== </span><span class="sc">%d</span><span class="st">년 </span><span class="sc">%2d</span><span class="st">월 | 자본금 </span><span class="sc">%d</span><span class="st">만원 | 명성 </span><span class="sc">%d</span><span class="st"> ==</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>               year<span class="op">,</span> month<span class="op">,</span> money<span class="op">,</span> fame<span class="op">);</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;  [6] 다음 달 진행   [0] 게임 종료</span><span class="sc">\n</span><span class="st">  &gt;&gt; 선택: &quot;</span><span class="op">);</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>        scanf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>sel<span class="op">);</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>sel <span class="op">==</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span>                       <span class="co">/* 사용자 종료 → 루프 탈출 */</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>sel <span class="op">==</span> <span class="dv">6</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>            <span class="co">/* 한 달 진행: 고정 수입 − 세금 − 임대료 */</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;  이번 달 수입(만원): &quot;</span><span class="op">);</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>            scanf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>income<span class="op">);</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>            <span class="dt">int</span> tax    <span class="op">=</span> income <span class="op">*</span> <span class="dv">10</span> <span class="op">/</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>            <span class="dt">int</span> profit <span class="op">=</span> income <span class="op">-</span> tax <span class="op">-</span> RENT<span class="op">;</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>            money <span class="op">+=</span> profit<span class="op">;</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;  순이익 </span><span class="sc">%+d</span><span class="st">만원  →  자본금 </span><span class="sc">%d</span><span class="st">만원</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> profit<span class="op">,</span> money<span class="op">);</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>            month<span class="op">++;</span>                     <span class="co">/* 달력 넘김 */</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>month <span class="op">&gt;</span> <span class="dv">12</span><span class="op">)</span> <span class="op">{</span> month <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> year<span class="op">++;</span> <span class="op">}</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>money <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span>               <span class="co">/* 파산 판정 */</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>                gameOver <span class="op">=</span> <span class="dv">1</span><span class="op">;</span>            <span class="co">/* → 다음 조건 검사에서 while 이 끝난다 */</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* 루프를 빠져나온 이유에 따라 엔딩 */</span></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>gameOver<span class="op">)</span></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&gt;&gt; 파산했습니다. [EQMENT STUDIO] 의 문을 닫습니다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&gt;&gt; 게임을 종료합니다. 수고하셨습니다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>이 코드가 A 모듈과 결정적으로 다른 점은 단 하나 — <strong>전체가
+<code>while (!gameOver)</code> 로 감싸여 있다는 것.</strong>
+<code>sel == 6</code> 을 고를 때마다 한 달이 지나고, 자본금이 음수가
+되면 <code>gameOver = 1</code> 이 되어 다음 조건 검사에서 루프가 끝난다.
+처음으로 우리 게임은 "한 번 하고 끝"이 아니라 <strong>끝날 때까지
+이어지는</strong> 무언가가 되었다.</p>
+<blockquote>
+<p><strong><code>gameOver</code> 가 상태의 전부다.</strong> 지금 이
+게임의 "지금 어떤 상황인가"는 오직 <code>gameOver</code> 한 변수로
+표현된다. 2부의 실시간 게임들은 이걸
+<code>_EPhase{ TITLE, INGAME }</code> 같은 <strong>여러
+페이즈</strong>로 확장하지만(2부 Snake), 뿌리는 같다 — <strong>상태를
+변수에 담고, 루프가 그 변수를 본다.</strong> 15장에서는 이
+<code>gameOver</code> 를
+<code>enum Ending { NONE, BANKRUPT, RICH, MASTERPIECE }</code> 로 키워
+파산·승리를 구분한다.</p>
+</blockquote>
+<hr />
+<h2 id="6장--함수--커진-코드를-정리하다">6장 · 함수 — 커진 코드를
+정리하다</h2>
+<p>5장에서 게임이 돌기 시작했지만, <code>main</code> 하나에
+현황판·메뉴·정산이 다 들어가 벌써 답답하다. 앞으로 직원·개발·판매가
+붙으면 <code>main</code> 은 수백 줄이 된다. 그래서
+<strong>함수</strong>로 나눈다. 함수는 "이름 붙인 코드 묶음"이다 — 한 번
+정의해 두고, 이름으로 여러 번 부른다.</p>
+<h3 id="61-함수-정의호출반환">6.1 함수 정의·호출·반환</h3>
+<p>함수는 <strong>반환형 · 이름 · 매개변수 · 몸통</strong> 으로
+이루어진다.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* 반환형   이름     (매개변수)          */</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>   <span class="dt">int</span>      Square  <span class="op">(</span><span class="dt">int</span> n<span class="op">)</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>   <span class="op">{</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>       <span class="cf">return</span> n <span class="op">*</span> n<span class="op">;</span>      <span class="co">/* 결과를 돌려준다 */</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>   <span class="op">}</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> a <span class="op">=</span> Square<span class="op">(</span><span class="dv">5</span><span class="op">);</span>    <span class="co">/* 호출 — a 는 25 */</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> Square<span class="op">(</span>a<span class="op">));</span>   <span class="co">/* 625 */</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<ul>
+<li><strong><code>return</code></strong> 은 값을 돌려주며 함수를
+끝낸다.</li>
+<li>돌려줄 값이 없는 함수는 반환형을 <strong><code>void</code></strong>
+로 한다. <code>void PrintHeader(void)</code> 는 "받는 것도 돌려주는 것도
+없이, 화면만 그리는 함수".</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> PrintLine<span class="op">(</span><span class="dt">void</span><span class="op">)</span>      <span class="co">/* 받지도 돌려주지도 않음 */</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;--------------------------------------------------</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="62-매개변수와-반환값--함수에-값을-주고받기">6.2 매개변수와
+반환값 — 함수에 값을 주고받기</h3>
+<p>매개변수는 함수에 넘기는 <strong>입력</strong>, 반환값은 함수가 주는
+<strong>출력</strong>이다. 게임의 세금 계산을 함수로 빼 보자.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* 수입을 받아 세금(10%)을 돌려준다 */</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> CalcTax<span class="op">(</span><span class="dt">int</span> income<span class="op">)</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> income <span class="op">*</span> <span class="dv">10</span> <span class="op">/</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> tax <span class="op">=</span> CalcTax<span class="op">(</span><span class="dv">820</span><span class="op">);</span>   <span class="co">/* 82 */</span></span></code></pre></div>
+<p>여기서 중요한 사실 하나 — <strong>매개변수는 값의
+복사본이다.</strong> <code>CalcTax(820)</code> 을 부르면
+<code>income</code> 에 820의 <strong>복사본</strong>이 들어간다. 함수
+안에서 <code>income</code> 을 바꿔도 바깥엔 영향이 없다. 이것을
+<strong>값에 의한 전달(pass by value)</strong> 이라 한다. 대부분의 경우
+이걸로 충분하지만 — "함수가 바깥의 원본을 직접 고쳐야 할 때"는 이야기가
+달라진다. 그 문제와 해법(포인터)은 D 모듈의 핵심 주제다. 지금은 "함수에
+넘긴 값은 복사된다"만 기억하자.</p>
+<h3 id="63-지역-변수-vs-전역-변수--스코프">6.3 지역 변수 vs 전역 변수 —
+스코프</h3>
+<p>변수는 <strong>어디서 태어났느냐</strong>에 따라 살 수 있는
+범위(스코프)와 수명이 다르다.</p>
+<ul>
+<li><strong>지역 변수</strong> — 함수(또는 블록) <strong>안</strong>에서
+선언. 그 함수가 실행되는 동안만 살고, 함수가 끝나면 사라진다. 다른
+함수에서는 보이지 않는다.</li>
+<li><strong>전역 변수</strong> — 모든 함수 <strong>바깥</strong>에서
+선언. 프로그램 내내 살아 있고, <strong>모든 함수가 접근</strong>할 수
+있다.</li>
+</ul>
+<div class="sourceCode" id="cb12"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> money <span class="op">=</span> <span class="dv">5000</span><span class="op">;</span>         <span class="co">/* 전역 — 어느 함수에서든 보인다 */</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> PayRent<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> rent <span class="op">=</span> <span class="dv">100</span><span class="op">;</span>       <span class="co">/* 지역 — 이 함수 안에서만 산다 */</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    money <span class="op">-=</span> rent<span class="op">;</span>        <span class="co">/* 전역 money 를 직접 줄인다 */</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    PayRent<span class="op">();</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> money<span class="op">);</span> <span class="co">/* 4900 — PayRent 가 바꾼 전역이 반영됨 */</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* printf(&quot;%d\n&quot;, rent);  ← ✗ 에러! rent 는 PayRent 안에서만 산다 */</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>우리 게임은 아직 <strong>자본금·명성·날짜를 전역 변수로
+둔다.</strong> 그래야 <code>PayRent()</code>,
+<code>AdvanceMonth()</code> 같은 함수들이 매개변수·반환값 없이도 게임
+상태를 직접 고칠 수 있기 때문이다. 값 전달(6.2)로는 원본을 못 고치니,
+지금 단계에선 전역이 현실적인 선택이다.</p>
+<blockquote>
+<p><strong>⚠️ 전역 변수는 임시방편이다 — D 모듈의 복선.</strong> 전역은
+편하지만 위험하다. <strong>어느 함수가 <code>money</code> 를 언제
+바꾸는지</strong> 코드만 봐선 알 수 없다(모두가 만질 수 있으니까).
+프로그램이 커질수록 이건 버그의 온상이 된다. 10장에서 우리는 전역 변수를
+<strong>버리고</strong>, 게임 상태를 하나로 묶은 뒤(구조체·9장) 그
+<strong>주소를 함수에 넘기는</strong>(포인터·10장) 방식으로 갈아탄다.
+그러면 함수 서명만 봐도 "이 함수가 회사를 만진다"가 드러난다. 지금의
+전역은 그 개선을 향한 디딤돌이다.</p>
+</blockquote>
+<h3
+id="64-게임에-적용--main-을-함수로-분해하고-자본금에-콤마를-달다">6.4
+게임에 적용 — <code>main</code> 을 함수로 분해하고, 자본금에 콤마를
+달다</h3>
+<p>이제 5.5의 비대한 <code>main</code> 을 역할별 함수로 나눈다. 동작은
+<strong>그대로</strong>, 구조만 바꾸는 것 — 이것이
+<strong>리팩터링</strong>이다.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define _CRT_SECURE_NO_WARNINGS</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#define RENT </span><span class="dv">100</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> money <span class="op">=</span> <span class="dv">5000</span><span class="op">,</span> fame <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> year <span class="op">=</span> <span class="dv">2026</span><span class="op">,</span> month <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> gameOver <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">/* ── 정수를 3자리 콤마로 출력 (반복문 + 함수 예제) ──</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">   A 모듈에서 예고한 &#39;자본금 콤마&#39;. 자릿수를 세고, 앞자리부터 찍으며 3자리마다 콤마.</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">   완성본은 이 로직을 문자열 버퍼에 담는 MoneyStr 로 리팩터링한다(C 모듈). */</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> PrintMoney<span class="op">(</span><span class="dt">int</span> v<span class="op">)</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> digits <span class="op">=</span> <span class="dv">1</span><span class="op">,</span> t<span class="op">,</span> place <span class="op">=</span> <span class="dv">1</span><span class="op">,</span> i<span class="op">;</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>v <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> putchar<span class="op">(</span><span class="ch">&#39;-&#39;</span><span class="op">);</span> v <span class="op">=</span> <span class="op">-</span>v<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> v<span class="op">;</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>t <span class="op">&gt;=</span> <span class="dv">10</span><span class="op">)</span> <span class="op">{</span> t <span class="op">/=</span> <span class="dv">10</span><span class="op">;</span> digits<span class="op">++;</span> <span class="op">}</span>        <span class="co">/* 자릿수 세기 */</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> i <span class="op">&lt;</span> digits<span class="op">;</span> i<span class="op">++)</span> place <span class="op">*=</span> <span class="dv">10</span><span class="op">;</span>     <span class="co">/* place = 10^(digits-1) */</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> digits<span class="op">;</span> i <span class="op">&gt;=</span> <span class="dv">1</span><span class="op">;</span> i<span class="op">--)</span> <span class="op">{</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>        putchar<span class="op">(</span><span class="ch">&#39;0&#39;</span> <span class="op">+</span> <span class="op">(</span>v <span class="op">/</span> place<span class="op">)</span> <span class="op">%</span> <span class="dv">10</span><span class="op">);</span>          <span class="co">/* 맨 앞자리부터 한 글자씩 */</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>i <span class="op">&gt;</span> <span class="dv">1</span> <span class="op">&amp;&amp;</span> <span class="op">(</span>i <span class="op">-</span> <span class="dv">1</span><span class="op">)</span> <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> putchar<span class="op">(</span><span class="ch">&#39;,&#39;</span><span class="op">);</span> <span class="co">/* 3자리마다 콤마 */</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>        place <span class="op">/=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a><span class="co">/* ── 현황판 출력 ── */</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> PrintHeader<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">==================================================</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;  </span><span class="sc">%-16s</span><span class="st">   </span><span class="sc">%d</span><span class="st">년 </span><span class="sc">%2d</span><span class="st">월     명성 ★ </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="st">&quot;EQMENT STUDIO&quot;</span><span class="op">,</span> year<span class="op">,</span> month<span class="op">,</span> fame<span class="op">);</span></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;  자본금 &quot;</span><span class="op">);</span>  PrintMoney<span class="op">(</span>money<span class="op">);</span>  printf<span class="op">(</span><span class="st">&quot;만원</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;==================================================</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a><span class="co">/* ── 한 달 정산 (전역 money/month 를 직접 갱신) ── */</span></span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> AdvanceMonth<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> income<span class="op">,</span> tax<span class="op">,</span> profit<span class="op">;</span></span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;  이번 달 수입(만원): &quot;</span><span class="op">);</span></span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>    scanf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>income<span class="op">);</span></span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>    tax    <span class="op">=</span> income <span class="op">*</span> <span class="dv">10</span> <span class="op">/</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>    profit <span class="op">=</span> income <span class="op">-</span> tax <span class="op">-</span> RENT<span class="op">;</span></span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>    money <span class="op">+=</span> profit<span class="op">;</span></span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;  순이익 </span><span class="sc">%+d</span><span class="st">만원  →  자본금 &quot;</span><span class="op">,</span> profit<span class="op">);</span></span>
+<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>    PrintMoney<span class="op">(</span>money<span class="op">);</span>  printf<span class="op">(</span><span class="st">&quot;만원</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>    month<span class="op">++;</span></span>
+<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>month <span class="op">&gt;</span> <span class="dv">12</span><span class="op">)</span> <span class="op">{</span> month <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> year<span class="op">++;</span> <span class="op">}</span></span>
+<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>money <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span> gameOver <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a><span class="co">/* ── 메뉴: 사용자가 종료를 고르면 1 을 반환 ── */</span></span>
+<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> MainMenu<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> sel<span class="op">;</span></span>
+<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;  [6] 다음 달 진행   [0] 게임 종료</span><span class="sc">\n</span><span class="st">  &gt;&gt; 선택: &quot;</span><span class="op">);</span></span>
+<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a>    scanf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>sel<span class="op">);</span></span>
+<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span> <span class="op">(</span>sel<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">6</span><span class="op">:</span> AdvanceMonth<span class="op">();</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">0</span><span class="op">:</span> <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span>              <span class="co">/* 종료 신호 */</span></span>
+<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a>    <span class="cf">default</span><span class="op">:</span> printf<span class="op">(</span><span class="st">&quot;  잘못된 선택입니다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb13-66"><a href="#cb13-66" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb13-67"><a href="#cb13-67" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb13-68"><a href="#cb13-68" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb13-69"><a href="#cb13-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-70"><a href="#cb13-70" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb13-71"><a href="#cb13-71" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb13-72"><a href="#cb13-72" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(!</span>gameOver<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb13-73"><a href="#cb13-73" aria-hidden="true" tabindex="-1"></a>        PrintHeader<span class="op">();</span></span>
+<span id="cb13-74"><a href="#cb13-74" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>MainMenu<span class="op">())</span>            <span class="co">/* 1 을 돌려주면(사용자 종료) */</span></span>
+<span id="cb13-75"><a href="#cb13-75" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span>                 <span class="co">/* 루프 탈출 */</span></span>
+<span id="cb13-76"><a href="#cb13-76" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb13-77"><a href="#cb13-77" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span>gameOver <span class="op">?</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&gt;&gt; 파산! 회사의 문을 닫습니다.</span><span class="sc">\n</span><span class="st">&quot;</span></span>
+<span id="cb13-78"><a href="#cb13-78" aria-hidden="true" tabindex="-1"></a>                    <span class="op">:</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&gt;&gt; 게임을 종료합니다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb13-79"><a href="#cb13-79" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb13-80"><a href="#cb13-80" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>같은 게임이지만 <code>main</code> 이 놀랄 만큼 짧아졌다. 이제
+<code>main</code> 은 "반복하며 현황판을 그리고 메뉴를 부른다"는
+<strong>큰 흐름만</strong> 말하고, 세부는 각 함수에 숨었다. 새
+기능(직원·개발)이 붙어도 <code>main</code> 은 거의 그대로고, 함수만
+늘어난다. <strong>함수 분해는 코드를 "읽을 수 있는 이야기"로
+만든다.</strong></p>
+<blockquote>
+<p><strong><code>main</code> 이 짧아진다는 것의 의미.</strong> 좋은
+<code>main</code> 은 목차 같다. 큰 흐름(제목)만 보여 주고, 자세한
+내용(본문)은 각 함수로 내려보낸다. 방금 우리가 만든
+<code>PrintHeader → MainMenu → AdvanceMonth</code> 구조는, 실제 완성본의
+<code>TitleScreen → GameLoop → MainMenu → AdvanceMonth</code> 구조와
+사실상 같은 모양이다(바로 아래 워크스루에서 확인한다). 우리는 지금 진짜
+게임의 뼈대를 짜고 있다.</p>
+</blockquote>
+<hr />
+<h2 id="코드-워크스루--실제-소스에서-보는-루프와-함수">코드 워크스루 —
+실제 소스에서 보는 루프와 함수</h2>
+<p>우리가 만든 "루프 + 함수 분해" 구조가, <code>Study/Tycoon/</code>
+완성본에서 어떻게 나타나는지 확인하자. 완성본은
+구조체·포인터(<code>Company *c</code>, D 모듈)를 쓰지만,
+<strong>반복문과 함수 분해라는 뼈대는 지금 배운 그대로</strong>다.</p>
+<blockquote>
+<p><strong>실제 파일:</strong> <code>Study/Tycoon/main.c</code>(게임
+루프·메뉴) · <code>Study/Tycoon/company.c</code>(월 정산)</p>
+</blockquote>
+<p><strong>① 게임 루프 (<code>main.c</code> ·
+<code>GameLoop</code>)</strong> — 우리의 <code>while (!gameOver)</code>
+에 해당한다. 완성본은 무한 루프 <code>for(;;)</code> 를 쓰고, 끝낼
+이유(사용자 종료·파산·승리)를 만나면 <code>return</code> 으로
+빠져나온다.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">void</span> GameLoop<span class="op">(</span>Company <span class="op">*</span>c<span class="op">)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(;;)</span> <span class="op">{</span>                          <span class="co">/* 우리의 while(!gameOver) 와 같은 심장 */</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>MainMenu<span class="op">(</span>c<span class="op">))</span>                <span class="co">/* 메뉴 — 사용자가 종료를 고르면 1 */</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>c<span class="op">-&gt;</span>ending <span class="op">==</span> END_BANKRUPT<span class="op">)</span>  <span class="co">/* 파산이면 루프 종료 */</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>c<span class="op">-&gt;</span>ending <span class="op">==</span> END_RICH <span class="op">||</span> c<span class="op">-&gt;</span>ending <span class="op">==</span> END_MASTERPIECE<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>            <span class="co">/* ... 승리 축하 + &#39;계속하기&#39; 선택 ... */</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>우리의 <code>gameOver</code>(0/1)가 완성본에선
+<code>c-&gt;ending</code>(<code>enum Ending</code>)으로 자라
+파산·거상·명작을 구분한다(15장). 하지만 "<strong>루프가 상태 변수를 보고
+끝낼지 정한다</strong>"는 원리는 5.5에서 배운 그대로다.</p>
+<p><strong>② 메뉴 분기 (<code>main.c</code> ·
+<code>MainMenu</code>)</strong> — 우리의 <code>MainMenu()</code> 와
+똑같이, 사용자가 종료를 고르면 <code>1</code> 을 돌려준다(6.4의 반환값
+신호). 그리고 각 메뉴를 <strong>함수 호출</strong>로 분기한다 — 6장의
+함수 분해가 그대로 보인다.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">int</span> MainMenu<span class="op">(</span>Company <span class="op">*</span>c<span class="op">)</span>     <span class="co">/* 종료 시 1 반환 */</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    ClearScreen<span class="op">();</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    PrintHeader<span class="op">(</span>c<span class="op">);</span>                 <span class="co">/* 현황판 — 함수로 분리 (우리 PrintHeader) */</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;  [1] 게임 개발  [2] 직원 관리  ...  [6] 다음 달 진행 &gt;&gt;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span> <span class="op">(</span>ReadInt<span class="op">(</span><span class="st">&quot;  &gt;&gt; 선택: &quot;</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">6</span><span class="op">))</span> <span class="op">{</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">1</span><span class="op">:</span> DevMenu<span class="op">(</span>c<span class="op">);</span>      <span class="cf">break</span><span class="op">;</span>   <span class="co">/* 각 화면이 저마다의 함수 */</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">2</span><span class="op">:</span> StaffMenu<span class="op">(</span>c<span class="op">);</span>    <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">6</span><span class="op">:</span> AdvanceMonth<span class="op">(</span>c<span class="op">);</span> <span class="cf">break</span><span class="op">;</span>   <span class="co">/* 다음 달 진행 */</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">0</span><span class="op">:</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>ReadInt<span class="op">(</span><span class="st">&quot;  정말 종료할까요? [1] 예 [0] 아니요 : &quot;</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">)</span> <span class="op">==</span> <span class="dv">1</span><span class="op">)</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>③ 월 정산 (<code>company.c</code> ·
+<code>AdvanceMonth</code>)</strong> — 우리 <code>AdvanceMonth()</code>
+의 확장판. GDD가 정한 한 달 처리
+8단계(개발→출시→판매→이벤트→월급→리포트→판정→달력)를, <strong>각 단계를
+함수 하나씩</strong> 불러 처리한다.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> AdvanceMonth<span class="op">(</span>Company <span class="op">*</span>c<span class="op">)</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    ResetReport<span class="op">();</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    ProgressProject<span class="op">(</span>c<span class="op">);</span>              <span class="co">/* (1) 개발 진행 */</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>ProjectDone<span class="op">(</span>c<span class="op">))</span> ReleaseNow<span class="op">(</span>c<span class="op">,</span> <span class="dv">0</span><span class="op">);</span>  <span class="co">/* (2) 출시 */</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    UpdateSales<span class="op">(</span>c<span class="op">);</span>                  <span class="co">/* (3) 판매 정산 */</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    RollApplicants<span class="op">(</span>c<span class="op">);</span>  MonthlyEvent<span class="op">(</span>c<span class="op">);</span>   <span class="co">/* (4) 지원자·이벤트 */</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>c<span class="op">-&gt;</span>month <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> UpdateTrend<span class="op">(</span>c<span class="op">,</span> <span class="dv">1</span><span class="op">);</span>  <span class="co">/* 분기마다 유행 재추첨 */</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    Report<span class="op">(</span><span class="st">&quot;직원 월급&quot;</span><span class="op">,</span> <span class="op">-</span>TotalSalary<span class="op">(</span>c<span class="op">));</span>  <span class="co">/* (5) 지출 */</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    Report<span class="op">(</span><span class="st">&quot;사무실 임대료&quot;</span><span class="op">,</span> <span class="op">-</span>OFFICE_RENT<span class="op">);</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    PrintMonthlyReport<span class="op">(</span>c<span class="op">);</span>           <span class="co">/* (6) 리포트 + 자본금 반영 */</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    CheckEnding<span class="op">(</span>c<span class="op">);</span>                  <span class="co">/* (7) 파산/승리 판정 */</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    c<span class="op">-&gt;</span>month<span class="op">++;</span>                      <span class="co">/* (8) 달력 진행 */</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>c<span class="op">-&gt;</span>month <span class="op">&gt;</span> <span class="dv">12</span><span class="op">)</span> <span class="op">{</span> c<span class="op">-&gt;</span>month <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> c<span class="op">-&gt;</span>year<span class="op">++;</span> <span class="op">}</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>한 줄 한 줄이 함수 호출이다. <code>AdvanceMonth</code> 는 "한 달 동안
+무슨 일이 일어나는가"의 <strong>목차</strong>이고, 실제 계산은
+<code>ProgressProject</code>, <code>UpdateSales</code>,
+<code>CheckEnding</code> 같은 함수에 나뉘어 있다. 이것이 6장이 말한
+"좋은 함수는 목차"의 완성형이다. <code>c-&gt;month % 3 == 0</code>(분기
+판정)에는 3장의 나머지 연산자가, 함수를 줄줄이 부르는 구조에는 6장의
+함수 분해가 함께 들어 있다.</p>
+<hr />
+<h2 id="그림으로-정리--루프와-함수-호출">그림으로 정리 — 루프와 함수
+호출</h2>
+<blockquote>
+<p>📊 <strong>웹 교육문서에서는 게임 루프의 한 바퀴가
+애니메이션(V-P1-B)으로 재생된다.</strong> 현황판 → 메뉴 → 정산 → 판정이
+돌고, 자본금 변수가 매 바퀴 갱신되다 음수가 되는 순간 루프가 멈추는
+과정을 보여 준다. 책에서는 아래 도식으로 대신한다.</p>
+</blockquote>
+<p><strong>게임 루프 — 조건이 끝날 때까지 도는 심장</strong></p>
+<pre><code>        ┌───────────── while (!gameOver) ──────────────┐
+        │                                              │
+   ┌────▼─────┐   ┌──────────┐   ┌───────────┐   ┌─────┴─────┐
+   │ 현황판    │──▶│ 메뉴 선택 │──▶│ 월 정산    │──▶│ 파산 판정  │
+   │PrintHeader│   │MainMenu  │   │AdvanceMonth│  │money&lt;0?   │
+   └──────────┘   └────┬─────┘   └───────────┘   └─────┬─────┘
+                       │ [0] 종료                       │
+                       ▼                        gameOver=1이면
+                   break로 탈출                   다음 검사에서 종료</code></pre>
+<p><strong>함수 호출과 스코프 — 지역 변수는 함수와 함께 태어나고
+죽는다</strong></p>
+<pre><code>  전역:   money = 5000   ← 프로그램 내내 살아 있음. 모든 함수가 만질 수 있다
+            ▲    ▲
+            │    │ 직접 수정
+   ┌────────┘    └──────────┐
+   │                        │
+  main()               AdvanceMonth()
+   sel (지역)            income, tax (지역)
+   └ main 끝나면 소멸      └ AdvanceMonth 끝나면 소멸</code></pre>
+<p>한 문장으로: <strong>반복문은 게임을 '계속 돌게' 하는 심장이고,
+함수는 그 심장이 하는 일을 '이름 붙은 조각'으로 나눈
+근육이다.</strong></p>
+<hr />
+<h2 id="체크포인트--스스로-점검하기">체크포인트 — 스스로 점검하기</h2>
+<p><strong>Q1.</strong> 아래 <code>while</code> 루프는 무한 루프다.
+왜이고, 어떻게 고치나?</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> n <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span>n <span class="op">&lt;=</span> <span class="dv">5</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> &quot;</span><span class="op">,</span> n<span class="op">);</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>Q2.</strong> <code>for (i = 0; i &lt; 3; i++)</code> 와
+정확히 같은 동작을 하는 <code>while</code> 문을 써라.</p>
+<p><strong>Q3.</strong> <code>break</code> 와 <code>continue</code> 의
+차이는?
+<code>for (i=1;i&lt;=5;i++) { if (i==3) continue; printf("%d",i); }</code>
+의 출력은?</p>
+<p><strong>Q4.</strong> <code>do-while</code> 이 <code>while</code> 과
+다른 결정적 차이 하나는? 어떤 상황에 <code>do-while</code> 이 더
+맞나?</p>
+<p><strong>Q5.</strong> 함수
+<code>void addTax(int money) { money += 100; }</code> 를
+<code>addTax(cash);</code> 로 불러도 바깥 <code>cash</code> 가 안
+변한다. 왜인가? (전역이 아니라 매개변수로 받았다고 가정)</p>
+<details><summary><b>해설 펼치기</b></summary>
+
+<p><strong>A1.</strong> 조건 <code>n &lt;= 5</code> 를 바꾸는
+코드(<code>n++</code>)가 없어 <code>n</code> 이 영원히 1이다. 조건이 늘
+참이라 무한 반복한다. 블록 안에 <code>n++;</code> 를 넣어 매 회차
+<code>n</code> 을 늘려야 언젠가 조건이 거짓이 되어 끝난다.</p>
+<p><strong>A2.</strong></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span>i <span class="op">&lt;</span> <span class="dv">3</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* 블록 */</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    i<span class="op">++;</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>for</code> 의 초기화(<code>i=0</code>)는 루프 앞으로,
+증감(<code>i++</code>)은 블록 끝으로 옮긴다.</p>
+<p><strong>A3.</strong> <code>break</code> 는 루프를 <strong>즉시
+완전히</strong> 끝내고, <code>continue</code> 는 <strong>이번 회차만
+건너뛰고 다음 회차로</strong> 간다. 출력은 <code>3</code> 만 빠진
+<code>1 2 4 5</code>.</p>
+<p><strong>A4.</strong> <code>do-while</code> 은 조건을
+<strong>끝에서</strong> 검사해 블록이 <strong>최소 한 번은</strong>
+실행된다. "일단 한 번 실행하고, 조건에 따라 반복"인 상황 — 메뉴 입력을
+한 번 받고 잘못됐으면 다시 받는 입력 검증 등에 맞는다.</p>
+<p><strong>A5.</strong> 매개변수 <code>money</code> 는 <code>cash</code>
+값의 <strong>복사본</strong>이다(값에 의한 전달). 함수 안에서 복사본
+<code>money</code> 를 늘려도 원본 <code>cash</code> 와는 무관하고,
+함수가 끝나면 복사본은 사라진다. 원본을 고치려면 <strong>주소를
+넘겨야</strong> 한다 — 그 방법(포인터)이 D 모듈의 주제다. (이것이 우리
+게임이 지금 상태를 전역 변수로 두는 이유이기도 하다.)</p>
+</details>
+
+<hr />
+<h2 id="실습-미션--숫자-맞히기-updownc-star">실습 미션 — 숫자 맞히기
+<code>updown.c</code> ⭐</h2>
+<blockquote>
+<p>본편(타이쿤)이 "한 게임을 계속 키우는 세로 축"이라면, 실습 미션은
+<strong>이 모듈의 새 문법만 콕 집어 연습하는 독립 미니게임(가로
+축)</strong> 이다. 먼저 직접 짜 보고, 막히면 힌트를, 그래도 막히면
+정답을 펼쳐 대조하자.</p>
+</blockquote>
+<p><strong>드릴 문법</strong> — <code>while</code> 반복 ·
+<code>break</code> · 비교 연산자 · 함수(판정 함수) · 지역 변수
+<strong>만드는 것</strong> — 1~100 중 정해진 수를 맞힐 때까지 반복하며
+"업/다운" 힌트를 주는 게임. <strong>클리어 조건</strong> — 정답을 맞히면
+시도 횟수를 출력하고 끝낸다. 정해진 최대 횟수를 넘기면 실패.
+<strong>규모</strong> — 약 40줄, 파일 1개. 표준 C만. 아직 난수는 안
+쓴다(정답은 상수로 고정 — E 모듈에서 <code>rand</code> 로 매번
+다르게).</p>
+<h3 id="문제-정의">문제 정의</h3>
+<p>이 게임의 핵심은 <strong><code>while</code> 루프 하나</strong> 다.
+정답을 맞힐 때까지 "입력받고 → 크다/작다 판정하고 → 다시" 를 반복하다가,
+맞히면 <code>break</code> 로 빠져나온다. A 모듈의 게임이 "한 번 하고
+끝"이었다면, 이 게임은 5장의 반복문 덕분에 "맞힐 때까지 계속"이 된다 — B
+모듈의 깨달음을 그대로 담은 미션이다.</p>
+<h3 id="목표--클리어-조건">목표 / 클리어 조건</h3>
+<ol type="1">
+<li>정답을 <code>#define ANSWER 42</code> 로 정한다(난수는 E 모듈).</li>
+<li><code>while</code> 로 "추측 입력 → 판정 → 반복"을 돌린다.</li>
+<li>추측이 정답보다 크면 "다운!", 작으면 "업!", 같으면 성공 후
+<code>break</code>.</li>
+<li>판정을 <strong>함수</strong>로 뺀다:
+<code>int Judge(int guess)</code> 가 −1(작다)/0(정답)/1(크다)을
+반환.</li>
+<li>최대 시도 횟수(예: 7회)를 넘기면 실패 메시지 후 종료 — 시도 횟수를
+세는 지역 변수.</li>
+</ol>
+<h3 id="힌트">힌트</h3>
+<details><summary><b>힌트 1 — 판정 함수</b></summary>
+
+<p>정답과 비교해 세 갈래 중 하나를 돌려주는 작은 함수를 만든다.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define ANSWER </span><span class="dv">42</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> Judge<span class="op">(</span><span class="dt">int</span> guess<span class="op">)</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>guess <span class="op">&lt;</span> ANSWER<span class="op">)</span> <span class="cf">return</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span>   <span class="co">/* 더 크게 (업) */</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>guess <span class="op">&gt;</span> ANSWER<span class="op">)</span> <span class="cf">return</span>  <span class="dv">1</span><span class="op">;</span>   <span class="co">/* 더 작게 (다운) */</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span>                        <span class="co">/* 정답 */</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+
+<details><summary><b>힌트 2 — 반복과 탈출</b></summary>
+
+<p>시도 횟수를 세며 최대 횟수까지 <code>for</code> 로 돌리고, 정답이면
+<code>break</code>.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> tries<span class="op">,</span> cleared <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>tries <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> tries <span class="op">&lt;=</span> MAX_TRY<span class="op">;</span> tries<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* 입력받기 */</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> r <span class="op">=</span> Judge<span class="op">(</span>guess<span class="op">);</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>r <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> cleared <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> <span class="cf">break</span><span class="op">;</span> <span class="op">}</span>   <span class="co">/* 맞히면 탈출 */</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span>r <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">?</span> <span class="st">&quot;  업!</span><span class="sc">\n</span><span class="st">&quot;</span> <span class="op">:</span> <span class="st">&quot;  다운!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>루프가 끝난 뒤 <code>cleared</code> 로 성공/실패를 가른다.</p>
+</details>
+
+<details><summary><b>힌트 3 — 삼항으로 힌트 한 줄</b></summary>
+
+<p><code>Judge</code> 결과 <code>r</code> 이 음수면 "업", 양수면 "다운".
+4장의 삼항 연산자로 한 줄에.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span>r <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">?</span> <span class="st">&quot;  업! 더 큰 수</span><span class="sc">\n</span><span class="st">&quot;</span> <span class="op">:</span> <span class="st">&quot;  다운! 더 작은 수</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+</details>
+
+<h3 id="정답-코드">정답 코드</h3>
+<details><summary><b>정답 펼치기 — <code>updown.c</code></b></summary>
+
+<div class="sourceCode" id="cb24"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define _CRT_SECURE_NO_WARNINGS</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#define ANSWER   </span><span class="dv">42</span><span class="pp">     </span><span class="co">/* 정답 (E 모듈에서 rand()%100+1 로 매번 다르게) */</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MAX_TRY   </span><span class="dv">7</span><span class="pp">     </span><span class="co">/* 최대 시도 횟수 */</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co">/* 추측을 판정: -1=정답보다 작다, 0=정답, 1=정답보다 크다 */</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> Judge<span class="op">(</span><span class="dt">int</span> guess<span class="op">)</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>guess <span class="op">&lt;</span> ANSWER<span class="op">)</span> <span class="cf">return</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>guess <span class="op">&gt;</span> ANSWER<span class="op">)</span> <span class="cf">return</span>  <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> tries<span class="op">,</span> guess<span class="op">,</span> cleared <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;=== 숫자 맞히기 (1~100, </span><span class="sc">%d</span><span class="st">번 안에) ===</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> MAX_TRY<span class="op">);</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>tries <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> tries <span class="op">&lt;=</span> MAX_TRY<span class="op">;</span> tries<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;[</span><span class="sc">%d</span><span class="st">/</span><span class="sc">%d</span><span class="st">] 추측: &quot;</span><span class="op">,</span> tries<span class="op">,</span> MAX_TRY<span class="op">);</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>        scanf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>guess<span class="op">);</span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> r <span class="op">=</span> Judge<span class="op">(</span>guess<span class="op">);</span></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>r <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span>                       <span class="co">/* 맞혔다! */</span></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>            cleared <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span>                          <span class="co">/* 루프 탈출 */</span></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span>r <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">?</span> <span class="st">&quot;  업! 더 큰 수</span><span class="sc">\n</span><span class="st">&quot;</span> <span class="op">:</span> <span class="st">&quot;  다운! 더 작은 수</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>cleared<span class="op">)</span></span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;&gt;&gt; 정답! </span><span class="sc">%d</span><span class="st">번 만에 맞혔습니다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> tries<span class="op">);</span></span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;&gt;&gt; 실패... 정답은 </span><span class="sc">%d</span><span class="st"> 였습니다.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> ANSWER<span class="op">);</span></span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>빌드:</strong> <code>cl updown.c</code> (MSVC) 또는
+<code>gcc updown.c -o updown</code></p>
+<p><strong>함정/체크포인트</strong></p>
+<ul>
+<li><code>break</code> 위치가 핵심이다. 정답일 때 <code>break</code>
+하지 않으면 맞히고도 루프가 계속 돌아 시도 횟수를 낭비한다. "맞히면 즉시
+탈출"이 이 게임의 규칙이다.</li>
+<li>성공 시 <code>tries</code> 를 그대로 출력하는 게 맞는가?
+<code>break</code> 는 <code>tries++</code> 가 실행되기
+<strong>전에</strong> 루프를 끊으므로, <code>tries</code> 는 정확히 "몇
+번째 시도에 맞혔는지"를 담고 있다. <code>for</code> 의 증감 시점을
+이해하면 이게 왜 맞는지 보인다.</li>
+<li>최대 횟수까지 못 맞히면 <code>for</code> 가 정상 종료되고
+<code>cleared</code> 는 0인 채다 — 루프 밖에서 성공/실패를 가르는
+<code>cleared</code> 플래그가 5.5의 <code>gameOver</code> 와 똑같은
+발상이다.</li>
+</ul>
+<p><strong>확장 과제</strong></p>
+<ul>
+<li><strong>E 모듈(난수)</strong> 에서 <code>ANSWER</code> 를
+<code>rand() % 100 + 1</code> 로 바꿔 매판 다른 수로.</li>
+<li>이분 탐색 힌트: 최선을 다하면 1~100은 <strong>7번 안에</strong>
+반드시 맞힐 수 있다(매번 절반을 노리면). 왜 7인지 생각해 보자(2^7 = 128
+&gt; 100).</li>
+</ul>
+</details>
+
+<hr />
+<h2 id="이-모듈을-마치며">이 모듈을 마치며</h2>
+<table>
+<thead>
+<tr>
+<th>얻은 것</th>
+<th>다음에 쓰는 곳</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>반복문으로 게임 루프 만들기</td>
+<td>모든 후속 장 — 게임은 루프 위에서 돈다</td>
+</tr>
+<tr>
+<td><code>break</code>/<code>continue</code> 흐름 제어</td>
+<td>메뉴 탈출, 배열 순회 중단(C 모듈)</td>
+</tr>
+<tr>
+<td>함수로 코드 분해</td>
+<td>전 장 — 새 기능은 새 함수로 붙는다</td>
+</tr>
+<tr>
+<td>지역/전역과 값 전달의 한계</td>
+<td><strong>D 모듈</strong> 포인터 — 전역을 버리고 주소로 원본 수정</td>
+</tr>
+</tbody>
+</table>
+<p>반복문으로 우리 회사는 처음 "돌아가는" 게임이 되었고, 함수로 그
+코드를 다시 읽을 수 있게 정리했다. 이제 게임에는 심장(루프)과
+근육(함수)이 생겼다. 다음 C 모듈에서는 직원 여럿을
+<strong>배열</strong>로, 회사명·게임 제목을 <strong>문자열</strong>로
+다루며, 회사에 사람과 이름을 채운다.</p>
+<blockquote>
+<p><strong>← 이전:</strong> <a href="Part1_01.html">A 모듈 · 1–4장 —
+값·계산·분기</a> | <strong>다음 →</strong> C 모듈 · 7–8장 — 배열과
+문자열</p>
+</blockquote>
+  </article>
+</main>
+<footer class="site-footer">
+  <a href="index.html">← 목차로 돌아가기</a>
+  <span>CSGP Learn · 표시용 원고 (코드는 UTF-8 사본)</span>
+</footer>
+<script src="book-nav.js"></script>
+</body>
+</html>

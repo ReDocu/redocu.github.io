@@ -109,31 +109,36 @@ document.querySelectorAll('[data-slider]').forEach((slider) => {
   const rightArrow = slider.querySelector('.slider-arrow--right');
   if (!track || !leftArrow || !rightArrow) return;
 
-  const scrollAmount = () => Math.min(track.clientWidth * 0.9, 420);
+  const firstCard = track.querySelector('.portfolio-card');
+
+  // 현재 화면에 보이는 카드 수만큼(데스크톱 3 / 태블릿 2 / 모바일 1) 한 페이지 단위로 이동
+  const pageStep = () => {
+    if (!firstCard) return track.clientWidth;
+    const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+    const unit = firstCard.getBoundingClientRect().width + gap;
+    const perView = Math.max(1, Math.round((track.clientWidth + gap) / unit));
+    return unit * perView;
+  };
+
+  // 넘길 카드가 남아 있는 쪽 화살표만 표시
+  const updateArrows = () => {
+    const maxScroll = track.scrollWidth - track.clientWidth - 1;
+    const overflowing = track.scrollWidth > track.clientWidth + 1;
+    leftArrow.classList.toggle('is-visible', overflowing && track.scrollLeft > 1);
+    rightArrow.classList.toggle('is-visible', overflowing && track.scrollLeft < maxScroll);
+  };
 
   leftArrow.addEventListener('click', () => {
-    track.scrollBy({ left: -scrollAmount(), behavior: 'smooth' });
+    track.scrollBy({ left: -pageStep(), behavior: 'smooth' });
   });
 
   rightArrow.addEventListener('click', () => {
-    track.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
+    track.scrollBy({ left: pageStep(), behavior: 'smooth' });
   });
 
-  slider.addEventListener('mousemove', (event) => {
-    const rect = slider.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const edgeZone = Math.min(120, rect.width * 0.18);
-    const nearLeft = x <= edgeZone;
-    const nearRight = x >= rect.width - edgeZone;
-
-    leftArrow.classList.toggle('is-visible', nearLeft);
-    rightArrow.classList.toggle('is-visible', nearRight);
-  });
-
-  slider.addEventListener('mouseleave', () => {
-    leftArrow.classList.remove('is-visible');
-    rightArrow.classList.remove('is-visible');
-  });
+  track.addEventListener('scroll', updateArrows, { passive: true });
+  window.addEventListener('resize', updateArrows);
+  updateArrows();
 });
 
 initTheme();

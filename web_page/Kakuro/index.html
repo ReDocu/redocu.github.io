@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>가쿠로 자동 생성</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Vanilla Kakuro</p>
+        <h1>가쿠로 자동 생성</h1>
+      </div>
+      <div class="header-actions">
+        <button id="themeToggle" class="soft-button" type="button">다크모드</button>
+      </div>
+    </header>
+
+    <main class="app-layout">
+      <section class="board-card" aria-labelledby="boardTitle">
+        <div class="board-top">
+          <div>
+            <h2 id="boardTitle">퍼즐</h2>
+            <span id="difficultyBadge" class="badge">중급 · 10×10</span>
+          </div>
+          <div class="stats" aria-label="게임 상태">
+            <span>시간 <strong id="timerValue">00:00</strong></span>
+            <span>빈칸 <strong id="emptyCount">0</strong></span>
+            <span>힌트 <strong id="hintCount">0</strong></span>
+          </div>
+        </div>
+
+        <div class="board-wrap">
+          <div id="kakuroBoard" class="kakuro-board" role="grid" aria-label="가쿠로 보드"></div>
+
+          <div id="genOverlay" class="board-overlay" hidden>
+            <div class="overlay-box">
+              <div class="spinner" aria-hidden="true"></div>
+              <p id="genOverlayText">퍼즐 생성 중…</p>
+            </div>
+          </div>
+
+          <div id="winOverlay" class="board-overlay" hidden>
+            <div class="overlay-box win">
+              <h3>클리어! 🎉</h3>
+              <p><span id="winSize">-</span></p>
+              <p>시간 <strong id="winTime">00:00</strong> · 힌트 <strong id="winHints">0</strong>회</p>
+              <button id="winNewBtn" class="primary-button" type="button">새 퍼즐</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="numberPad" class="number-pad" aria-label="숫자 입력">
+          <button type="button" class="number-key" data-number="1">1</button>
+          <button type="button" class="number-key" data-number="2">2</button>
+          <button type="button" class="number-key" data-number="3">3</button>
+          <button type="button" class="number-key" data-number="4">4</button>
+          <button type="button" class="number-key" data-number="5">5</button>
+          <button type="button" class="number-key" data-number="6">6</button>
+          <button type="button" class="number-key" data-number="7">7</button>
+          <button type="button" class="number-key" data-number="8">8</button>
+          <button type="button" class="number-key" data-number="9">9</button>
+          <button type="button" class="number-key erase" data-action="erase">지우기</button>
+        </div>
+
+        <p id="statusMessage" class="status-message" aria-live="polite">퍼즐을 준비하고 있습니다.</p>
+      </section>
+
+      <aside class="control-card" aria-label="게임 메뉴">
+        <div class="control-field">
+          <label for="difficultySelect">난이도</label>
+          <select id="difficultySelect">
+            <option value="6">입문 · 6×6</option>
+            <option value="8">초급 · 8×8</option>
+            <option value="10" selected>중급 · 10×10</option>
+            <option value="12">고급 · 12×12</option>
+            <option value="16">전문가 · 16×16</option>
+          </select>
+        </div>
+
+        <div class="button-grid">
+          <button id="newPuzzleBtn" class="primary-button" type="button">새 퍼즐</button>
+          <button id="noteModeBtn" type="button" aria-pressed="false">메모 모드 (N)</button>
+          <button id="undoBtn" type="button">되돌리기 (Ctrl+Z)</button>
+          <button id="hintBtn" type="button">힌트</button>
+        </div>
+
+        <label class="option-row">
+          <input id="autoCandChk" type="checkbox">
+          자동 후보 표시
+        </label>
+
+        <div class="run-panel" aria-label="선택 런 정보">
+          <h3>조합 도우미</h3>
+          <div id="runInfo">
+            <p class="placeholder">칸을 선택하면 들어갈 수 있는 조합이 표시됩니다.</p>
+          </div>
+        </div>
+
+        <div class="help-panel">
+          <h3>규칙</h3>
+          <ul>
+            <li>모든 흰 칸에 1~9를 넣습니다.</li>
+            <li>대각선 위 숫자 = 오른쪽 칸들의 합.</li>
+            <li>대각선 아래 숫자 = 아래쪽 칸들의 합.</li>
+            <li>한 줄 안에서 같은 숫자는 두 번 쓸 수 없습니다.</li>
+          </ul>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script src="js/combinations.js" defer></script>
+  <script src="js/kakuroSolver.js" defer></script>
+  <script src="js/kakuroGenerator.js" defer></script>
+  <script src="js/ui.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>

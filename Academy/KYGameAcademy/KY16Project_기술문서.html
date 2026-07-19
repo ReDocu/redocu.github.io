@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KY 16 Project — 기술문서</title>
+<style>
+  :root {
+    --bg:        #0d1117;
+    --bg-soft:   #161b22;
+    --bg-card:   #1a2029;
+    --bg-elev:   #21262d;
+    --line:      #2d333b;
+    --line-soft: #21262d;
+    --tx:        #e6edf3;
+    --tx-dim:    #9aa7b4;
+    --tx-mute:   #6b7683;
+    --mono: 'D2Coding','Cascadia Code','Consolas','SFMono-Regular',ui-monospace,monospace;
+
+    /* 단계별 강조색 */
+    --c-basic:  #38bdf8;  /* 기초/빌드 - 시안 */
+    --c-proc:   #fbbf24;  /* 절차적/알고리즘 - 앰버 */
+    --c-oop:    #c084fc;  /* OOP/구조 - 퍼플 */
+    --c-warn:   #f87171;  /* 이슈 - 레드 */
+    --c-basic-bg: rgba(56,189,248,.10);
+    --c-proc-bg:  rgba(251,191,36,.10);
+    --c-oop-bg:   rgba(192,132,252,.10);
+    --c-warn-bg:  rgba(248,113,113,.10);
+  }
+  :root[data-theme="light"] {
+    --bg:        #f6f8fa;
+    --bg-soft:   #ffffff;
+    --bg-card:   #ffffff;
+    --bg-elev:   #f0f3f6;
+    --line:      #d8dee4;
+    --line-soft: #e6ebf0;
+    --tx:        #1c2128;
+    --tx-dim:    #57606a;
+    --tx-mute:   #848d97;
+    --c-basic-bg: rgba(2,132,199,.08);
+    --c-proc-bg:  rgba(180,120,0,.10);
+    --c-oop-bg:   rgba(147,51,234,.08);
+    --c-warn-bg:  rgba(220,38,38,.08);
+    --c-basic:  #0284c7;
+    --c-proc:   #b45309;
+    --c-oop:    #9333ea;
+    --c-warn:   #dc2626;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+  body {
+    font-family: 'Pretendard','Noto Sans KR','Malgun Gothic',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    background: var(--bg);
+    color: var(--tx);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "tnum";
+  }
+
+  /* ── 진행바 ── */
+  #progress {
+    position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+    background: linear-gradient(90deg,var(--c-basic),var(--c-proc),var(--c-oop));
+    z-index: 100; transition: width .1s linear;
+  }
+
+  /* ── 레이아웃 ── */
+  .layout { display: grid; grid-template-columns: 264px minmax(0,1fr); max-width: 1280px; margin: 0 auto; }
+
+  /* ── 사이드 목차 ── */
+  aside {
+    position: sticky; top: 0; align-self: start; height: 100vh; overflow-y: auto;
+    padding: 28px 20px 40px; border-right: 1px solid var(--line);
+  }
+  aside .brand { font-family: var(--mono); font-size: 12px; color: var(--tx-mute); letter-spacing: .05em; margin-bottom: 4px; }
+  aside .brand b { color: var(--c-basic); }
+  aside h2 { font-size: 17px; font-weight: 800; margin-bottom: 22px; letter-spacing: -.01em; }
+  .toc-group { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--tx-mute); margin: 20px 0 8px; font-weight: 700; }
+  .toc a {
+    display: block; color: var(--tx-dim); text-decoration: none; font-size: 13.5px;
+    padding: 5px 12px; border-radius: 7px; border-left: 2px solid transparent; transition: all .15s;
+  }
+  .toc a:hover { color: var(--tx); background: var(--bg-elev); }
+  .toc a.active { color: var(--tx); border-left-color: var(--accent,var(--c-basic)); background: var(--bg-elev); font-weight: 600; }
+  .toc a .num { font-family: var(--mono); color: var(--tx-mute); font-size: 11px; margin-right: 7px; }
+
+  #themeBtn {
+    margin-top: 26px; width: 100%; background: var(--bg-elev); color: var(--tx-dim);
+    border: 1px solid var(--line); border-radius: 8px; padding: 8px; cursor: pointer;
+    font-size: 12.5px; font-family: inherit; transition: all .15s;
+  }
+  #themeBtn:hover { color: var(--tx); border-color: var(--c-basic); }
+
+  /* ── 본문 ── */
+  main { padding: 0 40px 120px; min-width: 0; }
+  section { scroll-margin-top: 70px; padding-top: 56px; }
+
+  /* ── 히어로 ── */
+  .hero { padding: 60px 0 40px; border-bottom: 1px solid var(--line); }
+  .hero .eyebrow { font-family: var(--mono); color: var(--c-proc); font-size: 13px; letter-spacing: .06em; margin-bottom: 14px; }
+  .hero h1 { font-size: 40px; font-weight: 850; line-height: 1.15; letter-spacing: -.02em; margin-bottom: 18px; }
+  .hero h1 .grad { background: linear-gradient(120deg,var(--c-basic),var(--c-oop)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p.lead { font-size: 16.5px; color: var(--tx-dim); max-width: 660px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 7px; font-size: 13px;
+    background: var(--bg-card); border: 1px solid var(--line); border-radius: 20px; padding: 6px 14px; color: var(--tx-dim);
+  }
+  .chip b { color: var(--tx); font-weight: 600; }
+  .chip .dot { width: 7px; height: 7px; border-radius: 50%; }
+
+  /* ── 섹션 헤더 ── */
+  .sec-head { margin-bottom: 28px; }
+  .sec-head .kicker { font-family: var(--mono); font-size: 12.5px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; font-weight: 700; }
+  .sec-head h2 { font-size: 28px; font-weight: 820; letter-spacing: -.015em; }
+  .sec-head p { color: var(--tx-dim); margin-top: 10px; max-width: 760px; font-size: 15px; }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--bg-card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 26px 28px; margin-bottom: 22px; position: relative; overflow: hidden;
+  }
+  .card::before { content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background: var(--accent,var(--c-basic)); }
+  .card-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; }
+  .card-badge {
+    font-family: var(--mono); font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 7px;
+    background: var(--accent-bg,var(--c-basic-bg)); color: var(--accent,var(--c-basic)); border: 1px solid transparent; white-space: nowrap;
+  }
+  .card-head .titles { flex: 1; min-width: 200px; }
+  .card-head h3 { font-size: 20px; font-weight: 780; letter-spacing: -.01em; }
+  .card-head .file { font-family: var(--mono); font-size: 12.5px; color: var(--tx-mute); margin-top: 3px; }
+  .card-head .file::before { content: "📄 "; }
+
+  /* ── 표 ── */
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; margin: 4px 0 6px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 520px; }
+  thead th { background: var(--bg-elev); text-align: left; padding: 11px 14px; font-weight: 700; font-size: 12.5px; color: var(--tx-dim); border-bottom: 1px solid var(--line); white-space: nowrap; }
+  tbody td { padding: 11px 14px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--bg-elev); }
+  td.idx { font-family: var(--mono); color: var(--accent,var(--c-basic)); font-weight: 700; text-align: center; width: 44px; }
+  code { font-family: var(--mono); font-size: .88em; background: var(--bg-elev); padding: 1px 6px; border-radius: 5px; border: 1px solid var(--line-soft); color: var(--tx); white-space: nowrap; }
+  td strong, li strong { color: var(--tx); font-weight: 700; }
+
+  /* ── 코드/다이어그램 블록 ── */
+  .codeblock {
+    background: var(--bg-soft); border: 1px solid var(--line); border-radius: 10px;
+    padding: 16px 18px; margin: 6px 0 4px; overflow-x: auto;
+    font-family: var(--mono); font-size: 12.5px; line-height: 1.55; color: var(--tx-dim);
+    white-space: pre; tab-size: 2;
+  }
+  .codeblock .cm { color: var(--tx-mute); }
+  .codeblock .kw { color: var(--c-oop); }
+  .codeblock .fn { color: var(--c-basic); }
+  .codeblock .hl { color: var(--c-proc); }
+  .code-cap { font-family: var(--mono); font-size: 11.5px; color: var(--tx-mute); margin: 14px 0 4px; letter-spacing: .03em; }
+
+  /* ── 리스트 ── */
+  .klist { list-style: none; display: flex; flex-direction: column; gap: 10px; margin: 6px 0; }
+  .klist li { padding-left: 26px; position: relative; font-size: 14px; color: var(--tx-dim); }
+  .klist li::before { content: "▸"; position: absolute; left: 6px; color: var(--accent,var(--c-basic)); font-weight: 700; }
+  .klist li b, .klist li strong { color: var(--tx); }
+
+  /* ── 정리 박스 ── */
+  .takeaway {
+    margin-top: 18px; padding: 14px 18px; border-radius: 10px; font-size: 14px;
+    background: var(--accent-bg,var(--c-basic-bg)); border: 1px solid transparent; color: var(--tx-dim);
+    display: flex; gap: 10px;
+  }
+  .takeaway b { color: var(--accent,var(--c-basic)); }
+  .takeaway .ico { flex-shrink: 0; }
+
+  /* ── 아키텍처 그리드 ── */
+  .concept-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 16px; }
+  .concept-card { background: var(--bg-card); border: 1px solid var(--line); border-radius: 12px; padding: 22px; }
+  .concept-card h4 { font-size: 15px; font-weight: 750; margin-bottom: 14px; display: flex; align-items: center; gap: 9px; }
+  .concept-card h4 .n { font-family: var(--mono); font-size: 13px; width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center; background: var(--bg-elev); color: var(--accent,var(--c-basic)); }
+  .concept-card ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .concept-card li { font-size: 13px; color: var(--tx-dim); padding-left: 16px; position: relative; }
+  .concept-card li::before { content: "·"; position: absolute; left: 4px; color: var(--tx-mute); }
+  .concept-card li b { color: var(--tx); }
+
+  /* ── 단계 스텝 ── */
+  .steps { display: flex; flex-direction: column; gap: 14px; margin-top: 6px; counter-reset: step; }
+  .step { display: grid; grid-template-columns: 48px 1fr; gap: 16px; align-items: start; background: var(--bg-card); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .step .n { counter-increment: step; font-family: var(--mono); font-weight: 800; font-size: 20px; width: 44px; height: 44px; border-radius: 11px; display: grid; place-items: center; background: var(--bg-elev); color: var(--c-proc); }
+  .step .n::before { content: counter(step); }
+  .step p { font-size: 14.5px; color: var(--tx-dim); }
+  .step p b { color: var(--tx); }
+
+  footer { text-align: center; padding: 48px 0 0; margin-top: 60px; border-top: 1px solid var(--line); color: var(--tx-mute); font-size: 13px; font-family: var(--mono); }
+
+  /* ── 모바일 ── */
+  .mobile-bar { display: none; }
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    aside { display: none; }
+    main { padding: 0 20px 80px; }
+    .hero h1 { font-size: 30px; }
+    .mobile-bar {
+      display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 50;
+      background: var(--bg-soft); border-bottom: 1px solid var(--line); padding: 12px 20px;
+    }
+    .mobile-bar .brand { font-family: var(--mono); font-size: 13px; font-weight: 700; }
+    .mobile-bar .brand b { color: var(--c-basic); }
+    .mobile-bar button { background: none; border: 1px solid var(--line); color: var(--tx-dim); border-radius: 7px; padding: 5px 10px; cursor: pointer; font-size: 12px; }
+    .hero .meta-row { gap: 8px; }
+  }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<div class="mobile-bar">
+  <div class="brand"><b>KY16</b> · 기술문서</div>
+  <button id="themeBtnM">◐ 테마</button>
+</div>
+
+<div class="layout">
+  <!-- ───────── 사이드 목차 ───────── -->
+  <aside>
+    <div class="brand">KY <b>Game</b> Academy</div>
+    <h2>KY16 · 기술문서</h2>
+    <nav class="toc">
+      <a href="#top"><span class="num">00</span>개요</a>
+      <a href="#build"><span class="num">01</span>빌드 · 실행 환경</a>
+      <a href="#arch"><span class="num">02</span>전체 아키텍처</a>
+      <a href="#map"><span class="num">03</span>소스 파일 맵</a>
+
+      <div class="toc-group">모듈 상세</div>
+      <a href="#basics"><span class="num">M1</span>기초 예제</a>
+      <a href="#proc"><span class="num">M2</span>절차적 게임</a>
+      <a href="#gamble"><span class="num">M3</span>Gamble (OOP)</a>
+      <a href="#alcanoid"><span class="num">M4</span>Alcanoid (OOP)</a>
+
+      <div class="toc-group">설계 · 유지보수</div>
+      <a href="#design"><span class="num">05</span>핵심 설계 · 알고리즘</a>
+      <a href="#issues"><span class="num">06</span>기술 이슈 · 개선점</a>
+      <a href="#extend"><span class="num">07</span>확장 · 재사용</a>
+    </nav>
+    <button id="themeBtn">◐  라이트 / 다크 전환</button>
+  </aside>
+
+  <!-- ───────── 본문 ───────── -->
+  <main>
+    <span id="top"></span>
+    <!-- 히어로 -->
+    <header class="hero">
+      <div class="eyebrow">KY 16 PROJECT — TECHNICAL REFERENCE</div>
+      <h1>KY16Project <span class="grad">기술문서</span><br>소스 구조 · 설계 · 빌드</h1>
+      <p class="lead">
+        C++ 콘솔 게임 모음집 <b style="color:var(--tx)">KY16Project</b>의 개발자용 레퍼런스.
+        하나의 <code>main()</code> 메뉴 아래 <b style="color:var(--tx)">절차적 → 객체지향</b> 두 계층이 공존하는 구조를
+        파일 맵 · 상속 계층 · 게임 루프 · 직렬화 포맷 · 기술 부채까지 소스 기준으로 정리한다.
+      </p>
+      <div class="meta-row">
+        <span class="chip"><span class="dot" style="background:var(--c-basic)"></span>소스 <b>30개 파일 · 약 4,700 LOC</b></span>
+        <span class="chip"><span class="dot" style="background:var(--c-proc)"></span>기간 <b>9/2 ~ 9/27</b></span>
+        <span class="chip"><span class="dot" style="background:var(--c-oop)"></span>빌드 <b>VS · v141 · MultiByte</b></span>
+        <span class="chip">타깃 <b>Windows x64 콘솔</b></span>
+      </div>
+    </header>
+
+    <!-- ═══════════ 01 빌드 · 실행 환경 ═══════════ -->
+    <section id="build">
+      <div class="sec-head">
+        <div class="kicker" style="color:var(--c-basic)">01 · Build &amp; Runtime</div>
+        <h2>빌드 · 실행 환경</h2>
+        <p>외부 라이브러리 없이 표준 라이브러리 + Win32 콘솔 API만 사용한다. <b>문자 집합이 MultiByte</b>라는 점이 인코딩 특성(§06)을 결정한다.</p>
+      </div>
+      <div class="card" style="--accent:var(--c-basic);--accent-bg:var(--c-basic-bg)">
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>항목</th><th>값</th></tr></thead>
+            <tbody>
+              <tr><td>IDE / 빌드</td><td><code>KY16Project.sln</code> · MSBuild (<code>.vcxproj</code>)</td></tr>
+              <tr><td>플랫폼 툴셋</td><td><strong>v141</strong> (Visual Studio 2017)</td></tr>
+              <tr><td>Windows SDK</td><td>10.0.18362.0</td></tr>
+              <tr><td>구성</td><td>Debug / Release × Win32 / x64</td></tr>
+              <tr><td>문자 집합</td><td><strong>MultiByte</strong> (<code>CharacterSet=MultiByte</code>) — CP949 기반</td></tr>
+              <tr><td>서브시스템</td><td>Console</td></tr>
+              <tr><td>배포 빌드</td><td>64-bit, 런타임 정적 링크(<code>/MT</code>) → 재배포 패키지 없이 단독 실행</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-cap">의존성 — 표준 라이브러리 + Win32 콘솔 API</div>
+        <pre class="codeblock">&lt;iostream&gt; &lt;string&gt; &lt;fstream&gt; &lt;ctime&gt;/&lt;time.h&gt; &lt;conio.h&gt; &lt;limits.h&gt;
+&lt;Windows.h&gt;   <span class="cm">// SetConsoleCursorPosition, WriteFile, COORD, Sleep 등</span></pre>
+        <div class="takeaway" style="--accent:var(--c-basic);--accent-bg:var(--c-basic-bg)">
+          <span class="ico">🧩</span><div><b>MultiByte 문자집합</b> — 유니코드가 아니라 코드페이지(CP949) 기반으로 한글 리터럴을 처리한다. 이것이 소스가 CP949로 저장된 이유이며, UTF-8 편집기에서 열면 일부 파일이 깨져 보인다.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ 02 전체 아키텍처 ═══════════ -->
+    <section id="arch">
+      <div class="sec-head">
+        <div class="kicker" style="color:var(--c-oop)">02 · Architecture</div>
+        <h2>전체 아키텍처</h2>
+        <p>프로젝트는 <b>두 개의 패러다임 계층</b>을 한 실행 파일에 담는다. 학습 진행(절차적 → 객체지향)이 그대로 코드 구조에 드러난다.</p>
+      </div>
+
+      <div class="code-cap">모듈 계층 구조</div>
+      <pre class="codeblock">                     <span class="fn">main.cpp</span>  <span class="cm">(메뉴 디스패처)</span>
+                          │
+        ┌─────────────────┼──────────────────────────┐
+        │                 │                           │
+  <span class="hl">[기초 예제]</span>        <span class="hl">[심화 게임 · 절차적]</span>         <span class="kw">[OOP 게임]</span>
+  Basic01~04        HeroIsProcedural            Gamble
+  <span class="cm">(전역 함수)</span>        DirectRope                  └ GameMain ─ USER / DEAL
+                    EscapeMirror                Alcanoid
+                    <span class="cm">(단일 함수+지역 struct)</span>     └ GameManager ─ GameObject
+                                                             ├ Actor
+                                                             ├ Ball
+                                                             └ Block</pre>
+
+      <div class="concept-grid" style="margin-top:20px">
+        <div class="concept-card" style="--accent:var(--c-basic)">
+          <h4><span class="n">H</span><code>KYModule.h</code> — 공용 헤더</h4>
+          <ul>
+            <li>표준 <code>include</code>를 한데 집약</li>
+            <li>메뉴가 호출하는 <b>모든 진입 함수를 전방 선언</b></li>
+            <li>각 게임 <code>.cpp</code>는 이 헤더 하나만 포함</li>
+            <li>선언·정의 분리의 교과서적 예</li>
+          </ul>
+        </div>
+        <div class="concept-card" style="--accent:var(--c-proc)">
+          <h4><span class="n">M</span><code>main.cpp</code> — 디스패처</h4>
+          <ul>
+            <li>최상위 메뉴 <code>while</code> 루프</li>
+            <li>숫자 입력 → <code>switch</code>로 모듈 분기</li>
+            <li>Basic01/02는 하위 메뉴 한 단계 더</li>
+            <li><code>stage==0</code> 또는 ESC로 종료</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="code-cap" style="margin-top:20px">실행 흐름 — main()</div>
+      <pre class="codeblock"><span class="fn">DrawOpenning()</span>
+<span class="kw">while</span> (true):
+    <span class="fn">DrawIndex()</span>               <span class="cm">// 1~9 메뉴 출력</span>
+    cin &gt;&gt; stage
+    <span class="fn">system</span>("cls")
+    <span class="kw">switch</span> (stage) → 각 모듈 진입 함수 호출
+    <span class="kw">if</span> stage==0 or ESC → break
+    <span class="fn">getchar()</span>                <span class="cm">// 모듈 종료 후 대기, 메뉴 복귀</span></pre>
+    </section>
+
+    <!-- ═══════════ 03 소스 파일 맵 ═══════════ -->
+    <section id="map">
+      <div class="sec-head">
+        <div class="kicker" style="color:var(--c-basic)">03 · Source Map</div>
+        <h2>소스 파일 맵</h2>
+        <p>총 30개 파일. 색상은 소속 계층(<span style="color:var(--c-basic)">기초</span> · <span style="color:var(--c-proc)">절차적</span> · <span style="color:var(--c-oop)">OOP</span>)을 나타낸다.</p>
+      </div>
+      <div class="card" style="--accent:var(--c-oop);--accent-bg:var(--c-oop-bg)">
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>파일</th><th>역할</th><th>핵심 개념</th></tr></thead>
+            <tbody>
+              <tr><td><code>main.cpp</code></td><td>최상위 메뉴 디스패처</td><td>switch 분기, 수명주기</td></tr>
+              <tr><td><code>KYModule.h</code></td><td>공용 헤더 / 전방 선언</td><td>헤더 집약, 선언·정의 분리</td></tr>
+              <tr><td><code>Basic01.cpp</code></td><td>기초 문법 11문제</td><td>변수·연산자·조건·반복</td></tr>
+              <tr><td><code>Basic02.cpp</code></td><td>배열·구조체 5문제</td><td>1D/2D 배열, struct, 아스키</td></tr>
+              <tr><td><code>Basic03.cpp</code></td><td>함수·포인터</td><td>오버로딩, 포인터, 참조</td></tr>
+              <tr><td><code>Basic04.cpp</code></td><td>템플릿·참조</td><td><code>template</code>, Swap 오버로딩</td></tr>
+              <tr><td><code>01. HeroIsProcedural.cpp</code></td><td>텍스트 RPG</td><td>절차적 상태관리, 가위바위보</td></tr>
+              <tr><td><code>02. DirectRope.cpp</code></td><td>2D 타일맵 이동</td><td>2차원 배열, WASD 이동</td></tr>
+              <tr><td><code>03. EscapeMirror.cpp</code></td><td>미로·채굴 탈출</td><td>struct 집합, 상태머신, 실시간 입력</td></tr>
+              <tr><td><code>01. Gamble.cpp</code></td><td>Gamble 진입점</td><td>게임 루프, <code>GameMain</code> 소유</td></tr>
+              <tr><td><code>GameMain.h/.cpp</code></td><td>Gamble 게임 매니저</td><td>베팅 로직, AI, 상태 갱신</td></tr>
+              <tr><td><code>USER.h/.cpp</code></td><td>플레이어/AI 모델</td><td>캡슐화(Get/Set)</td></tr>
+              <tr><td><code>DEAL.h/.cpp</code></td><td>카드 딜러</td><td>셔플·분배 알고리즘</td></tr>
+              <tr><td><code>Alcanoid.cpp</code></td><td>Alcanoid 진입점</td><td>정형 게임 루프</td></tr>
+              <tr><td><code>GameManager.h/.cpp</code></td><td>Alcanoid 게임 매니저</td><td>씬 관리, 충돌, 저장/불러오기</td></tr>
+              <tr><td><code>GameObject.h/.cpp</code></td><td>게임 오브젝트 <b>기반 클래스</b></td><td>상속의 뿌리</td></tr>
+              <tr><td><code>Actor.h/.cpp</code></td><td>패들(플레이어)</td><td>상속, 이동/발사</td></tr>
+              <tr><td><code>Ball.h/.cpp</code></td><td>공</td><td>상속, 벡터 이동·반사</td></tr>
+              <tr><td><code>Block.h/.cpp</code></td><td>벽돌</td><td>상속 (최소 구현)</td></tr>
+              <tr><td><code>config.h</code> · <code>pch.h</code></td><td>상수/enum · PCH</td><td><code>#define</code>, <code>enum</code> (중복 주의 §06)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ M1 기초 예제 ═══════════ -->
+    <section id="basics">
+      <div class="sec-head">
+        <div class="kicker" style="color:var(--c-basic)">Module 1 · Fundamentals</div>
+        <h2>기초 예제 — Basic01~04</h2>
+        <p>전역 함수의 집합. 각 파일이 하나의 "테스트 모듈" 함수를 노출하고, 그 안에서 개별 실습 함수를 호출한다.</p>
+      </div>
+      <div class="card" style="--accent:var(--c-basic);--accent-bg:var(--c-basic-bg)">
+        <div class="card-head">
+          <span class="card-badge">Basic 03</span>
+          <div class="titles"><h3>함수 · 오버로딩 · 포인터 · 참조</h3><div class="file">Basic03.cpp</div></div>
+        </div>
+        <ul class="klist">
+          <li><b>함수 오버로딩</b> — <code>NumAvg(int,int)</code> vs <code>NumAvg(int*,int)</code>, <code>studyRandNum()</code> 2종을 대비</li>
+          <li><b>포인터를 통한 값 변경</b> — <code>ChangeNum(int*)</code>로 원본을 직접 수정</li>
+          <li><b>참조 전달</b> — <code>func_by_ref(int&amp;)</code>로 포인터 없이 원본 수정</li>
+        </ul>
+      </div>
+      <div class="card" style="--accent:var(--c-basic);--accent-bg:var(--c-basic-bg)">
+        <div class="card-head">
+          <span class="card-badge">Basic 04</span>
+          <div class="titles"><h3>템플릿 · 참조 · Swap</h3><div class="file">Basic04.cpp</div></div>
+        </div>
+        <ul class="klist">
+          <li><b>템플릿 함수</b> — <code>template&lt;typename T&gt; AddTemp</code>, 단일/이종 타입 파라미터, <code>typeid().name()</code></li>
+          <li><b>포인터 Swap vs 참조 Swap</b> — 같은 동작을 두 메커니즘으로 오버로딩해 나란히 제시</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ═══════════ M2 절차적 게임 ═══════════ -->
+    <section id="proc">
+      <div class="sec-head">
+        <div class="kicker" style="color:var(--c-proc)">Module 2 · Procedural</div>
+        <h2>심화 게임 — 절차적</h2>
+        <p>클래스 없이, 한 함수 안에서 지역 변수·지역 struct·<code>while</code> 루프로 게임 전체를 구현한다.</p>
+      </div>
+      <div class="card" style="--accent:var(--c-proc);--accent-bg:var(--c-proc-bg)">
+        <div class="card-head">
+          <span class="card-badge">심화 1</span>
+          <div class="titles"><h3>HeroIsProcedural — 텍스트 RPG</h3><div class="file">01. HeroIsProcedural.cpp</div></div>
+        </div>
+        <ul class="klist">
+          <li><code>hero_*</code> / <code>monster_*</code> 스칼라 변수로 스탯 관리</li>
+          <li>탐험 시 <code>rand()</code>로 몬스터 선택 → <b>가위바위보(GA/BA/BO)</b> 승패로 데미지 교환</li>
+          <li><code>day</code> 카운터가 0 이하로 내려가면 서브보스 → 보스 순차 등장</li>
+          <li>경험치 누적 → 레벨업 루프(<code>while(hero_exp &gt; hero_up_exp)</code>)로 스탯 상승, 승리 시 아스키 아트 연출</li>
+        </ul>
+      </div>
+      <div class="card" style="--accent:var(--c-proc);--accent-bg:var(--c-proc-bg)">
+        <div class="card-head">
+          <span class="card-badge">심화 2</span>
+          <div class="titles"><h3>DirectRope — 2D 타일맵 이동</h3><div class="file">02. DirectRope.cpp</div></div>
+        </div>
+        <ul class="klist">
+          <li><code>int map[10][10]</code>에 <code>0</code>(길)/<code>1</code>(영웅)/<code>2</code>(탈출구)을 심음</li>
+          <li>WASD로 좌표 갱신, <code>system("cls")</code> 후 전체 재출력하는 <b>전면 리드로우</b> 방식</li>
+          <li>탈출구 좌표 도달 시 승리</li>
+        </ul>
+      </div>
+      <div class="card" style="--accent:var(--c-proc);--accent-bg:var(--c-proc-bg)">
+        <div class="card-head">
+          <span class="card-badge">심화 3</span>
+          <div class="titles"><h3>EscapeMirror — 미로·채굴 탈출</h3><div class="file">03. EscapeMirror.cpp</div></div>
+        </div>
+        <ul class="klist">
+          <li><code>TILE / PLAYER / ITEM / KEY</code> <b>4종 struct</b>를 지역 배열로 운용</li>
+          <li><code>stage</code> 변수를 <b>상태머신</b>으로 사용 — 1=초기화, 2=타이틀, 3=게임오버, 4=상점, 그 외=플레이</li>
+          <li><code>_kbhit()</code>/<code>_getch()</code> 실시간 입력, 지형 타입별 스태미나 소모</li>
+          <li>채굴(SPACE)로 벽 → 길 변환, 열쇠 수집 후 탈출 조건 검사</li>
+        </ul>
+        <div class="takeaway" style="--accent:var(--c-proc);--accent-bg:var(--c-proc-bg)">
+          <span class="ico">⚠️</span><div>변수·struct·플래그가 한 함수에 폭증한다. <b>"절차적 방식의 한계"</b>를 체감시키는 지점 — 다음 단계에서 클래스로 정리된다.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ M3 Gamble ═══════════ -->
+    <section id="gamble">
+      <div class="sec-head">
+        <div class="kicker" style="color:var(--c-oop)">Module 3 · OOP 도입</div>
+        <h2>Gamble — 매니저 + 데이터 모델</h2>
+        <p>클래스로 <b>책임을 분리</b>한 첫 게임. 두 슬롯 카드 사이(min &lt; 카드 &lt; max)에 다음 카드가 들어오면 이기는 베팅 게임.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="concept-card" style="--accent:var(--c-oop)">
+          <h4><span class="n">D</span><code>USER</code> — 데이터 모델</h4>
+          <ul>
+            <li><b>private + Get/Set</b> 캡슐화</li>
+            <li><code>_money</code>, <code>_slot_min/max</code>, <code>_choice</code>(폴드)</li>
+            <li>플레이어 1 + AI 4 = 5인 게임</li>
+          </ul>
+        </div>
+        <div class="concept-card" style="--accent:var(--c-oop)">
+          <h4><span class="n">C</span><code>DEAL</code> — 카드 딜러</h4>
+          <ul>
+            <li><code>MixCard()</code> — 중복 제거 셔플</li>
+            <li><code>ShareCardNum()</code> — <code>share_count</code> 커서 순차 분배</li>
+            <li>소진 시 재셔플</li>
+          </ul>
+        </div>
+        <div class="concept-card" style="--accent:var(--c-oop)">
+          <h4><span class="n">G</span><code>GameMain</code> — 매니저</h4>
+          <ul>
+            <li><code>Betting()</code>/<code>Ado()</code>(올인) 판정</li>
+            <li><code>NextReceiver()</code> 턴 이양</li>
+            <li><code>AiProcess()</code> — 슬롯 간격 기반 콜/올인/폴드</li>
+            <li><code>OnDraw()</code> — 표 형태 상태 렌더링</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ M4 Alcanoid ═══════════ -->
+    <section id="alcanoid">
+      <div class="sec-head">
+        <div class="kicker" style="color:var(--c-oop)">Module 4 · OOP 종합</div>
+        <h2>Alcanoid — 상속 계층 + 게임 루프 + 영속화</h2>
+        <p>가장 정형화된 구조이자 학습의 최종 도착점. 상속·다형성·캡슐화·게임루프·파일 저장을 종합한다.</p>
+      </div>
+
+      <div class="code-cap">상속 계층 — GameObject</div>
+      <pre class="codeblock"><span class="kw">GameObject</span>  <span class="cm">// 기반: _posX/Y, _dirX/Y, _speedPower, _shape, _isAlive, _isCollide + Get/Set</span>
+   ├── <span class="fn">Actor</span> : 패들.  Move(key, Ball*), Shoot(Ball*), _isBallOn(공 부착 여부)
+   ├── <span class="fn">Ball</span>  : 공.    Move()에서 cos/sin 각도로 방향벡터, 벽/블록/패들 반사, bornTime/deadTime(점수)
+   └── <span class="fn">Block</span> : 벽돌.  위치·생존만 갖는 최소 파생 클래스</pre>
+
+      <div class="code-cap" style="margin-top:20px">게임 루프 — Alcanoid.cpp (표준 실시간 루프)</div>
+      <pre class="codeblock"><span class="fn">Initialize()</span>                       <span class="cm">// 객체 생성·배치</span>
+<span class="kw">while</span> (true):
+    startFrame = <span class="fn">clock()</span>
+    key = <span class="fn">GetKeyEvent()</span>            <span class="cm">// _kbhit 논블로킹 입력</span>
+    <span class="fn">InputProcess</span>(key)             <span class="cm">// 이동/발사/저장/불러오기</span>
+    <span class="fn">Update()</span>                       <span class="cm">// 공 이동·충돌·점수·생명</span>
+    <span class="fn">DrawScreen()</span>                   <span class="cm">// 씬별 렌더링</span>
+    <span class="fn">FrameDelay</span>(startFrame)         <span class="cm">// 30 FPS 고정 (1000/FPS 보정)</span></pre>
+
+      <ul class="klist" style="margin-top:18px">
+        <li><b>씬 관리</b> — <code>enum SCENE { GAME_START, GAME_PLAY, GAME_OVER }</code>로 상태 전환</li>
+        <li><b>스테이지</b> — <code>enum BLOCKNUM { STAGE1=30, STAGE2=40, STAGE3=50 }</code>. 블록 전멸 시 <code>NextGame()</code>이 <code>delete[]</code> 후 다음 스테이지 배열 재할당</li>
+        <li><b>저장/불러오기</b> — <code>save_point.txt</code> 텍스트 직렬화 (§05 참고)</li>
+      </ul>
+    </section>
+
+    <!-- ═══════════ 05 핵심 설계 · 알고리즘 ═══════════ -->
+    <section id="design">
+      <div class="sec-head">
+        <div class="kicker" style="color:var(--c-proc)">05 · Design &amp; Algorithms</div>
+        <h2>핵심 설계 · 알고리즘</h2>
+        <p>모듈을 가로지르는 공통 기법 — 렌더링 · 입력 · 충돌 · 직렬화 · 셔플.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="concept-card" style="--accent:var(--c-proc)">
+          <h4><span class="n">R</span>콘솔 렌더링</h4>
+          <ul>
+            <li><b>전면 리드로우</b> — <code>system("cls")</code> 후 전체 재출력 (Basic·절차적·Gamble). 단순하나 깜빡임</li>
+            <li><b>커서 직접 이동</b> — <code>SetConsoleCursorPosition</code>+<code>WriteFile</code>로 오브젝트만 갱신 (Alcanoid). <code>mode con</code> 창 고정, 커서 숨김</li>
+          </ul>
+        </div>
+        <div class="concept-card" style="--accent:var(--c-proc)">
+          <h4><span class="n">I</span>입력 처리</h4>
+          <ul>
+            <li><b>블로킹</b> — <code>cin</code>, <code>getchar()</code> (메뉴·턴제)</li>
+            <li><b>논블로킹</b> — <code>_kbhit()</code>+<code>_getch()</code> (실시간)</li>
+          </ul>
+        </div>
+        <div class="concept-card" style="--accent:var(--c-proc)">
+          <h4><span class="n">C</span>충돌 판정</h4>
+          <ul>
+            <li><code>float</code> 좌표를 <code>×10<sup>7</sup></code> 정수화해 비교</li>
+            <li>도형 너비(<code>std::size</code>) + Y 인접(<code>posY==other.posY+1</code>)</li>
+            <li>부동소수 비교를 정수화로 회피</li>
+          </ul>
+        </div>
+        <div class="concept-card" style="--accent:var(--c-proc)">
+          <h4><span class="n">S</span>카드 셔플</h4>
+          <ul>
+            <li><code>rand()%52+1</code> 후 중복이면 <code>i--</code> 재시도</li>
+            <li>52장 유일 값 보장 (Fisher–Yates 계열 변형)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="code-cap" style="margin-top:20px">저장 포맷 — save_point.txt (Alcanoid)</div>
+      <pre class="codeblock">stage score life
+----------------------------
+<span class="cm">(블록 생존맵: 0/1 을 열×행으로)</span>
+----------------------------
+ball.direct_x ball.direct_y
+ball.posX ball.posY
+----------------------------
+actor.speedPower
+actor.posX
+actor.posY</pre>
+      <div class="takeaway" style="--accent:var(--c-proc);--accent-bg:var(--c-proc-bg)">
+        <span class="ico">💾</span><div>로드 시 <b><code>stage</code>를 먼저 읽어</b> <code>NextGame()</code>으로 블록 배열을 맞춘 뒤 나머지를 역직렬화한다. 배포본의 <code>save_point.txt</code>가 이 포맷의 실제 예시.</div>
+      </div>
+    </section>
+
+    <!-- ═══════════ 06 기술 이슈 ═══════════ -->
+    <section id="issues">
+      <div class="sec-head">
+        <div class="kicker" style="color:var(--c-warn)">06 · Technical Debt</div>
+        <h2>기술 이슈 · 개선점</h2>
+        <p>학습 결과물 특성상 남아 있는 부채. 소스를 읽으며 확인한 실제 항목으로, 재사용/리팩터링 시 우선 검토 대상.</p>
+      </div>
+      <div class="card" style="--accent:var(--c-warn);--accent-bg:var(--c-warn-bg)">
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>#</th><th>이슈</th><th>위치</th><th>내용 / 개선안</th></tr></thead>
+            <tbody>
+              <tr><td class="idx" style="--accent:var(--c-warn)">1</td><td><b>소스 인코딩 혼재</b></td><td>프로젝트 전반</td><td>대부분 <b>CP949(EUC-KR)</b>, 일부(<code>pch.h</code>, <code>Alcanoid.cpp</code>)는 UTF-8. UTF-8 편집기에서 CP949 파일이 깨져 보임 → UTF-8 일괄 변환 + <code>.gitattributes</code> 고정 권장</td></tr>
+              <tr><td class="idx" style="--accent:var(--c-warn)">2</td><td><b>상수 매크로 중복</b></td><td><code>config.h</code> ↔ <code>pch.h</code></td><td><code>GAME_FPS</code>, <code>GAME_WIDTH</code>, <code>enum SCENE/BLOCKNUM</code> 등 양쪽 중복 → 재정의 경고 소지. 한 곳으로 단일화</td></tr>
+              <tr><td class="idx" style="--accent:var(--c-warn)">3</td><td><b>대입/비교 혼동 버그</b></td><td><code>GameMain::OnDraw</code></td><td><code>if (game_start = true)</code> — 비교가 아니라 <b>대입</b>이라 항상 참. <code>==</code>로 수정 필요</td></tr>
+              <tr><td class="idx" style="--accent:var(--c-warn)">4</td><td><b>메모리 해제 누락</b></td><td><code>GameMain</code>, <code>GameManager</code> 소멸자</td><td><code>new</code>한 객체를 <code>delete</code> 하지 않아 누수 → 소멸자 정리 또는 스마트 포인터</td></tr>
+              <tr><td class="idx" style="--accent:var(--c-warn)">5</td><td><b>미완성 함수</b></td><td><code>AiChoice()</code>, <code>Actor::Shoot()</code></td><td><code>AiChoice()</code>는 빈 함수, <code>Shoot()</code>은 양 분기 동일 동작 → 죽은 코드 정리</td></tr>
+              <tr><td class="idx" style="--accent:var(--c-warn)">6</td><td><b>매직 넘버</b></td><td><code>Collide()</code>, <code>Ball::Move()</code></td><td><code>×10000000</code> 스케일, 고정 <code>angle=120</code> → 명명 상수/주석화</td></tr>
+              <tr><td class="idx" style="--accent:var(--c-warn)">7</td><td><b>전역 상태</b></td><td><code>Basic03.cpp</code> <code>_worldNum</code></td><td>전역 변수 의존 → 재사용 시 지역화 권장</td></tr>
+              <tr><td class="idx" style="--accent:var(--c-warn)">8</td><td><b>플랫폼 종속</b></td><td>전반</td><td>Win32 콘솔 API·<code>system("cls")</code>·CP949 전제 → Windows 전용, 이식성 낮음(학습용으론 무방)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ 07 확장 · 재사용 ═══════════ -->
+    <section id="extend">
+      <div class="sec-head">
+        <div class="kicker" style="color:var(--c-proc)">07 · Extend &amp; Reuse</div>
+        <h2>확장 · 재사용 가이드</h2>
+        <p>모듈을 떼어 쓰거나 엔진 골격을 재활용할 때의 지침.</p>
+      </div>
+      <ul class="klist">
+        <li><b>개별 게임 분리</b> — 각 게임은 <code>KYModule.h</code> 하나에 의존하고 진입 함수 하나만 노출한다. 해당 <code>.cpp</code>(+OOP 게임은 매니저/모델 헤더 세트)와 <code>KYModule.h</code>만 가져오면 분리 이식 가능</li>
+        <li><b>엔진 골격 재사용</b> — Alcanoid의 <code>GameObject</code> 계층 + <code>Initialize/Input/Update/Draw/FrameDelay</code> 루프는 다른 콘솔 게임의 최소 프레임워크로 재활용 가능. 렌더링을 커서 이동 방식으로 통일하면 확장이 쉬움</li>
+      </ul>
+      <div class="code-cap" style="margin-top:18px">우선 정리 순서</div>
+      <div class="steps">
+        <div class="step"><div class="n"></div><p><b>인코딩 통일</b> — 저장소 표준을 UTF-8로 일괄 변환, <code>.gitattributes</code> 고정</p></div>
+        <div class="step"><div class="n"></div><p><b>상수 중복 제거</b> — <code>config.h</code>/<code>pch.h</code> 매크로·enum 단일화</p></div>
+        <div class="step"><div class="n"></div><p><b>소멸자 메모리 정리</b> — <code>GameMain</code>·<code>GameManager</code> 누수 제거</p></div>
+        <div class="step"><div class="n"></div><p><b>OnDraw 대입 버그</b> — <code>if (game_start = true)</code> → <code>==</code> 교정</p></div>
+      </div>
+    </section>
+
+    <footer>
+      KY 16 Project · Technical Reference &nbsp;·&nbsp; 소스 30개 파일 · 약 4,700 LOC &nbsp;·&nbsp; 01. CPP/Console/KY16Project/
+    </footer>
+  </main>
+</div>
+
+<script>
+  // 진행바 + 스크롤 스파이
+  const prog = document.getElementById('progress');
+  const links = [...document.querySelectorAll('.toc a')];
+  const map = links.map(a => ({ a, sec: document.querySelector(a.getAttribute('href')) })).filter(x => x.sec);
+
+  function onScroll() {
+    const h = document.documentElement;
+    const max = h.scrollHeight - h.clientHeight;
+    prog.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+
+    const y = h.scrollTop + 120;
+    let cur = map[0];
+    for (const m of map) { if (m.sec.offsetTop <= y) cur = m; }
+    links.forEach(a => a.classList.remove('active'));
+    if (cur) {
+      cur.a.classList.add('active');
+      // 활성 링크의 강조색을 섹션 계열에 맞춤
+      const id = cur.a.getAttribute('href');
+      let c = 'var(--c-basic)';
+      if (/proc|design|extend/.test(id)) c = 'var(--c-proc)';
+      else if (/arch|gamble|alcanoid/.test(id)) c = 'var(--c-oop)';
+      else if (/issues/.test(id)) c = 'var(--c-warn)';
+      cur.a.style.setProperty('--accent', c);
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // 테마 토글
+  function toggleTheme() {
+    const root = document.documentElement;
+    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('ky-theme', next); } catch (e) {}
+  }
+  document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+  document.getElementById('themeBtnM').addEventListener('click', toggleTheme);
+  try {
+    const saved = localStorage.getItem('ky-theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  } catch (e) {}
+</script>
+</body>
+</html>

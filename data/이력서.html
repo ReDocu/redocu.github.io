@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>이력서 · 이도규 (Lee Dogyu)</title>
+<style>
+  :root {
+    --accent: #0FB88E;        /* 홈페이지 민트(#5CFFD1)에서 파생한 가독성 있는 청록 */
+    --accent-soft: #5CFFD1;
+    --accent-ink: #0b6f56;
+    --ink: #14181d;
+    --muted: #55606c;
+    --faint: #8a94a0;
+    --line: #e6e9ee;
+    --bg-soft: #f6f8fa;
+    --page: 210mm;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    margin: 0;
+    background: #e9edf2;
+    color: var(--ink);
+    font-family: "Pretendard", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", Arial, sans-serif;
+    line-height: 1.55;
+    font-size: 10.5pt;
+  }
+  a { color: var(--accent-ink); text-decoration: none; }
+
+  .page {
+    width: var(--page);
+    min-height: 297mm;
+    margin: 18px auto;
+    background: #fff;
+    padding: 16mm 15mm 14mm;
+    box-shadow: 0 10px 30px rgba(15, 17, 21, 0.12);
+    position: relative;
+  }
+  .page::before {
+    content: "";
+    position: absolute; inset: 0 0 auto 0; height: 6px;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent-soft) 100%);
+  }
+
+  /* ── Header ───────────────────────────── */
+  header.masthead { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; padding-bottom: 14px; border-bottom: 2px solid var(--ink); }
+  .id-name { margin: 0; font-size: 27pt; font-weight: 800; letter-spacing: -0.01em; line-height: 1.05; }
+  .id-name span { font-size: 14pt; font-weight: 600; color: var(--muted); margin-left: 8px; }
+  .id-role { margin: 6px 0 0; font-size: 11.5pt; font-weight: 700; color: var(--accent-ink); }
+  .id-sub { margin: 3px 0 0; font-size: 9.5pt; color: var(--faint); }
+  .id-contact { text-align: right; font-size: 9.3pt; color: var(--muted); line-height: 1.7; white-space: nowrap; }
+  .id-contact b { color: var(--ink); font-weight: 700; }
+
+  /* ── Summary ──────────────────────────── */
+  .summary { margin: 14px 0 4px; font-size: 10.2pt; color: #2c3440; }
+  .summary strong { color: var(--accent-ink); font-weight: 700; }
+
+  /* ── Section ──────────────────────────── */
+  section { margin-top: 16px; }
+  h2.sec {
+    display: flex; align-items: center; gap: 9px;
+    margin: 0 0 9px; font-size: 12pt; font-weight: 800; color: var(--ink);
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  h2.sec::before { content: ""; width: 5px; height: 15px; background: var(--accent); border-radius: 2px; }
+  h2.sec small { font-size: 8.5pt; font-weight: 600; color: var(--faint); letter-spacing: 0; text-transform: none; }
+
+  /* ── Skills grid ──────────────────────── */
+  .skills { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 26px; }
+  .skill-row { display: grid; grid-template-columns: 78px 1fr; gap: 10px; padding: 3px 0; border-bottom: 1px dashed var(--line); font-size: 9.6pt; }
+  .skill-row dt { font-weight: 700; color: var(--accent-ink); }
+  .skill-row dd { margin: 0; color: #303842; }
+
+  /* ── Experience / items ───────────────── */
+  .item { margin-bottom: 11px; break-inside: avoid; }
+  .item:last-child { margin-bottom: 0; }
+  .item-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .item-title { font-size: 10.6pt; font-weight: 800; margin: 0; }
+  .item-org { color: var(--accent-ink); font-weight: 700; }
+  .item-meta { font-size: 9pt; color: var(--faint); white-space: nowrap; font-weight: 600; }
+  .item ul { margin: 4px 0 0; padding-left: 15px; }
+  .item li { margin: 1.5px 0; font-size: 9.7pt; color: #2f3742; }
+  .item li b { color: var(--ink); font-weight: 700; }
+  .tags { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag { font-size: 8pt; font-weight: 700; color: var(--accent-ink); background: rgba(92,255,209,0.16); border: 1px solid rgba(15,184,142,0.25); padding: 1px 7px; border-radius: 999px; }
+
+  /* ── Two-column body ──────────────────── */
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+
+  /* ── Education / compact list ─────────── */
+  .edu { break-inside: avoid; }
+  .edu .item-title { font-size: 10.2pt; }
+
+  .mini { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 20px; }
+  .mini .m { font-size: 9.3pt; break-inside: avoid; padding: 3px 0; border-bottom: 1px solid var(--line); }
+  .mini .m b { color: var(--ink); }
+  .mini .m span { color: var(--muted); }
+
+  footer.foot { margin-top: 18px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 8.3pt; color: var(--faint); display: flex; justify-content: space-between; }
+
+  /* ── Print ────────────────────────────── */
+  @page { size: A4; margin: 12mm; }
+  @media print {
+    body { background: #fff; }
+    .page { width: auto; min-height: auto; margin: 0; padding: 0; box-shadow: none; }
+    .page::before { display: none; }
+    a { color: var(--accent-ink); }
+    section, .item, .edu, .skill-row { break-inside: avoid; }
+    .no-print { display: none; }
+  }
+  .print-hint { max-width: var(--page); margin: 10px auto -6px; text-align: right; }
+  .print-hint button { font: inherit; font-size: 9pt; font-weight: 700; color: #0b6f56; background: var(--accent-soft); border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="print-hint no-print">
+  <button onclick="window.print()">🖨️ 인쇄 / PDF 저장</button>
+</div>
+
+<div class="page">
+
+  <!-- ══ Header ══ -->
+  <header class="masthead">
+    <div>
+      <h1 class="id-name">이도규 <span>Lee Dogyu</span></h1>
+      <p class="id-role">게임 클라이언트 개발자 · 메타버스 / 교육 콘텐츠 개발</p>
+      <p class="id-sub">1992.07.18 · 희망 직종: 게임 클라이언트 개발자, 보조 강사</p>
+    </div>
+    <div class="id-contact">
+      <div>✉ <b><a href="mailto:dlehrb103@google.com">dlehrb103@google.com</a></b></div>
+      <div>🖥 <a href="https://redocu.github.io/">redocu.github.io</a></div>
+      <div>⌥ <a href="https://github.com/ReDocu">github.com/ReDocu</a></div>
+    </div>
+  </header>
+
+  <!-- ══ Summary ══ -->
+  <p class="summary">
+    <strong>C/C++ · Unity · Unreal · Python</strong> 기반의 게임 클라이언트 개발자입니다.
+    상용 Unity FPS 콘텐츠와 Unreal 자율주행 시뮬레이션을 실무에서 개발했으며,
+    오브젝트 풀 · 씬/입력 매니저 · 턴 시스템 등 <strong>재사용 가능한 게임 프레임워크 설계</strong>에 강점이 있습니다.
+    최근에는 Unity 6 · UE5로 개인 프로젝트를 지속하고, 대학에서 <strong>VR · AI 콘텐츠 강의</strong>를 병행하고 있습니다.
+  </p>
+
+  <!-- ══ Skills ══ -->
+  <section>
+    <h2 class="sec">보유 기술</h2>
+    <div class="skills">
+      <dl class="skill-row"><dt>Language</dt><dd>C / C++, C#, Python</dd></dl>
+      <dl class="skill-row"><dt>Engine</dt><dd>Unity 6, Unreal Engine 5 (Blueprint)</dd></dl>
+      <dl class="skill-row"><dt>Game System</dt><dd>A* PathFinding, TurnSystem, EnemyAI, Object Pool, NavMesh Behavior Tree, 더블 버퍼링</dd></dl>
+      <dl class="skill-row"><dt>VR / XR</dt><dd>UE5 VR Template, Grab Component, Pixel Streaming</dd></dl>
+      <dl class="skill-row"><dt>AI / Data</dt><dd>YOLO(자체 학습), 회귀 모델, 전처리 · 하이퍼파라미터 튜닝</dd></dl>
+      <dl class="skill-row"><dt>Web / Etc</dt><dd>Flask, WINAPI, Pygame, GoF 디자인 패턴, UML, CSV / DB 정규화</dd></dl>
+    </div>
+  </section>
+
+  <!-- ══ Two-column: Career / Education ══ -->
+  <section>
+    <h2 class="sec">경력 <small>Work Experience</small></h2>
+
+    <div class="item">
+      <div class="item-head">
+        <p class="item-title"><span class="item-org">CellBig</span> — 라이브프로그램팀 대리</p>
+        <span class="item-meta">2020.07 – 2021.12</span>
+      </div>
+      <ul>
+        <li>적외선 센서(너프건) 기반 <b>Unity FPS 게임 콘텐츠</b> 개발 — <i>Fanta Play</i></li>
+        <li>App Joint 연동에 맞춘 <b>Unity 게임 콘텐츠</b> 보조 및 개발 — <i>ALIVE</i></li>
+      </ul>
+      <div class="tags"><span class="tag">Unity</span><span class="tag">FPS</span><span class="tag">센서 연동</span></div>
+    </div>
+
+    <div class="item">
+      <div class="item-head">
+        <p class="item-title"><span class="item-org">KETI (한국전자기술연구원)</span> — 모빌리티 플랫폼 프리랜서</p>
+        <span class="item-meta">2022.06 – 2023.05</span>
+      </div>
+      <ul>
+        <li>Unreal 기반 자율주행 시뮬레이터 <b>Carla Simulator</b> 분석</li>
+        <li>Unreal 자체 자율주행 시뮬레이션 <b>환경 요소 개발</b> 및 보조</li>
+        <li>UI 개발 — Ultimate Menu System 에셋 분석 및 적용</li>
+      </ul>
+      <div class="tags"><span class="tag">Unreal Engine</span><span class="tag">자율주행</span><span class="tag">UI</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec">강의 · 교육 <small>Teaching</small></h2>
+    <div class="item">
+      <div class="item-head">
+        <p class="item-title"><span class="item-org">홍익대학교 메타버스 융합SW아카데미</span> — 조교 / 보조강사</p>
+        <span class="item-meta">2024.07 – 2025.05</span>
+      </div>
+      <ul>
+        <li>UE5 <b>VR 플랫폼 강의</b> 2주 보조강사 — VR 방탈출 교보재 직접 제작</li>
+        <li>Unreal <b>Pixel Streaming</b> 활용 전시 보조 (조교)</li>
+        <li>경일게임아카데미 <b>GoF 23종 디자인 패턴 강의 문서</b> 제작 (C++ 예시 · UML)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ══ Education ══ -->
+  <section>
+    <h2 class="sec">학력</h2>
+    <div class="cols">
+      <div class="item edu">
+        <div class="item-head">
+          <p class="item-title">건국대학교 대학원 · 석사</p>
+          <span class="item-meta">~ 2019.08</span>
+        </div>
+        <ul><li>스마트 ICT 융합학과 (HCI 연구실) · <b>4.2 / 4.5</b></li></ul>
+      </div>
+      <div class="item edu">
+        <div class="item-head">
+          <p class="item-title">서울호서전문학교 · 학사 (학점은행제)</p>
+          <span class="item-meta">~ 2017.02</span>
+        </div>
+        <ul><li>컴퓨터공학 / 사이버해킹보안학과 · <b>3.58 / 4.5</b></li></ul>
+      </div>
+    </div>
+    <div class="item edu" style="margin-top:8px">
+      <div class="item-head">
+        <p class="item-title">직무 교육 과정</p>
+        <span class="item-meta">2019 – 2024</span>
+      </div>
+      <ul>
+        <li>경일게임아카데미 — Unity 3D 콘텐츠 개발 (2019 – 2020)</li>
+        <li>MBC컴퓨터아카데미 — AI 스마트 플랫폼 개발 과정 · YOLO / Python (2023.09 – 2024.05)</li>
+      </ul>
+    </div>
+  </section>
+
+</div><!-- /page 1 -->
+
+<div class="page">
+
+  <!-- ══ Projects ══ -->
+  <section style="margin-top:0">
+    <h2 class="sec">대표 프로젝트 <small>Selected Projects</small></h2>
+
+    <div class="item">
+      <div class="item-head">
+        <p class="item-title">Mixamo TBS War — 턴제 전략 게임</p>
+        <span class="item-meta">2025 · Unity 6</span>
+      </div>
+      <ul>
+        <li>그리드 시스템 · <b>A* PathFinding</b> · <b>TurnSystem</b> · EnemyAI · CameraManager 설계</li>
+        <li>Mixamo 캐릭터 호환 파이프라인 추가, Unity 6 신규 기능 적응용 포트폴리오</li>
+      </ul>
+      <div class="tags"><span class="tag">Unity 6</span><span class="tag">Turn-Based</span><span class="tag">AI</span><span class="tag">▶ youtu.be/EgANF3ILO7M</span></div>
+    </div>
+
+    <div class="item">
+      <div class="item-head">
+        <p class="item-title">RTS Deffence Arena — 실시간 디펜스</p>
+        <span class="item-meta">2025 · Unity 6</span>
+      </div>
+      <ul>
+        <li><b>오브젝트 관리 최적화</b> 및 에셋 번들 적용 관리 프로그램 개발</li>
+        <li>ResourceManager(Object Pool), Unity 6 Input System, Cinemachine 카메라, CoroutineHandler</li>
+        <li>NavMesh 기반 <b>Behavior Tree</b> AI, UGUI 적용</li>
+      </ul>
+      <div class="tags"><span class="tag">Unity 6</span><span class="tag">Object Pool</span><span class="tag">NavMesh</span><span class="tag">github.com/ReDocu/DefenceGame</span></div>
+    </div>
+
+    <div class="item">
+      <div class="item-head">
+        <p class="item-title">VR 방탈출 — 메타버스 VR 강의 교보재</p>
+        <span class="item-meta">2024 · UE5 Blueprint</span>
+      </div>
+      <ul>
+        <li>Grab Component 기반 <b>사물 잡기 · 던지기</b>, 손 애니메이션 · 소켓 링크 구성</li>
+        <li>전방 충돌 체크, 버튼 · 사물함 <b>기믹</b>, Widget 기반 <b>인벤토리</b> 구현</li>
+        <li>대학교 2주 강의(2~4학년 대상) 실습 자료로 설계</li>
+      </ul>
+      <div class="tags"><span class="tag">Unreal 5</span><span class="tag">VR</span><span class="tag">github.com/ReDocu/VR_Escape_Room</span></div>
+    </div>
+
+    <div class="item">
+      <div class="item-head">
+        <p class="item-title">CSGP — Console Game Pack 프레임워크</p>
+        <span class="item-meta">2023 · C / C++</span>
+      </div>
+      <ul>
+        <li>2개 이상의 게임을 하나의 팩에 담는 <b>콘솔 게임 프레임워크</b> 설계</li>
+        <li>Life Cycle(OnInit / Update / Render / Release), Timer · Screen · Scene · Input Manager</li>
+        <li>ScreenManager <b>더블 버퍼링</b>, List 기반 Snake 등 콘텐츠 분리 구조</li>
+      </ul>
+      <div class="tags"><span class="tag">C++</span><span class="tag">WINAPI</span><span class="tag">Framework</span><span class="tag">github.com/ReDocu/CSGPProject</span></div>
+    </div>
+
+    <div class="item">
+      <div class="item-head">
+        <p class="item-title">AI 스마트 플랫폼 — YOLO 기반 영상 인식</p>
+        <span class="item-meta">2024 · Python</span>
+      </div>
+      <ul>
+        <li>자체 학습 <b>YOLO(pt) 모델</b>을 적용한 CCTV 객체 인식 구현</li>
+        <li>Flask 기반 SNS 웹(로그인 · 게시판 · 댓글 · 좋아요), 스팀 할인가 예측(회귀 · 하이퍼파라미터)</li>
+      </ul>
+      <div class="tags"><span class="tag">Python</span><span class="tag">YOLO</span><span class="tag">Flask</span><span class="tag">회귀 모델</span></div>
+    </div>
+  </section>
+
+  <!-- ══ Other projects (chronicle) ══ -->
+  <section>
+    <h2 class="sec">기타 프로젝트 <small>Chronicle</small></h2>
+    <div class="mini">
+      <div class="m"><b>트릭스터 택틱스</b> <span>— WINAPI 턴제 RPG · ISO Matrix / Z-Order / A* · MapTool 개발</span></div>
+      <div class="m"><b>리그레션 (팀)</b> <span>— Unity 마을 경영 보드게임 · UI/카메라 · CSV DB 정규화</span></div>
+      <div class="m"><b>덕덕 디펜스</b> <span>— Unity 디펜스 · RayCast 집중 학습 · UI 디자인 연구</span></div>
+      <div class="m"><b>동방플라이트 (팀)</b> <span>— WINAPI 탄막 슈팅 · Vector 기반 객체 관리</span></div>
+      <div class="m"><b>몬스터를 찾아서 (팀)</b> <span>— Python / Pygame · ObjectPool · 동적 UI (Fade In/Out)</span></div>
+      <div class="m"><b>스팀 할인가 예측 (팀)</b> <span>— 전처리 세부화 · 회귀 알고리즘 · 모델 평가</span></div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>이도규 (Lee Dogyu) · 게임 클라이언트 개발자</span>
+    <span>Portfolio: redocu.github.io · GitHub: github.com/ReDocu</span>
+  </footer>
+
+</div><!-- /page 2 -->
+
+</body>
+</html>

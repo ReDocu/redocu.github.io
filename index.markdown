@@ -48,6 +48,7 @@ title : main
             <div class="card-actions">
               <a class="btn" href="project/ClaudeCockpit/ClaudeCockpit-v0.1.0.zip" target="_blank" rel="noopener">다운로드</a>
               <a class="btn" href="https://github.com/ReDocu/ClaudeCodeTemplate" target="_blank" rel="noopener">GitHub</a>
+              <a class="btn" href="project/ClaudeCockpit/Tech_document.html" target="_blank" rel="noopener">기술문서</a>
             </div>
           </div>
         </article>
@@ -120,21 +121,23 @@ title : main
     <div class="section-head">
       <p class="section-label">Section 02</p>
       <h2>학원 교육 정리</h2>
-      <p class="section-copy">포트폴리오 정리내역입니다.</p>
+      <p class="section-copy">학원 과정별로 배운 내용과 직접 만든 결과물을 정리했습니다.</p>
     </div>
     <div class="portfolio-slider" data-slider>
       <button class="slider-arrow slider-arrow--left" type="button" aria-label="이전 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <div class="slider-track" tabindex="0">
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/Kyungil_Academy.png" alt="전자책 프로젝트 A 썸네일" />
+            <img src="assets/images/portfolio/Kyungil_Academy.png" alt="경일게임아카데미 게임 개발 커리큘럼 썸네일" />
           </div>
           <div class="portfolio-card__body">
-            <h3>경일게임아카데미</h3>
-            <p>Unity를 활용한 게임 콘텐츠 개발 </p>
-            <div class="tag-list"><span class="tag">WinAPI</span><span class="tag">Unity</span><span class="tag">Game</span></div>
+            <h3>게임 클라이언트/콘텐츠 개발 커리큘럼</h3>
+            <p>디벨로퍼로켓(전 경일게임아카데미)</p>
+            <p>2019-09-02 ~ 2020-03-23</p>
+            <p>C/C++ 콘솔 → WinAPI 프레임워크 → Unity 엔진 순서로 게임 클라이언트 개발을 배우고, 단계마다 슈팅·SRPG·턴제 전략 게임을 직접 제작했습니다.</p>
+            <div class="tag-list"><span class="tag">C/C++</span><span class="tag">WinAPI</span><span class="tag">Unity</span><span class="tag">게임 개발</span></div>
             <div class="card-actions">
-              <a class="btn" href="/Academy/Kyungil_Academy" target="_blank" rel="noopener">다운로드</a>
+              <a class="btn" href="/Academy/Kyungil_Academy" target="_blank" rel="noopener">상세문서</a>
               <a class="btn" href="https://github.com/ReDocu/KYGameAcademy" target="_blank" rel="noopener">Github</a>
               <a class="btn" href="/Academy/KYGameAcademy/학습정리.html" target="_blank" rel="noopener">학습문서</a>
             </div>
@@ -142,16 +145,33 @@ title : main
         </article>
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/Kyungil_Academy.png" alt="전자책 프로젝트 A 썸네일" />
+            <img src="assets/images/portfolio/Kyungil_Academy.png" alt="MBC컴퓨터아카데미 AI 커리큘럼 썸네일" />
           </div>
           <div class="portfolio-card__body">
-            <h3>MBC 컴퓨터 아카데미</h3>
-            <p>Unity를 활용한 게임 콘텐츠 개발 </p>
-            <div class="tag-list"><span class="tag">WinAPI</span><span class="tag">Unity</span><span class="tag">Game</span></div>
+            <h3>비전 기반 AI 모델 생성 커리큘럼</h3>
+            <p>MBC컴퓨터아카데미(전 국제컴퓨터아트학원) </p>
+            <p>2023-09-13 ~ 2024-05-08 </p>
+            <p>Python 게임 제작에서 시작해 데이터 분석과 CNN 딥러닝, Object Detection 라벨링을 거쳐, 학습시킨 모델을 실시간 CCTV 웹 서비스로 배포했습니다.</p>
+            <div class="tag-list"><span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">TensorFlow</span><span class="tag">Flask</span></div>
             <div class="card-actions">
-              <a class="btn" href="/portfolio/Kyungil_Academy" target="_blank" rel="noopener">다운로드</a>
-              <a class="btn" href="https://github.com/ReDocu/KCD_Academy" target="_blank" rel="noopener">Github</a>
-              <a class="btn" href="/portfolio/Kyungil_Academy" target="_blank" rel="noopener">학습문서</a>
+              <a class="btn" href="/Academy/MBC_Academy" target="_blank" rel="noopener">상세문서</a>
+              <a class="btn" href="/Academy/MBCAcademy/학습정리.html" target="_blank" rel="noopener">학습문서</a>
+            </div>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="assets/images/portfolio/Kyungil_Academy.png" alt="코드캠프 바이브 코딩 커리큘럼 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>웹 기반 바이브 코딩 커리큘럼</h3>
+            <p>코드캠프(딩코)</p>
+            <p>2026-06-29 ~ 2026-09-11</p>
+            <p>Claude Code 중심의 바이브 코딩 과정. PRD 문서 작성부터 Supabase·Vercel 배포까지 익히며 소개 페이지와 미니 노션 웹서비스를 제작하고 있습니다.</p>
+            <div class="tag-list"><span class="tag">Claude Code</span><span class="tag">Supabase</span><span class="tag">Vercel</span><span class="tag">진행중</span></div>
+            <div class="card-actions">
+              <a class="btn" href="/Academy/CodeCamp_Academy" target="_blank" rel="noopener">체험하기</a>
+              <a class="btn" href="https://github.com/ReDocu/Sesac_CC_ClaudeCode" target="_blank" rel="noopener">Github</a>
             </div>
           </div>
         </article>

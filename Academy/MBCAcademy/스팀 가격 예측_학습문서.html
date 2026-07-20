@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>스팀 가격 예측하기 — 학습문서</title>
+<link rel="stylesheet" href="study-note.css">
+<style>:root { --accent: #6366f1; }</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="back" href="/Academy/MBC_Academy.html">← MBC아카데미</a>
+  <span class="doc-id">STUDY NOTE · 04 / 05</span>
+  <button data-theme-toggle>◐ 테마</button>
+</header>
+
+<main>
+  <!-- ── 히어로 ── -->
+  <header class="hero">
+    <p class="eyebrow">MBC컴퓨터아카데미 · MACHINE LEARNING</p>
+    <h1>머신러닝으로<br><span class="grad">스팀 가격 예측하기</span></h1>
+    <p class="lead">
+      스팀 게임 데이터를 이용해 세일 할인가격을 예측하는 머신러닝 팀 프로젝트.
+      EDA와 전처리부터 모델 학습, 평가, 하이퍼파라미터 튜닝까지
+      머신러닝 프로젝트의 표준 절차를 한 바퀴 완주하는 것이 목표였다.
+    </p>
+    <div class="chips">
+      <span class="chip"><span class="dot"></span><b>팀 프로젝트</b></span>
+      <span class="chip">과제 <b>할인가격 예측</b></span>
+      <a class="chip" href="/Academy/MBCAcademy/스팀의 세일 할인가격 예측.pdf" target="_blank" rel="noopener">📄 <b>프로젝트 PDF</b></a>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="v">1<small>주</small></div><div class="k">기간</div></div>
+      <div class="stat"><div class="v">EDA</div><div class="k">탐색 분석</div></div>
+      <div class="stat"><div class="v">회귀</div><div class="k">예측 모델</div></div>
+      <div class="stat"><div class="v">튜닝</div><div class="k">하이퍼파라미터</div></div>
+    </div>
+  </header>
+
+  <!-- ── 01 개요 ── -->
+  <section id="overview">
+    <div class="sec-head"><span class="n">01</span><h2>프로젝트 개요</h2></div>
+    <p class="sec-desc">
+      "이 게임은 세일 때 얼마나 할인될까?"를 데이터로 답해보는 프로젝트.
+      장르·평점·출시년도·가격 같은 특징으로부터 할인가격을 예측하는 모델을 만들었다.
+      데이터를 그대로 넣으면 모델이 학습하지 못하기 때문에,
+      <b>이상치 제거·인코딩·정규화 같은 전처리가 이 프로젝트의 중심</b>이었다.
+    </p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>항목</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td><b>데이터</b></td><td>스팀 게임 목록 데이터 (장르·태그·평점·정가·할인가 등)</td></tr>
+          <tr><td><b>전처리</b></td><td>이상치 제거, 원-핫 인코딩, 학습/테스트 분리, 정규화</td></tr>
+          <tr><td><b>모델</b></td><td>회귀 알고리즘 (선형 회귀 → 트리 계열 순으로 비교)</td></tr>
+          <tr><td><b>평가</b></td><td>MAE·RMSE·R² 지표 비교 + 하이퍼파라미터 튜닝으로 개선</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── 02 진행 과정 ── -->
+  <section id="process">
+    <div class="sec-head"><span class="n">02</span><h2>진행 과정</h2></div>
+    <div class="pipeline">
+      <div class="pipe"><div class="t"><span class="idx">P1</span>EDA</div><p>분포·상관관계를 그래프로 탐색하며 어떤 특징이 할인과 관련 있는지 파악</p></div>
+      <div class="pipe"><div class="t"><span class="idx">P2</span>전처리</div><p>이상치 제거 → 원-핫 인코딩 → 데이터 분리 → 정규화 순서로 학습 준비</p></div>
+      <div class="pipe"><div class="t"><span class="idx">P3</span>학습 · 평가</div><p>여러 회귀 모델을 학습시켜 MAE·RMSE·R²로 성능 비교</p></div>
+      <div class="pipe"><div class="t"><span class="idx">P4</span>튜닝</div><p>GridSearch로 하이퍼파라미터를 바꿔가며 최적 조합 탐색</p></div>
+    </div>
+  </section>
+
+  <!-- ── 03 핵심 개념 ── -->
+  <section id="concepts">
+    <div class="sec-head"><span class="n">03</span><h2>핵심 학습 개념</h2></div>
+    <div class="grid2">
+      <div class="concept">
+        <h3>EDA (탐색적 데이터 분석)</h3>
+        <ul>
+          <li>히스토그램·산점도·상관계수로 <b>데이터를 먼저 이해</b></li>
+          <li>가격 분포의 긴 꼬리(고가 게임)를 보고 이상치 기준 결정</li>
+          <li>모델링 전에 "무엇이 영향을 주는가"의 가설 세우기</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h3>전처리 4종 세트</h3>
+        <ul>
+          <li><b>이상치 제거</b> — IQR 기준으로 극단값 걸러내기</li>
+          <li><b>원-핫 인코딩</b> — 장르 같은 범주형을 0/1 컬럼으로 변환</li>
+          <li><b>데이터 분리</b> — train/test를 나눠 공정한 평가 준비</li>
+          <li><b>정규화</b> — 스케일이 다른 특징을 같은 범위로 맞춤</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h3>회귀 모델 · 평가</h3>
+        <ul>
+          <li>연속값(가격)을 예측하는 <b>회귀 문제</b>로 정의</li>
+          <li><b>MAE·RMSE</b>로 오차 크기, <b>R²</b>로 설명력 확인</li>
+          <li>모델별 성능을 같은 지표로 비교해 선택</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h3>하이퍼파라미터 튜닝</h3>
+        <ul>
+          <li>모델이 학습하지 못하는 값(트리 깊이 등)은 <b>사람이 정한다</b></li>
+          <li>GridSearch + 교차검증으로 조합을 체계적으로 탐색</li>
+          <li>튜닝 전후 지표를 기록해 개선 폭 확인</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 분석 노트 ── -->
+  <section id="impl">
+    <div class="sec-head"><span class="n">04</span><h2>분석 노트</h2></div>
+    <p class="sec-desc">전처리 → 학습 → 평가 → 튜닝 흐름을 요약한 예시 코드.</p>
+
+    <div class="cell">
+      <div class="cell-head"><span class="in">In [1]</span><span class="cap">전처리 — 이상치 제거와 원-핫 인코딩</span></div>
+      <pre><span class="cm"># IQR 기준 이상치 제거</span>
+q1, q3 = df[<span class="st">"price"</span>].quantile([<span class="nm">0.25</span>, <span class="nm">0.75</span>])
+iqr = q3 - q1
+df = df[(df[<span class="st">"price"</span>] &gt;= q1 - <span class="nm">1.5</span> * iqr) &amp; (df[<span class="st">"price"</span>] &lt;= q3 + <span class="nm">1.5</span> * iqr)]
+
+<span class="cm"># 범주형(장르) 원-핫 인코딩</span>
+df = pd.get_dummies(df, columns=[<span class="st">"genre"</span>])</pre>
+    </div>
+
+    <div class="cell">
+      <div class="cell-head"><span class="in">In [2]</span><span class="cap">분리·정규화 후 회귀 모델 학습</span></div>
+      <pre><span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> StandardScaler
+<span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> RandomForestRegressor
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="nm">0.2</span>)
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)   <span class="cm"># 테스트 데이터는 transform만!</span>
+X_test  = scaler.transform(X_test)
+
+model = RandomForestRegressor().fit(X_train, y_train)</pre>
+    </div>
+
+    <div class="cell">
+      <div class="cell-head"><span class="in">In [3]</span><span class="cap">평가와 하이퍼파라미터 튜닝</span></div>
+      <pre><span class="kw">from</span> sklearn.metrics <span class="kw">import</span> mean_absolute_error, r2_score
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> GridSearchCV
+
+pred = model.predict(X_test)
+print(<span class="st">"MAE:"</span>, mean_absolute_error(y_test, pred), <span class="st">"R²:"</span>, r2_score(y_test, pred))
+
+grid = GridSearchCV(RandomForestRegressor(),
+                    {<span class="st">"n_estimators"</span>: [<span class="nm">100</span>, <span class="nm">300</span>], <span class="st">"max_depth"</span>: [<span class="nm">8</span>, <span class="nm">16</span>, <span class="kw">None</span>]},
+                    cv=<span class="nm">5</span>, scoring=<span class="st">"neg_mean_absolute_error"</span>)
+grid.fit(X_train, y_train)
+print(grid.best_params_)</pre>
+    </div>
+  </section>
+
+  <!-- ── 05 배운 점 ── -->
+  <section id="learned">
+    <div class="sec-head"><span class="n">05</span><h2>배운 점 &amp; 회고</h2></div>
+    <ul class="klist">
+      <li><b>전처리 순서에는 이유가 있다.</b> 분리 전에 정규화하면 테스트 정보가 학습에 새어 들어간다(데이터 누수)는 것을 배웠다.</li>
+      <li><b>지표 없이 "좋다"는 없다.</b> MAE·RMSE·R²를 함께 봐야 모델의 성격(큰 오차에 민감한지 등)이 보였다.</li>
+      <li><b>튜닝은 마법이 아니라 탐색.</b> GridSearch로 조합을 바꿔도 개선 폭은 전처리 품질만큼 크지 않았다 — 결국 데이터가 우선.</li>
+      <li><b>EDA가 방향을 정한다.</b> 그래프에서 세운 가설이 특징 선택과 이상치 기준의 근거가 됐다.</li>
+    </ul>
+    <div class="callout"><span class="ico">💡</span><p><span class="tt">한 줄 정리</span><b>EDA → 전처리 → 학습 → 평가 → 튜닝</b>이라는 머신러닝 프로젝트의 표준 절차를 완주했다. 이 절차는 이후 어떤 데이터·모델을 만나도 그대로 적용할 수 있는 틀이 됐다.</p></div>
+  </section>
+
+  <footer>
+    <span>MBC컴퓨터아카데미 · 학습문서 04</span>
+    <span><a href="/Academy/MBCAcademy/스팀의 세일 할인가격 예측.pdf" target="_blank" rel="noopener">프로젝트 PDF ↗</a></span>
+  </footer>
+</main>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var saved = localStorage.getItem('mbc-doc-theme');
+  if (saved) root.dataset.theme = saved;
+  else if (matchMedia('(prefers-color-scheme: dark)').matches) root.dataset.theme = 'dark';
+  document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      localStorage.setItem('mbc-doc-theme', next);
+    });
+  });
+})();
+</script>
+</body>
+</html>

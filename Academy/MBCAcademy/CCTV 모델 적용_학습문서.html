@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>인공지능 모델 적용 웹사이트 (CCTV) — 학습문서</title>
+<link rel="stylesheet" href="study-note.css">
+<style>:root { --accent: #f59e0b; }</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="back" href="/Academy/MBC_Academy.html">← MBC아카데미</a>
+  <span class="doc-id">STUDY NOTE · 05 / 05</span>
+  <button data-theme-toggle>◐ 테마</button>
+</header>
+
+<main>
+  <!-- ── 히어로 ── -->
+  <header class="hero">
+    <p class="eyebrow">MBC컴퓨터아카데미 · OBJECT DETECTION · FINAL PROJECT</p>
+    <h1>인공지능 모델 적용<br><span class="grad">CCTV 웹사이트 제작</span></h1>
+    <p class="lead">
+      과정 전체를 마무리하는 최종 팀 프로젝트.
+      Object Detection 데이터 라벨링을 직접 경험한 뒤, 라벨링한 데이터로 학습시킨
+      모델을 라즈베리파이 CCTV(웹캠)와 Flask 웹사이트에 연결해
+      실시간 객체 탐지 서비스를 만들었다.
+    </p>
+    <div class="chips">
+      <span class="chip"><span class="dot"></span><b>팀 · 최종 프로젝트</b></span>
+      <span class="chip">주제 <b>실시간 객체 탐지</b></span>
+      <a class="chip" href="/Academy/MBCAcademy/인공지능모델적용웹사이트제작.pdf" target="_blank" rel="noopener">📄 <b>프로젝트 PDF</b></a>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="v">5<small>주</small></div><div class="k">기간</div></div>
+      <div class="stat"><div class="v">Flask</div><div class="k">웹 서버</div></div>
+      <div class="stat"><div class="v">라즈베리파이</div><div class="k">CCTV 장비</div></div>
+      <div class="stat"><div class="v">라벨링</div><div class="k">데이터 구축</div></div>
+    </div>
+  </header>
+
+  <!-- ── 01 개요 ── -->
+  <section id="overview">
+    <div class="sec-head"><span class="n">01</span><h2>프로젝트 개요</h2></div>
+    <p class="sec-desc">
+      라즈베리파이에 연결한 웹캠 영상을 서버로 받아 실시간으로 객체를 탐지하고,
+      결과를 웹사이트에서 확인할 수 있게 만들었다.
+      관리자가 원할 때마다 <b>모델을 바꿔 끼우면 탐지 대상이 동적으로 변경</b>되는 것이
+      이 프로젝트의 핵심 아이디어. 웹사이트 자체도 로그인·게시판·댓글·좋아요를 갖춘
+      SNS 형태로 개발해 서버-클라이언트 구조를 함께 학습했다.
+    </p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>구성 요소</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td><b>입력</b></td><td>라즈베리파이 + 웹캠 (CCTV 역할, 영상 스트림 전송)</td></tr>
+          <tr><td><b>추론</b></td><td>라벨링 데이터로 학습시킨 Object Detection 모델 (파일 포맷에 맞게 변환·적용)</td></tr>
+          <tr><td><b>서버</b></td><td>Flask — 영상 스트리밍 라우트 + SNS 기능(로그인·게시판·댓글·좋아요)</td></tr>
+          <tr><td><b>관리</b></td><td>모델 정보를 DB에 등록, 선택한 모델로 탐지 대상을 동적 교체</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── 02 데이터 라벨링 경험 ── -->
+  <section id="labeling">
+    <div class="sec-head"><span class="n">02</span><h2>데이터 라벨링 경험</h2></div>
+    <p class="sec-desc">
+      최종 프로젝트에 앞서 Object Detection 학습 데이터를 직접 만드는 라벨링 실습을 두 차례 진행했다.
+      영상 프레임마다 대상에 바운딩 박스를 그리고 클래스를 지정하는 작업이다.
+    </p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>실습</th><th>대상</th><th>포인트</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>라벨링 ①</b></td>
+            <td>손흥민 추적하기</td>
+            <td>경기 영상에서 단일 인물 라벨링 — 빠른 움직임·가림(occlusion) 상황에서 일관된 박스 그리기</td>
+          </tr>
+          <tr>
+            <td><b>라벨링 ②</b></td>
+            <td>르브론 제임스 · 스테판 커리 추적하기</td>
+            <td>다중 클래스 라벨링 — 비슷한 복장의 선수 사이에서 두 대상을 구분하는 기준(유니폼·등번호) 정의</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout"><span class="ico">🏷️</span><p><span class="tt">체감한 것</span>라벨링 기준이 흔들리면 모델도 흔들린다. <b>박스를 얼마나 타이트하게 칠지, 가려진 대상을 포함할지</b> 같은 규칙을 팀이 먼저 합의해야 데이터 품질이 유지됐다.</p></div>
+  </section>
+
+  <!-- ── 03 시스템 구성 ── -->
+  <section id="arch">
+    <div class="sec-head"><span class="n">03</span><h2>시스템 구성</h2></div>
+    <div class="pipeline">
+      <div class="pipe"><div class="t"><span class="idx">S1</span>영상 입력</div><p>라즈베리파이 웹캠이 CCTV처럼 실시간 프레임 캡처</p></div>
+      <div class="pipe"><div class="t"><span class="idx">S2</span>모델 추론</div><p>서버가 프레임마다 객체 탐지 실행, 바운딩 박스 표시</p></div>
+      <div class="pipe"><div class="t"><span class="idx">S3</span>스트리밍</div><p>Flask 라우트가 처리된 프레임을 웹 페이지로 연속 전송</p></div>
+      <div class="pipe"><div class="t"><span class="idx">S4</span>모델 교체</div><p>DB에 등록된 모델 중 선택 → 탐지 대상 동적 변경</p></div>
+    </div>
+  </section>
+
+  <!-- ── 04 핵심 개념 ── -->
+  <section id="concepts">
+    <div class="sec-head"><span class="n">04</span><h2>핵심 학습 개념</h2></div>
+    <div class="grid2">
+      <div class="concept">
+        <h3>Object Detection</h3>
+        <ul>
+          <li>분류를 넘어 <b>"무엇이 어디에 있는지"</b>까지 찾는 문제</li>
+          <li>바운딩 박스 + 클래스 + 신뢰도로 결과 표현</li>
+          <li>라벨링 품질 → 탐지 품질로 직결되는 구조 이해</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h3>모델 파일 포맷 적용</h3>
+        <ul>
+          <li>학습 환경과 서비스 환경의 <b>모델 포맷이 다르다</b>는 문제 인식</li>
+          <li>다양하게 학습시킨 모델을 서비스 포맷에 맞게 변환·적용</li>
+          <li>모델을 파일 단위로 관리하면 교체가 배포 없이 가능</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h3>Flask 웹 개발</h3>
+        <ul>
+          <li>라우팅·템플릿·세션으로 <b>SNS 웹사이트</b> 구축</li>
+          <li>로그인, 게시판, 댓글, 좋아요 기능 구현</li>
+          <li>DB 연동으로 서버-클라이언트 구조의 기본기 학습</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h3>실시간 스트리밍</h3>
+        <ul>
+          <li>프레임을 연속 응답으로 보내는 <b>MJPEG 스트리밍</b> 방식</li>
+          <li>추론 속도와 전송 속도의 균형(프레임 스킵) 고민</li>
+          <li>엣지 장비(라즈베리파이)와 서버의 역할 분담 경험</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 05 구현 노트 ── -->
+  <section id="impl">
+    <div class="sec-head"><span class="n">05</span><h2>구현 노트</h2></div>
+    <p class="sec-desc">실시간 탐지 스트리밍과 모델 동적 교체의 핵심 아이디어를 요약한 예시 코드.</p>
+
+    <div class="cell">
+      <div class="cell-head"><span class="in">In [1]</span><span class="cap">Flask 영상 스트리밍 — 탐지 결과를 프레임 단위로 전송</span></div>
+      <pre><span class="kw">def</span> <span class="fn">gen_frames</span>():
+    <span class="kw">while</span> <span class="kw">True</span>:
+        ok, frame = camera.read()          <span class="cm"># 라즈베리파이 웹캠 프레임</span>
+        <span class="kw">if</span> <span class="kw">not</span> ok: <span class="kw">break</span>
+        frame = detector.draw_boxes(frame) <span class="cm"># 현재 모델로 객체 탐지</span>
+        _, buf = cv2.imencode(<span class="st">".jpg"</span>, frame)
+        <span class="kw">yield</span> (b<span class="st">"--frame\r\nContent-Type: image/jpeg\r\n\r\n"</span> + buf.tobytes() + b<span class="st">"\r\n"</span>)
+
+<span class="nm">@app.route</span>(<span class="st">"/video_feed"</span>)
+<span class="kw">def</span> <span class="fn">video_feed</span>():
+    <span class="kw">return</span> Response(gen_frames(), mimetype=<span class="st">"multipart/x-mixed-replace; boundary=frame"</span>)</pre>
+    </div>
+
+    <div class="cell">
+      <div class="cell-head"><span class="in">In [2]</span><span class="cap">모델 동적 교체 — DB에 등록된 모델을 골라 탐지 대상 변경</span></div>
+      <pre><span class="nm">@app.route</span>(<span class="st">"/models/&lt;int:model_id&gt;/activate"</span>, methods=[<span class="st">"POST"</span>])
+<span class="kw">def</span> <span class="fn">activate_model</span>(model_id):
+    row = db.get_model(model_id)            <span class="cm"># 모델 경로·포맷 정보</span>
+    detector.load(row.path, fmt=row.format) <span class="cm"># 포맷에 맞게 로드</span>
+    <span class="kw">return</span> {<span class="st">"active"</span>: row.name}          <span class="cm"># 이후 스트림부터 새 모델로 탐지</span></pre>
+    </div>
+  </section>
+
+  <!-- ── 06 배운 점 ── -->
+  <section id="learned">
+    <div class="sec-head"><span class="n">06</span><h2>배운 점 &amp; 회고</h2></div>
+    <ul class="klist">
+      <li><b>AI는 모델이 아니라 시스템이다.</b> 라벨링 → 학습 → 포맷 변환 → 서버 적용 → 웹 표시까지, 모델은 전체 파이프라인의 한 조각이었다.</li>
+      <li><b>라벨링 품질이 곧 모델 품질.</b> 손흥민·르브론·커리 실습에서 세운 라벨링 규칙의 중요성이 최종 프로젝트에서 그대로 증명됐다.</li>
+      <li><b>포맷 문제는 실무의 벽.</b> 학습시킨 모델이 그대로 서비스에 안 들어간다는 것, 변환·적용 방안을 찾는 과정이 실제 개발의 큰 부분이었다.</li>
+      <li><b>웹은 AI의 창구.</b> Flask로 SNS 기능까지 만들며, 모델을 사람에게 보여주는 인터페이스의 가치를 배웠다.</li>
+    </ul>
+    <div class="callout"><span class="ico">💡</span><p><span class="tt">한 줄 정리</span>과정 전체(파이썬 → 데이터 분석 → 모델 학습 → 라벨링)의 결과를 하나의 서비스로 묶은 프로젝트. <b>"학습시킨 모델을 실제로 쓰이게 만드는 일"</b>이 무엇인지 처음부터 끝까지 경험했다.</p></div>
+  </section>
+
+  <footer>
+    <span>MBC컴퓨터아카데미 · 학습문서 05</span>
+    <span><a href="/Academy/MBCAcademy/인공지능모델적용웹사이트제작.pdf" target="_blank" rel="noopener">프로젝트 PDF ↗</a></span>
+  </footer>
+</main>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var saved = localStorage.getItem('mbc-doc-theme');
+  if (saved) root.dataset.theme = saved;
+  else if (matchMedia('(prefers-color-scheme: dark)').matches) root.dataset.theme = 'dark';
+  document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      localStorage.setItem('mbc-doc-theme', next);
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>늑대 vs 허스키 — 학습문서</title>
+<link rel="stylesheet" href="study-note.css">
+<style>:root { --accent: #8b5cf6; }</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="back" href="/Academy/MBC_Academy.html">← MBC아카데미</a>
+  <span class="doc-id">STUDY NOTE · 03 / 05</span>
+  <button data-theme-toggle>◐ 테마</button>
+</header>
+
+<main>
+  <!-- ── 히어로 ── -->
+  <header class="hero">
+    <p class="eyebrow">MBC컴퓨터아카데미 · SUPERVISED LEARNING · CNN</p>
+    <h1>이미지 분류<br><span class="grad">늑대 vs 허스키</span></h1>
+    <p class="lead">
+      지도 학습(이미지 분류)을 처음 경험한 딥러닝 프로젝트.
+      직접 크롤링한 늑대·허스키 이미지로 CNN 모델을 만들고 학습시켜,
+      사람도 헷갈리는 두 동물을 모델이 구분하게 만드는 것이 목표였다.
+    </p>
+    <div class="chips">
+      <span class="chip"><span class="dot"></span><b>팀 프로젝트</b></span>
+      <span class="chip">과제 <b>이진 분류</b></span>
+      <a class="chip" href="/Academy/MBCAcademy/늑대vs허스키 CNN 알고리즘 분석 테스트.pdf" target="_blank" rel="noopener">📄 <b>프로젝트 PDF</b></a>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="v">4<small>일</small></div><div class="k">기간</div></div>
+      <div class="stat"><div class="v">TensorFlow</div><div class="k">프레임워크</div></div>
+      <div class="stat"><div class="v">CNN</div><div class="k">알고리즘</div></div>
+      <div class="stat"><div class="v">2<small> classes</small></div><div class="k">분류 대상</div></div>
+    </div>
+  </header>
+
+  <!-- ── 01 개요 ── -->
+  <section id="overview">
+    <div class="sec-head"><span class="n">01</span><h2>프로젝트 개요</h2></div>
+    <p class="sec-desc">
+      늑대와 허스키는 생김새가 비슷해 이미지 분류의 난이도와 함정을 동시에 보여주는 주제다.
+      데이터 수집(크롤링)부터 모델 구성, 학습 그래프 검증, 데이터 증강까지
+      <b>지도 학습의 전체 사이클을 처음부터 끝까지</b> 직접 돌려보는 것이 목적이었다.
+    </p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>항목</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td><b>데이터</b></td><td>크롤링으로 수집한 늑대·허스키 이미지 (라벨 = 폴더 구분)</td></tr>
+          <tr><td><b>모델</b></td><td>Conv2D + MaxPooling을 쌓은 CNN, 마지막은 sigmoid 이진 출력</td></tr>
+          <tr><td><b>검증</b></td><td>학습/검증 정확도·손실 그래프로 과적합 여부 판단</td></tr>
+          <tr><td><b>개선</b></td><td>이미지 크기 변형·자르기 등 데이터 증강으로 재학습</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── 02 진행 과정 ── -->
+  <section id="process">
+    <div class="sec-head"><span class="n">02</span><h2>진행 과정</h2></div>
+    <div class="pipeline">
+      <div class="pipe"><div class="t"><span class="idx">P1</span>데이터 수집</div><p>이미지 크롤링으로 클래스별 데이터셋 구축, 불량 이미지 수작업 제거</p></div>
+      <div class="pipe"><div class="t"><span class="idx">P2</span>전처리 · 증강</div><p>크기 통일·정규화, 크기 변형·자르기로 데이터 증폭</p></div>
+      <div class="pipe"><div class="t"><span class="idx">P3</span>모델 구성</div><p>Conv-Pool 블록을 쌓고 sigmoid 출력의 CNN 설계</p></div>
+      <div class="pipe"><div class="t"><span class="idx">P4</span>학습 · 검증</div><p>epoch별 정확도·손실 그래프를 그려 과적합 확인 및 개선</p></div>
+    </div>
+  </section>
+
+  <!-- ── 03 핵심 개념 ── -->
+  <section id="concepts">
+    <div class="sec-head"><span class="n">03</span><h2>핵심 학습 개념</h2></div>
+    <div class="grid2">
+      <div class="concept">
+        <h3>지도 학습 · 이진 분류</h3>
+        <ul>
+          <li><b>입력(이미지) + 정답(라벨)</b> 쌍으로 모델을 학습</li>
+          <li>출력층 <b>sigmoid</b>가 0~1 확률을 내고, 0.5를 기준으로 분류</li>
+          <li>손실 함수는 binary crossentropy 사용</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h3>CNN 구조</h3>
+        <ul>
+          <li><b>합성곱(Conv)</b>이 이미지의 지역적 특징(귀·눈·털 무늬)을 추출</li>
+          <li><b>풀링(Pooling)</b>으로 크기를 줄이며 중요한 특징만 남김</li>
+          <li>층을 쌓을수록 단순한 선 → 복잡한 형태 순으로 특징이 조합됨</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h3>학습 곡선 검증</h3>
+        <ul>
+          <li>학습 정확도만 오르고 <b>검증 정확도가 정체되면 과적합</b></li>
+          <li>그래프를 그려봐야 모델의 상태가 보인다는 것을 체득</li>
+          <li>epoch 수·모델 크기를 조정하며 곡선 변화 관찰</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h3>데이터 증강</h3>
+        <ul>
+          <li>크기 변형·자르기·뒤집기로 <b>같은 이미지에서 여러 학습 샘플</b> 생성</li>
+          <li>적은 데이터로도 일반화 성능을 끌어올리는 방법</li>
+          <li>증강 전후의 검증 정확도 차이를 직접 비교</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 실험 노트 ── -->
+  <section id="impl">
+    <div class="sec-head"><span class="n">04</span><h2>실험 노트</h2></div>
+    <p class="sec-desc">모델 구성과 검증 흐름을 요약한 예시 코드.</p>
+
+    <div class="cell">
+      <div class="cell-head"><span class="in">In [1]</span><span class="cap">데이터 증강 — 크기 변형·자르기·뒤집기로 데이터 증폭</span></div>
+      <pre><span class="kw">from</span> tensorflow.keras.preprocessing.image <span class="kw">import</span> ImageDataGenerator
+
+train_gen = ImageDataGenerator(
+    rescale=<span class="nm">1</span>/<span class="nm">255</span>,          <span class="cm"># 정규화</span>
+    zoom_range=<span class="nm">0.2</span>,          <span class="cm"># 확대(자르기 효과)</span>
+    width_shift_range=<span class="nm">0.1</span>,
+    horizontal_flip=<span class="kw">True</span>,
+).flow_from_directory(<span class="st">"data/train"</span>, target_size=(<span class="nm">128</span>, <span class="nm">128</span>), class_mode=<span class="st">"binary"</span>)</pre>
+    </div>
+
+    <div class="cell">
+      <div class="cell-head"><span class="in">In [2]</span><span class="cap">CNN 모델 — Conv-Pool 블록 + sigmoid 이진 출력</span></div>
+      <pre>model = Sequential([
+    Conv2D(<span class="nm">32</span>, (<span class="nm">3</span>, <span class="nm">3</span>), activation=<span class="st">"relu"</span>, input_shape=(<span class="nm">128</span>, <span class="nm">128</span>, <span class="nm">3</span>)),
+    MaxPooling2D(<span class="nm">2</span>, <span class="nm">2</span>),
+    Conv2D(<span class="nm">64</span>, (<span class="nm">3</span>, <span class="nm">3</span>), activation=<span class="st">"relu"</span>),
+    MaxPooling2D(<span class="nm">2</span>, <span class="nm">2</span>),
+    Flatten(),
+    Dense(<span class="nm">64</span>, activation=<span class="st">"relu"</span>),
+    Dense(<span class="nm">1</span>, activation=<span class="st">"sigmoid"</span>),   <span class="cm"># 늑대(0) vs 허스키(1)</span>
+])
+model.compile(optimizer=<span class="st">"adam"</span>, loss=<span class="st">"binary_crossentropy"</span>, metrics=[<span class="st">"accuracy"</span>])</pre>
+    </div>
+
+    <div class="cell">
+      <div class="cell-head"><span class="in">In [3]</span><span class="cap">학습 곡선 — 그래프로 과적합 여부 확인</span></div>
+      <pre>history = model.fit(train_gen, validation_data=val_gen, epochs=<span class="nm">20</span>)
+
+plt.plot(history.history[<span class="st">"accuracy"</span>], label=<span class="st">"train"</span>)
+plt.plot(history.history[<span class="st">"val_accuracy"</span>], label=<span class="st">"val"</span>)
+plt.legend()                    <span class="cm"># 두 곡선이 벌어지면 과적합 신호</span></pre>
+    </div>
+  </section>
+
+  <!-- ── 05 배운 점 ── -->
+  <section id="learned">
+    <div class="sec-head"><span class="n">05</span><h2>배운 점 &amp; 회고</h2></div>
+    <div class="callout"><span class="ico">⚠️</span><p><span class="tt">함정</span>늑대 사진에는 눈(雪) 배경이 많다. 모델이 동물이 아니라 <b>배경을 보고 분류</b>할 수 있다는 것 — 데이터가 편향되면 모델은 엉뚱한 것을 배운다는 사실을 이 주제로 직접 확인했다.</p></div>
+    <ul class="klist">
+      <li><b>모델보다 데이터가 먼저다.</b> 크롤링한 데이터의 품질·편향이 정확도에 그대로 반영됐다.</li>
+      <li><b>그래프 없이는 판단할 수 없다.</b> 학습/검증 곡선을 그려봐야 과적합인지, 더 학습해야 하는지 알 수 있었다.</li>
+      <li><b>증강은 공짜 데이터다.</b> 같은 이미지를 변형하는 것만으로 검증 정확도가 눈에 띄게 올랐다.</li>
+      <li><b>CNN의 직관 이해.</b> 합성곱이 특징을 뽑고 풀링이 요약한다는 흐름을 코드와 결과로 연결해 이해했다.</li>
+    </ul>
+    <div class="callout"><span class="ico">💡</span><p><span class="tt">한 줄 정리</span>지도 학습의 사이클(데이터 → 모델 → 학습 → 검증 → 개선)을 처음 완주했고, <b>"AI의 성능은 데이터에서 시작된다"</b>는 이후 라벨링 과정의 문제의식을 여기서 얻었다.</p></div>
+  </section>
+
+  <footer>
+    <span>MBC컴퓨터아카데미 · 학습문서 03</span>
+    <span><a href="/Academy/MBCAcademy/늑대vs허스키 CNN 알고리즘 분석 테스트.pdf" target="_blank" rel="noopener">프로젝트 PDF ↗</a></span>
+  </footer>
+</main>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var saved = localStorage.getItem('mbc-doc-theme');
+  if (saved) root.dataset.theme = saved;
+  else if (matchMedia('(prefers-color-scheme: dark)').matches) root.dataset.theme = 'dark';
+  document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      localStorage.setItem('mbc-doc-theme', next);
+    });
+  });
+})();
+</script>
+</body>
+</html>

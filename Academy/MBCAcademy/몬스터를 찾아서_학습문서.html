@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>몬스터를 찾아서 — 학습문서</title>
+<link rel="stylesheet" href="study-note.css">
+<style>:root { --accent: #38bdf8; }</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="back" href="/Academy/MBC_Academy.html">← MBC아카데미</a>
+  <span class="doc-id">STUDY NOTE · 01 / 05</span>
+  <button data-theme-toggle>◐ 테마</button>
+</header>
+
+<main>
+  <!-- ── 히어로 ── -->
+  <header class="hero">
+    <p class="eyebrow">MBC컴퓨터아카데미 · PYTHON GAME PROGRAMMING</p>
+    <h1>파이썬 슈팅게임<br><span class="grad">몬스터를 찾아서</span></h1>
+    <p class="lead">
+      파이썬 문법 과정을 마무리하며 진행한 첫 팀 프로젝트.
+      pygame으로 종스크롤 비행 슈팅 게임을 만들면서, 문법으로만 배웠던
+      자료구조·함수·클래스가 실제 프로그램에서 어떻게 쓰이는지 체득했다.
+    </p>
+    <div class="chips">
+      <span class="chip"><span class="dot"></span><b>팀 프로젝트</b></span>
+      <span class="chip">장르 <b>종스크롤 슈팅</b></span>
+      <a class="chip" href="/Academy/MBCAcademy/파이썬 슈팅게임 - 몬스터를 찾아서.pdf" target="_blank" rel="noopener">📄 <b>프로젝트 PDF</b></a>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="v">3<small>주</small></div><div class="k">기간</div></div>
+      <div class="stat"><div class="v">Python</div><div class="k">언어</div></div>
+      <div class="stat"><div class="v">pygame</div><div class="k">라이브러리</div></div>
+      <div class="stat"><div class="v">애자일</div><div class="k">진행 방식</div></div>
+    </div>
+  </header>
+
+  <!-- ── 01 개요 ── -->
+  <section id="overview">
+    <div class="sec-head"><span class="n">01</span><h2>프로젝트 개요</h2></div>
+    <p class="sec-desc">
+      플레이어 기체를 조작해 아래에서 위로 스크롤되는 맵을 비행하며 몬스터를 격추하는 게임.
+      팀원들이 인터넷에서 직접 가져온 이미지를 알파 처리해서 게임에 넣을 수 있도록
+      리소스 파이프라인을 코드로 만들었고, 초기 구조를 먼저 잡은 뒤 기능을 하나씩
+      더해가는 애자일 방식으로 진행했다.
+    </p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>항목</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td><b>목표</b></td><td>파이썬 문법(자료구조·함수·클래스)을 실제 게임 제작에 적용</td></tr>
+          <tr><td><b>담당 역할</b></td><td>초기 게임 구조 설계, 리소스 관리 코드, 오브젝트 풀링·텍스트 애니메이션 구현</td></tr>
+          <tr><td><b>핵심 기능</b></td><td>플레이어 이동·발사, 몬스터 스폰, 충돌 판정, 점수·UI, 텍스트 연출</td></tr>
+          <tr><td><b>협업 방식</b></td><td>뼈대 코드를 먼저 공유하고, 팀원이 각자 기능·리소스를 붙이는 방식</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── 02 진행 과정 ── -->
+  <section id="process">
+    <div class="sec-head"><span class="n">02</span><h2>진행 과정</h2></div>
+    <div class="pipeline">
+      <div class="pipe"><div class="t"><span class="idx">P1</span>구조 설계</div><p>게임 루프·씬 구조를 먼저 정의하고 팀원이 붙을 수 있는 뼈대 마련</p></div>
+      <div class="pipe"><div class="t"><span class="idx">P2</span>리소스 파이프라인</div><p>이미지 수집 → 알파 처리 → 딕셔너리 등록까지의 흐름을 코드화</p></div>
+      <div class="pipe"><div class="t"><span class="idx">P3</span>기능 구현</div><p>이동·발사·충돌·스폰 등 핵심 게임 플레이를 반복적으로 추가</p></div>
+      <div class="pipe"><div class="t"><span class="idx">P4</span>폴리싱</div><p>텍스트 애니메이션·연출을 더하고 밸런스와 버그 정리</p></div>
+    </div>
+  </section>
+
+  <!-- ── 03 핵심 개념 ── -->
+  <section id="concepts">
+    <div class="sec-head"><span class="n">03</span><h2>핵심 학습 개념</h2></div>
+    <div class="grid2">
+      <div class="concept">
+        <h3>게임 루프 &amp; 이벤트 처리</h3>
+        <ul>
+          <li><b>입력 → 갱신 → 렌더</b>로 이어지는 프레임 단위 루프 구조</li>
+          <li>pygame의 <b>이벤트 큐</b>로 키 입력·종료 이벤트 처리</li>
+          <li><code>Clock.tick()</code>으로 프레임 속도 고정</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h3>딕셔너리 기반 리소스 관리</h3>
+        <ul>
+          <li>이미지·사운드를 <b>이름(key)으로 꺼내 쓰는</b> 리소스 딕셔너리</li>
+          <li>팀원이 파일만 추가하면 코드 수정 없이 리소스가 등록되는 구조</li>
+          <li><code>convert_alpha()</code>로 배경 투명 처리 일괄 적용</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h3>오브젝트 풀링</h3>
+        <ul>
+          <li>총알·몬스터를 매번 생성/삭제하지 않고 <b>풀에서 재사용</b></li>
+          <li>화면 밖으로 나간 객체는 비활성화 후 풀로 반환</li>
+          <li>객체 수가 많아져도 프레임이 안정적으로 유지됨을 확인</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h3>텍스트 애니메이션</h3>
+        <ul>
+          <li>점수·스테이지 안내 텍스트가 <b>커지고 사라지는</b> 연출</li>
+          <li>경과 시간 기반 보간으로 크기·투명도 계산</li>
+          <li>연출 하나로 게임의 타격감이 크게 달라지는 것을 경험</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 구현 노트 ── -->
+  <section id="impl">
+    <div class="sec-head"><span class="n">04</span><h2>구현 노트</h2></div>
+    <p class="sec-desc">프로젝트에서 배운 구조를 요약한 예시 코드. 실제 코드의 핵심 아이디어만 남긴 형태다.</p>
+
+    <div class="cell">
+      <div class="cell-head"><span class="in">In [1]</span><span class="cap">딕셔너리 리소스 로더 — 파일명을 key로 등록해 어디서든 꺼내 쓴다</span></div>
+      <pre><span class="kw">import</span> os, pygame
+
+images = {}                          <span class="cm"># {"player": Surface, "monster_a": Surface, ...}</span>
+
+<span class="kw">def</span> <span class="fn">load_images</span>(folder=<span class="st">"assets"</span>):
+    <span class="kw">for</span> name <span class="kw">in</span> os.listdir(folder):
+        <span class="kw">if</span> name.endswith(<span class="st">".png"</span>):
+            key = name.rsplit(<span class="st">"."</span>, <span class="nm">1</span>)[<span class="nm">0</span>]
+            surf = pygame.image.load(os.path.join(folder, name))
+            images[key] = surf.convert_alpha()   <span class="cm"># 알파 처리 일괄 적용</span></pre>
+    </div>
+
+    <div class="cell">
+      <div class="cell-head"><span class="in">In [2]</span><span class="cap">오브젝트 풀링 — 총알을 재사용해 생성 비용 제거</span></div>
+      <pre><span class="kw">class</span> <span class="fn">BulletPool</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, size=<span class="nm">64</span>):
+        self.pool = [Bullet(active=<span class="kw">False</span>) <span class="kw">for</span> _ <span class="kw">in</span> range(size)]
+
+    <span class="kw">def</span> <span class="fn">fire</span>(self, x, y):
+        <span class="kw">for</span> b <span class="kw">in</span> self.pool:
+            <span class="kw">if</span> <span class="kw">not</span> b.active:          <span class="cm"># 쉬고 있는 총알을 찾아 재사용</span>
+                b.reset(x, y)
+                <span class="kw">return</span> b</pre>
+    </div>
+
+    <div class="cell">
+      <div class="cell-head"><span class="in">In [3]</span><span class="cap">메인 루프 — 입력 → 갱신 → 렌더의 반복</span></div>
+      <pre><span class="kw">while</span> running:
+    <span class="kw">for</span> event <span class="kw">in</span> pygame.event.get():      <span class="cm"># ① 입력</span>
+        <span class="kw">if</span> event.type == pygame.QUIT: running = <span class="kw">False</span>
+
+    player.update(); pool.update(); spawner.update()   <span class="cm"># ② 갱신</span>
+
+    screen.blit(images[<span class="st">"background"</span>], (<span class="nm">0</span>, scroll_y))  <span class="cm"># ③ 렌더</span>
+    all_sprites.draw(screen)
+    pygame.display.flip()
+    clock.tick(<span class="nm">60</span>)</pre>
+    </div>
+  </section>
+
+  <!-- ── 05 배운 점 ── -->
+  <section id="learned">
+    <div class="sec-head"><span class="n">05</span><h2>배운 점 &amp; 회고</h2></div>
+    <ul class="klist">
+      <li><b>문법은 프로젝트에서 완성된다.</b> 딕셔너리·클래스·리스트 컴프리헨션이 "언제 왜 필요한지"를 게임을 만들며 처음 체감했다.</li>
+      <li><b>구조를 먼저 잡으면 협업이 쉬워진다.</b> 뼈대 코드와 리소스 규칙을 먼저 공유하자, 팀원이 각자 기능을 붙여도 충돌이 적었다.</li>
+      <li><b>성능은 설계에서 나온다.</b> 오브젝트 풀링 적용 전후의 프레임 차이를 보며 "만들고 지우는 비용"을 처음 의식하게 됐다.</li>
+      <li><b>연출은 작은 코드로 큰 효과.</b> 텍스트 애니메이션 하나로 게임의 인상이 달라졌다.</li>
+    </ul>
+    <div class="callout"><span class="ico">💡</span><p><span class="tt">한 줄 정리</span>이 프로젝트로 <b>"돌아가는 코드"에서 "구조가 있는 코드"</b>로 넘어가는 첫 계단을 밟았다. 이후 데이터 분석·AI 과정에서도 이때 잡은 파이썬 기초가 그대로 쓰였다.</p></div>
+  </section>
+
+  <footer>
+    <span>MBC컴퓨터아카데미 · 학습문서 01</span>
+    <span><a href="/Academy/MBCAcademy/파이썬 슈팅게임 - 몬스터를 찾아서.pdf" target="_blank" rel="noopener">프로젝트 PDF ↗</a></span>
+  </footer>
+</main>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var saved = localStorage.getItem('mbc-doc-theme');
+  if (saved) root.dataset.theme = saved;
+  else if (matchMedia('(prefers-color-scheme: dark)').matches) root.dataset.theme = 'dark';
+  document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      localStorage.setItem('mbc-doc-theme', next);
+    });
+  });
+})();
+</script>
+</body>
+</html>

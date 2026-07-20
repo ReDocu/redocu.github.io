@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>카테고리 분석에 따른 여행지 추천 — 학습문서</title>
+<link rel="stylesheet" href="study-note.css">
+<style>:root { --accent: #10b981; }</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="back" href="/Academy/MBC_Academy.html">← MBC아카데미</a>
+  <span class="doc-id">STUDY NOTE · 02 / 05</span>
+  <button data-theme-toggle>◐ 테마</button>
+</header>
+
+<main>
+  <!-- ── 히어로 ── -->
+  <header class="hero">
+    <p class="eyebrow">MBC컴퓨터아카데미 · DATA ANALYSIS</p>
+    <h1>카테고리 분석에 따른<br><span class="grad">여행지 추천</span></h1>
+    <p class="lead">
+      Pandas / NumPy를 처음 배우고 진행한 데이터 분석 팀 프로젝트.
+      공공데이터와 크롤링으로 여행지 데이터를 모으고, 전처리·카테고리 분석을 거쳐
+      조건에 맞는 여행지를 추천하는 여행 가이드를 만들었다.
+    </p>
+    <div class="chips">
+      <span class="chip"><span class="dot"></span><b>팀 프로젝트</b></span>
+      <span class="chip">주제 <b>여행 가이드</b></span>
+      <a class="chip" href="/Academy/MBCAcademy/카테고리 분석에 따른 여행지 추천.pdf" target="_blank" rel="noopener">📄 <b>프로젝트 PDF</b></a>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="v">1<small>주</small></div><div class="k">기간</div></div>
+      <div class="stat"><div class="v">Pandas</div><div class="k">분석</div></div>
+      <div class="stat"><div class="v">NumPy</div><div class="k">연산</div></div>
+      <div class="stat"><div class="v">크롤링</div><div class="k">수집</div></div>
+    </div>
+  </header>
+
+  <!-- ── 01 개요 ── -->
+  <section id="overview">
+    <div class="sec-head"><span class="n">01</span><h2>프로젝트 개요</h2></div>
+    <p class="sec-desc">
+      "어떤 사람에게 어떤 여행지를 추천할 수 있을까?"라는 질문에서 출발했다.
+      여행지를 자연·문화·체험 같은 카테고리로 나누고, 카테고리별 데이터를 분석해
+      조건(지역·유형)에 맞는 여행지를 골라주는 것이 목표.
+      데이터를 "받아쓰는" 것이 아니라 <b>수집 → 정제 → 분석 → 결론</b>의 전 과정을 직접 겪는 것에 의미를 두었다.
+    </p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>항목</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td><b>데이터 소스</b></td><td>공공데이터포털의 관광지 데이터 + 여행 관련 사이트 크롤링 데이터</td></tr>
+          <tr><td><b>분석 단위</b></td><td>여행지 × 카테고리(자연·문화·체험 등) × 지역</td></tr>
+          <tr><td><b>결과물</b></td><td>카테고리 조건을 넣으면 상위 여행지를 추천해주는 분석 노트북</td></tr>
+          <tr><td><b>담당 역할</b></td><td>크롤링 코드 작성, 데이터 전처리, 카테고리 집계 분석</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── 02 분석 파이프라인 ── -->
+  <section id="process">
+    <div class="sec-head"><span class="n">02</span><h2>분석 파이프라인</h2></div>
+    <div class="pipeline">
+      <div class="pipe"><div class="t"><span class="idx">P1</span>수집</div><p>공공데이터 CSV 다운로드 + requests·BeautifulSoup로 여행 사이트 크롤링</p></div>
+      <div class="pipe"><div class="t"><span class="idx">P2</span>전처리</div><p>결측치·중복 제거, 카테고리 표기 통일, 두 소스의 데이터 병합</p></div>
+      <div class="pipe"><div class="t"><span class="idx">P3</span>분석</div><p>groupby 집계로 카테고리·지역별 특징 파악, 조건 필터링</p></div>
+      <div class="pipe"><div class="t"><span class="idx">P4</span>도출</div><p>카테고리별 추천 리스트 정리, 시각화로 근거 제시</p></div>
+    </div>
+  </section>
+
+  <!-- ── 03 핵심 개념 ── -->
+  <section id="concepts">
+    <div class="sec-head"><span class="n">03</span><h2>핵심 학습 개념</h2></div>
+    <div class="grid2">
+      <div class="concept">
+        <h3>Pandas DataFrame</h3>
+        <ul>
+          <li><code>read_csv</code>로 불러온 데이터를 <b>표 형태로 조작</b></li>
+          <li>불리언 인덱싱으로 조건에 맞는 행 추출</li>
+          <li><code>merge</code>로 서로 다른 소스의 데이터 결합</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h3>데이터 수집 · 크롤링</h3>
+        <ul>
+          <li>공공데이터포털에서 <b>필요한 데이터 찾는 법</b>부터 학습</li>
+          <li>requests + BeautifulSoup로 HTML에서 원하는 값 추출</li>
+          <li>수집 데이터에는 반드시 <b>정제 과정이 따라온다</b>는 것을 체감</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h3>전처리</h3>
+        <ul>
+          <li><code>isna</code>·<code>dropna</code>·<code>fillna</code>로 결측치 처리</li>
+          <li>같은 의미의 다른 표기("자연", "자연경관")를 <b>하나로 통일</b></li>
+          <li>중복 행 제거와 자료형 변환</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h3>집계 · 분석 도출</h3>
+        <ul>
+          <li><code>groupby</code>·<code>pivot_table</code>로 카테고리·지역별 집계</li>
+          <li>정렬·상위 N 추출로 추천 리스트 생성</li>
+          <li>수치를 그래프로 바꿔 <b>근거 있는 결론</b> 만들기</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 분석 노트 ── -->
+  <section id="impl">
+    <div class="sec-head"><span class="n">04</span><h2>분석 노트</h2></div>
+    <p class="sec-desc">프로젝트의 흐름을 요약한 예시 코드. 실제 분석 노트북의 핵심 단계만 남긴 형태다.</p>
+
+    <div class="cell">
+      <div class="cell-head"><span class="in">In [1]</span><span class="cap">크롤링 — 여행 사이트에서 여행지 이름·카테고리 수집</span></div>
+      <pre><span class="kw">import</span> requests
+<span class="kw">from</span> bs4 <span class="kw">import</span> BeautifulSoup
+
+rows = []
+<span class="kw">for</span> page <span class="kw">in</span> range(<span class="nm">1</span>, <span class="nm">11</span>):
+    html = requests.get(url, params={<span class="st">"page"</span>: page}).text
+    soup = BeautifulSoup(html, <span class="st">"html.parser"</span>)
+    <span class="kw">for</span> item <span class="kw">in</span> soup.select(<span class="st">".spot-card"</span>):
+        rows.append({
+            <span class="st">"name"</span>: item.select_one(<span class="st">".title"</span>).text.strip(),
+            <span class="st">"category"</span>: item.select_one(<span class="st">".tag"</span>).text.strip(),
+            <span class="st">"region"</span>: item.select_one(<span class="st">".region"</span>).text.strip(),
+        })</pre>
+    </div>
+
+    <div class="cell">
+      <div class="cell-head"><span class="in">In [2]</span><span class="cap">전처리 — 결측치 제거와 카테고리 표기 통일</span></div>
+      <pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+df = pd.concat([pd.DataFrame(rows), pd.read_csv(<span class="st">"공공데이터_관광지.csv"</span>)])
+df = df.dropna(subset=[<span class="st">"name"</span>, <span class="st">"category"</span>]).drop_duplicates(<span class="st">"name"</span>)
+
+category_map = {<span class="st">"자연경관"</span>: <span class="st">"자연"</span>, <span class="st">"문화재"</span>: <span class="st">"문화"</span>, <span class="st">"액티비티"</span>: <span class="st">"체험"</span>}
+df[<span class="st">"category"</span>] = df[<span class="st">"category"</span>].replace(category_map)</pre>
+    </div>
+
+    <div class="cell">
+      <div class="cell-head"><span class="in">In [3]</span><span class="cap">집계 — 카테고리·지역별 여행지 분석 후 추천 도출</span></div>
+      <pre>summary = (df.groupby([<span class="st">"region"</span>, <span class="st">"category"</span>])
+             .agg(count=(<span class="st">"name"</span>, <span class="st">"count"</span>), score=(<span class="st">"rating"</span>, <span class="st">"mean"</span>))
+             .reset_index())
+
+<span class="cm"># "자연" 카테고리에서 평점이 높은 지역 Top 5</span>
+top = (summary[summary[<span class="st">"category"</span>] == <span class="st">"자연"</span>]
+         .sort_values(<span class="st">"score"</span>, ascending=<span class="kw">False</span>)
+         .head(<span class="nm">5</span>))</pre>
+    </div>
+  </section>
+
+  <!-- ── 05 배운 점 ── -->
+  <section id="learned">
+    <div class="sec-head"><span class="n">05</span><h2>배운 점 &amp; 회고</h2></div>
+    <ul class="klist">
+      <li><b>분석의 8할은 전처리.</b> 실제 데이터는 표기가 제각각이고 비어 있는 값이 많아서, 분석보다 정제에 훨씬 많은 시간이 들었다.</li>
+      <li><b>데이터는 직접 구할 수 있다.</b> 공공데이터포털과 크롤링을 배우면서 "데이터가 없어서 못 한다"는 말이 줄었다.</li>
+      <li><b>groupby 하나로 질문이 풀린다.</b> "어느 지역에 자연 여행지가 많은가?" 같은 질문이 집계 한 번으로 답이 되는 경험.</li>
+      <li><b>결론에는 근거가 필요하다.</b> 추천 리스트를 낼 때 수치와 그래프로 이유를 붙이는 습관을 들였다.</li>
+    </ul>
+    <div class="callout"><span class="ico">💡</span><p><span class="tt">한 줄 정리</span>이 프로젝트에서 <b>수집 → 전처리 → 집계 → 결론</b>이라는 데이터 분석의 기본 루틴을 몸에 익혔고, 이 루틴은 이후 머신러닝 과정의 EDA·전처리로 그대로 이어졌다.</p></div>
+  </section>
+
+  <footer>
+    <span>MBC컴퓨터아카데미 · 학습문서 02</span>
+    <span><a href="/Academy/MBCAcademy/카테고리 분석에 따른 여행지 추천.pdf" target="_blank" rel="noopener">프로젝트 PDF ↗</a></span>
+  </footer>
+</main>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var saved = localStorage.getItem('mbc-doc-theme');
+  if (saved) root.dataset.theme = saved;
+  else if (matchMedia('(prefers-color-scheme: dark)').matches) root.dataset.theme = 'dark';
+  document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      localStorage.setItem('mbc-doc-theme', next);
+    });
+  });
+})();
+</script>
+</body>
+</html>

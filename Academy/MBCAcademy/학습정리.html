@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MBC컴퓨터아카데미 — 전체 교육 문서</title>
+<link rel="stylesheet" href="study-note.css">
+<style>
+  :root { --accent: #38bdf8; }
+  html { scroll-padding-top: 70px; }
+
+  /* ── 진행바 ── */
+  #progress {
+    position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+    background: linear-gradient(90deg, #38bdf8, #10b981, #8b5cf6, #6366f1, #f59e0b);
+    z-index: 100; transition: width .1s linear;
+  }
+
+  /* ── 사이드 목차 레이아웃 ── */
+  .layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); max-width: 1180px; margin: 0 auto; }
+  .layout > main { max-width: none; }
+  aside.toc-side {
+    position: sticky; top: 0; align-self: start; height: 100vh; overflow-y: auto;
+    padding: 24px 18px 40px; border-right: 1px solid var(--line);
+  }
+  .toc-side .brand { font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em; color: var(--tx-mute); margin-bottom: 4px; }
+  .toc-side .brand b { color: var(--accent); }
+  .toc-side h2 { font-size: 16px; font-weight: 800; margin-bottom: 18px; letter-spacing: -.01em; }
+  .toc-group { font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--tx-mute); font-weight: 700; margin: 18px 0 6px; }
+  .toc a {
+    display: block; color: var(--tx-dim); text-decoration: none; font-size: 13px;
+    padding: 5px 11px; border-radius: 7px; border-left: 2px solid transparent; transition: all .15s;
+  }
+  .toc a:hover { color: var(--tx); background: var(--bg-soft); }
+  .toc a.active { color: var(--tx); background: var(--bg-soft); border-left-color: var(--ch, var(--accent)); font-weight: 600; }
+  .toc a .num { font-family: var(--mono); font-size: 11px; color: var(--ch, var(--tx-mute)); margin-right: 7px; }
+
+  /* ── 챕터 공통 ── */
+  .chapter { border-top: 1px solid var(--line); }
+  .goal-box { background: var(--accent-soft); border: 1px solid var(--accent-line); border-radius: 12px; padding: 16px 20px; margin-bottom: 22px; }
+  .goal-box h4 { font-size: 13px; font-weight: 800; color: var(--accent); letter-spacing: .04em; margin-bottom: 8px; }
+  .goal-box ul { list-style: none; display: grid; gap: 5px; }
+  .goal-box li { font-size: 13.5px; color: var(--tx-dim); padding-left: 18px; position: relative; }
+  .goal-box li::before { content: "🎯"; position: absolute; left: 0; font-size: 10.5px; top: 3px; }
+  h3.sub { font-size: 17px; font-weight: 800; margin: 34px 0 12px; display: flex; align-items: center; gap: 9px; letter-spacing: -.01em; }
+  h3.sub .m { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+  .prose { font-size: 14.5px; color: var(--tx-dim); max-width: 740px; margin-bottom: 12px; }
+  .prose b { color: var(--tx); }
+
+  @media (max-width: 960px) {
+    .layout { grid-template-columns: 1fr; }
+    aside.toc-side { display: none; }
+  }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<div class="layout">
+  <!-- ───────── 사이드 목차 ───────── -->
+  <aside class="toc-side">
+    <div class="brand">MBC <b>Computer</b> Academy</div>
+    <h2>전체 교육 문서</h2>
+    <nav class="toc">
+      <a href="#intro" style="--ch:#38bdf8"><span class="num">00</span>오리엔테이션</a>
+      <div class="toc-group">1부 · 프로그래밍</div>
+      <a href="#ch1" style="--ch:#38bdf8"><span class="num">01</span>Python 기초</a>
+      <a href="#ch2" style="--ch:#10b981"><span class="num">02</span>데이터 분석</a>
+      <div class="toc-group">2부 · 인공지능</div>
+      <a href="#ch3" style="--ch:#8b5cf6"><span class="num">03</span>지도 학습 · 딥러닝</a>
+      <a href="#ch4" style="--ch:#6366f1"><span class="num">04</span>머신러닝 예측 모델</a>
+      <div class="toc-group">3부 · 실전</div>
+      <a href="#ch5" style="--ch:#f59e0b"><span class="num">05</span>Object Detection</a>
+      <a href="#ch6" style="--ch:#f59e0b"><span class="num">06</span>모델 서비스화</a>
+      <a href="#outro" style="--ch:#38bdf8"><span class="num">07</span>마무리</a>
+    </nav>
+    <button id="themeBtnSide" data-theme-toggle style="margin-top:24px;width:100%;background:var(--bg-card);border:1px solid var(--line);color:var(--tx-dim);border-radius:8px;padding:8px;font-size:12.5px;font-family:inherit;cursor:pointer;">◐ 라이트 / 다크 전환</button>
+  </aside>
+
+  <!-- ───────── 본문 ───────── -->
+  <main>
+    <!-- ── 히어로 ── -->
+    <header class="hero">
+      <p class="eyebrow">MBC컴퓨터아카데미 · 비전 기반 AI 모델 생성 커리큘럼</p>
+      <h1>Python에서 AI 서비스까지<br><span class="grad">전체 교육 문서</span></h1>
+      <p class="lead">
+        파이썬 첫 문법부터 실시간 객체 탐지 서비스 배포까지, 8개월 과정에서 배운 내용을
+        교재 형태로 정리한 문서다. 각 챕터는 <b>개념 설명 → 예제 코드 → 체크포인트 →
+        실전 프로젝트</b> 순서로 구성되어 있어, 처음 배우는 사람도 순서대로 따라올 수 있다.
+      </p>
+      <div class="chips">
+        <span class="chip"><span class="dot"></span><b>2023-09-13 ~ 2024-05-08</b></span>
+        <a class="chip" href="/Academy/MBC_Academy.html"><b>과정 상세 페이지</b></a>
+        <a class="chip" href="https://github.com/ReDocu/KCD_Academy" target="_blank" rel="noopener"><b>GitHub</b></a>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="v">6<small>챕터</small></div><div class="k">교육 구성</div></div>
+        <div class="stat"><div class="v">8<small>개월</small></div><div class="k">교육 기간</div></div>
+        <div class="stat"><div class="v">5<small>회</small></div><div class="k">팀 프로젝트</div></div>
+        <div class="stat"><div class="v">2<small>회</small></div><div class="k">라벨링 실습</div></div>
+      </div>
+    </header>
+
+    <!-- ══ 00 오리엔테이션 ══ -->
+    <section id="intro">
+      <div class="sec-head"><span class="n">00</span><h2>오리엔테이션 — 무엇을 어떤 순서로 배우는가</h2></div>
+      <p class="prose">
+        이 과정의 목표는 하나다. <b>"데이터로 동작하는 서비스를 처음부터 끝까지 만들 수 있는 사람"</b>이 되는 것.
+        그래서 커리큘럼은 도구(Python) → 재료(데이터) → 두뇌(모델) → 재료 만들기(라벨링) → 완성품(서비스) 순서로 쌓아 올라간다.
+      </p>
+      <div class="pipeline">
+        <div class="pipe" style="--accent:#38bdf8"><div class="t"><span class="idx">CH1</span>Python</div><p>게임을 만들며 프로그래밍 기초 체득</p></div>
+        <div class="pipe" style="--accent:#10b981"><div class="t"><span class="idx">CH2</span>데이터 분석</div><p>Pandas/NumPy로 데이터를 다루는 법</p></div>
+        <div class="pipe" style="--accent:#8b5cf6"><div class="t"><span class="idx">CH3</span>딥러닝</div><p>CNN으로 이미지를 분류하는 법</p></div>
+        <div class="pipe" style="--accent:#6366f1"><div class="t"><span class="idx">CH4</span>머신러닝</div><p>수치를 예측하는 모델과 평가·튜닝</p></div>
+        <div class="pipe" style="--accent:#f59e0b"><div class="t"><span class="idx">CH5</span>라벨링</div><p>Object Detection 데이터 만들기</p></div>
+        <div class="pipe" style="--accent:#f59e0b"><div class="t"><span class="idx">CH6</span>서비스화</div><p>모델을 웹 서비스로 배포하기</p></div>
+      </div>
+      <h3 class="sub"><span class="m">SETUP</span>학습 환경</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>도구</th><th>용도</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td><b>Python 3.x</b></td><td>모든 챕터의 기본 언어</td><td>가상환경(venv)으로 프로젝트별 분리</td></tr>
+            <tr><td><b>Jupyter Notebook / Colab</b></td><td>데이터 분석·모델 학습 실습</td><td>셀 단위 실행으로 결과를 즉시 확인</td></tr>
+            <tr><td><b>VS Code</b></td><td>게임·웹 등 애플리케이션 개발</td><td>디버깅·확장 활용</td></tr>
+            <tr><td><b>라즈베리파이 + 웹캠</b></td><td>최종 프로젝트 CCTV 장비</td><td>6챕터에서 사용</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══ CH1 Python ══ -->
+    <section id="ch1" class="chapter" style="--accent:#38bdf8">
+      <div class="sec-head"><span class="n">CH.1</span><h2>Python 기초 — 게임으로 배우는 프로그래밍</h2></div>
+      <div class="goal-box">
+        <h4>학습 목표</h4>
+        <ul>
+          <li>변수·자료형·제어문·함수 등 파이썬 핵심 문법을 사용할 수 있다</li>
+          <li>리스트와 딕셔너리를 상황에 맞게 골라 쓸 수 있다</li>
+          <li>클래스로 게임 오브젝트를 설계하고, 게임 루프 구조를 이해한다</li>
+        </ul>
+      </div>
+
+      <h3 class="sub"><span class="m">1-1</span>변수와 자료형</h3>
+      <p class="prose">
+        프로그래밍은 값을 이름 붙여 저장하는 것에서 시작한다. 파이썬은 자료형을 선언하지 않아도
+        값에 따라 자동으로 정해지는 <b>동적 타이핑</b> 언어다.
+      </p>
+      <div class="cell">
+        <div class="cell-head"><span class="in">In [1]</span><span class="cap">기본 자료형 — 게임의 상태를 변수로 표현해보기</span></div>
+        <pre>hp = <span class="nm">100</span>            <span class="cm"># int    : 정수</span>
+speed = <span class="nm">2.5</span>         <span class="cm"># float  : 실수</span>
+name = <span class="st">"플레이어"</span>    <span class="cm"># str    : 문자열</span>
+alive = <span class="kw">True</span>        <span class="cm"># bool   : 참/거짓</span>
+
+<span class="kw">if</span> hp &lt;= <span class="nm">0</span>:         <span class="cm"># 제어문: 조건에 따라 흐름이 갈라진다</span>
+    alive = <span class="kw">False</span>
+    print(f<span class="st">"{name} 사망"</span>)   <span class="cm"># f-string으로 변수를 문자열에 삽입</span></pre>
+      </div>
+
+      <h3 class="sub"><span class="m">1-2</span>리스트와 딕셔너리 — 언제 무엇을 쓰나</h3>
+      <p class="prose">
+        파이썬에서 가장 많이 쓰는 두 자료구조. <b>순서가 중요하면 리스트, 이름으로 찾아야 하면 딕셔너리</b>다.
+        게임에서는 몬스터 무리처럼 "여러 개를 순회"할 때 리스트를, 이미지 리소스처럼 "이름으로 꺼낼" 때 딕셔너리를 쓴다.
+      </p>
+      <div class="tbl">
+        <table>
+          <thead><tr><th></th><th>리스트 <code>[]</code></th><th>딕셔너리 <code>{}</code></th></tr></thead>
+          <tbody>
+            <tr><td><b>접근 방식</b></td><td>순서(인덱스)로 접근</td><td>이름(key)으로 접근</td></tr>
+            <tr><td><b>어울리는 상황</b></td><td>몬스터 무리, 총알 목록</td><td>이미지 리소스, 설정값</td></tr>
+            <tr><td><b>대표 문법</b></td><td><code>monsters[0]</code>, <code>append</code></td><td><code>images["player"]</code>, <code>get</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cell">
+        <div class="cell-head"><span class="in">In [2]</span><span class="cap">딕셔너리 리소스 관리 — 실전 프로젝트에서 그대로 쓴 패턴</span></div>
+        <pre>images = {}                                  <span class="cm"># 이름 → 이미지 저장소</span>
+<span class="kw">for</span> file <span class="kw">in</span> os.listdir(<span class="st">"assets"</span>):
+    key = file.rsplit(<span class="st">"."</span>, <span class="nm">1</span>)[<span class="nm">0</span>]
+    images[key] = pygame.image.load(f<span class="st">"assets/{file}"</span>).convert_alpha()
+
+screen.blit(images[<span class="st">"player"</span>], (x, y))       <span class="cm"># 어디서든 이름으로 꺼내 쓴다</span></pre>
+      </div>
+
+      <h3 class="sub"><span class="m">1-3</span>클래스와 게임 루프</h3>
+      <p class="prose">
+        클래스는 <b>데이터(속성)와 동작(메서드)을 하나로 묶는</b> 설계도다. 게임의 플레이어·몬스터·총알은
+        전부 "위치를 갖고, 움직이고, 그려진다"는 공통점이 있어 클래스로 표현하기 좋다.
+        그리고 모든 게임은 <b>입력 → 갱신 → 렌더</b>를 초당 수십 번 반복하는 게임 루프로 돌아간다.
+      </p>
+      <div class="cell">
+        <div class="cell-head"><span class="in">In [3]</span><span class="cap">클래스 + 게임 루프 — 게임 프로그램의 뼈대</span></div>
+        <pre><span class="kw">class</span> <span class="fn">Player</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, x, y):
+        self.x, self.y = x, y            <span class="cm"># 속성: 상태</span>
+    <span class="kw">def</span> <span class="fn">update</span>(self, keys):             <span class="cm"># 메서드: 동작</span>
+        <span class="kw">if</span> keys[pygame.K_LEFT]:  self.x -= <span class="nm">5</span>
+        <span class="kw">if</span> keys[pygame.K_RIGHT]: self.x += <span class="nm">5</span>
+
+<span class="kw">while</span> running:                           <span class="cm"># ── 게임 루프 ──</span>
+    keys = pygame.key.get_pressed()      <span class="cm"># ① 입력</span>
+    player.update(keys)                  <span class="cm"># ② 갱신</span>
+    screen.blit(images[<span class="st">"player"</span>], (player.x, player.y))  <span class="cm"># ③ 렌더</span>
+    pygame.display.flip()
+    clock.tick(<span class="nm">60</span>)                       <span class="cm"># 초당 60프레임 고정</span></pre>
+      </div>
+
+      <div class="callout"><span class="ico">✅</span><p><span class="tt">체크포인트</span>다음에 답할 수 있으면 통과. ① 리스트와 딕셔너리는 언제 각각 쓰는가? ② 게임 루프의 3단계는 무엇인가? ③ 클래스의 속성과 메서드는 어떻게 다른가?</p></div>
+      <div class="callout"><span class="ico">🚀</span><p><span class="tt">실전 프로젝트</span>이 챕터의 내용으로 종스크롤 슈팅 게임 <b>「몬스터를 찾아서」</b>를 팀으로 제작했다. → <a href="/Academy/MBCAcademy/몬스터를 찾아서_학습문서.html"><b>학습문서 01</b></a> · <a href="/Academy/MBCAcademy/파이썬 슈팅게임 - 몬스터를 찾아서.pdf" target="_blank" rel="noopener">PDF</a></p></div>
+    </section>
+
+    <!-- ══ CH2 데이터 분석 ══ -->
+    <section id="ch2" class="chapter" style="--accent:#10b981">
+      <div class="sec-head"><span class="n">CH.2</span><h2>데이터 분석 — Pandas / NumPy</h2></div>
+      <div class="goal-box">
+        <h4>학습 목표</h4>
+        <ul>
+          <li>공공데이터와 크롤링으로 필요한 데이터를 직접 구할 수 있다</li>
+          <li>DataFrame으로 데이터를 불러오고, 결측치·중복을 정리할 수 있다</li>
+          <li>groupby 집계로 데이터에서 결론을 끌어낼 수 있다</li>
+        </ul>
+      </div>
+
+      <h3 class="sub"><span class="m">2-1</span>데이터 구하기 — 공공데이터와 크롤링</h3>
+      <p class="prose">
+        분석은 데이터가 있어야 시작된다. 데이터를 구하는 두 가지 길:
+        <b>공공데이터포털</b>에서 정리된 CSV를 내려받거나, 웹 페이지에서 <b>크롤링</b>으로 직접 수집한다.
+      </p>
+      <div class="cell">
+        <div class="cell-head"><span class="in">In [1]</span><span class="cap">크롤링 기본 패턴 — 요청(requests) 후 파싱(BeautifulSoup)</span></div>
+        <pre><span class="kw">import</span> requests
+<span class="kw">from</span> bs4 <span class="kw">import</span> BeautifulSoup
+
+html = requests.get(url).text                    <span class="cm"># ① 페이지 요청</span>
+soup = BeautifulSoup(html, <span class="st">"html.parser"</span>)     <span class="cm"># ② HTML 파싱</span>
+<span class="kw">for</span> item <span class="kw">in</span> soup.select(<span class="st">".spot-card"</span>):      <span class="cm"># ③ CSS 선택자로 추출</span>
+    print(item.select_one(<span class="st">".title"</span>).text.strip())</pre>
+      </div>
+
+      <h3 class="sub"><span class="m">2-2</span>DataFrame — 데이터를 표로 다루기</h3>
+      <p class="prose">
+        Pandas의 <b>DataFrame</b>은 행과 열이 있는 표다. 엑셀을 코드로 다룬다고 생각하면 된다.
+        불러온 데이터는 반드시 <code>head()</code>·<code>info()</code>로 먼저 생김새를 확인하는 습관을 들인다.
+      </p>
+      <div class="cell">
+        <div class="cell-head"><span class="in">In [2]</span><span class="cap">불러오기 → 살펴보기 → 골라내기</span></div>
+        <pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+df = pd.read_csv(<span class="st">"관광지.csv"</span>)      <span class="cm"># CSV → DataFrame</span>
+df.head()                             <span class="cm"># 앞 5행 미리보기</span>
+df.info()                             <span class="cm"># 열 이름·자료형·결측 확인</span>
+
+nature = df[df[<span class="st">"category"</span>] == <span class="st">"자연"</span>]   <span class="cm"># 불리언 인덱싱: 조건으로 행 선택</span></pre>
+      </div>
+
+      <h3 class="sub"><span class="m">2-3</span>전처리 — 지저분한 데이터 정리하기</h3>
+      <p class="prose">
+        실제 데이터는 비어 있고(결측치), 겹치고(중복), 표기가 제각각이다.
+        <b>분석 시간의 대부분은 전처리에 쓰인다</b> — 이것이 이 챕터에서 가장 중요한 교훈이다.
+      </p>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>문제</th><th>확인</th><th>처리</th></tr></thead>
+          <tbody>
+            <tr><td><b>결측치</b></td><td><code>df.isna().sum()</code></td><td><code>dropna()</code> 삭제 또는 <code>fillna()</code> 채우기</td></tr>
+            <tr><td><b>중복</b></td><td><code>df.duplicated()</code></td><td><code>drop_duplicates()</code></td></tr>
+            <tr><td><b>표기 불일치</b></td><td><code>df["col"].unique()</code></td><td><code>replace()</code>로 표기 통일</td></tr>
+            <tr><td><b>자료형 오류</b></td><td><code>df.info()</code></td><td><code>astype()</code>으로 변환</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub"><span class="m">2-4</span>집계와 결론 — groupby</h3>
+      <p class="prose">
+        <b>groupby</b>는 "~별로 묶어서 계산하라"는 명령이다. "지역별 평균 평점은?" 같은
+        질문 대부분이 groupby 한 번으로 답이 된다. 결론에는 항상 수치와 그래프라는 근거를 붙인다.
+      </p>
+      <div class="cell">
+        <div class="cell-head"><span class="in">In [3]</span><span class="cap">지역×카테고리별 집계 후 상위 5개 추출</span></div>
+        <pre>summary = (df.groupby([<span class="st">"region"</span>, <span class="st">"category"</span>])
+             .agg(count=(<span class="st">"name"</span>, <span class="st">"count"</span>), score=(<span class="st">"rating"</span>, <span class="st">"mean"</span>))
+             .reset_index())
+
+top5 = summary.sort_values(<span class="st">"score"</span>, ascending=<span class="kw">False</span>).head(<span class="nm">5</span>)</pre>
+      </div>
+
+      <div class="callout"><span class="ico">✅</span><p><span class="tt">체크포인트</span>① 결측치를 확인하고 처리하는 함수는? ② 불리언 인덱싱이란? ③ "카테고리별 개수"를 구하는 코드를 한 줄로 쓸 수 있는가?</p></div>
+      <div class="callout"><span class="ico">🚀</span><p><span class="tt">실전 프로젝트</span>공공데이터 + 크롤링 데이터로 <b>「카테고리 분석에 따른 여행지 추천」</b> 가이드를 제작했다. → <a href="/Academy/MBCAcademy/여행지 추천_학습문서.html"><b>학습문서 02</b></a> · <a href="/Academy/MBCAcademy/카테고리 분석에 따른 여행지 추천.pdf" target="_blank" rel="noopener">PDF</a></p></div>
+    </section>
+
+    <!-- ══ CH3 지도 학습 ══ -->
+    <section id="ch3" class="chapter" style="--accent:#8b5cf6">
+      <div class="sec-head"><span class="n">CH.3</span><h2>지도 학습 · 딥러닝 — 이미지 분류</h2></div>
+      <div class="goal-box">
+        <h4>학습 목표</h4>
+        <ul>
+          <li>지도 학습이 무엇인지, 데이터와 라벨의 관계를 설명할 수 있다</li>
+          <li>CNN이 이미지의 특징을 뽑아내는 원리를 이해한다</li>
+          <li>학습 곡선을 읽고 과적합을 진단하며, 데이터 증강으로 개선할 수 있다</li>
+        </ul>
+      </div>
+
+      <h3 class="sub"><span class="m">3-1</span>머신러닝의 세 갈래</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>방식</th><th>재료</th><th>배우는 것</th><th>예시</th></tr></thead>
+          <tbody>
+            <tr><td><b>지도 학습</b></td><td>입력 + 정답(라벨)</td><td>입력 → 정답의 규칙</td><td>늑대/허스키 분류, 가격 예측</td></tr>
+            <tr><td><b>비지도 학습</b></td><td>입력만</td><td>데이터 속 숨은 구조</td><td>비슷한 게임끼리 군집화</td></tr>
+            <tr><td><b>강화 학습</b></td><td>행동 + 보상</td><td>보상을 최대화하는 전략</td><td>게임 AI</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">
+        이 챕터는 <b>지도 학습</b>이다. "이 사진은 늑대(0), 이 사진은 허스키(1)"라는
+        정답이 붙은 데이터를 주고, 모델이 그 규칙을 스스로 찾게 한다.
+      </p>
+
+      <h3 class="sub"><span class="m">3-2</span>신경망과 CNN의 직관</h3>
+      <p class="prose">
+        신경망은 입력에 <b>가중치를 곱하고 더한 뒤 활성화 함수</b>를 통과시키는 뉴런의 연결이다.
+        이미지에는 <b>CNN(합성곱 신경망)</b>을 쓴다 — <b>합성곱(Conv)</b> 필터가 귀·눈·털 무늬 같은
+        지역적 특징을 훑어내고, <b>풀링(Pooling)</b>이 크기를 줄이며 중요한 것만 남긴다.
+        층이 깊어질수록 "선 → 형태 → 얼굴"처럼 특징이 조합된다.
+      </p>
+      <div class="cell">
+        <div class="cell-head"><span class="in">In [1]</span><span class="cap">CNN 모델 구성 — Conv-Pool 블록을 쌓고 sigmoid로 마무리</span></div>
+        <pre>model = Sequential([
+    Conv2D(<span class="nm">32</span>, (<span class="nm">3</span>, <span class="nm">3</span>), activation=<span class="st">"relu"</span>, input_shape=(<span class="nm">128</span>, <span class="nm">128</span>, <span class="nm">3</span>)),
+    MaxPooling2D(<span class="nm">2</span>, <span class="nm">2</span>),          <span class="cm"># 특징 요약 (크기 절반)</span>
+    Conv2D(<span class="nm">64</span>, (<span class="nm">3</span>, <span class="nm">3</span>), activation=<span class="st">"relu"</span>),
+    MaxPooling2D(<span class="nm">2</span>, <span class="nm">2</span>),
+    Flatten(),                      <span class="cm"># 2D 특징맵 → 1D 벡터</span>
+    Dense(<span class="nm">64</span>, activation=<span class="st">"relu"</span>),
+    Dense(<span class="nm">1</span>, activation=<span class="st">"sigmoid"</span>),  <span class="cm"># 0~1 확률 (0.5 기준 분류)</span>
+])
+model.compile(optimizer=<span class="st">"adam"</span>, loss=<span class="st">"binary_crossentropy"</span>, metrics=[<span class="st">"accuracy"</span>])</pre>
+      </div>
+
+      <h3 class="sub"><span class="m">3-3</span>학습 곡선 읽기와 과적합</h3>
+      <p class="prose">
+        모델의 상태는 <b>학습/검증 곡선을 그려봐야</b> 보인다. 학습 정확도만 오르고 검증 정확도가
+        멈추면 <b>과적합</b> — 모델이 문제를 이해한 게 아니라 답을 외운 상태다.
+        처방은 데이터를 늘리거나(증강), 모델을 줄이거나, 일찍 멈추는 것.
+      </p>
+      <div class="cell">
+        <div class="cell-head"><span class="in">In [2]</span><span class="cap">데이터 증강 + 학습 곡선 — 과적합 진단의 기본 도구</span></div>
+        <pre>train_gen = ImageDataGenerator(rescale=<span class="nm">1</span>/<span class="nm">255</span>, zoom_range=<span class="nm">0.2</span>,
+                               horizontal_flip=<span class="kw">True</span>)   <span class="cm"># 증강: 공짜 데이터</span>
+
+history = model.fit(train, validation_data=val, epochs=<span class="nm">20</span>)
+plt.plot(history.history[<span class="st">"accuracy"</span>], label=<span class="st">"train"</span>)
+plt.plot(history.history[<span class="st">"val_accuracy"</span>], label=<span class="st">"val"</span>)  <span class="cm"># 두 곡선이 벌어지면 과적합</span></pre>
+      </div>
+      <div class="callout"><span class="ico">⚠️</span><p><span class="tt">데이터 편향 주의</span>늑대 사진에는 눈(雪) 배경이 많다. 데이터가 편향되면 모델은 동물이 아니라 <b>배경을 보고 분류</b>한다. 정확도가 높아도 엉뚱한 것을 배웠을 수 있다 — 데이터를 의심하는 습관이 딥러닝의 절반이다.</p></div>
+
+      <div class="callout"><span class="ico">✅</span><p><span class="tt">체크포인트</span>① 지도 학습과 비지도 학습의 차이는? ② 합성곱과 풀링의 역할은 각각 무엇인가? ③ 과적합을 곡선에서 어떻게 알아보고, 어떻게 처방하는가?</p></div>
+      <div class="callout"><span class="ico">🚀</span><p><span class="tt">실전 프로젝트</span>직접 크롤링한 이미지로 <b>「늑대 vs 허스키」</b> CNN 분류 모델을 제작·검증했다. → <a href="/Academy/MBCAcademy/늑대vs허스키_학습문서.html"><b>학습문서 03</b></a> · <a href="/Academy/MBCAcademy/늑대vs허스키 CNN 알고리즘 분석 테스트.pdf" target="_blank" rel="noopener">PDF</a></p></div>
+    </section>
+
+    <!-- ══ CH4 머신러닝 예측 모델 ══ -->
+    <section id="ch4" class="chapter" style="--accent:#6366f1">
+      <div class="sec-head"><span class="n">CH.4</span><h2>머신러닝 예측 모델 — EDA부터 튜닝까지</h2></div>
+      <div class="goal-box">
+        <h4>학습 목표</h4>
+        <ul>
+          <li>EDA로 데이터를 탐색하고 가설을 세울 수 있다</li>
+          <li>이상치 제거·인코딩·분리·정규화를 올바른 순서로 수행할 수 있다</li>
+          <li>회귀 모델을 지표(MAE·RMSE·R²)로 평가하고 하이퍼파라미터를 튜닝할 수 있다</li>
+        </ul>
+      </div>
+
+      <h3 class="sub"><span class="m">4-1</span>EDA — 모델링 전에 데이터와 대화하기</h3>
+      <p class="prose">
+        <b>EDA(탐색적 데이터 분석)</b>는 히스토그램·산점도·상관계수로 데이터의 분포와 관계를
+        먼저 살피는 단계다. "어떤 특징이 가격에 영향을 줄까?"라는 가설이 여기서 나오고,
+        이상치 기준·특징 선택의 근거가 된다. CH.2의 전처리 기술이 그대로 재사용된다.
+      </p>
+
+      <h3 class="sub"><span class="m">4-2</span>전처리 4종 세트 — 순서가 중요하다</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>순서</th><th>작업</th><th>이유</th></tr></thead>
+          <tbody>
+            <tr><td><b>①</b></td><td>이상치 제거 (IQR 기준)</td><td>극단값이 모델을 왜곡하지 않도록</td></tr>
+            <tr><td><b>②</b></td><td>원-핫 인코딩</td><td>모델은 숫자만 이해한다 — 장르 같은 범주형을 0/1 컬럼으로</td></tr>
+            <tr><td><b>③</b></td><td>train / test 분리</td><td>공정한 평가를 위해 시험 문제를 미리 감춘다</td></tr>
+            <tr><td><b>④</b></td><td>정규화 (분리 후!)</td><td>분리 전에 하면 테스트 정보가 학습에 새어든다 = <b>데이터 누수</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cell">
+        <div class="cell-head"><span class="in">In [1]</span><span class="cap">전처리 파이프라인 — ①→②→③→④ 순서 그대로</span></div>
+        <pre>q1, q3 = df[<span class="st">"price"</span>].quantile([<span class="nm">0.25</span>, <span class="nm">0.75</span>]); iqr = q3 - q1
+df = df[(df[<span class="st">"price"</span>] &gt;= q1 - <span class="nm">1.5</span>*iqr) &amp; (df[<span class="st">"price"</span>] &lt;= q3 + <span class="nm">1.5</span>*iqr)]  <span class="cm"># ①</span>
+df = pd.get_dummies(df, columns=[<span class="st">"genre"</span>])                             <span class="cm"># ②</span>
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="nm">0.2</span>) <span class="cm"># ③</span>
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)   <span class="cm"># ④ 학습 데이터로만 fit</span>
+X_test  = scaler.transform(X_test)        <span class="cm">#    테스트는 transform만!</span></pre>
+      </div>
+
+      <h3 class="sub"><span class="m">4-3</span>회귀 모델과 평가 지표</h3>
+      <p class="prose">
+        연속된 수치(가격)를 예측하는 문제는 <b>회귀</b>다. "좋은 모델"은 감이 아니라 지표로 정의한다.
+      </p>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>지표</th><th>의미</th><th>읽는 법</th></tr></thead>
+          <tbody>
+            <tr><td><b>MAE</b></td><td>평균 절대 오차</td><td>"평균적으로 얼마나 빗나가는가" — 직관적</td></tr>
+            <tr><td><b>RMSE</b></td><td>평균 제곱근 오차</td><td>큰 오차에 더 민감 — 치명적 오차를 잡을 때</td></tr>
+            <tr><td><b>R²</b></td><td>결정 계수</td><td>1에 가까울수록 데이터를 잘 설명 (0.7이면 70%)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub"><span class="m">4-4</span>하이퍼파라미터 튜닝</h3>
+      <p class="prose">
+        트리 깊이·트리 개수처럼 모델이 스스로 배우지 못하는 값은 사람이 정한다.
+        <b>GridSearch + 교차검증</b>으로 조합을 체계적으로 탐색한다 — 단, 튜닝의 개선 폭은
+        전처리 품질을 넘지 못한다. <b>데이터가 먼저, 튜닝은 마지막</b>이다.
+      </p>
+      <div class="cell">
+        <div class="cell-head"><span class="in">In [2]</span><span class="cap">학습 → 평가 → GridSearch 튜닝</span></div>
+        <pre>model = RandomForestRegressor().fit(X_train, y_train)
+pred = model.predict(X_test)
+print(mean_absolute_error(y_test, pred), r2_score(y_test, pred))
+
+grid = GridSearchCV(RandomForestRegressor(),
+                    {<span class="st">"n_estimators"</span>: [<span class="nm">100</span>, <span class="nm">300</span>], <span class="st">"max_depth"</span>: [<span class="nm">8</span>, <span class="nm">16</span>, <span class="kw">None</span>]},
+                    cv=<span class="nm">5</span>)
+grid.fit(X_train, y_train)
+print(grid.best_params_)         <span class="cm"># 최적 조합 확인</span></pre>
+      </div>
+
+      <div class="callout"><span class="ico">✅</span><p><span class="tt">체크포인트</span>① 정규화를 분리 뒤에 하는 이유는? ② MAE와 RMSE는 언제 각각 보는가? ③ 하이퍼파라미터와 파라미터(가중치)의 차이는?</p></div>
+      <div class="callout"><span class="ico">🚀</span><p><span class="tt">실전 프로젝트</span>스팀 게임 데이터로 <b>「세일 할인가격 예측」</b> 모델을 만들고 평가·튜닝까지 완주했다. → <a href="/Academy/MBCAcademy/스팀 가격 예측_학습문서.html"><b>학습문서 04</b></a> · <a href="/Academy/MBCAcademy/스팀의 세일 할인가격 예측.pdf" target="_blank" rel="noopener">PDF</a></p></div>
+    </section>
+
+    <!-- ══ CH5 Object Detection ══ -->
+    <section id="ch5" class="chapter" style="--accent:#f59e0b">
+      <div class="sec-head"><span class="n">CH.5</span><h2>Object Detection — 데이터 라벨링</h2></div>
+      <div class="goal-box">
+        <h4>학습 목표</h4>
+        <ul>
+          <li>분류와 객체 탐지의 차이를 설명할 수 있다</li>
+          <li>바운딩 박스·IoU 등 탐지의 기본 개념을 이해한다</li>
+          <li>일관된 규칙으로 학습용 데이터를 직접 라벨링할 수 있다</li>
+        </ul>
+      </div>
+
+      <h3 class="sub"><span class="m">5-1</span>분류에서 탐지로</h3>
+      <p class="prose">
+        CH.3의 분류는 "이 사진이 무엇인가"에 답한다. <b>Object Detection은 "무엇이, 어디에,
+        몇 개나 있는가"</b>까지 답한다. 결과는 <b>바운딩 박스(위치) + 클래스(이름) + 신뢰도(확률)</b>의 묶음이다.
+      </p>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>개념</th><th>설명</th></tr></thead>
+          <tbody>
+            <tr><td><b>바운딩 박스</b></td><td>대상을 감싸는 사각형 — 좌표 (x, y, w, h)로 표현</td></tr>
+            <tr><td><b>IoU</b></td><td>예측 박스와 정답 박스가 겹치는 비율 — 탐지가 "맞았다"의 기준</td></tr>
+            <tr><td><b>신뢰도</b></td><td>모델이 "이 박스 안에 대상이 있다"고 확신하는 정도</td></tr>
+            <tr><td><b>클래스</b></td><td>박스 안 대상의 이름 — 라벨링 때 정의한 목록에서 나온다</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub"><span class="m">5-2</span>라벨링 실습 — 데이터를 직접 만들다</h3>
+      <p class="prose">
+        모델을 "쓰는" 입장에서 데이터를 "만드는" 입장으로 바꿔보는 실습.
+        영상 프레임마다 대상에 박스를 그리고 클래스를 지정했다.
+      </p>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>실습</th><th>대상</th><th>난이도 포인트</th></tr></thead>
+          <tbody>
+            <tr><td><b>①</b></td><td>손흥민 추적하기</td><td>단일 인물 — 빠른 움직임, 다른 선수와의 겹침(가림) 처리</td></tr>
+            <tr><td><b>②</b></td><td>르브론 제임스 · 스테판 커리</td><td>다중 클래스 — 비슷한 대상을 구분할 기준(유니폼·등번호) 정의</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">라벨링 전에 팀이 반드시 합의해야 하는 규칙:</p>
+      <ul class="klist">
+        <li><b>박스는 얼마나 타이트하게?</b> 몸 전체인지, 여백 없이 딱 맞게인지 — 기준이 섞이면 모델이 흔들린다.</li>
+        <li><b>가려진 대상은 포함하나?</b> 절반 이상 가림, 화면 밖 잘림 등의 처리 규칙을 먼저 정한다.</li>
+        <li><b>클래스 구분 기준은?</b> 사람 눈에도 헷갈리는 대상이라면, 구분 근거(등번호 등)를 명문화한다.</li>
+      </ul>
+      <div class="callout"><span class="ico">🏷️</span><p><span class="tt">핵심 교훈</span><b>데이터 품질 = 모델 품질.</b> 라벨링 기준이 흔들리면 아무리 좋은 모델도 흔들린다. AI 프로젝트에서 라벨링은 잡일이 아니라 성능을 결정하는 설계 작업이다.</p></div>
+
+      <div class="callout"><span class="ico">✅</span><p><span class="tt">체크포인트</span>① 분류와 탐지의 출력은 어떻게 다른가? ② IoU는 무엇을 재는가? ③ 라벨링 전에 팀이 합의할 규칙 세 가지는?</p></div>
+    </section>
+
+    <!-- ══ CH6 모델 서비스화 ══ -->
+    <section id="ch6" class="chapter" style="--accent:#f59e0b">
+      <div class="sec-head"><span class="n">CH.6</span><h2>모델 서비스화 — Flask와 실시간 CCTV</h2></div>
+      <div class="goal-box">
+        <h4>학습 목표</h4>
+        <ul>
+          <li>Flask로 라우팅·템플릿 기반 웹 서비스를 만들 수 있다</li>
+          <li>학습시킨 모델을 서비스 포맷에 맞게 적용할 수 있다</li>
+          <li>실시간 영상 스트리밍에 탐지 모델을 연결할 수 있다</li>
+        </ul>
+      </div>
+
+      <h3 class="sub"><span class="m">6-1</span>Flask 기초 — 웹은 요청과 응답이다</h3>
+      <p class="prose">
+        웹 서버는 결국 <b>"주소(URL)로 요청이 오면 응답을 돌려주는 프로그램"</b>이다.
+        Flask에서는 함수에 <code>@app.route</code>를 붙여 주소와 함수를 연결한다.
+        이 구조 위에 로그인·게시판·댓글·좋아요를 얹으면 SNS가 된다.
+      </p>
+      <div class="cell">
+        <div class="cell-head"><span class="in">In [1]</span><span class="cap">라우팅 기본 — 주소와 함수를 연결</span></div>
+        <pre><span class="kw">from</span> flask <span class="kw">import</span> Flask, render_template, request
+
+app = Flask(__name__)
+
+<span class="nm">@app.route</span>(<span class="st">"/"</span>)
+<span class="kw">def</span> <span class="fn">index</span>():
+    <span class="kw">return</span> render_template(<span class="st">"index.html"</span>)   <span class="cm"># 템플릿 렌더링</span>
+
+<span class="nm">@app.route</span>(<span class="st">"/login"</span>, methods=[<span class="st">"POST"</span>])
+<span class="kw">def</span> <span class="fn">login</span>():
+    user = request.form[<span class="st">"username"</span>]         <span class="cm"># 폼 데이터 수신</span>
+    ...</pre>
+      </div>
+
+      <h3 class="sub"><span class="m">6-2</span>모델 포맷 — 학습 환경과 서비스 환경은 다르다</h3>
+      <p class="prose">
+        노트북에서 학습한 모델 파일이 서버에 그대로 들어가지 않는 경우가 많다.
+        <b>모델을 서비스 포맷에 맞게 변환·적용</b>하는 일은 실무의 큰 부분이다.
+        모델을 파일 단위로 관리하고 경로·포맷을 DB에 등록해두면, <b>배포 없이 모델을 갈아 끼우는</b> 구조를 만들 수 있다.
+      </p>
+
+      <h3 class="sub"><span class="m">6-3</span>실시간 스트리밍 — 탐지 결과를 웹으로</h3>
+      <p class="prose">
+        라즈베리파이 웹캠의 프레임을 서버가 받아 모델로 탐지하고, 처리된 프레임을
+        <b>MJPEG 방식</b>(이미지를 연속으로 밀어내는 응답)으로 브라우저에 흘려보낸다.
+      </p>
+      <div class="cell">
+        <div class="cell-head"><span class="in">In [2]</span><span class="cap">탐지 + 스트리밍 + 모델 동적 교체 — 최종 프로젝트의 핵심 구조</span></div>
+        <pre><span class="kw">def</span> <span class="fn">gen_frames</span>():
+    <span class="kw">while</span> <span class="kw">True</span>:
+        ok, frame = camera.read()
+        frame = detector.draw_boxes(frame)      <span class="cm"># 현재 모델로 탐지</span>
+        _, buf = cv2.imencode(<span class="st">".jpg"</span>, frame)
+        <span class="kw">yield</span> (b<span class="st">"--frame\r\n"</span> b<span class="st">"Content-Type: image/jpeg\r\n\r\n"</span> + buf.tobytes())
+
+<span class="nm">@app.route</span>(<span class="st">"/video_feed"</span>)
+<span class="kw">def</span> <span class="fn">video_feed</span>():
+    <span class="kw">return</span> Response(gen_frames(), mimetype=<span class="st">"multipart/x-mixed-replace; boundary=frame"</span>)
+
+<span class="nm">@app.route</span>(<span class="st">"/models/&lt;int:mid&gt;/activate"</span>, methods=[<span class="st">"POST"</span>])
+<span class="kw">def</span> <span class="fn">activate</span>(mid):
+    row = db.get_model(mid)
+    detector.load(row.path, fmt=row.format)     <span class="cm"># 탐지 대상 동적 교체</span></pre>
+      </div>
+
+      <div class="callout"><span class="ico">✅</span><p><span class="tt">체크포인트</span>① 라우팅이란 무엇인가? ② 모델을 DB에 등록해 관리하면 무엇이 좋아지는가? ③ MJPEG 스트리밍의 동작 원리를 한 문장으로 설명할 수 있는가?</p></div>
+      <div class="callout"><span class="ico">🚀</span><p><span class="tt">최종 프로젝트</span>CH.1~5의 모든 내용을 묶어 <b>「인공지능 모델 적용 CCTV 웹사이트」</b>를 5주간 제작했다. → <a href="/Academy/MBCAcademy/CCTV 모델 적용_학습문서.html"><b>학습문서 05</b></a> · <a href="/Academy/MBCAcademy/인공지능모델적용웹사이트제작.pdf" target="_blank" rel="noopener">PDF</a></p></div>
+    </section>
+
+    <!-- ══ 마무리 ══ -->
+    <section id="outro" class="chapter" style="--accent:#38bdf8">
+      <div class="sec-head"><span class="n">07</span><h2>마무리 — 챕터와 프로젝트 한눈에</h2></div>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>챕터</th><th>배우는 것</th><th>실전 프로젝트</th><th>문서</th></tr></thead>
+          <tbody>
+            <tr><td><b>CH.1</b> Python</td><td>문법·자료구조·클래스·게임 루프</td><td>몬스터를 찾아서</td><td><a href="/Academy/MBCAcademy/몬스터를 찾아서_학습문서.html">학습문서 01</a></td></tr>
+            <tr><td><b>CH.2</b> 데이터 분석</td><td>크롤링·전처리·groupby 집계</td><td>여행지 추천</td><td><a href="/Academy/MBCAcademy/여행지 추천_학습문서.html">학습문서 02</a></td></tr>
+            <tr><td><b>CH.3</b> 딥러닝</td><td>CNN·학습 곡선·데이터 증강</td><td>늑대 vs 허스키</td><td><a href="/Academy/MBCAcademy/늑대vs허스키_학습문서.html">학습문서 03</a></td></tr>
+            <tr><td><b>CH.4</b> 머신러닝</td><td>EDA·전처리 4종·회귀 평가·튜닝</td><td>스팀 가격 예측</td><td><a href="/Academy/MBCAcademy/스팀 가격 예측_학습문서.html">학습문서 04</a></td></tr>
+            <tr><td><b>CH.5</b> 라벨링</td><td>바운딩 박스·IoU·라벨링 규칙</td><td>손흥민 / 르브론·커리 추적</td><td>—</td></tr>
+            <tr><td><b>CH.6</b> 서비스화</td><td>Flask·모델 포맷·실시간 스트리밍</td><td>CCTV 웹사이트 (최종)</td><td><a href="/Academy/MBCAcademy/CCTV 모델 적용_학습문서.html">학습문서 05</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose" style="margin-top:18px">
+        과정 전체를 관통하는 원칙은 세 가지다.
+        <b>① 데이터가 모델보다 먼저다</b> — 성능 문제의 답은 대부분 데이터 쪽에 있다.
+        <b>② 절차가 도구보다 오래 남는다</b> — 수집→전처리→학습→평가→개선의 루틴은 어디서든 통한다.
+        <b>③ 만드는 것보다 쓰이게 하는 것</b> — 모델은 서비스에 올라가야 비로소 가치가 된다.
+      </p>
+      <div class="callout"><span class="ico">💡</span><p><span class="tt">다음 단계</span>이 문서를 마쳤다면: 객체 탐지 모델 아키텍처(YOLO 계열) 깊이 파기 → 모델 경량화·엣지 배포 → MLOps(데이터·모델 버전 관리)로 확장하는 것을 추천한다.</p></div>
+    </section>
+
+    <footer>
+      <span>MBC컴퓨터아카데미 · 전체 교육 문서</span>
+      <span><a href="/Academy/MBC_Academy.html">과정 상세 페이지 ↗</a></span>
+    </footer>
+  </main>
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var saved = localStorage.getItem('mbc-doc-theme');
+  if (saved) root.dataset.theme = saved;
+  else if (matchMedia('(prefers-color-scheme: dark)').matches) root.dataset.theme = 'dark';
+  document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      localStorage.setItem('mbc-doc-theme', next);
+    });
+  });
+
+  // 읽기 진행바
+  var bar = document.getElementById('progress');
+  addEventListener('scroll', function () {
+    var h = document.documentElement;
+    bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+  }, { passive: true });
+
+  // 목차 현재 위치 하이라이트
+  var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  var sections = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        links.forEach(function (a) { a.classList.remove('active'); });
+        var idx = sections.indexOf(e.target);
+        if (idx > -1) links[idx].classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(function (s) { if (s) observer.observe(s); });
+})();
+</script>
+</body>
+</html>

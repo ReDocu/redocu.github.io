@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>미니 노션 — 개인 업무 관리</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    color: #37352f;
+    background: #fff;
+  }
+  .hidden { display: none !important; }
+  button { font-family: inherit; cursor: pointer; }
+  input, textarea { font-family: inherit; color: inherit; }
+
+  /* ---------- 로그인 ---------- */
+  .login-wrap {
+    height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    background: #f7f7f5;
+  }
+  .login-card {
+    background: #fff; border: 1px solid #e9e9e7; border-radius: 12px;
+    padding: 48px 40px; width: 360px; max-width: 90vw; text-align: center;
+    box-shadow: 0 4px 24px rgba(0,0,0,.06);
+  }
+  .login-card .logo { font-size: 40px; margin-bottom: 12px; }
+  .login-card h1 { font-size: 22px; margin-bottom: 6px; }
+  .login-card .sub { font-size: 13px; color: #787774; margin-bottom: 28px; }
+  .google-btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; padding: 11px 16px;
+    border: 1px solid #dadce0; border-radius: 8px; background: #fff;
+    font-size: 14px; font-weight: 500; color: #3c4043;
+  }
+  .google-btn:hover { background: #f8f9fa; }
+  .google-btn:disabled { opacity: .6; cursor: default; }
+  .demo-note { font-size: 11px; color: #9b9a97; margin-top: 20px; line-height: 1.5; }
+
+  /* ---------- 앱 레이아웃 ---------- */
+  .app { height: 100%; display: flex; }
+  .sidebar {
+    width: 240px; flex-shrink: 0;
+    background: #f7f7f5; border-right: 1px solid #e9e9e7;
+    padding: 12px 8px; overflow-y: auto;
+    display: flex; flex-direction: column;
+  }
+  .side-profile {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px; border-radius: 6px; cursor: pointer;
+    font-weight: 600; font-size: 14px;
+  }
+  .side-profile:hover { background: #efefed; }
+  .avatar {
+    width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+    background: #d3e5ef; color: #2383e2;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; overflow: hidden;
+  }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .side-nav { margin-top: 8px; }
+  .side-nav a {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 8px; border-radius: 6px;
+    font-size: 14px; color: #5f5e5b; cursor: pointer; user-select: none;
+  }
+  .side-nav a:hover { background: #efefed; }
+  .side-nav a.active { background: #efefed; color: #37352f; font-weight: 600; }
+  .side-label {
+    font-size: 11px; font-weight: 600; color: #9b9a97;
+    padding: 14px 8px 4px;
+  }
+  .side-page {
+    display: block; padding: 5px 8px 5px 24px; border-radius: 6px;
+    font-size: 13px; color: #5f5e5b; cursor: pointer;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .side-page:hover { background: #efefed; }
+  .side-page.active { background: #efefed; color: #37352f; font-weight: 600; }
+  .side-empty { padding: 5px 8px 5px 24px; font-size: 12px; color: #b9b8b5; }
+
+  main { flex: 1; overflow-y: auto; }
+  .page { max-width: 720px; margin: 0 auto; padding: 56px 32px 80px; }
+  .page h2 { font-size: 28px; margin-bottom: 4px; }
+  .page .desc { font-size: 13px; color: #787774; margin-bottom: 24px; }
+
+  /* ---------- 업무 페이지 (목록) ---------- */
+  .cmd-input {
+    width: 100%; padding: 10px 14px;
+    border: 1px solid #e9e9e7; border-radius: 8px;
+    font-size: 14px; background: #fbfbfa; outline: none;
+  }
+  .cmd-input:focus { border-color: #2383e2; background: #fff; }
+  .hint { font-size: 12px; color: #9b9a97; margin: 8px 2px 24px; min-height: 16px; }
+  .hint.warn { color: #d9730d; }
+  .post-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 8px; cursor: pointer;
+    border: 1px solid transparent;
+  }
+  .post-item:hover { background: #f7f7f5; }
+  .post-item .p-icon { font-size: 16px; }
+  .post-item .p-title { flex: 1; font-size: 15px; font-weight: 500; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .post-item .p-title.untitled { color: #9b9a97; font-weight: 400; }
+  .post-item .p-date { font-size: 12px; color: #9b9a97; flex-shrink: 0; }
+  .list-empty {
+    text-align: center; color: #9b9a97; font-size: 14px;
+    padding: 48px 0; border: 1px dashed #e9e9e7; border-radius: 8px;
+  }
+
+  /* ---------- 글 상세 ---------- */
+  .detail-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; }
+  .detail-bar .spacer { flex: 1; }
+  .ghost-btn {
+    border: none; background: none; padding: 6px 10px; border-radius: 6px;
+    font-size: 13px; color: #787774;
+  }
+  .ghost-btn:hover { background: #f1f1ef; color: #37352f; }
+  .danger-btn {
+    border: 1px solid #fadbd6; background: #fff; padding: 6px 12px; border-radius: 6px;
+    font-size: 13px; color: #e03e3e;
+  }
+  .danger-btn:hover { background: #fdf1f0; }
+  .title-input {
+    width: 100%; border: none; outline: none;
+    font-size: 34px; font-weight: 700; margin-bottom: 12px;
+  }
+  .title-input::placeholder { color: #d5d4d1; }
+  .content-input {
+    width: 100%; min-height: 45vh; border: none; outline: none; resize: none;
+    font-size: 15px; line-height: 1.7;
+  }
+  .content-input::placeholder { color: #b9b8b5; }
+  .save-status { font-size: 12px; color: #9b9a97; }
+
+  /* ---------- 마이 페이지 ---------- */
+  .my-row { margin-bottom: 28px; }
+  .my-row label { display: block; font-size: 13px; font-weight: 600; color: #5f5e5b; margin-bottom: 8px; }
+  .my-avatar {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: #d3e5ef; color: #2383e2;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px; font-weight: 700; overflow: hidden; margin-bottom: 10px;
+  }
+  .my-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .text-input {
+    width: 280px; max-width: 100%; padding: 9px 12px;
+    border: 1px solid #e9e9e7; border-radius: 8px; font-size: 14px; outline: none;
+  }
+  .text-input:focus { border-color: #2383e2; }
+  .primary-btn {
+    padding: 9px 16px; border: none; border-radius: 8px;
+    background: #2383e2; color: #fff; font-size: 14px; font-weight: 500;
+  }
+  .primary-btn:hover { background: #1a73cd; }
+  .file-btn {
+    display: inline-block; padding: 8px 14px;
+    border: 1px solid #e9e9e7; border-radius: 8px;
+    font-size: 13px; color: #5f5e5b; cursor: pointer; background: #fff;
+  }
+  .file-btn:hover { background: #f7f7f5; }
+
+  /* ---------- 가이드북 ---------- */
+  .guide-badge { font-size: 12px; color: #9b9a97; }
+  .guide-body { padding-top: 8px; }
+  .guide-body h3 { font-size: 18px; margin: 28px 0 10px; }
+  .guide-body p { font-size: 14px; line-height: 1.7; margin: 8px 0; }
+  .guide-body ol, .guide-body ul { padding-left: 22px; font-size: 14px; line-height: 1.9; margin: 8px 0; }
+  .guide-body pre {
+    background: #f7f7f5; border: 1px solid #e9e9e7; border-radius: 8px;
+    padding: 12px 14px; overflow-x: auto; margin: 10px 0;
+  }
+  .guide-body pre code { font-family: Consolas, "Courier New", monospace; font-size: 12.5px; line-height: 1.6; }
+  .guide-body p code, .guide-body li code {
+    background: #f1f1ef; padding: 1px 5px; border-radius: 4px;
+    font-family: Consolas, "Courier New", monospace; font-size: 12.5px; color: #eb5757;
+  }
+  .guide-callout {
+    background: #f1f1ef; border-radius: 8px; padding: 10px 14px;
+    font-size: 13px; line-height: 1.6; margin: 12px 0 4px;
+  }
+  .guide-body table { border-collapse: collapse; width: 100%; font-size: 13px; margin: 10px 0; }
+  .guide-body th, .guide-body td {
+    border: 1px solid #e9e9e7; padding: 6px 10px; text-align: left;
+    line-height: 1.5; vertical-align: top;
+  }
+  .guide-body th { background: #f7f7f5; font-weight: 600; white-space: nowrap; }
+
+  /* ---------- 오늘의 고양이 (cataas API) ---------- */
+  .cat-card {
+    margin-top: 36px; border: 1px solid #e9e9e7; border-radius: 10px;
+    padding: 14px 16px; background: #fff;
+  }
+  .cat-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .cat-title { font-weight: 600; font-size: 14px; }
+  .cat-src { font-size: 11px; color: #9b9a97; flex: 1; }
+  .cat-body img {
+    width: 100%; max-height: 320px; object-fit: cover;
+    border-radius: 8px; display: block;
+  }
+  .cat-status {
+    font-size: 13px; color: #9b9a97; padding: 32px 12px; text-align: center;
+    background: #fbfbfa; border-radius: 8px;
+  }
+  .cat-tags { margin-top: 8px; font-size: 12px; color: #2383e2; }
+
+  /* ---------- 토스트 ---------- */
+  #toast {
+    position: fixed; left: 50%; bottom: 32px; transform: translateX(-50%);
+    background: #37352f; color: #fff; font-size: 13px;
+    padding: 10px 18px; border-radius: 8px;
+    opacity: 0; pointer-events: none; transition: opacity .25s;
+  }
+  #toast.show { opacity: 1; }
+
+  @media (max-width: 640px) {
+    .app { flex-direction: column; }
+    .sidebar { width: 100%; flex-direction: row; align-items: center; overflow-x: auto; padding: 8px; }
+    .side-nav { display: flex; margin: 0; }
+    .side-pages { display: none; }
+    .page { padding: 32px 20px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== 로그인 페이지 ===== -->
+<div id="view-login" class="login-wrap hidden">
+  <div class="login-card">
+    <div class="logo">📝</div>
+    <h1>미니 노션</h1>
+    <p class="sub">개인 업무를 기록하고 관리하는 나만의 무료 도구</p>
+    <button id="btn-google" class="google-btn">
+      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      Google로 계속하기
+    </button>
+    <p class="demo-note">포트폴리오 데모 버전입니다.<br>정적 페이지이므로 실제 구글 OAuth 대신 로그인 흐름을 시뮬레이션하며, 데이터는 브라우저(localStorage)에만 저장됩니다.</p>
+  </div>
+</div>
+
+<!-- ===== 앱 ===== -->
+<div id="view-app" class="app hidden">
+  <aside class="sidebar">
+    <div class="side-profile" id="side-profile" title="마이 페이지">
+      <span class="avatar" id="side-avatar"></span>
+      <span id="side-name"></span>
+    </div>
+    <nav class="side-nav">
+      <a id="nav-list">📋 <span>업무 페이지</span></a>
+      <a id="nav-my">👤 <span>마이 페이지</span></a>
+      <a id="btn-logout">🚪 <span>로그아웃</span></a>
+    </nav>
+    <div class="side-pages">
+      <div class="side-label">📖 가이드북 (고정)</div>
+      <div id="side-guide-list"></div>
+      <div class="side-label">내 글</div>
+      <div id="side-page-list"></div>
+    </div>
+  </aside>
+
+  <main>
+    <!-- 업무 페이지: 글 목록 -->
+    <section id="sec-list" class="page">
+      <h2>📋 업무 페이지</h2>
+      <p class="desc">입력창에 <b>/page</b> 를 입력하고 Enter 를 누르면 새 글이 만들어집니다.</p>
+      <input id="cmd-input" class="cmd-input" placeholder="/page 를 입력해 새 글 만들기" autocomplete="off">
+      <div id="cmd-hint" class="hint"></div>
+      <div id="post-list"></div>
+
+      <!-- 외부 API 연동 데모: cataas.com (Cat as a Service) -->
+      <div class="cat-card">
+        <div class="cat-head">
+          <span class="cat-title">🐱 오늘의 고양이</span>
+          <span class="cat-src">외부 API 연동 데모 · cataas.com</span>
+          <button id="btn-cat-refresh" class="ghost-btn">↻ 다른 고양이</button>
+        </div>
+        <div class="cat-body">
+          <div id="cat-status" class="cat-status">🐈 고양이를 불러오는 중...</div>
+          <img id="cat-img" class="hidden" alt="랜덤 고양이 이미지">
+        </div>
+        <div id="cat-tags" class="cat-tags"></div>
+      </div>
+    </section>
+
+    <!-- 글 상세 -->
+    <section id="sec-detail" class="page hidden">
+      <div class="detail-bar">
+        <button id="btn-back" class="ghost-btn">← 목록으로</button>
+        <span class="spacer"></span>
+        <span id="save-status" class="save-status"></span>
+        <button id="btn-delete" class="danger-btn">🗑 글 삭제</button>
+      </div>
+      <input id="detail-title" class="title-input" placeholder="제목 없음" autocomplete="off">
+      <textarea id="detail-content" class="content-input" placeholder="내용을 입력하세요..."></textarea>
+    </section>
+
+    <!-- 가이드북 (고정, 읽기 전용) -->
+    <section id="sec-guide" class="page hidden">
+      <div class="detail-bar">
+        <button id="btn-guide-back" class="ghost-btn">← 목록으로</button>
+        <span class="spacer"></span>
+        <span class="guide-badge">📌 고정 가이드 · 읽기 전용</span>
+      </div>
+      <h2 id="guide-title"></h2>
+      <div id="guide-body" class="guide-body"></div>
+    </section>
+
+    <!-- 마이 페이지 -->
+    <section id="sec-my" class="page hidden">
+      <h2>👤 마이 페이지</h2>
+      <p class="desc">프로필은 이 브라우저에 저장되며 사이드바에 바로 반영됩니다.</p>
+      <div class="my-row">
+        <label>프로필 이미지</label>
+        <div class="my-avatar" id="my-avatar"></div>
+        <label class="file-btn">이미지 선택
+          <input type="file" id="photo-input" accept="image/*" style="display:none">
+        </label>
+        <button id="btn-photo-cat" class="file-btn">🐱 랜덤 고양이로 (API)</button>
+        <button id="btn-photo-reset" class="ghost-btn">기본 이미지로</button>
+      </div>
+      <div class="my-row">
+        <label for="nick-input">별명</label>
+        <input id="nick-input" class="text-input" maxlength="20" placeholder="별명을 입력하세요">
+        <button id="btn-nick-save" class="primary-btn">저장</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="toast"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- 저장소 (localStorage) ---------- */
+  var store = {
+    get posts() { try { return JSON.parse(localStorage.getItem('mn.posts')) || []; } catch (e) { return []; } },
+    set posts(v) { localStorage.setItem('mn.posts', JSON.stringify(v)); },
+    get user() { try { return JSON.parse(localStorage.getItem('mn.user')); } catch (e) { return null; } },
+    set user(v) { localStorage.setItem('mn.user', JSON.stringify(v)); },
+    get loggedIn() { return localStorage.getItem('mn.session') === '1'; },
+    set loggedIn(v) { v ? localStorage.setItem('mn.session', '1') : localStorage.removeItem('mn.session'); }
+  };
+
+  var currentId = null;
+  var currentGuideId = null;
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function fmtDate(ts) {
+    var d = new Date(ts);
+    return (d.getMonth() + 1) + '월 ' + d.getDate() + '일';
+  }
+  function toast(msg) {
+    var t = $('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(function () { t.classList.remove('show'); }, 1800);
+  }
+
+  /* ---------- 화면 전환 ---------- */
+  function showLogin() {
+    $('view-login').classList.remove('hidden');
+    $('view-app').classList.add('hidden');
+  }
+  function showApp() {
+    $('view-login').classList.add('hidden');
+    $('view-app').classList.remove('hidden');
+    renderSidebar();
+    showSection('list');
+    if (!catLoaded) { catLoaded = true; loadCat(); }
+  }
+  function showSection(name) {
+    ['list', 'detail', 'my', 'guide'].forEach(function (n) {
+      $('sec-' + n).classList.toggle('hidden', n !== name);
+    });
+    $('nav-list').classList.toggle('active', name === 'list' || name === 'detail' || name === 'guide');
+    $('nav-my').classList.toggle('active', name === 'my');
+    if (name === 'list') { currentId = null; currentGuideId = null; renderList(); renderSidebar(); }
+    if (name === 'my') renderMyPage();
+  }
+
+  /* ---------- 가이드북 (고정, 읽기 전용) ---------- */
+  var GUIDES = [
+    {
+      id: 'google',
+      icon: '🔑',
+      title: '구글 로그인 연동 가이드',
+      body: `
+<p class="guide-callout">현재 데모의 구글 로그인은 시뮬레이션입니다. 실제 서비스에서는 <b>Supabase Auth의 Google Provider</b>를 쓰는 것이 가장 간단합니다. (Supabase 연동 가이드를 먼저 보세요)</p>
+<h3>1. Google Cloud Console 설정</h3>
+<ol>
+  <li><code>console.cloud.google.com</code> → 새 프로젝트 생성</li>
+  <li>API 및 서비스 → <b>OAuth 동의 화면</b> 구성 (외부 선택, 앱 이름·이메일 입력)</li>
+  <li>사용자 인증 정보 → <b>OAuth 클라이언트 ID</b> 생성 (유형: 웹 애플리케이션)</li>
+  <li>승인된 리디렉션 URI에 Supabase 콜백 주소 추가:<br>
+      <code>https://프로젝트ID.supabase.co/auth/v1/callback</code></li>
+</ol>
+<h3>2. Supabase에서 Google Provider 켜기</h3>
+<ol>
+  <li>Supabase 대시보드 → Authentication → Providers → <b>Google</b></li>
+  <li>위에서 만든 Client ID / Client Secret 붙여넣고 저장</li>
+</ol>
+<h3>3. 코드 연결</h3>
+<pre><code>// 로그인 버튼 클릭 시
+await supabase.auth.signInWithOAuth({
+  provider: 'google',
+  options: { redirectTo: location.origin }
+});
+
+// 로그인 상태 감지 → 화면 전환
+supabase.auth.onAuthStateChange(function (event, session) {
+  if (session) showApp(); else showLogin();
+});
+
+// 로그아웃
+await supabase.auth.signOut();</code></pre>
+<p>이 데모의 <code>login()</code> / <code>logout()</code> 함수를 위 코드로 교체하면 됩니다. 로그인한 사용자 정보(이메일·구글 프로필 사진)는 <code>session.user</code>에 들어 있습니다.</p>`
+    },
+    {
+      id: 'supabase',
+      icon: '⚡',
+      title: 'Supabase 연동 가이드',
+      body: `
+<p class="guide-callout">지금은 글이 브라우저 localStorage에만 저장됩니다. Supabase(무료 티어)를 붙이면 어느 기기에서든 같은 데이터를 쓸 수 있습니다.</p>
+<h3>1. 프로젝트 만들기</h3>
+<ol>
+  <li><code>supabase.com</code> 가입 → New Project 생성</li>
+  <li>Settings → API에서 <code>Project URL</code>과 <code>anon public key</code> 확인</li>
+</ol>
+<h3>2. posts 테이블 생성 (SQL Editor)</h3>
+<pre><code>create table posts (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users not null,
+  title text default '',
+  content text default '',
+  updated_at timestamptz default now()
+);
+
+alter table posts enable row level security;
+
+create policy "내 글만 접근" on posts
+  for all using (auth.uid() = user_id);</code></pre>
+<h3>3. 클라이언트 연결</h3>
+<pre><code>&lt;script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"&gt;&lt;/script&gt;
+&lt;script&gt;
+  var supabase = window.supabase.createClient(PROJECT_URL, ANON_KEY);
+&lt;/script&gt;</code></pre>
+<h3>4. localStorage CRUD를 Supabase로 교체</h3>
+<pre><code>// 목록 (store.posts 대신)
+var { data } = await supabase.from('posts')
+  .select().order('updated_at', { ascending: false });
+
+// 생성 (createPost)
+await supabase.from('posts').insert({ user_id: user.id });
+
+// 저장 (saveCurrent)
+await supabase.from('posts')
+  .update({ title: title, content: content, updated_at: new Date() })
+  .eq('id', currentId);
+
+// 삭제 (deleteCurrent)
+await supabase.from('posts').delete().eq('id', currentId);</code></pre>
+<p><code>anon key</code>는 공개되어도 되는 키입니다 — 데이터 보호는 2번의 <b>RLS 정책</b>이 담당합니다.</p>`
+    },
+    {
+      id: 'storage',
+      icon: '🖼️',
+      title: 'Supabase 이미지 스토리지 가이드',
+      body: `
+<p class="guide-callout">현재 데모는 프로필 이미지를 dataURL로 변환해 localStorage에 저장합니다. <b>Supabase Storage</b>를 쓰면 파일은 클라우드에 올리고 DB에는 URL만 저장합니다 — 어느 기기에서든 같은 이미지가 보이고, localStorage 용량 걱정도 없어집니다.</p>
+<h3>1. 버킷 만들기</h3>
+<ol>
+  <li>Supabase 대시보드 → Storage → <b>New bucket</b> → 이름 <code>avatars</code></li>
+  <li><b>Public bucket</b> 체크 — 프로필 이미지는 URL만 알면 보여야 하므로 공개로 (비공개 문서용이라면 체크 해제)</li>
+</ol>
+<h3>2. 업로드 정책 (RLS)</h3>
+<p>읽기는 공개, 업로드·수정은 <b>본인 폴더만</b> 허용하는 것이 기본 패턴입니다. SQL Editor에서:</p>
+<pre><code>create policy "본인 폴더에만 업로드" on storage.objects
+  for insert with check (
+    bucket_id = 'avatars'
+    and auth.uid()::text = (storage.foldername(name))[1]
+  );
+
+create policy "본인 파일만 수정" on storage.objects
+  for update using (
+    bucket_id = 'avatars'
+    and auth.uid()::text = (storage.foldername(name))[1]
+  );</code></pre>
+<p>파일 경로를 <code>사용자ID/파일명</code> 형태로 저장하면 위 정책이 폴더 이름으로 소유자를 판별합니다.</p>
+<h3>3. 업로드 & URL 얻기</h3>
+<pre><code>// 파일 선택 시
+var file = e.target.files[0];
+var path = user.id + '/avatar.png';   // 사용자ID 폴더 아래 고정 이름
+
+// 업로드 (같은 경로면 덮어쓰기)
+var { error } = await supabase.storage
+  .from('avatars')
+  .upload(path, file, { upsert: true });
+if (error) { alert('업로드 실패: ' + error.message); return; }
+
+// 공개 URL 발급 → 프로필에 저장
+var { data } = supabase.storage.from('avatars').getPublicUrl(path);
+var photoUrl = data.publicUrl + '?t=' + Date.now(); // 캐시 갱신용</code></pre>
+<h3>4. 이 데모에 적용하기</h3>
+<ul>
+  <li><code>onPhotoPicked()</code>의 FileReader(dataURL) 부분을 위 업로드 코드로 교체</li>
+  <li><code>user.photo</code>에 dataURL 대신 <code>photoUrl</code>을 저장 — 아바타 렌더링 코드는 그대로 동작</li>
+  <li>같은 경로에 upsert로 덮어쓰므로 <code>?t=타임스탬프</code>를 붙여야 브라우저 캐시가 갱신됩니다</li>
+</ul>
+<h3>5. 팁 & 주의</h3>
+<ul>
+  <li>업로드 전 파일 크기 검사(이 데모의 2MB 체크처럼) — Storage 무료 티어는 총 1GB</li>
+  <li>비공개 버킷이라면 <code>getPublicUrl</code> 대신 <code>createSignedUrl(path, 유효초)</code>로 임시 URL 발급</li>
+  <li>이미지 리사이즈(transform 옵션)는 유료 플랜 기능 — 무료에서는 업로드 전에 canvas로 줄여서 올리기</li>
+</ul>`
+    },
+    {
+      id: 'image',
+      icon: '🎞️',
+      title: '이미지 프로세스 가이드',
+      body: `
+<p class="guide-callout">사진 한 장은 <b>픽셀(RGB 숫자)의 거대한 묶음</b>이라 용량이 큽니다(MB 단위). 그래서 이미지는 DB에 직접 넣지 않고 — <b>실물은 Storage에, DB에는 다운로드 주소만</b> 저장합니다. 구현 코드는 <b>🖼️ Supabase 이미지 스토리지 가이드</b>를 함께 보세요.</p>
+<h3>1. 사진은 숫자다 — 픽셀과 RGB</h3>
+<ul>
+  <li>사진 = 무수히 많은 <b>픽셀</b>의 조합, 픽셀 하나 = <b>R·G·B 세 숫자</b>(각 0~255)</li>
+  <li>왜 256단계? 컴퓨터는 스위치(ON/OFF)로 정보를 표기 — 비트 8개 = <b>2⁸ = 256가지</b> (8비트 = 1바이트)</li>
+  <li>해상도 1920×1080 = 픽셀이 가로 1920 × 세로 1080개 — 그래서 사진은 MB, 영상(연속 사진)은 GB</li>
+  <li>숫자로 변환된다는 것은 DB에 저장도 가능하다는 뜻 — 이미지 컬럼 타입이 <b>BLOB</b>(이진 데이터)</li>
+</ul>
+<h3>2. 왜 분리 저장하나 — 비동기 프로세스</h3>
+<p>이미지를 숫자·텍스트와 같이 불러오면 <b>화면 전체가 이미지를 기다리게</b> 됩니다. 그래서 <b>용량이 작은 데이터(숫자·텍스트)를 먼저</b> 보여주고, <b>용량이 큰 데이터(이미지)는 뒤에서 따로</b> 불러옵니다 — 이것이 <b>비동기 방식</b>이고, 이미지 자리는 로딩(스켈레톤 UI)으로 처리합니다.</p>
+<h3>3. 등록·조회 흐름</h3>
+<p><b>이미지 등록 4단계</b></p>
+<ol>
+  <li>저장하기 클릭</li>
+  <li>이미지 파일만 먼저 <b>Storage에 업로드</b></li>
+  <li>Storage가 <b>다운로드 주소</b>(<code>https://img01...</code>) 반환</li>
+  <li>텍스트 + <b>이미지주소</b>를 DB(프로필 테이블)에 저장</li>
+</ol>
+<p><b>이미지 조회 4단계</b></p>
+<ol>
+  <li>화면이 데이터 요청</li>
+  <li>DB가 텍스트 + 이미지주소를 <b>즉시 응답</b> → 텍스트는 바로 렌더링, 이미지는 로딩 처리</li>
+  <li>이미지주소로 <b>Storage에 별도 요청</b></li>
+  <li>다운로드 완료 → 화면에 표시</li>
+</ol>
+<h3>4. 주소는 나눠서 관리</h3>
+<pre><code>https://supabase주소/스토리지이름 / 버킷이름/파일명.jpg
+└──── 스토리지경로: .env에 ────┘ └── 파일경로: DB에 ──┘</code></pre>
+<ul>
+  <li>파일명은 날짜·원본명 대신 <b>UUID(uuidv4/uuidv7)</b> — 이름 충돌과 주소 추측을 방지</li>
+  <li>Supabase Storage는 <b>S3(Simple Storage Service) 프로토콜 호환</b> — S3 Configuration에서 Endpoint·Region 확인 가능</li>
+</ul>
+<h3>5. 이 데모에 적용하기 — 프롬프트 예시</h3>
+<pre><code>마이페이지에서 프로필 이미지 업로드 및 변경 기능을 구현해줘.
+이 기능은 supabase와 연동될 거야.
+사진은 스토리지의 profile-image 버킷에
+uuidv4 파일명으로 저장되어야 해.</code></pre>
+<p>버킷 생성 · RLS 정책 · 업로드 코드는 <b>🖼️ Supabase 이미지 스토리지 가이드</b> 항목에 있습니다.</p>`
+    },
+    {
+      id: 'vercel',
+      icon: '▲',
+      title: 'Vercel 배포 가이드',
+      body: `
+<p class="guide-callout">이 데모는 파일 하나짜리 정적 페이지라 Vercel 무료 플랜으로 1분 안에 배포할 수 있습니다.</p>
+<h3>방법 A — GitHub 연동 (권장)</h3>
+<ol>
+  <li>이 HTML 파일을 <code>index.html</code>로 이름을 바꿔 GitHub 저장소에 push</li>
+  <li><code>vercel.com</code> → GitHub 계정으로 로그인 → Add New → Project</li>
+  <li>저장소 Import → Framework Preset은 <b>Other</b> 그대로 → Deploy</li>
+  <li>완료 — <code>프로젝트명.vercel.app</code> 주소가 생기고, 이후 push할 때마다 자동 재배포됩니다</li>
+</ol>
+<h3>방법 B — CLI</h3>
+<pre><code>npm i -g vercel
+cd 프로젝트폴더
+vercel        # 첫 배포 (질문은 Enter로 기본값 선택)
+vercel --prod # 프로덕션 배포</code></pre>
+<h3>배포 후 체크리스트</h3>
+<ul>
+  <li>구글 OAuth 사용 시: 배포 주소를 Google Cloud <b>승인된 자바스크립트 원본</b>과 Supabase <b>Redirect URLs</b>에 추가</li>
+  <li>커스텀 도메인: 프로젝트 Settings → Domains에서 연결</li>
+  <li>비밀 키는 절대 HTML에 넣지 않기 (anon key처럼 공개 가능한 키만)</li>
+</ul>`
+    },
+    {
+      id: 'api',
+      icon: '🔌',
+      title: '외부 API 연동 가이드',
+      body: `
+<p class="guide-callout">업무 페이지 하단의 <b>"오늘의 고양이"</b> 위젯이 실제 동작 예시입니다 — cataas.com API를 fetch로 호출합니다.</p>
+<h3>1. 기본 패턴: fetch</h3>
+<pre><code>var res = await fetch('https://cataas.com/cat?json=true');
+if (!res.ok) throw new Error('HTTP ' + res.status);
+var data = await res.json();
+// data.url → 이미지 주소, data.tags → 태그 배열</code></pre>
+<h3>2. 실전 3요소: 로딩 · 성공 · 실패</h3>
+<pre><code>async function loadCat() {
+  status.textContent = '불러오는 중...';    // ① 로딩 표시
+  try {
+    var res = await fetch(API_URL);
+    if (!res.ok) throw new Error(res.status);
+    render(await res.json());               // ② 성공 → 화면 반영
+  } catch (err) {
+    status.textContent = '실패: ' + err;    // ③ 실패 → 안내 + 재시도 버튼
+  }
+}</code></pre>
+<h3>3. 다른 API를 붙일 때 체크리스트</h3>
+<ul>
+  <li><b>CORS</b>: 응답 헤더에 <code>Access-Control-Allow-Origin</code>이 있어야 브라우저에서 직접 호출 가능 (cataas는 <code>*</code> 허용)</li>
+  <li><b>HTTPS</b>: 배포 페이지가 https라면 API 주소도 https여야 합니다</li>
+  <li><b>API 키</b>: 비밀 키가 필요한 API는 프론트에 키를 넣지 말고 서버(예: Vercel Functions)를 거치기</li>
+  <li><b>호출 횟수</b>: 필요한 순간에만 호출하기 (이 데모도 진입 시 1회 + 버튼 클릭 시에만)</li>
+</ul>`
+    },
+    {
+      id: 'pm',
+      icon: '🧭',
+      title: 'PM 스킬 가이드',
+      body: `
+<p class="guide-callout">PM 스킬은 Claude Code에 설치해 쓰는 <b>기획용 슬래시 커맨드 모음</b>입니다. 이 데모의 PRD(02-prd.md)도 <code>/write-prd</code> 스킬로 만들었습니다.</p>
+<h3>1. 대표 스킬</h3>
+<table>
+  <tr><th>커맨드</th><th>하는 일</th></tr>
+  <tr><td><code>/summarize-meeting</code></td><td>인터뷰·회의 내용을 결정사항/액션아이템으로 정리</td></tr>
+  <tr><td><code>/write-prd</code></td><td>아이디어를 8섹션 PRD 문서로 작성</td></tr>
+  <tr><td><code>/pre-mortem</code></td><td>출시 전 리스크 분석 — 진짜 문제(Tiger) / 과장된 걱정(Paper Tiger) / 말 못한 불안(Elephant) 분류</td></tr>
+  <tr><td><code>/strategy-red-team</code></td><td>전략의 핵심 가정을 공격해서 약점을 미리 발견</td></tr>
+  <tr><td><code>/prioritization-frameworks</code></td><td>RICE·ICE·Kano 등 우선순위 프레임워크 적용</td></tr>
+  <tr><td><code>/user-stories</code> · <code>/job-stories</code></td><td>기능을 개발용 백로그(스토리 + 인수 조건)로 분해</td></tr>
+</table>
+<h3>2. 추천 흐름</h3>
+<ol>
+  <li>인터뷰·아이디어 메모 → <code>/summarize-meeting</code>으로 정리</li>
+  <li>인사이트를 모아 <code>/write-prd</code>로 PRD 작성</li>
+  <li><code>/pre-mortem</code> · <code>/strategy-red-team</code>으로 검증</li>
+  <li><code>/user-stories</code>로 개발 항목 분해 → 구현 시작</li>
+</ol>
+<p>이 프로젝트가 정확히 이 흐름입니다: 요구사항 메모 → <code>02-prd.md</code> → 이 데모 구현.</p>`
+    },
+    {
+      id: 'design',
+      icon: '🎨',
+      title: '클로드 디자인 · 하이파이 가이드',
+      body: `
+<p class="guide-callout">Claude Code로 디자인을 <b>로우파이 → 디자인 시스템 → 하이파이 → 핸드오프</b> 순서로 발전시키는 워크플로입니다.</p>
+<h3>1. 4단계 흐름</h3>
+<ol>
+  <li><b>로우파이(Lo-Fi)</b>: PRD 기반으로 화면 구조만 있는 와이어프레임 HTML 생성 — 회색 박스여도 텍스트·흐름은 실제와 동일하게</li>
+  <li><b>디자인 시스템 정의</b>: 색·타이포·간격·컴포넌트 규칙을 <code>design.md</code> 문서로 고정</li>
+  <li><b>하이파이(Hi-Fi)</b>: 디자인 시스템을 적용한 실제 서비스 수준의 화면 (지금 이 데모 수준)</li>
+  <li><b>핸드오프</b>: 확정된 하이파이의 CSS 변수·클래스를 실제 개발 코드로 이관</li>
+</ol>
+<h3>2. design.md 예시</h3>
+<pre><code># Design System
+## 색상
+- 주색: #2383e2 (버튼, 링크)
+- 본문: #37352f / 보조: #9b9a97
+- 배경: #fff / 사이드바: #f7f7f5
+## 타이포
+- 제목 28px bold / 본문 15px / 보조 13px
+## 컴포넌트
+- 카드: radius 10px, border #e9e9e7
+- 버튼: radius 8px, padding 9px 16px</code></pre>
+<h3>3. 팁</h3>
+<ul>
+  <li>디자인 시스템을 파일로 만들어 두고 "design.md를 따라서"라고 지시 — 화면마다 스타일이 흔들리지 않습니다</li>
+  <li>스크린샷을 붙여넣고 "여기 간격이 좁다"처럼 구체적으로 피드백 → 반복 수정</li>
+  <li>로우파이 단계에서 화면 흐름을 먼저 확정하면 하이파이에서 갈아엎는 일이 줄어듭니다</li>
+</ul>`
+    },
+    {
+      id: 'superpowers',
+      icon: '🦸',
+      title: 'Superpowers 가이드',
+      body: `
+<p class="guide-callout">Superpowers는 Claude Code에 검증된 작업 방식(스킬)을 대량으로 추가하는 <b>오픈소스 플러그인</b>입니다. 브레인스토밍 → 계획 → TDD 같은 흐름을 Claude가 스스로 따르게 됩니다.</p>
+<h3>1. 설치</h3>
+<pre><code>/plugin marketplace add obra/superpowers-marketplace
+/plugin install superpowers@superpowers-marketplace</code></pre>
+<h3>2. 동작 방식</h3>
+<ul>
+  <li>스킬 = "이 상황에서는 이렇게 일하라"는 마크다운 매뉴얼</li>
+  <li>Claude가 작업을 시작할 때 관련 스킬을 스스로 찾아서 로드 — 명령을 외울 필요가 없습니다</li>
+</ul>
+<h3>3. 대표 스킬</h3>
+<table>
+  <tr><th>스킬</th><th>하는 일</th></tr>
+  <tr><td>brainstorming</td><td>코드 작성 전에 요구사항을 질문으로 구체화</td></tr>
+  <tr><td>writing-plans</td><td>구현 계획서를 먼저 작성하고 승인받고 진행</td></tr>
+  <tr><td>test-driven-development</td><td>테스트를 먼저 쓰고 구현 (RED → GREEN → REFACTOR)</td></tr>
+  <tr><td>systematic-debugging</td><td>추측 대신 근본 원인을 단계적으로 추적</td></tr>
+</table>
+<h3>4. 언제 쓰나</h3>
+<p>큰 기능을 만들 때 "바로 코드부터 쓰지 말고 계획·테스트를 거치게" 강제하고 싶을 때 효과적입니다. 반대로 이 데모처럼 작은 실습에는 없어도 됩니다.</p>`
+    },
+    {
+      id: 'speckit',
+      icon: '📋',
+      title: 'Spec Kit 가이드',
+      body: `
+<p class="guide-callout">Spec Kit은 GitHub이 만든 <b>스펙 주도 개발(Spec-Driven Development)</b> 툴킷입니다. "코드가 아니라 스펙 문서가 진실의 원천"이라는 접근입니다.</p>
+<h3>1. 설치</h3>
+<pre><code>uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+specify init 프로젝트명 --ai claude</code></pre>
+<h3>2. 명령 흐름 (Claude Code 안에서)</h3>
+<table>
+  <tr><th>커맨드</th><th>단계</th></tr>
+  <tr><td><code>/speckit.constitution</code></td><td>프로젝트 원칙 정의 (코드 스타일, 테스트 기준 등)</td></tr>
+  <tr><td><code>/speckit.specify</code></td><td>무엇을·왜 만드는지 스펙 작성</td></tr>
+  <tr><td><code>/speckit.clarify</code></td><td>모호한 부분을 질문으로 구체화</td></tr>
+  <tr><td><code>/speckit.plan</code></td><td>기술 스택·아키텍처 계획</td></tr>
+  <tr><td><code>/speckit.tasks</code></td><td>실행 가능한 작업 목록으로 분해</td></tr>
+  <tr><td><code>/speckit.implement</code></td><td>작업 순서대로 구현</td></tr>
+</table>
+<h3>3. 포인트</h3>
+<ul>
+  <li>수정할 때도 코드가 아니라 <b>스펙부터</b> 고치고 다시 구현을 돌립니다</li>
+  <li>git 워크트리와 조합하면 기능별 병렬 개발에 유리합니다 — 워크트리마다 <code>/speckit-specify 게시글 기능</code>처럼 스펙부터 시작</li>
+  <li>Superpowers가 "일하는 방식"이라면 Spec Kit은 "산출물 문서 체계"에 가깝습니다</li>
+</ul>`
+    },
+    {
+      id: 'http',
+      icon: '🚦',
+      title: 'HTTP 상태 코드 가이드',
+      body: `
+<p class="guide-callout">fetch 응답의 <code>res.status</code>가 상태 코드입니다. <code>res.ok</code>는 200~299일 때만 true — 이 데모의 고양이 위젯도 이걸로 성공/실패를 나눕니다.</p>
+<h3>1. 자주 만나는 코드</h3>
+<table>
+  <tr><th>코드</th><th>의미</th><th>이럴 때</th></tr>
+  <tr><td>200</td><td>OK</td><td>성공</td></tr>
+  <tr><td>201</td><td>Created</td><td>생성 성공 (POST로 글 생성 등)</td></tr>
+  <tr><td>204</td><td>No Content</td><td>성공했지만 돌려줄 내용 없음 (삭제 등)</td></tr>
+  <tr><td>301/302</td><td>Redirect</td><td>주소가 옮겨짐 — fetch는 자동으로 따라감</td></tr>
+  <tr><td>304</td><td>Not Modified</td><td>변경 없음 — 브라우저 캐시 사용</td></tr>
+  <tr><td>400</td><td>Bad Request</td><td>요청 형식이 잘못됨 (필수 값 누락 등)</td></tr>
+  <tr><td>401</td><td>Unauthorized</td><td>로그인(인증)이 필요함</td></tr>
+  <tr><td>403</td><td>Forbidden</td><td>로그인은 했지만 권한이 없음</td></tr>
+  <tr><td>404</td><td>Not Found</td><td>없는 주소/리소스</td></tr>
+  <tr><td>429</td><td>Too Many Requests</td><td>호출 한도 초과 — 잠시 후 재시도</td></tr>
+  <tr><td>500</td><td>Internal Server Error</td><td>서버 내부 오류</td></tr>
+  <tr><td>502/503</td><td>Bad Gateway / Unavailable</td><td>서버 과부하·점검 중</td></tr>
+</table>
+<h3>2. 코드에서 다루기</h3>
+<pre><code>var res = await fetch(url);
+if (res.status === 401)      { /* 로그인 화면으로 */ }
+else if (res.status === 429) { /* 잠시 후 재시도 안내 */ }
+else if (!res.ok)            { /* 공통 오류 안내 */ }
+else                         { var data = await res.json(); }</code></pre>
+<h3>3. 감 잡기</h3>
+<ul>
+  <li><b>401 vs 403</b>: 401은 "누군지 모름(로그인 필요)", 403은 "누군지 알지만 권한 없음"</li>
+  <li><b>4xx는 내 요청 문제, 5xx는 서버 문제</b> — 5xx만 재시도가 의미 있습니다</li>
+</ul>`
+    },
+    {
+      id: 'proxy',
+      icon: '🛡️',
+      title: '프록시로 CORS 해결 가이드',
+      body: `
+<p class="guide-callout">CORS는 서버가 아니라 <b>브라우저가 막는 것</b>입니다. 응답에 <code>Access-Control-Allow-Origin</code> 헤더가 없으면 브라우저가 결과를 버립니다. 해결책은 허용된 서버(프록시)를 사이에 두는 것.</p>
+<h3>1. 언제 필요한가</h3>
+<ul>
+  <li>쓰려는 API가 CORS를 허용하지 않을 때 (cataas는 <code>*</code> 허용이라 프록시 불필요)</li>
+  <li>API 키를 브라우저 코드에 노출하면 안 될 때</li>
+</ul>
+<h3>2. 방법 A — Vercel rewrites (가장 간단)</h3>
+<pre><code>// vercel.json
+{
+  "rewrites": [
+    { "source": "/cataas/:path*",
+      "destination": "https://cataas.com/:path*" }
+  ]
+}
+
+// 프론트: 같은 도메인으로 요청 → CORS 자체가 발생하지 않음
+fetch('/cataas/cat?json=true')</code></pre>
+<h3>3. 방법 B — 서버리스 함수 프록시 (키 숨기기)</h3>
+<pre><code>// api/proxy.js (Vercel Functions)
+export default async function handler(req, res) {
+  var r = await fetch('https://api.example.com/data', {
+    headers: { Authorization: 'Bearer ' + process.env.API_KEY }
+  });
+  res.status(r.status).json(await r.json());
+}</code></pre>
+<p>키는 Vercel 대시보드의 Environment Variables에 저장 — HTML에는 절대 넣지 않습니다.</p>
+<h3>4. 주의</h3>
+<ul>
+  <li>공개 프록시(cors-anywhere 등)는 테스트용 — 프로덕션에서 사용 금지</li>
+  <li>프록시가 아무 주소나 대신 호출하게 열어두면(오픈 프록시) 악용됩니다 — 대상 API를 코드에 고정</li>
+</ul>`
+    },
+    {
+      id: 'hooks',
+      icon: '⚙️',
+      title: 'Hooks와 Env 가이드',
+      body: `
+<p class="guide-callout"><b>Hooks</b>는 Claude Code가 특정 시점에 자동으로 셸 명령을 실행하게 하는 설정, <b>Env</b>는 세션에 주입되는 환경변수입니다. 둘 다 <code>.claude/settings.json</code>에 둡니다.</p>
+<h3>1. Hooks — 언제 실행되나</h3>
+<table>
+  <tr><th>이벤트</th><th>시점</th></tr>
+  <tr><td>PreToolUse</td><td>도구 실행 직전 (조건에 따라 차단 가능)</td></tr>
+  <tr><td>PostToolUse</td><td>도구 실행 직후 (포맷터·린트 자동 실행)</td></tr>
+  <tr><td>UserPromptSubmit</td><td>사용자가 프롬프트를 보낼 때</td></tr>
+  <tr><td>Stop</td><td>Claude 응답이 끝났을 때 (알림 등)</td></tr>
+  <tr><td>SessionStart</td><td>세션 시작 시 (환경 준비)</td></tr>
+</table>
+<h3>2. 예시 — 파일 수정 후 자동 포맷</h3>
+<pre><code>// .claude/settings.json
+{
+  "hooks": {
+    "PostToolUse": [{
+      "matcher": "Edit|Write",
+      "hooks": [{ "type": "command",
+                  "command": "npx prettier --write ." }]
+    }]
+  }
+}</code></pre>
+<h3>3. Env — 환경변수</h3>
+<pre><code>{
+  "env": { "API_BASE": "https://cataas.com" }
+}</code></pre>
+<ul>
+  <li>세션 안에서 실행되는 모든 셸 명령에 적용됩니다</li>
+  <li>비밀 키는 커밋되는 settings.json이 아니라 <b>.env + .gitignore</b> 또는 개인용 settings.local.json에</li>
+  <li>배포 환경(Vercel 등)에서는 대시보드의 Environment Variables에 등록</li>
+</ul>
+<h3>4. 기억할 것</h3>
+<p>"매번 X 해줘"라고 부탁하는 건 잊힐 수 있지만, Hook은 <b>하네스가 강제 실행</b>하므로 빠지지 않습니다. 반복 규칙은 Hook으로 만드는 것이 확실합니다.</p>`
+    },
+    {
+      id: 'worktree',
+      icon: '🌳',
+      title: 'Git 워크트리 병렬 구현 가이드',
+      body: `
+<p class="guide-callout">기능 여러 개를 <b>동시에</b> 만들고 싶을 때, 프로젝트 폴더를 복사하면 결과물을 다시 합칠 방법이 없습니다. <b>Git 워크트리</b>는 하나의 <code>.git</code>을 공유하는 작업 폴더를 여러 개 만들어 — 병렬로 작업하고 마지막에 <b>merge로 정식 통합</b>할 수 있습니다.</p>
+<h3>1. 폴더 복사 vs 워크트리</h3>
+<table>
+  <tr><th>방식</th><th>이력 공유</th><th>통합</th></tr>
+  <tr><td>폴더 복사</td><td>별개의 사본 (이력 없음)</td><td>수작업 붙여넣기뿐 — 사실상 불가</td></tr>
+  <tr><td>Git 워크트리</td><td>같은 <code>.git</code> 공유 (브랜치만 다름)</td><td><code>git merge</code>로 정식 통합</td></tr>
+</table>
+<h3>2. 기능을 그룹으로 묶기</h3>
+<p>같은 파일을 만질(서로 의존하는) 기능은 한 워크트리로 묶어야 충돌이 줄어듭니다. 이 데모 기준:</p>
+<table>
+  <tr><th>워크트리</th><th>기능 그룹</th></tr>
+  <tr><td>wt1</td><td>게시글 등록·수정·조회·삭제 (서로 강하게 의존 → 한 묶음)</td></tr>
+  <tr><td>wt2</td><td>다크모드 토글</td></tr>
+  <tr><td>wt3</td><td>사이드바 접기/펼치기</td></tr>
+  <tr><td>wt4</td><td>프로필 자기소개 등록·수정·조회</td></tr>
+</table>
+<h3>3. 워크트리 만들기</h3>
+<pre><code>git worktree add .claude/worktrees/wt1 -b worktree-wt1
+git worktree add .claude/worktrees/wt2 -b worktree-wt2
+git worktree list   # 확인</code></pre>
+<h3>4. 워크트리마다 스펙 지시</h3>
+<p>각 워크트리 폴더에서 Claude Code 세션을 열고 <code>/speckit-specify</code>로 기능을 지시합니다. <b>하면 안 되는 것(제약)</b>을 반드시 함께 적습니다.</p>
+<pre><code>/speckit-specify 게시글 기능을 구현해줘.
+이미 로컬스토리지로 구현되어 있는데, 내가 Supabase에 만든
+page 테이블에 저장되도록 변경해줘.
+내가 만든 DB 테이블 구조는 변경하면 안 돼.
+로그인된 유저가 등록하고, 자신의 글만 조회·삭제할 수 있어야 해.</code></pre>
+<h3>5. 확인 → 커밋 → 통합</h3>
+<ol>
+  <li>워크트리마다 기능을 확인하고 <b>커밋</b>까지 마칩니다</li>
+  <li>메인 세션에 한 문장: <b>"지금 있는 워크트리 1, 2, 3, 4 모두 통합해줘"</b></li>
+  <li>AI가 하는 일: 개발 서버 종료(<code>pkill -f "next dev"</code>) → 워크트리별 변경 파일 diff 확인 → <code>git merge worktree-wt1</code>부터 <b>순차 병합</b>(충돌은 내용 보고 처리) → 서버 재기동 후 전 페이지 응답 검증</li>
+</ol>
+<h3>6. 주의 & 디버깅</h3>
+<ul>
+  <li>병합 직후 이전 dev 서버가 살아 있으면 <b>옛 코드가 보입니다</b> — 서버 종료 후 재기동해서 병합된 코드인지 확인</li>
+  <li>제약을 안 적으면 병렬 작업이 서로의 전제(DB 구조 등)를 깨뜨릴 수 있습니다</li>
+  <li>버그가 나는데 에러가 안 보이면: <b>"작동 왜 안 되는지 확인하게 네가 로그를 남겨줘, 내가 스크린샷 찍어서 보내줄게"</b> — AI에게 관찰 수단을 심게 한 뒤 출력을 되돌려주는 순환이 디버깅의 기본</li>
+</ul>`
+    }
+  ];
+
+  function renderGuideList() {
+    var box = $('side-guide-list');
+    box.innerHTML = GUIDES.map(function (g) {
+      var cls = 'side-page' + (g.id === currentGuideId ? ' active' : '');
+      return '<a class="' + cls + '" data-guide="' + g.id + '">' + g.icon + ' ' + esc(g.title) + '</a>';
+    }).join('');
+    Array.prototype.forEach.call(box.querySelectorAll('[data-guide]'), function (el) {
+      el.addEventListener('click', function () { openGuide(el.getAttribute('data-guide')); });
+    });
+  }
+
+  function openGuide(id) {
+    var guide = GUIDES.filter(function (g) { return g.id === id; })[0];
+    if (!guide) return;
+    currentGuideId = id;
+    currentId = null;
+    $('guide-title').textContent = guide.icon + ' ' + guide.title;
+    $('guide-body').innerHTML = guide.body;
+    showSection('guide');
+    renderSidebar();
+    $('sec-guide').closest('main').scrollTop = 0;
+  }
+
+  /* ---------- 프로필 ---------- */
+  function avatarHTML(user, big) {
+    if (user && user.photo) return '<img src="' + user.photo + '" alt="프로필">';
+    var initial = (user && user.nickname ? user.nickname : '사').charAt(0);
+    return esc(initial);
+  }
+  function renderSidebar() {
+    var user = store.user || {};
+    $('side-name').textContent = user.nickname || '사용자';
+    $('side-avatar').innerHTML = avatarHTML(user);
+    renderGuideList();
+
+    var posts = store.posts;
+    var box = $('side-page-list');
+    if (!posts.length) {
+      box.innerHTML = '<div class="side-empty">아직 글이 없습니다</div>';
+      return;
+    }
+    box.innerHTML = posts.map(function (p) {
+      var title = p.title ? esc(p.title) : '제목 없음';
+      var cls = 'side-page' + (p.id === currentId ? ' active' : '');
+      return '<a class="' + cls + '" data-id="' + p.id + '">📄 ' + title + '</a>';
+    }).join('');
+    Array.prototype.forEach.call(box.querySelectorAll('.side-page'), function (el) {
+      el.addEventListener('click', function () { openPost(el.getAttribute('data-id')); });
+    });
+  }
+
+  /* ---------- 업무 페이지: 목록 ---------- */
+  function renderList() {
+    var posts = store.posts;
+    var box = $('post-list');
+    if (!posts.length) {
+      box.innerHTML = '<div class="list-empty">아직 글이 없습니다.<br>위 입력창에 <b>/page</b> 를 입력해 첫 글을 만들어 보세요.</div>';
+      return;
+    }
+    box.innerHTML = posts.map(function (p) {
+      var title = p.title
+        ? '<span class="p-title">' + esc(p.title) + '</span>'
+        : '<span class="p-title untitled">제목 없음</span>';
+      return '<div class="post-item" data-id="' + p.id + '">' +
+        '<span class="p-icon">📄</span>' + title +
+        '<span class="p-date">' + fmtDate(p.updatedAt) + '</span></div>';
+    }).join('');
+    Array.prototype.forEach.call(box.querySelectorAll('.post-item'), function (el) {
+      el.addEventListener('click', function () { openPost(el.getAttribute('data-id')); });
+    });
+  }
+
+  /* ---------- 글 생성 / 상세 / 저장 / 삭제 ---------- */
+  function createPost() {
+    var posts = store.posts;
+    var post = {
+      id: 'p' + Date.now(),
+      title: '',
+      content: '',
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+    posts.unshift(post);
+    store.posts = posts;
+    toast('새 글이 만들어졌습니다');
+    openPost(post.id);
+  }
+  function openPost(id) {
+    var post = store.posts.filter(function (p) { return p.id === id; })[0];
+    if (!post) return;
+    currentId = id;
+    $('detail-title').value = post.title;
+    $('detail-content').value = post.content;
+    $('save-status').textContent = '';
+    showSection('detail');
+    renderSidebar();
+    $('detail-title').focus();
+  }
+  function saveCurrent() {
+    if (!currentId) return;
+    var posts = store.posts;
+    var post = posts.filter(function (p) { return p.id === currentId; })[0];
+    if (!post) return;
+    post.title = $('detail-title').value;
+    post.content = $('detail-content').value;
+    post.updatedAt = Date.now();
+    store.posts = posts;
+    var d = new Date();
+    $('save-status').textContent = '저장됨 ' +
+      ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+    renderSidebar();
+  }
+  function deleteCurrent() {
+    if (!currentId) return;
+    if (!confirm('이 글을 삭제할까요? 되돌릴 수 없습니다.')) return;
+    store.posts = store.posts.filter(function (p) { return p.id !== currentId; });
+    toast('글이 삭제되었습니다');
+    showSection('list');
+  }
+
+  /* ---------- 마이 페이지 ---------- */
+  function renderMyPage() {
+    var user = store.user || {};
+    $('nick-input').value = user.nickname || '';
+    $('my-avatar').innerHTML = avatarHTML(user, true);
+  }
+  function saveNickname() {
+    var nick = $('nick-input').value.trim();
+    if (!nick) { toast('별명을 입력해 주세요'); return; }
+    var user = store.user || {};
+    user.nickname = nick;
+    store.user = user;
+    renderSidebar();
+    renderMyPage();
+    toast('별명이 변경되었습니다');
+  }
+  function onPhotoPicked(e) {
+    var file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) { toast('2MB 이하 이미지만 가능합니다'); return; }
+    var reader = new FileReader();
+    reader.onload = function () {
+      var user = store.user || {};
+      user.photo = reader.result;
+      store.user = user;
+      renderSidebar();
+      renderMyPage();
+      toast('프로필 이미지가 변경되었습니다');
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  }
+  function resetPhoto() {
+    var user = store.user || {};
+    delete user.photo;
+    store.user = user;
+    renderSidebar();
+    renderMyPage();
+    toast('기본 이미지로 변경되었습니다');
+  }
+
+  /* ---------- cataas API (https://cataas.com/doc.html) ---------- */
+  var CATAAS = 'https://cataas.com';
+  var catLoaded = false;
+
+  // GET /cat?json=true → 랜덤 고양이 메타데이터(JSON)에서 이미지 URL과 태그를 추출
+  function fetchRandomCat() {
+    return fetch(CATAAS + '/cat?json=true').then(function (res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    }).then(function (data) {
+      var id = data._id || data.id || '';
+      var url = data.url || (id ? '/cat/' + id : '/cat');
+      if (url.indexOf('http') !== 0) url = CATAAS + url;
+      url += (url.indexOf('?') >= 0 ? '&' : '?') + 'width=800';
+      return { url: url, tags: data.tags || [] };
+    });
+  }
+
+  function loadCat() {
+    var img = $('cat-img'), status = $('cat-status');
+    status.textContent = '🐈 고양이를 불러오는 중...';
+    status.classList.remove('hidden');
+    img.classList.add('hidden');
+    $('cat-tags').textContent = '';
+    fetchRandomCat().then(function (cat) {
+      img.onload = function () {
+        status.classList.add('hidden');
+        img.classList.remove('hidden');
+      };
+      img.onerror = function () {
+        status.textContent = '이미지를 불러오지 못했습니다. "다른 고양이"로 다시 시도해 주세요.';
+      };
+      img.src = cat.url;
+      $('cat-tags').textContent = cat.tags.length ? '#' + cat.tags.join('  #') : '';
+    }).catch(function (err) {
+      status.textContent = 'API 호출에 실패했습니다 (' + err.message + '). 네트워크 확인 후 다시 시도해 주세요.';
+    });
+  }
+
+  // 마이 페이지: 프로필 이미지를 랜덤 고양이로 설정
+  function setCatProfile() {
+    toast('고양이 이미지를 가져오는 중...');
+    fetchRandomCat().then(function (cat) {
+      var user = store.user || {};
+      user.photo = cat.url;
+      store.user = user;
+      renderSidebar();
+      renderMyPage();
+      toast('프로필이 랜덤 고양이로 변경되었습니다 🐱');
+    }).catch(function () {
+      toast('고양이 이미지를 가져오지 못했습니다');
+    });
+  }
+
+  /* ---------- 로그인 / 로그아웃 (데모 시뮬레이션) ---------- */
+  function login() {
+    var btn = $('btn-google');
+    btn.disabled = true;
+    btn.lastChild.textContent = ' 로그인 중...';
+    setTimeout(function () {
+      if (!store.user) store.user = { nickname: '사용자' };
+      store.loggedIn = true;
+      btn.disabled = false;
+      btn.lastChild.textContent = ' Google로 계속하기';
+      showApp();
+      toast((store.user.nickname || '사용자') + '님, 환영합니다!');
+    }, 700);
+  }
+  function logout() {
+    store.loggedIn = false;
+    showLogin();
+  }
+
+  /* ---------- 이벤트 바인딩 ---------- */
+  $('btn-google').addEventListener('click', login);
+  $('btn-logout').addEventListener('click', logout);
+  $('nav-list').addEventListener('click', function () { showSection('list'); });
+  $('nav-my').addEventListener('click', function () { showSection('my'); });
+  $('side-profile').addEventListener('click', function () { showSection('my'); });
+  $('btn-back').addEventListener('click', function () { showSection('list'); });
+  $('btn-guide-back').addEventListener('click', function () { showSection('list'); });
+  $('btn-delete').addEventListener('click', deleteCurrent);
+  $('detail-title').addEventListener('input', saveCurrent);
+  $('detail-content').addEventListener('input', saveCurrent);
+  $('btn-nick-save').addEventListener('click', saveNickname);
+  $('nick-input').addEventListener('keydown', function (e) { if (e.key === 'Enter') saveNickname(); });
+  $('photo-input').addEventListener('change', onPhotoPicked);
+  $('btn-photo-reset').addEventListener('click', resetPhoto);
+  $('btn-photo-cat').addEventListener('click', setCatProfile);
+  $('btn-cat-refresh').addEventListener('click', loadCat);
+
+  var cmd = $('cmd-input');
+  cmd.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter') return;
+    var v = cmd.value.trim();
+    if (v === '/page') {
+      cmd.value = '';
+      $('cmd-hint').textContent = '';
+      $('cmd-hint').classList.remove('warn');
+      createPost();
+    } else if (v) {
+      $('cmd-hint').textContent = '지원하는 명령어: /page (새 글 만들기)';
+      $('cmd-hint').classList.add('warn');
+    }
+  });
+  cmd.addEventListener('input', function () {
+    if (cmd.value.trim() === '/page') {
+      $('cmd-hint').textContent = 'Enter 를 누르면 새 글이 만들어집니다';
+      $('cmd-hint').classList.remove('warn');
+    } else {
+      $('cmd-hint').textContent = '';
+      $('cmd-hint').classList.remove('warn');
+    }
+  });
+
+  /* ---------- 시작 ---------- */
+  store.loggedIn ? showApp() : showLogin();
+})();
+</script>
+</body>
+</html>

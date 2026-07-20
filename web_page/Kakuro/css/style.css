@@ -190,6 +190,9 @@ h1 {
 
 .kakuro-board {
   display: grid;
+  /* 암시적 auto 행은 stretch가 내용 높이에 여백을 더하는 방식이라
+     숫자가 입력된 행만 커진다 — 내용과 무관하게 균등 분할로 고정 */
+  grid-auto-rows: minmax(0, 1fr);
   gap: 1px;
   width: 100%;
   aspect-ratio: 1;
@@ -211,10 +214,11 @@ h1 {
   background: var(--board-block);
 }
 
-/* 힌트 칸 대각선 — 이미지 없이 gradient로 렌더링 (GDD §7) */
+/* 힌트 칸 대각선 — 이미지 없이 gradient로 렌더링 (GDD §7)
+   경계선은 gradient 진행축과 수직이므로 to bottom left가 ＼ 방향을 그린다 */
 .cell.clue {
   background-image: linear-gradient(
-    to bottom right,
+    to bottom left,
     transparent calc(50% - 1px),
     rgba(255, 255, 255, 0.35) calc(50% - 1px),
     rgba(255, 255, 255, 0.35) calc(50% + 1px),
@@ -302,6 +306,11 @@ h1 {
   border-radius: 8px;
   background: color-mix(in srgb, var(--panel) 78%, transparent);
   backdrop-filter: blur(2px);
+}
+
+/* display: grid가 UA의 [hidden] 규칙을 덮어쓰므로 명시적으로 숨긴다 */
+.board-overlay[hidden] {
+  display: none;
 }
 
 .overlay-box {

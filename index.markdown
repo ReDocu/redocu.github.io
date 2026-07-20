@@ -46,7 +46,7 @@ title : main
             <p>여러 프로젝트의 Claude Code 세션을 한 화면에서 관리·모니터링하는 로컬 대시보드입니다. 세션 상태 확인과 빠른 전환을 지원합니다.</p>
             <div class="tag-list"><span class="tag">Claude Code</span><span class="tag">Node.js</span><span class="tag">wmux</span><span class="tag">v0.1</span></div>
             <div class="card-actions">
-              <a class="btn" href="project/ClaudeCockpit/ClaudeCockpit-v0.1.0.zip" target="_blank" rel="noopener">다운로드</a>
+              <a class="btn" href="project/ClaudeCockpit/ClaudeCockpit-v0.3.0.zip" target="_blank" rel="noopener">다운로드</a>
               <a class="btn" href="https://github.com/ReDocu/ClaudeCodeTemplate" target="_blank" rel="noopener">GitHub</a>
               <a class="btn" href="project/ClaudeCockpit/Tech_document.html" target="_blank" rel="noopener">기술문서</a>
             </div>
@@ -128,7 +128,7 @@ title : main
       <div class="slider-track" tabindex="0">
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/Kyungil_Academy.png" alt="경일게임아카데미 게임 개발 커리큘럼 썸네일" />
+            <img src="Academy/KYGame_overview.png" alt="경일게임아카데미 게임 개발 커리큘럼 썸네일" />
           </div>
           <div class="portfolio-card__body">
             <h3>게임 클라이언트/콘텐츠 개발 커리큘럼</h3>

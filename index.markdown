@@ -12,31 +12,89 @@ title : main
       <p class="eyebrow">콘텐츠 개발자 / 메타버스 개발자</p>
       <h1>DOCU</h1>
       <p class="hero__desc">
+        게임 클라이언트 개발에서 시작해 비전 AI 모델 학습, 웹 서비스 개발까지 영역을 넓혀 온 개발자입니다.
+        지금은 Claude Code를 중심으로 개발 도구와 웹 게임을 만들고, 배운 것을 문서로 정리해 나누고 있습니다.
       </p>
       <div class="hero__tags" aria-label="핵심 키워드">
-        <span class="chip">UNITY</span>
+        <span class="chip">Unity</span>
         <span class="chip">Unreal Engine</span>
-        <span class="chip">Python</span>
-        <span class="chip">ETC</span>
+        <span class="chip">C/C++</span>
+        <span class="chip">Python · AI</span>
+        <span class="chip">Claude Code</span>
       </div>
       <div class="hero__actions">
         <a class="btn" href="/data/포트폴리오.pdf">포트폴리오 보기</a>
-        <a class="btn btn--ghost" href="#contact">Contact Us 이동</a>
+        <a class="btn btn--ghost" href="https://github.com/redocu" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn btn--ghost" href="#contact">Contact</a>
+        <a class="btn btn--ghost" href="/project/Dashboard">포트폴리오 요약</a>
       </div>
     </div>
   </div>
 </section>
-<!-- 학원 관련 페이지 -->
-<section class="section portfolio-section" id="projects">
+
+<!-- Section 01 : 소프트웨어 -->
+<section class="section portfolio-section" id="software">
   <div class="container">
     <div class="section-head">
       <p class="section-label">Section 01</p>
-      <h2>포트폴리오</h2>
-      <p class="section-copy">아이디어를 실제 코드로 완성해 온 개인 개발 프로젝트 모음입니다.</p>
+      <h2>소프트웨어</h2>
+      <p class="section-copy">웹 서비스와 개발 도구 등 아이디어를 실제 코드로 완성해 온 소프트웨어 프로젝트 모음입니다.</p>
     </div>
     <div class="portfolio-slider" data-slider>
       <button class="slider-arrow slider-arrow--left" type="button" aria-label="이전 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <div class="slider-track" tabindex="0">
+      <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="assets/images/portfolio/ResumeSim.svg" alt="가상 이력서 시뮬레이션 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>가상 이력서 시뮬레이션</h3>
+            <p>가상 인물의 이력서를 만들고 평가해 보는 시뮬레이션 프로젝트입니다. 개인 프로젝트로 정식 출시를 목표로 개발하고 있습니다.</p>
+            <div class="tag-list"><span class="tag">개발중</span><span class="tag">출시목적</span><span class="tag">개인</span><span class="tag">GitHub</span></div>
+            <div class="card-actions">
+              <a class="btn" href="https://github.com/ReDocu/ResumeAnalyze" target="_blank" rel="noopener">GitHub 바로가기</a>
+            </div>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="assets/images/portfolio/AutomationTool.svg" alt="소프트웨어 자동화 툴 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>소프트웨어 자동화 툴 프로그램</h3>
+            <p>반복되는 작업 과정을 자동화하는 툴 프로그램입니다. 개인 프로젝트로 정식 출시를 목표로 개발하고 있습니다.</p>
+            <div class="tag-list"><span class="tag">개발중</span><span class="tag">출시목적</span><span class="tag">개인</span><span class="tag">GitHub</span></div>
+            <div class="card-actions">
+              <a class="btn" href="https://github.com/ReDocu/ProcessingAuto" target="_blank" rel="noopener">GitHub 바로가기</a>
+            </div>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="assets/images/portfolio/AssetManager.svg" alt="에셋 및 데이터 관리자 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>에셋 및 데이터 관리자</h3>
+            <p>프로젝트의 에셋과 데이터를 한곳에서 정리·관리하는 도구입니다. 개인 프로젝트로 정식 출시를 목표로 개발하고 있습니다.</p>
+            <div class="tag-list"><span class="tag">개발중</span><span class="tag">출시목적</span><span class="tag">개인</span><span class="tag">GitHub</span></div>
+            <div class="card-actions">
+              <a class="btn" href="https://github.com/ReDocu/AssetManager" target="_blank" rel="noopener">GitHub 바로가기</a>
+            </div>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="assets/images/portfolio/DictionaryProject.svg" alt="사전 프로젝트 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>사전 프로젝트</h3>
+            <p>용어와 지식을 모아 정리하고 검색해 보는 사전 프로젝트입니다. 개인 프로젝트로 정식 출시를 목표로 개발하고 있습니다.</p>
+            <div class="tag-list"><span class="tag">개발중</span><span class="tag">출시목적</span><span class="tag">개인</span><span class="tag">GitHub</span></div>
+            <div class="card-actions">
+              <a class="btn" href="https://github.com/ReDocu/DictionaryProject" target="_blank" rel="noopener">GitHub 바로가기</a>
+            </div>
+          </div>
+        </article>
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
             <img src="project/ClaudeCockpit/banner.png" alt="ClaudeCockpit 프로젝트 썸네일" />
@@ -44,7 +102,7 @@ title : main
           <div class="portfolio-card__body">
             <h3>ClaudeCockpit</h3>
             <p>여러 프로젝트의 Claude Code 세션을 한 화면에서 관리·모니터링하는 로컬 대시보드입니다. 세션 상태 확인과 빠른 전환을 지원합니다.</p>
-            <div class="tag-list"><span class="tag">Claude Code</span><span class="tag">Node.js</span><span class="tag">wmux</span><span class="tag">v0.1</span></div>
+            <div class="tag-list"><span class="tag">Claude Code</span><span class="tag">Node.js</span><span class="tag">wmux</span><span class="tag">v0.3</span></div>
             <div class="card-actions">
               <a class="btn" href="project/ClaudeCockpit/ClaudeCockpit-v0.3.0.zip" target="_blank" rel="noopener">다운로드</a>
               <a class="btn" href="https://github.com/ReDocu/ClaudeCodeTemplate" target="_blank" rel="noopener">GitHub</a>
@@ -69,32 +127,36 @@ title : main
         </article>
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/EduCraft.svg" alt="Educraft 프로젝트 썸네일" />
+            <img src="assets/images/portfolio/EduCraft_hub.svg" alt="EduCraft 프로젝트 썸네일" />
           </div>
           <div class="portfolio-card__body">
-            <h3>ResumeAnalyze</h3>
-            <p>현재 개발이 진행 중인 프로젝트입니다.</p>
-            <div class="tag-list"><span class="tag">개발중</span><span class="tag">GitHub</span></div>
+            <h3>EduCraft</h3>
+            <p>학습 플랫폼. 책 제작 플랫폼 BookCraft, 학습 관리 LMSCraft, 강의 탐색·리뷰 LecView, 미니게임 네 개의 공방을 사용하는 단일 Next.js 앱입니다.</p>
+            <div class="tag-list"><span class="tag">Next.js</span><span class="tag">Supabase</span><span class="tag">모노레포</span><span class="tag">Vercel</span></div>
             <div class="card-actions">
-              <a class="btn" href="https://github.com/ReDocu/ResumeAnalyze" target="_blank" rel="noopener">개요</a>
-              <a class="btn" href="https://github.com/ReDocu/ResumeAnalyze" target="_blank" rel="noopener">GitHub</a>
-              <a class="btn" href="https://github.com/ReDocu/ResumeAnalyze" target="_blank" rel="noopener">기술문서</a>
+              <a class="btn" href="http://www.eqment.store/" target="_blank" rel="noopener">방문</a>
+              <a class="btn" href="https://github.com/ReDocu/EduCraft" target="_blank" rel="noopener">GitHub</a>
+              <a class="btn" href="https://github.com/ReDocu/CompanyProcess#readme" target="_blank" rel="noopener">기술문서</a>
             </div>
           </div>
         </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/EduCraft.svg" alt="Educraft 프로젝트 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>Educraft</h3>
-            <p>현재 개발이 진행 중인 프로젝트입니다.</p>
-            <div class="tag-list"><span class="tag">개발중</span><span class="tag">GitHub</span></div>
-            <div class="card-actions">
-              <a class="btn" href="https://github.com/ReDocu/EduCraft" target="_blank" rel="noopener">GitHub 바로가기</a>
-            </div>
-          </div>
-        </article>
+      </div>
+      <button class="slider-arrow slider-arrow--right" type="button" aria-label="다음 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5L16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- Section 02 : 게임 소프트웨어 -->
+<section class="section portfolio-section" id="games">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-label">Section 02</p>
+      <h2>게임 소프트웨어</h2>
+      <p class="section-copy">직접 설계하고 구현한 게임과 게임 개발 프레임워크 모음입니다.</p>
+    </div>
+    <div class="portfolio-slider" data-slider>
+      <button class="slider-arrow slider-arrow--left" type="button" aria-label="이전 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="slider-track" tabindex="0">
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
             <img src="project/CSGP/banner.png" alt="CSGP 프로젝트 썸네일" />
@@ -110,17 +172,57 @@ title : main
             </div>
           </div>
         </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="assets/images/portfolio/GameDevTool.svg" alt="게임 개발 운영 툴 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>게임 개발 운영 툴</h3>
+            <p>게임 개발과 라이브 운영을 돕는 자동화 툴입니다. 개인 프로젝트로 정식 출시를 목표로 개발하고 있습니다.</p>
+            <div class="tag-list"><span class="tag">개발중</span><span class="tag">출시목적</span><span class="tag">개인</span><span class="tag">GitHub</span></div>
+            <div class="card-actions">
+              <a class="btn" href="https://github.com/ReDocu/GameDevAuto" target="_blank" rel="noopener">GitHub 바로가기</a>
+            </div>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="assets/images/portfolio/AnimalGuard.svg" alt="동물수호대 프로젝트 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>동물 수호대</h3>
+            <p>동물들을 지켜내는 디펜스 게임입니다. 개인 프로젝트로 정식 출시를 목표로 개발하고 있습니다.</p>
+            <div class="tag-list"><span class="tag">개발중</span><span class="tag">출시목적</span><span class="tag">개인</span><span class="tag">GitHub</span></div>
+            <div class="card-actions">
+              <a class="btn" href="https://github.com/ReDocu/AnimalDeffence" target="_blank" rel="noopener">GitHub 바로가기</a>
+            </div>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="assets/images/portfolio/AcademySim.svg" alt="학원 운영 시뮬레이션 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>학원 운영 시뮬레이션</h3>
+            <p>학원을 운영하며 커리큘럼과 수강생을 관리하는 경영 시뮬레이션 게임입니다. 팀 프로젝트로 정식 출시를 목표로 개발하고 있습니다.</p>
+            <div class="tag-list"><span class="tag">개발중</span><span class="tag">출시목적</span><span class="tag">팀</span><span class="tag">GitHub</span></div>
+            <div class="card-actions">
+              <a class="btn" href="https://github.com/ReDocu/Project_Academy_Ops" target="_blank" rel="noopener">GitHub 바로가기</a>
+            </div>
+          </div>
+        </article>
       </div>
       <button class="slider-arrow slider-arrow--right" type="button" aria-label="다음 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5L16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>
   </div>
 </section>
-<!-- 학원 관련 페이지 -->
-<section class="section portfolio-section" id="ebooks">
+
+<!-- Section 04 : 학원 교육 -->
+<section class="section portfolio-section" id="academy">
   <div class="container">
     <div class="section-head">
-      <p class="section-label">Section 02</p>
-      <h2>학원 교육 정리</h2>
+      <p class="section-label">Section 04</p>
+      <h2>학원 교육</h2>
       <p class="section-copy">학원 과정별로 배운 내용과 직접 만든 결과물을 정리했습니다.</p>
     </div>
     <div class="portfolio-slider" data-slider>
@@ -128,7 +230,7 @@ title : main
       <div class="slider-track" tabindex="0">
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
-            <img src="Academy/KYGame_overview.png" alt="경일게임아카데미 게임 개발 커리큘럼 썸네일" />
+            <img src="/Academy/KYGameAcademy/KYGame_overview.png" alt="경일게임아카데미 게임 개발 커리큘럼 썸네일" />
           </div>
           <div class="portfolio-card__body">
             <h3>게임 클라이언트/콘텐츠 개발 커리큘럼</h3>
@@ -145,7 +247,7 @@ title : main
         </article>
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/Kyungil_Academy.png" alt="MBC컴퓨터아카데미 AI 커리큘럼 썸네일" />
+            <img src="assets/images/portfolio/MBC_Academy.png" alt="MBC컴퓨터아카데미 AI 커리큘럼 썸네일" />
           </div>
           <div class="portfolio-card__body">
             <h3>비전 기반 AI 모델 생성 커리큘럼</h3>
@@ -161,7 +263,7 @@ title : main
         </article>
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/Kyungil_Academy.png" alt="코드캠프 바이브 코딩 커리큘럼 썸네일" />
+            <img src="assets/images/portfolio/CodeCamp.svg" alt="코드캠프 바이브 코딩 커리큘럼 썸네일" />
           </div>
           <div class="portfolio-card__body">
             <h3>웹 기반 바이브 코딩 커리큘럼</h3>
@@ -181,10 +283,11 @@ title : main
   </div>
 </section>
 
+<!-- Contact Us -->
 <section class="section section--contact" id="contact">
   <div class="container">
     <div class="section-head">
-      <p class="section-label">Section 08</p>
+      <p class="section-label">Contact</p>
       <h2>Contact Us</h2>
       <p class="section-copy"><!--연락 경로는 짧고 직관적으로 정리합니다.--></p>
     </div>

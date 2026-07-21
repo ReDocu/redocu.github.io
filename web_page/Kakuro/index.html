@@ -108,9 +108,39 @@
             <li>한 줄 안에서 같은 숫자는 두 번 쓸 수 없습니다.</li>
           </ul>
         </div>
+
+        <fieldset class="print-options">
+          <legend>인쇄</legend>
+          <div class="print-group">
+            <span class="print-group-title">출력 범위</span>
+            <label>
+              <input id="printPuzzleOnly" type="radio" name="printMode" value="puzzle" checked>
+              문제만 인쇄
+            </label>
+            <label>
+              <input id="printWithAnswer" type="radio" name="printMode" value="answer">
+              문제 + 정답 인쇄
+            </label>
+          </div>
+          <div class="print-group">
+            <span class="print-group-title">페이지당 문제 수</span>
+            <label>
+              <input id="printOnePerPage" type="radio" name="printPerPage" value="1" checked>
+              1문제
+            </label>
+            <label>
+              <input id="printTwoPerPage" type="radio" name="printPerPage" value="2">
+              2문제
+            </label>
+          </div>
+        </fieldset>
+
+        <button id="printBtn" class="primary-button print-button" type="button">프린트하기</button>
       </aside>
     </main>
   </div>
+
+  <section id="printRoot" class="print-root" aria-hidden="true"></section>
 
   <script src="js/combinations.js" defer></script>
   <script src="js/kakuroSolver.js" defer></script>

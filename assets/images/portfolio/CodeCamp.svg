@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600">
+  <rect width="900" height="600" rx="24" fill="#ffe9d6"/>
+  <rect x="42" y="42" width="816" height="516" rx="22" fill="rgba(255,255,255,0.72)"/>
+  <rect x="88" y="98" width="500" height="300" rx="18" fill="#0f1115"/>
+  <circle cx="120" cy="130" r="9" fill="#ff5f57"/>
+  <circle cx="150" cy="130" r="9" fill="#febc2e"/>
+  <circle cx="180" cy="130" r="9" fill="#28c840"/>
+  <text x="116" y="200" font-size="26" font-family="Consolas, monospace" fill="#28c840">&gt; claude code</text>
+  <text x="116" y="244" font-size="26" font-family="Consolas, monospace" fill="#e5e7eb">PRD 작성 → 구현 → 배포</text>
+  <text x="116" y="288" font-size="26" font-family="Consolas, monospace" fill="#e5e7eb">Supabase · Vercel</text>
+  <rect x="116" y="320" width="18" height="32" fill="#28c840">
+    <animate attributeName="opacity" values="1;0;1" dur="1.4s" repeatCount="indefinite"/>
+  </rect>
+  <text x="88" y="495" font-size="42" font-family="Arial, sans-serif" font-weight="700" fill="#0f1115">CODECAMP</text>
+  <text x="88" y="535" font-size="24" font-family="Arial, sans-serif" fill="#233039">Vibe Coding with Claude Code</text>
+</svg>

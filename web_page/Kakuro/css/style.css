@@ -371,6 +371,7 @@ h1 {
 
 .number-key.erase {
   font-size: 0.85rem;
+  white-space: nowrap; /* 세로 줄바꿈되면 행 전체 키가 같이 커진다 */
 }
 
 .status-message {
@@ -504,6 +505,199 @@ h1 {
   font-size: 0.88rem;
 }
 
+/* ── 인쇄 옵션 (화면) ── */
+
+.print-options {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.print-options legend {
+  padding: 0 4px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.print-group {
+  display: grid;
+  gap: 8px;
+}
+
+.print-group-title {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.print-options label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+
+.print-root {
+  display: none;
+}
+
+/* ── 인쇄 전용 스타일 ── */
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 14mm;
+  }
+
+  html,
+  body {
+    width: 210mm;
+    min-height: 297mm;
+    background: #ffffff;
+    color: #000000;
+  }
+
+  .app {
+    display: none !important;
+  }
+
+  .print-root {
+    display: block !important;
+  }
+
+  .print-page {
+    display: flex;
+    min-height: 269mm;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    page-break-after: always;
+  }
+
+  .print-page:last-child {
+    page-break-after: auto;
+  }
+
+  .print-title {
+    margin: 0;
+    font-size: 22pt;
+    font-weight: 900;
+    text-align: center;
+  }
+
+  .print-sheet {
+    display: grid;
+    justify-items: center;
+    width: 100%;
+  }
+
+  .print-page.two-up .print-sheet {
+    gap: 7mm;
+  }
+
+  .print-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    page-break-inside: avoid;
+  }
+
+  .print-item-title {
+    margin: 5mm 0 0;
+    font-size: 12pt;
+    font-weight: 900;
+    text-align: center;
+  }
+
+  .print-meta {
+    display: flex;
+    gap: 8mm;
+    justify-content: center;
+    margin: 4mm 0 6mm;
+    color: #333333;
+    font-size: 10.5pt;
+    font-weight: 700;
+  }
+
+  .print-page.two-up .print-title {
+    font-size: 18pt;
+  }
+
+  .print-page.two-up .print-item-title {
+    margin-top: 3mm;
+    font-size: 10.5pt;
+  }
+
+  .print-page.two-up .print-meta {
+    margin: 2mm 0 3mm;
+    font-size: 8.8pt;
+  }
+
+  .print-kakuro {
+    display: grid;
+    grid-auto-rows: minmax(0, 1fr);
+    border: 2pt solid #000000;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .print-kcell {
+    position: relative;
+    border-right: 0.5pt solid #666666;
+    border-bottom: 0.5pt solid #666666;
+  }
+
+  .print-kcell.white {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    font-size: var(--p-cell-font, 6mm);
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .print-kcell.block,
+  .print-kcell.clue {
+    background: #d8d8d8;
+  }
+
+  /* 힌트 칸 대각선 — 화면과 동일한 ＼ 방향 */
+  .print-kcell.clue {
+    background-image: linear-gradient(
+      to bottom left,
+      transparent calc(50% - 0.35pt),
+      #000000 calc(50% - 0.35pt),
+      #000000 calc(50% + 0.35pt),
+      transparent calc(50% + 0.35pt)
+    );
+  }
+
+  .print-kcell .pa,
+  .print-kcell .pd {
+    position: absolute;
+    color: #000000;
+    font-size: var(--p-clue-font, 3mm);
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .print-kcell .pa {
+    top: 10%;
+    right: 8%;
+  }
+
+  .print-kcell .pd {
+    bottom: 10%;
+    left: 8%;
+  }
+}
+
 /* ── 반응형 (GDD §7 모바일) ── */
 
 @media (max-width: 900px) {
@@ -526,3 +720,7 @@ h1 {
     font-size: 0.82rem;
   }
 }
+
+/* PuzzleLab 임베드 모드: 허브가 헤더와 테마 토글을 대신 제공한다 */
+html.embedded .app-header { display: none; }
+html.embedded .app { padding-top: 16px; }

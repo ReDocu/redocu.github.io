@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>퍼즐 게임 생성기</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="lab">
+    <header class="lab-header">
+      <div class="lab-title">
+        <p class="eyebrow">Puzzle Lab</p>
+        <h1>퍼즐 게임 생성기</h1>
+      </div>
+      <nav class="lab-tabs" role="tablist" aria-label="게임 선택">
+        <button id="tabSudoku" class="lab-tab is-active" role="tab" aria-selected="true" data-game="sudoku" type="button">스도쿠</button>
+        <button id="tabKakuro" class="lab-tab" role="tab" aria-selected="false" data-game="kakuro" type="button">가쿠로</button>
+      </nav>
+      <div class="header-actions">
+        <button id="themeToggle" class="soft-button" type="button">다크모드</button>
+        <a class="soft-button" href="/#games">포트폴리오</a>
+      </div>
+    </header>
+
+    <main class="lab-stage">
+      <iframe id="frameSudoku" class="game-frame is-active" src="../Sudoku/index.html?embed=1" title="스도쿠 자동 생성"></iframe>
+      <iframe id="frameKakuro" class="game-frame" data-src="../Kakuro/index.html?embed=1" title="가쿠로 자동 생성"></iframe>
+    </main>
+  </div>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>

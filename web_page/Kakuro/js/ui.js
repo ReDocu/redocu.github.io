@@ -21,6 +21,8 @@
   var timerId = null;
   var finished = false;
   var generating = false;
+  var printCache = null; // [{puzzle, createdAt}] — 현재 퍼즐 기준 인쇄 목록
+  var puzzleCreatedAt = 0;
 
   /* ── 유틸 ── */
 
@@ -150,6 +152,8 @@
   function afterPuzzleReady(message) {
     selected = -1;
     autoCandMap = null;
+    printCache = null;
+    puzzleCreatedAt = Date.now();
     els.badge.textContent =
       (PRESET_LABEL[puzzle.n] || "커스텀") + " · " + puzzle.n + "×" + puzzle.n;
     els.timer.textContent = formatTime(elapsed);
@@ -158,6 +162,7 @@
     refresh();
     setStatus(message);
     startTimer();
+    updatePrintPreview();
   }
 
   /* ── 보드 렌더링 (GDD §7) ── */
@@ -491,6 +496,155 @@
     setStatus("클리어! 축하합니다.");
   }
 
+  /* ── 인쇄 (Sudoku와 동일한 옵션: 문제만/문제+정답 · 페이지당 1/2문제) ── */
+
+  function formatDate(ts) {
+    var dt = new Date(ts);
+    var m = dt.getMonth() + 1;
+    var d = dt.getDate();
+    return dt.getFullYear() + "-" + (m < 10 ? "0" : "") + m + "-" + (d < 10 ? "0" : "") + d;
+  }
+
+  /* 인쇄 목록 준비 — 1번은 현재 퍼즐, 2문제 선택 시 같은 난이도로 하나 더 생성 */
+  function preparePrintItems(count, done) {
+    var valid = printCache && printCache.length >= count &&
+      printCache[0].puzzle === puzzle;
+    if (valid) {
+      done(printCache.slice(0, count));
+      return;
+    }
+    printCache = [{ puzzle: puzzle, createdAt: puzzleCreatedAt }];
+    if (count === 1) {
+      done(printCache);
+      return;
+    }
+    generating = true;
+    els.newBtn.disabled = true;
+    els.genOverlayText.textContent = "인쇄용 퍼즐 생성 중…";
+    els.genOverlay.hidden = false;
+    window.KakuroGenerator.generateAsync(puzzle.n, function (result) {
+      generating = false;
+      els.newBtn.disabled = false;
+      els.genOverlay.hidden = true;
+      els.genOverlayText.textContent = "퍼즐 생성 중…";
+      if (result) printCache.push({ puzzle: result.puzzle, createdAt: Date.now() });
+      done(printCache);
+    }, function (attempts) {
+      els.genOverlayText.textContent = "인쇄용 퍼즐 생성 중… (시도 " + attempts + ")";
+    });
+  }
+
+  function printPuzzle() {
+    if (!puzzle || generating) return;
+    var count = els.printTwoPerPage.checked ? 2 : 1;
+    preparePrintItems(count, function (items) {
+      renderPrintRoot(items, els.printWithAnswer.checked);
+      window.print();
+    });
+  }
+
+  /* Ctrl+P 대비: 옵션이 바뀌거나 퍼즐이 바뀔 때마다 인쇄 뷰를 미리 갱신 */
+  function updatePrintPreview() {
+    if (!puzzle) return;
+    var count = els.printTwoPerPage.checked ? 2 : 1;
+    var base = printCache && printCache[0] && printCache[0].puzzle === puzzle
+      ? printCache
+      : [{ puzzle: puzzle, createdAt: puzzleCreatedAt }];
+    renderPrintRoot(base.slice(0, Math.min(count, base.length)), els.printWithAnswer.checked);
+  }
+
+  function renderPrintRoot(items, withAnswer) {
+    els.printRoot.innerHTML = "";
+    els.printRoot.appendChild(createPrintPage("문제", items, false));
+    if (withAnswer) {
+      els.printRoot.appendChild(createPrintPage("정답", items, true));
+    }
+  }
+
+  function createPrintPage(type, items, isAnswer) {
+    var page = document.createElement("article");
+    var title = document.createElement("h2");
+    var sheet = document.createElement("div");
+    var boardMm = items.length === 2 ? 105 : 165;
+
+    page.className = "print-page " + (items.length === 2 ? "two-up" : "one-up");
+    title.className = "print-title";
+    title.textContent = "가쿠로 " + type;
+    sheet.className = "print-sheet";
+
+    items.forEach(function (item, index) {
+      sheet.appendChild(createPrintItem(type, item, index + 1, isAnswer, boardMm));
+    });
+
+    page.appendChild(title);
+    page.appendChild(sheet);
+    return page;
+  }
+
+  function createPrintItem(type, item, number, isAnswer, boardMm) {
+    var wrapper = document.createElement("section");
+    var heading = document.createElement("h3");
+    var meta = document.createElement("div");
+    var p = item.puzzle;
+
+    wrapper.className = "print-item";
+    heading.className = "print-item-title";
+    heading.textContent = type + " " + number;
+    meta.className = "print-meta";
+    meta.innerHTML =
+      "<span>난이도 " + (PRESET_LABEL[p.n] || "커스텀") + " · " + p.n + "×" + p.n + "</span>" +
+      "<span>생성일 " + formatDate(item.createdAt || Date.now()) + "</span>";
+
+    wrapper.appendChild(heading);
+    wrapper.appendChild(meta);
+    wrapper.appendChild(createPrintBoard(p, isAnswer, boardMm));
+    return wrapper;
+  }
+
+  function createPrintBoard(p, isAnswer, boardMm) {
+    var board = document.createElement("div");
+    board.className = "print-kakuro";
+    board.style.width = boardMm + "mm";
+    board.style.height = boardMm + "mm";
+    board.style.gridTemplateColumns = "repeat(" + p.t + ", 1fr)";
+    var cellMm = boardMm / p.t;
+    board.style.setProperty("--p-cell-font", (cellMm * 0.55).toFixed(2) + "mm");
+    board.style.setProperty("--p-clue-font", (cellMm * 0.28).toFixed(2) + "mm");
+
+    for (var r = 0; r < p.t; r++) {
+      for (var c = 0; c < p.t; c++) {
+        var cell = document.createElement("div");
+        var isBlock = r >= p.block.length || p.block[r][c];
+        if (!isBlock) {
+          cell.className = "print-kcell white";
+          if (isAnswer) cell.textContent = String(p.solution[r][c]);
+        } else {
+          var a = p.clueA[r] ? p.clueA[r][c] : 0;
+          var d = p.clueD[r] ? p.clueD[r][c] : 0;
+          if (a || d) {
+            cell.className = "print-kcell clue";
+            if (a) {
+              var sa = document.createElement("span");
+              sa.className = "pa";
+              sa.textContent = a;
+              cell.appendChild(sa);
+            }
+            if (d) {
+              var sd = document.createElement("span");
+              sd.className = "pd";
+              sd.textContent = d;
+              cell.appendChild(sd);
+            }
+          } else {
+            cell.className = "print-kcell block";
+          }
+        }
+        board.appendChild(cell);
+      }
+    }
+    return board;
+  }
+
   /* ── 이벤트 바인딩 ── */
 
   function bindEvents() {
@@ -537,6 +691,12 @@
       autoCand = els.autoCandChk.checked;
       refresh();
     });
+
+    els.printBtn.addEventListener("click", printPuzzle);
+    [els.printPuzzleOnly, els.printWithAnswer, els.printOnePerPage, els.printTwoPerPage]
+      .forEach(function (radio) {
+        radio.addEventListener("change", updatePrintPreview);
+      });
 
     els.themeToggle.addEventListener("click", function () {
       var dark = document.documentElement.dataset.theme === "dark";
@@ -585,7 +745,13 @@
       winHints: $("winHints"),
       winSize: $("winSize"),
       winNewBtn: $("winNewBtn"),
-      themeToggle: $("themeToggle")
+      themeToggle: $("themeToggle"),
+      printBtn: $("printBtn"),
+      printPuzzleOnly: $("printPuzzleOnly"),
+      printWithAnswer: $("printWithAnswer"),
+      printOnePerPage: $("printOnePerPage"),
+      printTwoPerPage: $("printTwoPerPage"),
+      printRoot: $("printRoot")
     };
 
     var savedTheme = null;

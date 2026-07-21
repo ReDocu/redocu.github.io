@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600">
+  <rect width="900" height="600" rx="24" fill="#e5f6e3"/>
+  <rect x="42" y="42" width="816" height="516" rx="22" fill="rgba(255,255,255,0.72)"/>
+  <!-- 방패 -->
+  <g transform="translate(120,110)">
+    <path d="M150 0 L300 52 L300 190 Q300 300 150 360 Q0 300 0 190 L0 52 Z" fill="#2f855a"/>
+    <path d="M150 34 L266 74 L266 188 Q266 272 150 322 Q34 272 34 188 L34 74 Z" fill="#e5f6e3"/>
+    <!-- 발자국 -->
+    <g fill="#2f855a">
+      <ellipse cx="150" cy="205" rx="34" ry="30"/>
+      <ellipse cx="105" cy="152" rx="15" ry="19"/>
+      <ellipse cx="138" cy="128" rx="15" ry="19"/>
+      <ellipse cx="176" cy="130" rx="15" ry="19"/>
+      <ellipse cx="204" cy="158" rx="15" ry="19"/>
+    </g>
+  </g>
+  <text x="480" y="270" font-size="52" font-family="Arial, 'Malgun Gothic', sans-serif" font-weight="700" fill="#0f1115">동물 수호대</text>
+  <text x="480" y="318" font-size="24" font-family="Arial, sans-serif" fill="#233039">Defense Game</text>
+  <text x="480" y="352" font-size="24" font-family="Arial, sans-serif" fill="#233039">In Development · Solo</text>
+  <rect x="480" y="386" width="150" height="44" rx="22" fill="#2f855a"/>
+  <text x="555" y="415" font-size="20" font-family="Arial, sans-serif" font-weight="700" fill="#ffffff" text-anchor="middle">WIP</text>
+</svg>

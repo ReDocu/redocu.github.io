@@ -111,32 +111,58 @@ document.querySelectorAll('[data-slider]').forEach((slider) => {
 
   const firstCard = track.querySelector('.portfolio-card');
 
-  // 현재 화면에 보이는 카드 수만큼(데스크톱 3 / 태블릿 2 / 모바일 1) 한 페이지 단위로 이동
-  const pageStep = () => {
-    if (!firstCard) return track.clientWidth;
+  // 진행 중인 스크롤의 목표 지점. 애니메이션 도중 화살표를 연타해도
+  // 중간 위치가 아니라 직전 목표를 기준으로 다음 페이지를 계산한다.
+  let pendingLeft = null;
+  let settleTimer = 0;
+
+  // offsetWidth는 hover scale 같은 transform의 영향을 받지 않는다
+  const metrics = () => {
     const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
-    const unit = firstCard.getBoundingClientRect().width + gap;
+    const unit = firstCard ? firstCard.offsetWidth + gap : track.clientWidth;
     const perView = Math.max(1, Math.round((track.clientWidth + gap) / unit));
-    return unit * perView;
+    return { unit, perView };
   };
 
-  // 넘길 카드가 남아 있는 쪽 화살표만 표시
+  const maxScroll = () => track.scrollWidth - track.clientWidth;
+
+  // 넘길 카드가 남아 있는 쪽 화살표만 표시 (이동 중에는 목표 지점 기준으로 판단)
   const updateArrows = () => {
-    const maxScroll = track.scrollWidth - track.clientWidth - 1;
+    const pos = pendingLeft ?? track.scrollLeft;
     const overflowing = track.scrollWidth > track.clientWidth + 1;
-    leftArrow.classList.toggle('is-visible', overflowing && track.scrollLeft > 1);
-    rightArrow.classList.toggle('is-visible', overflowing && track.scrollLeft < maxScroll);
+    leftArrow.classList.toggle('is-visible', overflowing && pos > 1);
+    rightArrow.classList.toggle('is-visible', overflowing && pos < maxScroll() - 1);
   };
 
-  leftArrow.addEventListener('click', () => {
-    track.scrollBy({ left: -pageStep(), behavior: 'smooth' });
+  // 화면에 보이는 카드 수만큼(데스크톱 3 / 태블릿 2 / 모바일 1) 카드 경계에 맞춰 이동
+  const page = (direction) => {
+    const { unit, perView } = metrics();
+    const from = pendingLeft ?? track.scrollLeft;
+    const targetCard = Math.round(from / unit) + direction * perView;
+    const left = Math.min(Math.max(targetCard, 0) * unit, maxScroll());
+    pendingLeft = left;
+    track.scrollTo({ left, behavior: 'smooth' });
+    updateArrows();
+  };
+
+  leftArrow.addEventListener('click', () => page(-1));
+  rightArrow.addEventListener('click', () => page(1));
+
+  // 사용자가 직접 스와이프·휠 스크롤을 시작하면 예약된 목표 지점을 버린다
+  ['wheel', 'touchstart', 'pointerdown'].forEach((type) => {
+    track.addEventListener(type, () => { pendingLeft = null; }, { passive: true });
   });
 
-  rightArrow.addEventListener('click', () => {
-    track.scrollBy({ left: pageStep(), behavior: 'smooth' });
-  });
+  // 스크롤이 멎으면 목표 지점을 해제해 실제 위치와 다시 동기화한다
+  track.addEventListener('scroll', () => {
+    updateArrows();
+    clearTimeout(settleTimer);
+    settleTimer = setTimeout(() => {
+      pendingLeft = null;
+      updateArrows();
+    }, 150);
+  }, { passive: true });
 
-  track.addEventListener('scroll', updateArrows, { passive: true });
   window.addEventListener('resize', updateArrows);
   updateArrows();
 });

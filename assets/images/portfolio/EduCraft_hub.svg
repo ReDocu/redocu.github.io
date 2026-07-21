@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600">
+  <rect width="900" height="600" rx="24" fill="#f8f2e6"/>
+  <rect x="24" y="24" width="852" height="552" rx="18" fill="none" stroke="#e5d9c4" stroke-width="2"/>
+
+  <!-- 아이브로우: 공방 4색 점 + 슬로건 -->
+  <g transform="translate(70,84)">
+    <circle cx="8" cy="0" r="9" fill="#b5651d"/>
+    <circle cx="34" cy="0" r="9" fill="#3e7c4f"/>
+    <circle cx="60" cy="0" r="9" fill="#d99427"/>
+    <circle cx="86" cy="0" r="9" fill="#3fa7c4"/>
+    <text x="112" y="9" font-family="Arial, 'Malgun Gothic', sans-serif" font-size="24" font-weight="600" fill="#6b5d4a">배움을 작품으로 · 공방 마을</text>
+  </g>
+
+  <!-- 헤드라인 -->
+  <text x="70" y="180" font-family="'Noto Serif KR', Batang, Georgia, serif" font-size="54" font-weight="900" fill="#33291d">강의를 듣고 끝내지 마세요.</text>
+  <text x="70" y="238" font-family="Arial, 'Malgun Gothic', sans-serif" font-size="30" font-weight="600" fill="#6b5d4a">책이 되고, 계획이 되고, 실력이 됩니다.</text>
+
+  <!-- 네 개의 공방 타일 -->
+  <g transform="translate(70,290)">
+    <rect x="0" y="0" width="180" height="170" rx="18" fill="#ffffff" stroke="#e5d9c4" stroke-width="2"/>
+    <rect x="20" y="22" width="52" height="52" rx="14" fill="#b5651d"/>
+    <text x="46" y="56" font-family="Arial, 'Malgun Gothic', sans-serif" font-size="26" font-weight="700" fill="#ffffff" text-anchor="middle">책</text>
+    <text x="20" y="112" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#33291d">BookCraft</text>
+    <text x="20" y="144" font-family="Arial, 'Malgun Gothic', sans-serif" font-size="20" font-weight="700" fill="#3e7c4f">이용 가능</text>
+  </g>
+  <g transform="translate(263,290)">
+    <rect x="0" y="0" width="180" height="170" rx="18" fill="#ffffff" stroke="#e5d9c4" stroke-width="2"/>
+    <rect x="20" y="22" width="52" height="52" rx="14" fill="#3e7c4f"/>
+    <text x="46" y="55" font-family="Arial, 'Malgun Gothic', sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="middle">일정</text>
+    <text x="20" y="112" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#33291d">LMSCraft</text>
+    <text x="20" y="144" font-family="Arial, 'Malgun Gothic', sans-serif" font-size="20" font-weight="700" fill="#a4988a">개발 예정</text>
+  </g>
+  <g transform="translate(456,290)">
+    <rect x="0" y="0" width="180" height="170" rx="18" fill="#ffffff" stroke="#e5d9c4" stroke-width="2"/>
+    <rect x="20" y="22" width="52" height="52" rx="14" fill="#d99427"/>
+    <text x="46" y="55" font-family="Arial, 'Malgun Gothic', sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="middle">리뷰</text>
+    <text x="20" y="112" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#33291d">LecView</text>
+    <text x="20" y="144" font-family="Arial, 'Malgun Gothic', sans-serif" font-size="20" font-weight="700" fill="#a4988a">개발 예정</text>
+  </g>
+  <g transform="translate(649,290)">
+    <rect x="0" y="0" width="180" height="170" rx="18" fill="#ffffff" stroke="#e5d9c4" stroke-width="2"/>
+    <rect x="20" y="22" width="52" height="52" rx="14" fill="#3fa7c4"/>
+    <text x="46" y="55" font-family="Arial, 'Malgun Gothic', sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="middle">게임</text>
+    <text x="20" y="112" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#33291d">MiniGame</text>
+    <text x="20" y="144" font-family="Arial, 'Malgun Gothic', sans-serif" font-size="20" font-weight="700" fill="#3e7c4f">이용 가능</text>
+  </g>
+
+  <!-- 푸터: 브랜드 + 도메인 -->
+  <g transform="translate(70,530)">
+    <rect x="0" y="-26" width="38" height="38" rx="10" fill="#33291d"/>
+    <text x="19" y="2" font-family="Georgia, serif" font-size="24" font-weight="700" fill="#f8f2e6" text-anchor="middle">E</text>
+    <text x="52" y="0" font-family="Arial, 'Malgun Gothic', sans-serif" font-size="24" font-weight="700" fill="#33291d">에듀크래프트 <tspan fill="#8a7a63" font-weight="600">EduCraft</tspan></text>
+  </g>
+</svg>

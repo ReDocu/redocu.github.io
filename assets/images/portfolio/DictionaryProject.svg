@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600">
+  <rect width="900" height="600" rx="24" fill="#ffe8ee"/>
+  <rect x="42" y="42" width="816" height="516" rx="22" fill="rgba(255,255,255,0.72)"/>
+  <!-- 펼친 책 -->
+  <g transform="translate(96,150)">
+    <path d="M150 24 Q75 -8 0 12 L0 200 Q75 180 150 212 Q225 180 300 200 L300 12 Q225 -8 150 24 Z" fill="#db2777"/>
+    <path d="M150 40 Q85 12 18 28 L18 186 Q85 172 150 196 Z" fill="#ffffff"/>
+    <path d="M150 40 Q215 12 282 28 L282 186 Q215 172 150 196 Z" fill="#ffffff"/>
+    <rect x="40" y="58" width="86" height="12" rx="6" fill="#f3bdd1"/>
+    <rect x="40" y="86" width="70" height="12" rx="6" fill="#f3bdd1"/>
+    <rect x="40" y="114" width="80" height="12" rx="6" fill="#f3bdd1"/>
+    <rect x="174" y="58" width="86" height="12" rx="6" fill="#f3bdd1"/>
+    <rect x="174" y="86" width="66" height="12" rx="6" fill="#f3bdd1"/>
+    <rect x="174" y="114" width="78" height="12" rx="6" fill="#f3bdd1"/>
+  </g>
+  <!-- 검색 돋보기 -->
+  <g transform="translate(320,330)">
+    <circle cx="40" cy="40" r="34" fill="none" stroke="#db2777" stroke-width="14"/>
+    <line x1="66" y1="66" x2="104" y2="104" stroke="#db2777" stroke-width="16" stroke-linecap="round"/>
+  </g>
+  <text x="490" y="270" font-size="46" font-family="Arial, 'Malgun Gothic', sans-serif" font-weight="700" fill="#0f1115">사전</text>
+  <text x="490" y="326" font-size="46" font-family="Arial, 'Malgun Gothic', sans-serif" font-weight="700" fill="#0f1115">프로젝트</text>
+  <text x="490" y="372" font-size="24" font-family="Arial, sans-serif" fill="#233039">In Development · Solo</text>
+  <rect x="490" y="400" width="150" height="44" rx="22" fill="#db2777"/>
+  <text x="565" y="429" font-size="20" font-family="Arial, sans-serif" font-weight="700" fill="#ffffff" text-anchor="middle">WIP</text>
+</svg>

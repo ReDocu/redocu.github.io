@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600">
+  <rect width="900" height="600" rx="24" fill="#efe6ff"/>
+  <rect x="42" y="42" width="816" height="516" rx="22" fill="rgba(255,255,255,0.72)"/>
+  <!-- 톱니바퀴 -->
+  <g transform="translate(210,220)" fill="#7c3aed">
+    <g>
+      <rect x="-14" y="-104" width="28" height="42" rx="8"/>
+      <rect x="-14" y="62" width="28" height="42" rx="8"/>
+      <rect x="-104" y="-14" width="42" height="28" rx="8"/>
+      <rect x="62" y="-14" width="42" height="28" rx="8"/>
+      <rect x="-83" y="-83" width="36" height="28" rx="8" transform="rotate(-45)"/>
+      <rect x="47" y="-83" width="36" height="28" rx="8" transform="rotate(45)"/>
+      <rect x="-83" y="55" width="36" height="28" rx="8" transform="rotate(45)"/>
+      <rect x="47" y="55" width="36" height="28" rx="8" transform="rotate(-45)"/>
+    </g>
+    <circle cx="0" cy="0" r="78"/>
+    <circle cx="0" cy="0" r="34" fill="#efe6ff"/>
+  </g>
+  <!-- 흐름 화살표 -->
+  <g stroke="#b394f5" stroke-width="10" stroke-linecap="round" fill="none">
+    <path d="M330 180 H 420"/>
+    <path d="M330 260 H 400"/>
+    <path d="M330 340 H 380"/>
+  </g>
+  <text x="460" y="270" font-size="46" font-family="Arial, 'Malgun Gothic', sans-serif" font-weight="700" fill="#0f1115">소프트웨어</text>
+  <text x="460" y="326" font-size="46" font-family="Arial, 'Malgun Gothic', sans-serif" font-weight="700" fill="#0f1115">자동화 툴</text>
+  <text x="460" y="372" font-size="24" font-family="Arial, sans-serif" fill="#233039">In Development · Solo</text>
+  <rect x="460" y="400" width="150" height="44" rx="22" fill="#7c3aed"/>
+  <text x="535" y="429" font-size="20" font-family="Arial, sans-serif" font-weight="700" fill="#ffffff" text-anchor="middle">WIP</text>
+</svg>

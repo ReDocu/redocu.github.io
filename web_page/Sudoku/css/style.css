@@ -604,3 +604,10 @@ select {
     border-bottom: 2pt solid #000000;
   }
 }
+
+/* PuzzleLab 임베드 모드: 허브가 헤더와 테마 토글을 대신 제공한다 */
+html.embedded .app-header { display: none; }
+html.embedded .app { padding-top: 16px; }
+
+/* 지우기 키가 세로로 줄바꿈되며 행 전체가 커지는 것 방지 */
+.number-key.erase { white-space: nowrap; }

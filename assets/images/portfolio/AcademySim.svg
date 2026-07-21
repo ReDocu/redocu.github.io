@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600">
+  <rect width="900" height="600" rx="24" fill="#fff3d6"/>
+  <rect x="42" y="42" width="816" height="516" rx="22" fill="rgba(255,255,255,0.72)"/>
+  <!-- 학원 건물 -->
+  <g transform="translate(100,120)">
+    <rect x="30" y="90" width="300" height="230" rx="10" fill="#ffffff" stroke="#e6d3a3" stroke-width="3"/>
+    <path d="M10 96 L180 10 L350 96 Z" fill="#d97706"/>
+    <rect x="150" y="220" width="60" height="100" rx="6" fill="#d97706"/>
+    <rect x="62" y="130" width="56" height="56" rx="8" fill="#fde8bd"/>
+    <rect x="152" y="130" width="56" height="56" rx="8" fill="#fde8bd"/>
+    <rect x="242" y="130" width="56" height="56" rx="8" fill="#fde8bd"/>
+    <rect x="62" y="226" width="56" height="56" rx="8" fill="#fde8bd"/>
+    <rect x="242" y="226" width="56" height="56" rx="8" fill="#fde8bd"/>
+  </g>
+  <!-- 운영 지표 -->
+  <g transform="translate(492,140)">
+    <rect x="0" y="60" width="52" height="90" rx="8" fill="#f3ce85"/>
+    <rect x="70" y="30" width="52" height="120" rx="8" fill="#e9b355"/>
+    <rect x="140" y="0" width="52" height="150" rx="8" fill="#d97706"/>
+    <rect x="210" y="44" width="52" height="106" rx="8" fill="#e9b355"/>
+  </g>
+  <text x="492" y="330" font-size="46" font-family="Arial, 'Malgun Gothic', sans-serif" font-weight="700" fill="#0f1115">학원 운영</text>
+  <text x="492" y="386" font-size="46" font-family="Arial, 'Malgun Gothic', sans-serif" font-weight="700" fill="#0f1115">시뮬레이션</text>
+  <text x="492" y="432" font-size="24" font-family="Arial, sans-serif" fill="#233039">In Development · Team</text>
+  <rect x="492" y="460" width="150" height="44" rx="22" fill="#d97706"/>
+  <text x="567" y="489" font-size="20" font-family="Arial, sans-serif" font-weight="700" fill="#ffffff" text-anchor="middle">WIP</text>
+</svg>

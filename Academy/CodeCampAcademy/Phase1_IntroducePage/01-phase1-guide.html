@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase 1 학습문서 — 소개 페이지 · 혼자서 만들고, 세상에 띄우기</title>
+<style>
+  :root {
+    --ink: #1f2430;
+    --muted: #5b6472;
+    --line: #e6e9ef;
+    --bg: #f5f7fa;
+    --card: #ffffff;
+    --blue: #3b82f6;
+    --blue-soft: #eaf2fe;
+    --violet: #7c6cf0;
+    --mint: #a7f0cd;
+    --sub-card: #f7f8fa;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Pretendard", "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    line-height: 1.6;
+    padding: 0 24px 90px;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; }
+  a { color: inherit; }
+
+  /* ── 상단 진행바 (sticky) ───────────────── */
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(245, 247, 250, .92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+    margin: 0 -24px 44px;
+    padding: 12px 24px;
+  }
+  .topbar-in {
+    max-width: 1040px; margin: 0 auto;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .topbar .label { font-size: 14px; font-weight: 800; white-space: nowrap; }
+  .bar {
+    flex: 1; min-width: 160px; height: 8px; border-radius: 999px;
+    background: #e3e8f0; overflow: hidden;
+  }
+  .bar > i { display: block; height: 100%; width: 0; background: var(--blue); border-radius: 999px; transition: width .25s; }
+  .topbar .count { font-size: 14px; font-weight: 800; color: var(--blue); white-space: nowrap; }
+  .reset-btn {
+    border: 1px solid var(--line); background: #fff; color: var(--muted);
+    border-radius: 999px; padding: 5px 14px; font-size: 13px; font-weight: 700;
+    font-family: inherit; cursor: pointer;
+  }
+  .reset-btn:hover { background: var(--sub-card); color: var(--ink); }
+
+  /* ── 페이지 헤더 ─────────────────────────── */
+  .page-head { margin-bottom: 36px; }
+  .page-head .eyebrow { font-size: 14px; font-weight: 700; color: var(--muted); letter-spacing: .02em; }
+  .page-head h1 { font-size: 40px; font-weight: 800; margin: 6px 0 12px; line-height: 1.25; }
+  .page-head p { color: var(--muted); font-size: 16px; max-width: 800px; }
+  .page-head p + p { margin-top: 6px; }
+  .page-head b { color: var(--ink); }
+  .tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+  .tags span {
+    background: var(--blue-soft); color: var(--blue);
+    border: 1px solid color-mix(in srgb, var(--blue) 25%, #fff);
+    border-radius: 999px; padding: 6px 16px; font-size: 14px; font-weight: 700;
+  }
+  .btns { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; text-decoration: none; font-weight: 800; font-size: 15px;
+    padding: 12px 26px; border-radius: 14px; color: var(--ink); transition: filter .15s;
+  }
+  .btn:hover { filter: brightness(.96); }
+  .btn.primary { background: var(--mint); }
+  .btn.ghost { background: #fff; border: 1px solid var(--line); }
+
+  /* ── 카드 공통 ───────────────────────────── */
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 22px;
+    padding: 36px 40px 40px; margin-bottom: 28px;
+    position: relative; overflow: hidden;
+    box-shadow: 0 2px 10px rgba(31, 36, 48, .04);
+  }
+  .card::before {
+    content: ""; position: absolute; top: 0; left: 24px; right: 24px; height: 5px;
+    border-radius: 0 0 6px 6px; background: var(--blue);
+  }
+  .sec-title {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 18px; font-weight: 800; margin-bottom: 18px;
+  }
+  .sec-title::before { content: ""; width: 5px; height: 18px; border-radius: 3px; background: var(--blue); }
+
+  /* ── 한마디 카드 ─────────────────────────── */
+  .oneline h2 { font-size: 26px; font-weight: 800; margin-bottom: 12px; }
+  .oneline p { color: var(--muted); font-size: 16px; }
+  .oneline .flow {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    margin: 20px 0 4px;
+  }
+  .flow .step {
+    background: var(--sub-card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 9px 16px; font-size: 14.5px; font-weight: 700;
+  }
+  .flow .arrow { color: var(--blue); font-weight: 800; }
+  .quote {
+    margin-top: 24px; background: var(--blue-soft);
+    border-left: 5px solid var(--blue); border-radius: 0 12px 12px 0;
+    padding: 16px 20px; font-size: 16px; font-weight: 700;
+  }
+  .quote small { display: block; font-size: 13px; font-weight: 700; color: var(--blue); margin-bottom: 4px; }
+
+  /* ── 로드맵 표 ───────────────────────────── */
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 12px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--sub-card); font-weight: 800; font-size: 14px; white-space: nowrap; }
+  td.day, th.day { text-align: center; width: 56px; font-weight: 800; }
+  td.topic { font-weight: 700; white-space: nowrap; }
+  td.key { color: var(--muted); }
+  td a { color: var(--blue); font-weight: 700; text-decoration: none; white-space: nowrap; }
+  td a:hover { text-decoration: underline; }
+  .table-note { margin-top: 16px; font-size: 14.5px; color: var(--muted); }
+  .table-note a { color: var(--blue); font-weight: 700; text-decoration: none; }
+  .table-note a:hover { text-decoration: underline; }
+
+  /* ── Day 카드 ────────────────────────────── */
+  .day-head { display: flex; gap: 18px; align-items: flex-start; margin-bottom: 28px; }
+  .badge-icon {
+    flex: 0 0 auto; width: 62px; height: 62px; border-radius: 16px;
+    background: var(--blue-soft); color: var(--blue);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 800;
+  }
+  .day-title { font-size: 26px; font-weight: 800; line-height: 1.3; }
+  .day-sub { color: var(--muted); font-size: 15px; margin-top: 4px; }
+  .day-body { display: grid; grid-template-columns: 1.15fr 1fr; gap: 40px; }
+
+  .learn ul { list-style: none; }
+  .learn li {
+    position: relative; padding-left: 18px; margin: 10px 0;
+    color: var(--muted); font-size: 15.5px;
+  }
+  .learn li::before {
+    content: ""; position: absolute; left: 0; top: 10px;
+    width: 6px; height: 6px; border-radius: 50%; background: var(--blue);
+  }
+  .learn b { color: var(--ink); }
+  code {
+    font-family: Consolas, "D2Coding", monospace; font-size: 14px;
+    background: var(--sub-card); padding: 1px 6px; border-radius: 5px; color: #e0483d;
+  }
+
+  .practice {
+    background: var(--sub-card); border: 1px solid var(--line);
+    border-radius: 16px; padding: 20px 22px; margin-bottom: 22px;
+  }
+  .practice .tag {
+    display: inline-block; background: #fff; border: 1px solid var(--line);
+    border-radius: 999px; padding: 4px 14px; font-size: 13px; font-weight: 700; margin-bottom: 10px;
+  }
+  .practice p { font-size: 15px; color: var(--muted); }
+  .practice b { color: var(--ink); }
+
+  /* ── 체크리스트 ──────────────────────────── */
+  .check-list { list-style: none; }
+  .check-list li { margin: 8px 0; }
+  .check-list label {
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 15px; cursor: pointer; user-select: none;
+    padding: 8px 12px; border-radius: 10px; border: 1px solid transparent;
+    transition: background .15s;
+  }
+  .check-list label:hover { background: var(--sub-card); }
+  .check-list input { display: none; }
+  .box {
+    flex: 0 0 auto; width: 20px; height: 20px; margin-top: 1px;
+    border: 2px solid #cbd3e0; border-radius: 6px; background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: #fff; font-weight: 800; transition: all .15s;
+  }
+  .check-list input:checked + .box { background: var(--blue); border-color: var(--blue); }
+  .check-list input:checked + .box::after { content: "✓"; }
+  .check-list input:checked ~ .txt { color: var(--muted); text-decoration: line-through; }
+
+  /* ── 졸업 카드 ───────────────────────────── */
+  .grad { --pad: 36px; }
+  .grad h2 { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+  .grad .lead { color: var(--muted); font-size: 15.5px; margin-bottom: 20px; }
+  .grad .check-list label { font-size: 16px; font-weight: 600; }
+
+  /* ── 다음 단계 ───────────────────────────── */
+  .next {
+    background: #fff; border: 1px solid var(--line); border-radius: 22px;
+    padding: 30px 36px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
+  }
+  .next .arrow-big { font-size: 34px; color: var(--violet); }
+  .next h3 { font-size: 21px; font-weight: 800; margin-bottom: 4px; }
+  .next p { color: var(--muted); font-size: 15px; max-width: 620px; }
+  .next .go { margin-left: auto; }
+  .next .go a {
+    display: inline-block; text-decoration: none; font-weight: 800; font-size: 15px;
+    padding: 12px 24px; border-radius: 14px;
+    background: #efedfd; color: var(--violet); white-space: nowrap;
+  }
+  .next .go a:hover { filter: brightness(.97); }
+
+  footer { margin-top: 34px; text-align: center; color: var(--muted); font-size: 13.5px; }
+
+  @media (max-width: 900px) {
+    body { padding: 0 16px 70px; }
+    .topbar { margin: 0 -16px 32px; padding: 10px 16px; }
+    .card { padding: 26px 22px 30px; }
+    .page-head h1 { font-size: 30px; }
+    .day-body { grid-template-columns: 1fr; gap: 28px; }
+    .day-title { font-size: 22px; }
+    td.topic, td.key { white-space: normal; }
+    .next .go { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ 진행률 바 ═══════════ -->
+<div class="topbar">
+  <div class="topbar-in">
+    <span class="label">학습 진행률</span>
+    <span class="bar"><i id="bar-fill"></i></span>
+    <span class="count" id="bar-count">0 / 0</span>
+    <button class="reset-btn" id="btn-reset">초기화</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ═══════════ 페이지 헤더 ═══════════ -->
+  <header class="page-head">
+    <div class="eyebrow">새싹 클로드코드 과정 · Phase 1 · Day 1 – 5</div>
+    <h1>소개 페이지 — 혼자서 만들고, 세상에 띄우기</h1>
+    <p><b>PRD → 웹의 구조 → 클로드코드 다루기 → Supabase·MCP → 배포</b> 순서로,
+       한 사람이 아이디어를 문서로 정리하고 실제 인터넷 주소가 있는 웹사이트로 배포하기까지의 전 과정을 다룹니다.</p>
+    <p>결과물은 이 폴더의 <b>ending-credits.html</b>(소개 페이지)로 확인할 수 있습니다.</p>
+    <div class="tags">
+      <span>Claude Code</span><span>PRD</span><span>Supabase</span>
+      <span>MCP</span><span>Git · GitHub</span><span>Vercel</span>
+    </div>
+    <div class="btns">
+      <a class="btn primary" href="./ending-credits.html">🎬 결과물 페이지 열기</a>
+      <a class="btn ghost" href="../curriculum.html">전체 커리큘럼</a>
+      <a class="btn ghost" href="./README.md">원문 README</a>
+    </div>
+  </header>
+
+  <!-- ═══════════ Phase 1의 한마디 ═══════════ -->
+  <section class="card oneline">
+    <h2>Phase 1의 한마디 — "혼자서 만들 수 있다"</h2>
+    <p>직군의 경계가 허물어진 시대에 클로드코드라는 도구를 손에 쥐고, 아래 다섯 걸음으로 나아갑니다.</p>
+    <div class="flow">
+      <span class="step">문서 먼저(PRD)</span><span class="arrow">→</span>
+      <span class="step">웹의 구조 이해</span><span class="arrow">→</span>
+      <span class="step">도구 숙련</span><span class="arrow">→</span>
+      <span class="step">데이터 연결</span><span class="arrow">→</span>
+      <span class="step">배포</span>
+    </div>
+    <div class="quote">
+      <small>반복되는 한 문장</small>
+      문서 먼저, 코드는 그다음. 그리고 비밀(<code>.env</code>)은 저장소 밖에.
+    </div>
+  </section>
+
+  <!-- ═══════════ 학습 로드맵 ═══════════ -->
+  <section class="card">
+    <div class="sec-title">학습 로드맵</div>
+    <table>
+      <thead>
+        <tr>
+          <th class="day">Day</th><th>주제</th><th>핵심 키워드</th><th>원문</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="day">1</td>
+          <td class="topic"><a href="#day1">일하는 방식의 변화와 PRD</a></td>
+          <td class="key">직군 경계의 붕괴 · AI 발전 3단계 · 에이전트 5요소 · PRD</td>
+          <td><a href="../result_doc/book_days/book-day01.md">book-day01.md</a></td>
+        </tr>
+        <tr>
+          <td class="day">2</td>
+          <td class="topic"><a href="#day2">웹의 구조와 문서 설계</a></td>
+          <td class="key">홈페이지 vs 웹 서비스 · BaaS · MPA/SPA · React/Next · GDD</td>
+          <td><a href="../result_doc/book_days/book-day02.md">book-day02.md</a></td>
+        </tr>
+        <tr>
+          <td class="day">3</td>
+          <td class="topic"><a href="#day3">클로드코드 잘 부리기</a></td>
+          <td class="key">컨텍스트 · 슬래시 명령어 · 사용량/요금 · 멀티플렉서 · 스킬</td>
+          <td><a href="../result_doc/book_days/book-day03.md">book-day03.md</a></td>
+        </tr>
+        <tr>
+          <td class="day">4</td>
+          <td class="topic"><a href="#day4">서버·데이터·Supabase·MCP</a></td>
+          <td class="key">호스트/포트 · NoSQL vs SQL · Supabase 실전 · MCP</td>
+          <td><a href="../result_doc/book_days/book-day04.md">book-day04.md</a></td>
+        </tr>
+        <tr>
+          <td class="day">5</td>
+          <td class="topic"><a href="#day5">배포 — 세상에 내보내기</a></td>
+          <td class="key">배포 3준비물 · 자동 배포 · .env · Git · GitHub · Vercel</td>
+          <td><a href="../result_doc/book_days/book-day05.md">book-day05.md</a></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="table-note">주차 요약본: <a href="../result_doc/book_week/book_week1.md">book_week1.md</a></p>
+  </section>
+
+  <!-- ═══════════ Day 1 ═══════════ -->
+  <section class="card" id="day1">
+    <div class="day-head">
+      <div class="badge-icon">D1</div>
+      <div>
+        <div class="day-title">일하는 방식이 바뀐다, 그리고 PRD</div>
+        <div class="day-sub">직군 경계의 붕괴 · AI 발전 3단계 · 에이전트 5요소 · PRD</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li>과거의 분업(기획자·디자이너·개발자·마케터) → 이제는 <b>웹/앱 만들기가 모든 직군의 공통 업무</b></li>
+          <li>AI 발전 3단계: 생성형 AI(웹) → AI 에이전트(설치형) → 에이전틱 AI</li>
+          <li>웹 제작 도구 생태계(홈페이지 → 프로토타입/MVP → 프로덕트)와 <b>Claude Code 하나로 전 단계 커버</b></li>
+          <li>AI 에이전트의 5가지 핵심 요소: <b>컨텍스트 · 모델/에포트 · 스킬 · 훅스 · MCP</b></li>
+          <li>클로드코드 실행 환경(CLI / GUI)</li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p><b>나만의 PRD 만들기</b> — "누가 / 무엇을 / 왜"를 문서로 정리한다.</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d1-1"><span class="box"></span><span class="txt">만들고 싶은 것을 PRD(누가/무엇을/왜)로 정리할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d1-2"><span class="box"></span><span class="txt">에이전트 5요소를 각각 한 문장으로 설명할 수 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ Day 2 ═══════════ -->
+  <section class="card" id="day2">
+    <div class="day-head">
+      <div class="badge-icon">D2</div>
+      <div>
+        <div class="day-title">웹의 구조 — 뒷단과 앞면, 그리고 GDD</div>
+        <div class="day-sub">홈페이지 vs 웹 서비스 · BaaS · MPA/SPA · React/Next · GDD</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li>홈페이지 vs 웹 서비스의 차이, 백엔드를 빌려 쓰는 <b>BaaS</b>와 <b>Supabase</b></li>
+          <li>프론트엔드의 진화: <b>MPA vs SPA</b>, html/css/js → <b>React</b> → <b>Next</b></li>
+          <li>현대 웹 개발의 세 조각: <b>Claude Code + Vercel + Supabase</b></li>
+          <li>제품 문서 <b>PRD</b> → 게임 문서 <b>GDD</b> 확장(소코반 예시)</li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p><b>게임 만들기 + 컨텍스트 관리</b> — GDD를 쓰고 클로드코드로 게임을 만들어 본다.</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d2-1"><span class="box"></span><span class="txt">홈페이지와 웹 서비스를 "데이터가 오가는가"로 구분할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d2-2"><span class="box"></span><span class="txt">Claude Code · Vercel · Supabase가 각각 무엇을 담당하는지 말할 수 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ Day 3 ═══════════ -->
+  <section class="card" id="day3">
+    <div class="day-head">
+      <div class="badge-icon">D3</div>
+      <div>
+        <div class="day-title">클로드코드를 다루는 법 — 컨텍스트와 스킬</div>
+        <div class="day-sub">컨텍스트 · 슬래시 명령어 · 사용량/요금 · 멀티플렉서 · 스킬</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li>AI의 작업 기억 <b>컨텍스트</b>: 매 대화마다 재주입(비용 반복 지불), 처음과 끝은 잘 기억하고 중간은 잘 잊음</li>
+          <li><b>슬래시 명령어</b>(클로드코드의 리모컨)와 사용량·요금제 읽는 법</li>
+          <li>여러 작업을 동시에 돌리는 <b>터미널 멀티플렉서</b>(tmux / cmux / wmux)</li>
+          <li>플러그인의 3요소(<b>스킬 · 훅스 · MCP</b>)와 프로젝트 폴더 구조</li>
+          <li><b>스킬</b> — 반복 프롬프트를 자산으로 만드는 법</li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p><b>스킬로 소코반 게임 만들기</b></p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d3-1"><span class="box"></span><span class="txt">컨텍스트가 왜 비용이고 왜 중간을 잊는지 설명할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d3-2"><span class="box"></span><span class="txt">자주 쓰는 프롬프트를 스킬로 등록해 재사용할 수 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ Day 4 ═══════════ -->
+  <section class="card" id="day4">
+    <div class="day-head">
+      <div class="badge-icon">D4</div>
+      <div>
+        <div class="day-title">서버와 데이터 — Supabase와 MCP</div>
+        <div class="day-sub">호스트/포트 · NoSQL vs SQL · Supabase 실전 · MCP</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li>서버 프로그램의 원리: <b>호스트와 포트</b>, 실서비스 포트 80(HTTP)/443(HTTPS), 접속=새로고침</li>
+          <li>데이터는 어디에: <b>로컬스토리지 vs 외부 DB</b>, <b>NoSQL(문서) vs SQL(표)</b>, Firebase vs Supabase</li>
+          <li><b>Supabase 실전</b> — 프로젝트 생성과 제공 기능</li>
+          <li>AI를 외부 세계에 연결하는 열쇠, <b>MCP</b></li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p><b>DB를 연동하여 게임의 기능과 연결하기</b>(Supabase + MCP)</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d4-1"><span class="box"></span><span class="txt">로컬스토리지 저장과 외부 DB 저장의 차이를 설명할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d4-2"><span class="box"></span><span class="txt">클로드코드에 Supabase MCP를 연결해 테이블을 다룰 수 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ Day 5 ═══════════ -->
+  <section class="card" id="day5">
+    <div class="day-head">
+      <div class="badge-icon">D5</div>
+      <div>
+        <div class="day-title">배포 — 내가 만든 것을 세상에</div>
+        <div class="day-sub">배포 3준비물 · 자동 배포 · .env · Git · GitHub · Vercel</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li>배포의 세 가지 준비물과 주소(URL) 한 줄의 구조</li>
+          <li>어디에 올릴까: 내 컴퓨터 · 클라우드 · <b>배포 플랫폼(Vercel)</b>, 백엔드는 만들 것인가(Render/Railway) <b>빌릴 것인가(Supabase)</b></li>
+          <li><b>코드 저장소 → Vercel 자동 배포</b> 흐름, 그리고 그 흐름을 타면 안 되는 <b>환경변수(<code>.env</code>)</b></li>
+          <li>통제 없는 노출의 대가 — 티빙 개인정보 유출 사례</li>
+          <li><b>Git(내 컴퓨터의 도구) vs GitHub(인터넷의 저장소)</b>: init → commit → push → 말로 배포하기</li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p><b>Git·GitHub·Vercel로 내 소개 페이지를 실제 주소로 배포</b>하고, 배포 퀴즈로 자가 점검.</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d5-1"><span class="box"></span><span class="txt">commit과 push의 차이를 설명하고 직접 할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d5-2"><span class="box"></span><span class="txt"><code>.env</code>가 왜 저장소에 올라가면 안 되는지 사례를 들어 설명할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d5-3"><span class="box"></span><span class="txt">내 소개 페이지가 실제 인터넷 주소로 열린다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ 졸업 체크리스트 ═══════════ -->
+  <section class="card grad">
+    <h2>🎓 Phase 1 졸업 체크리스트</h2>
+    <p class="lead">네 가지가 모두 켜지면 Phase 1은 끝입니다.</p>
+    <ul class="check-list">
+      <li><label><input type="checkbox" data-k="g-1"><span class="box"></span><span class="txt">PRD를 먼저 쓰고 코드를 나중에 만드는 흐름이 몸에 붙었다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-2"><span class="box"></span><span class="txt">Claude Code + Vercel + Supabase 3종 세트의 역할 분담을 안다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-3"><span class="box"></span><span class="txt">소개 페이지가 배포되어 누구나 접속할 수 있다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-4"><span class="box"></span><span class="txt">비밀 값(<code>.env</code>)은 저장소 밖에서 관리한다</span></label></li>
+    </ul>
+  </section>
+
+  <!-- ═══════════ 다음 단계 ═══════════ -->
+  <section class="next">
+    <div class="arrow-big">→</div>
+    <div>
+      <h3>다음 단계 · Phase 2 — 미니 노션</h3>
+      <p>혼자 만들던 방식에서, 기획 → 디자인 → 개발을 핸드오프로 잇는 실무형 협업 구조로 확장합니다.</p>
+    </div>
+    <div class="go"><a href="../Phase2_MiniNotion/02-phase2-guide.html">Phase 2 학습문서</a></div>
+  </section>
+
+  <footer>새싹 클로드코드 과정 · Phase 1 학습문서 — 원문: <code>Phase1_IntroducePage/README.md</code></footer>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var KEY = 'phase1.progress';
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.check-list input[type=checkbox]'));
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
+  }
+  function save(state) {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* 저장 불가 환경은 무시 */ }
+  }
+  function render() {
+    var done = boxes.filter(function (b) { return b.checked; }).length;
+    var total = boxes.length;
+    document.getElementById('bar-fill').style.width = (total ? done / total * 100 : 0) + '%';
+    document.getElementById('bar-count').textContent = done + ' / ' + total;
+  }
+
+  var state = load();
+  boxes.forEach(function (b) {
+    b.checked = !!state[b.dataset.k];
+    b.addEventListener('change', function () {
+      state[b.dataset.k] = b.checked;
+      save(state);
+      render();
+    });
+  });
+
+  document.getElementById('btn-reset').addEventListener('click', function () {
+    if (!confirm('체크한 내용을 모두 지울까요?')) return;
+    state = {};
+    save(state);
+    boxes.forEach(function (b) { b.checked = false; });
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

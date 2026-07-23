@@ -588,9 +588,69 @@ vercel --prod # 프로덕션 배포</code></pre>
 <h3>배포 후 체크리스트</h3>
 <ul>
   <li>구글 OAuth 사용 시: 배포 주소를 Google Cloud <b>승인된 자바스크립트 원본</b>과 Supabase <b>Redirect URLs</b>에 추가</li>
-  <li>커스텀 도메인: 프로젝트 Settings → Domains에서 연결</li>
+  <li>커스텀 도메인: 프로젝트 Settings → Domains에서 연결 — 자세한 절차·DNS 레코드는 <b>🌐 커스텀 도메인 적용 가이드</b> 참고</li>
   <li>비밀 키는 절대 HTML에 넣지 않기 (anon key처럼 공개 가능한 키만)</li>
 </ul>`
+    },
+    {
+      id: 'domain',
+      icon: '🌐',
+      title: '커스텀 도메인 적용 가이드',
+      body: `
+<p class="guide-callout"><code>프로젝트명.vercel.app</code> 대신 <b>내 도메인</b>(예: <code>mynotion.com</code>)을 붙이는 과정입니다. 먼저 <b>▲ Vercel 배포 가이드</b>로 배포를 끝낸 뒤 진행하세요. 핵심은 도메인 관리 콘솔에서 <b>DNS 레코드</b>를 Vercel이 안내하는 값으로 맞추는 것입니다.</p>
+<h3>1. 도메인 준비</h3>
+<ul>
+  <li>도메인 등록기관(가비아·Cloudflare·Namecheap·후이즈 등)에서 원하는 주소를 구매</li>
+  <li>이미 있는 도메인이라면 그 등록기관의 <b>DNS 관리(레코드 수정)</b> 화면을 열어 둡니다</li>
+</ul>
+<h3>2. Vercel에 도메인 등록</h3>
+<ol>
+  <li>Vercel 프로젝트 → <b>Settings → Domains</b> → 도메인 입력 후 <b>Add</b></li>
+  <li>Vercel이 <b>어떤 DNS 레코드를 넣어야 하는지</b>(A 또는 CNAME 값)를 화면에 안내해 줍니다 — 이 값을 그대로 3~4단계에서 등록</li>
+</ol>
+<h3>3. DNS 레코드 이해하기</h3>
+<table>
+  <tr><th>타입</th><th>연결 대상</th><th>쓰는 곳</th></tr>
+  <tr><td><b>A</b></td><td>도메인 → <b>IP 주소</b></td><td>루트 도메인(<code>mynotion.com</code>)</td></tr>
+  <tr><td><b>CNAME</b></td><td>도메인 → <b>다른 도메인</b></td><td>서브도메인(<code>www</code>·<code>staging</code>·<code>dev</code>)</td></tr>
+  <tr><td><b>TXT</b></td><td>텍스트 정보</td><td>소유권 검증 등</td></tr>
+  <tr><td>MX / SRV</td><td>메일 / 서비스</td><td>이메일 수신 등(도메인 연결엔 불필요)</td></tr>
+</table>
+<p>레코드 하나는 <b>타입 · 호스트 · 값/위치 · TTL</b>로 이뤄집니다. TTL(Time To Live)은 캐시 유지 시간으로 보통 <code>600</code>(초)이면 충분합니다.</p>
+<h3>4. 루트 도메인 vs 서브도메인</h3>
+<table>
+  <tr><th>주소</th><th>레코드</th><th>호스트</th><th>값/위치(예)</th></tr>
+  <tr><td><code>mynotion.com</code> (루트/apex)</td><td>A</td><td><code>@</code></td><td>Vercel이 안내하는 IP(예 <code>76.76.21.21</code>)</td></tr>
+  <tr><td><code>www.mynotion.com</code> (서브)</td><td>CNAME</td><td><code>www</code></td><td><code>cname.vercel-dns.com</code></td></tr>
+</table>
+<p>루트 도메인은 원칙적으로 A 레코드를 씁니다. 등록기관이 ALIAS/ANAME을 지원하면 CNAME처럼 도메인으로 연결할 수도 있습니다 — <b>Vercel이 안내한 값을 그대로</b> 넣는 것이 가장 안전합니다.</p>
+<h3>5. DNS 관리 콘솔에서 레코드 추가</h3>
+<ol>
+  <li>DNS 레코드 수정 화면에서 <b>타입</b> 선택(A / CNAME / TXT …)</li>
+  <li><b>호스트</b>: 루트는 <code>@</code>, 서브도메인은 <code>www</code>처럼 앞부분만</li>
+  <li><b>값/위치</b>: 2단계에서 Vercel이 알려준 IP 또는 도메인</li>
+  <li><b>TTL</b> 600 → <b>저장</b></li>
+</ol>
+<h3>6. 전파 대기 & HTTPS 자동 발급</h3>
+<ul>
+  <li>DNS 변경은 전파에 <b>몇 분 ~ 수 시간</b>이 걸립니다 — Vercel Domains 화면에서 <b>Valid Configuration</b>이 뜨면 연결 완료</li>
+  <li><b>SSL 인증서는 Vercel이 자동 발급</b>합니다 → 별도 설정 없이 <code>https://</code>로 접속됩니다(따로 켤 필요 없음)</li>
+</ul>
+<h3>7. ⚠️ 도메인을 붙였으면 로그인 설정도 갱신</h3>
+<p>접속 주소가 바뀌었으므로, 새 도메인을 인증 허용 목록에 넣지 않으면 <b>소셜로그인이 막힙니다.</b></p>
+<ul>
+  <li><b>Supabase</b> → Authentication → URL Configuration: <b>Site URL</b>과 <b>Redirect URLs</b>를 새 도메인으로 (예: <code>https://mynotion.com</code>, <code>https://mynotion.com/**</code>) — 로컬(<code>http://localhost:3000/**</code>)도 함께 남겨 둡니다. (⚡ Supabase 연동 가이드)</li>
+  <li><b>Google Cloud</b> → OAuth 클라이언트: <b>승인된 자바스크립트 원본</b>과 <b>리디렉션 URI</b>에 새 도메인 추가. (🔑 구글 로그인 연동 가이드)</li>
+</ul>
+<h3>8. 자주 나는 에러</h3>
+<table>
+  <tr><th>증상</th><th>원인 · 해결</th></tr>
+  <tr><td><code>"requested path is invalid"</code></td><td>Redirect URL에 <code>https://</code> 스킴이나 콜백 경로가 빠짐 → 스킴과 경로를 정확히 입력</td></tr>
+  <tr><td>사이트에 연결할 수 없음 / DNS 오류</td><td>전파 대기 중이거나 레코드 값 오타 → 값 재확인 후 잠시 대기</td></tr>
+  <tr><td>Invalid Configuration (Vercel)</td><td>호스트/값이 안내와 다름 → Vercel이 표시한 A·CNAME 값과 정확히 일치시키기</td></tr>
+  <tr><td>인증서 대기 / 보안 경고</td><td>DNS가 아직 안 붙음 → 연결이 유효해지면 Vercel이 자동으로 발급</td></tr>
+</table>
+<p>정리: <b>Vercel에 도메인 추가 → 안내받은 DNS 레코드 등록(루트=A · 서브=CNAME) → 전파·HTTPS 자동 → Supabase·Google 인증 주소 갱신.</b></p>`
     },
     {
       id: 'api',

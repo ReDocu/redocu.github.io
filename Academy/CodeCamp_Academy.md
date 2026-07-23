@@ -111,7 +111,6 @@ title : main
 </style>
 
 <section class="cc-track-page" aria-label="코드캠프 새싹 클로드코드 과정 학습 정리">
-
   <!-- ══ 페이지 헤더 ══ -->
   <header class="cc-hero" style="--track-c:#10b981">
     <p class="section-label">코드캠프(딩코) · 새싹 클로드코드 과정 · 2026-06-29 ~ 2026-09-11</p>
@@ -136,7 +135,6 @@ title : main
         <p class="cc-track__tag">PRD → 웹의 구조 → 클로드코드 다루기 → Supabase·MCP → 배포</p>
       </div>
     </div>
-
     <div class="cc-track__grid">
       <div>
         <p class="cc-track__summary">
@@ -149,7 +147,6 @@ title : main
         </div>
         <p class="cc-motto">한 문장 — <b>"문서 먼저, 코드는 그다음. 비밀(.env)은 저장소 밖에."</b></p>
       </div>
-
       <div class="cc-project">
         <div class="cc-project__thumb"><span>P1<small>INTRO PAGE</small></span></div>
         <div class="cc-project__body">
@@ -158,13 +155,13 @@ title : main
           <p>PRD에서 시작해 실제 인터넷 주소로 배포까지 완주한 자기소개 페이지.</p>
           <div class="cc-project__actions">
             <a class="btn" href="/Academy/CodeCampAcademy/Phase1_IntroducePage/intro.html" target="_blank" rel="noopener">체험하기</a>
-            <a class="btn btn--soft" href="/Academy/CodeCampAcademy/Phase1_IntroducePage/README.md" target="_blank" rel="noopener">학습 로드맵</a>
+            <a class="btn btn--soft" href="/Academy/CodeCampAcademy/Phase1_IntroducePage/01-phase1-guide.html" target="_blank" rel="noopener">학습 로드맵</a>
+            <a class="btn btn--soft" href="/Academy/CodeCampAcademy/Phase2_MiniNotion/클로드코드_Phase_1.pdf" target="_blank" rel="noopener">E-Book</a>
           </div>
         </div>
       </div>
     </div>
   </article>
-
   <!-- ══ ② Phase 2 ══ -->
   <article class="cc-track" id="phase-2" style="--track:#8b5cf6">
     <div class="cc-track__head">
@@ -174,7 +171,6 @@ title : main
         <p class="cc-track__tag">기획(PM-Skills) → 디자인(클로드 디자인) → 개발(하네스 엔지니어링) 핸드오프</p>
       </div>
     </div>
-
     <div class="cc-track__grid">
       <div>
         <p class="cc-track__summary">
@@ -188,7 +184,6 @@ title : main
         </div>
         <p class="cc-motto">한 문장 — <b>"모델의 선의에 의존하지 말고, 구조로 강제하라."</b></p>
       </div>
-
       <div class="cc-project">
         <div class="cc-project__thumb"><span>P2<small>MINI NOTION</small></span></div>
         <div class="cc-project__body">
@@ -197,11 +192,11 @@ title : main
           <p>핸드오프로 만든 노션형 웹서비스. 구글로그인과 이미지 업로드까지 동작합니다.</p>
           <div class="cc-project__actions">
             <a class="btn" href="/Academy/CodeCampAcademy/Phase2_MiniNotion/02-mini-notion.html" target="_blank" rel="noopener">체험하기</a>
-            <a class="btn btn--soft" href="/Academy/CodeCampAcademy/Phase2_MiniNotion/README.md" target="_blank" rel="noopener">학습 로드맵</a>
+            <a class="btn btn--soft" href="/Academy/CodeCampAcademy/Phase2_MiniNotion/02-phase2-guide.html" target="_blank" rel="noopener">학습 로드맵</a>
+            <a class="btn btn--soft" href="/Academy/CodeCampAcademy/Phase2_MiniNotion/클로드코드_Phase_2.pdf" target="_blank" rel="noopener">E-Book</a>
           </div>
         </div>
       </div>
     </div>
   </article>
-
 </section>

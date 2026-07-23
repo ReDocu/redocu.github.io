@@ -1,12 +1,12 @@
-새싹 클로드코드 과정 · Phase 2 · Day 6 – 15
+새싹 클로드코드 과정 · Phase 2 · Day 6 – 16
 
-# 미니 노션 — 팀처럼, 통제하며, 지키면서 만들기
+# 미니 노션 — 팀처럼, 통제하며, 지키면서, 세상에 내보내며 만들기
 
-**기획(PM-Skills) → 디자인(클로드 디자인) → 개발(하네스 엔지니어링)** 을 핸드오프로 잇는 역할 분리형 구조로 미니 노션 웹서비스를 만들고, 외부 API 연동 · 인증/보안 · 구글로그인 · 자동 안전장치(훅스) · 워크트리 병렬 구현 · 이미지 스토리지까지 확장합니다.
+**기획(PM-Skills) → 디자인(클로드 디자인) → 개발(하네스 엔지니어링)** 을 핸드오프로 잇는 역할 분리형 구조로 미니 노션 웹서비스를 만들고, 외부 API 연동 · 인증/보안 · 구글로그인 · 자동 안전장치(훅스) · 워크트리 병렬 구현 · 이미지 스토리지, 그리고 **Git·Vercel 배포와 모니터링(로그·메트릭)**까지 확장합니다.
 
 결과물은 이 폴더의 [`02-mini-notion.html`](./02-mini-notion.html)(미니 노션)로 확인할 수 있습니다.
 
-`● PM-Skills` `● Claude Design` `● DB 설계` `● TDD · SDD` `● API · CORS` `● 인증 · 보안` `● OAuth · JWT` `● Hooks` `● Git 워크트리` `● Supabase Storage`
+`● PM-Skills` `● Claude Design` `● DB 설계` `● TDD · SDD` `● API · CORS` `● 인증 · 보안` `● OAuth · JWT` `● Hooks` `● Git 워크트리` `● Supabase Storage` `● 배포 · Vercel` `● 모니터링 · 로그/메트릭`
 
 ---
 
@@ -15,7 +15,7 @@
 Phase 1이 "혼자서 만들 수 있다"였다면, Phase 2는 두 걸음 더 나아갑니다.
 
 - **Week 2 (Day 6–10)** — 기획 → 디자인 → 개발을 **핸드오프**로 잇는 실무형 협업 구조. 뼈대는 **데이터베이스 설계**(정규화·UUID)와 **LLM 엔지니어링 4단계**(프롬프트→컨텍스트→하네스→루프).
-- **Week 3+ (Day 11–15)** — **바깥세상과 연결하고, 지키면서 만든다.** 외부 API(CORS·프록시), 인증·인가와 암호화, 구글로그인(JWT), 훅과 Git 워크트리, 그리고 워크트리 병렬 실전과 이미지 스토리지 분리 저장.
+- **Week 3+ (Day 11–16)** — **바깥세상과 연결하고, 지키면서 만들고, 세상에 내보낸다.** 외부 API(CORS·프록시), 인증·인가와 암호화, 구글로그인(JWT), 훅과 Git 워크트리, 워크트리 병렬 실전과 이미지 스토리지 분리 저장, 그리고 **Git·Vercel 배포와 모니터링(로그·메트릭)** 및 전 과정 총정리.
 
 > 반복되는 한 문장 — **모델의 선의에 의존하지 말고, 구조로 강제하라.**
 
@@ -33,6 +33,7 @@ Phase 1이 "혼자서 만들 수 있다"였다면, Phase 2는 두 걸음 더 나
 | 13 | 보안 | 구글로그인 실습 | GCP·Supabase 연동 · JWT=인코딩 · Bearer 인가 | [book-day13.md](../result_doc/book_days/book-day13.md) |
 | 14 | 자동화 | 훅스와 기능 병렬 구현 | PreToolUse/Stop · 토크노믹스 · Git 워크트리 | [book-day14.md](../result_doc/book_days/book-day14.md) |
 | 15 | 실전·확장 | 워크트리 병렬 실전과 이미지 프로세스 | 기능 그룹화·병렬 통합 · 픽셀/RGB · Storage 분리 저장 | [book-day15.md](../result_doc/book_days/book-day15.md) |
+| 16 | 배포·운영 | 배포 환경과 모니터링, 전 과정 총정리 | 배포 4단계 · Git/Vercel 자동배포 · 로그/메트릭 · Vercel 에이전트 | [book-day16.md](../result_doc/book_days/book-day16.md) |
 
 주차 요약본: [book_week2.md](../result_doc/book_week/book_week2.md) · [book_week3.md](../result_doc/book_week/book_week3.md)
 공용 가이드: [google-login-guide](../docs/google-login-guide.md) · [secrets-and-visibility-guide](../docs/secrets-and-visibility-guide.md) · [claude-code-parallel-guide](../docs/claude-code-parallel-guide.md) · [token-efficiency-guide](../docs/token-efficiency-guide.md)
@@ -193,6 +194,25 @@ Phase 1이 "혼자서 만들 수 있다"였다면, Phase 2는 두 걸음 더 나
 - [ ] 기능을 의존 관계로 그룹화해 워크트리에 배분하고, 충돌 없이 한 코드베이스로 통합할 수 있다
 - [ ] 이미지를 DB에 직접 넣지 않는 이유(비동기 프로세스)를 설명하고, Storage 업로드 → 주소를 DB에 저장하는 흐름을 그릴 수 있다
 
+## Day 16 · 배포 환경과 모니터링, 그리고 미니 노션 총정리
+
+**배우는 것**
+
+- **배포 환경 4단계**(로컬 · 개발 · 스테이징 · 프로덕션) — 단계별 용도·접속 주소·회원 데이터 분리, 1인 개발은 **로컬+프로덕션**만으로 시작(`.env.prod`/`.env.local`)
+- **Git·Github·Vercel 자동 배포** — "빌드 → 커밋 → 푸쉬"로 코드 저장소에 올리면 Vercel이 자동 감지·배포, **`.env`는 Github이 아니라 Vercel에 직접 입력**
+- 배포 후 소셜로그인이 안 되는 이유 → Supabase **Site URL · Redirect URL을 배포 주소로 갱신**(프로덕션·로컬 둘 다), 커스텀 도메인 연결(**DNS 레코드 A/CNAME/TXT**)
+- **모니터링**: **로그**(요청 기록) vs **메트릭**(시간에 따라 변하는 수치), **Vercel 에이전트**(Chat·Code Reviews·Investigations)에게 좋은 질문 던지기
+- **전 과정 총정리**: 기획 → 디자인 → DB → 개발 → API → 로그인 → 훅·워크트리 → 이미지 → 배포를 하나의 지도로 복기
+
+**실습·과제** — Github 리포지토리 생성 → 빌드·커밋·푸쉬 → Vercel 연결·최초 1회 수동 배포 → Supabase 소셜로그인 인증 URL 변경 → 프로덕션/로컬 로그인 테스트. 참고: [secrets-and-visibility-guide](../docs/secrets-and-visibility-guide.md) · [google-login-guide](../docs/google-login-guide.md)
+
+**이걸 할 수 있으면 통과**
+
+- [ ] 배포 4단계를 구분하고, 1인 개발에서 로컬+프로덕션만으로 시작하는 이유를 설명할 수 있다
+- [ ] "빌드→커밋→푸쉬 → Vercel 자동배포" 흐름으로 미니 노션을 배포하고, `.env`는 Vercel에 직접 넣을 수 있다
+- [ ] 배포 후 Supabase Site URL·Redirect URL을 갱신해 프로덕션·로컬 양쪽에서 소셜로그인이 되게 할 수 있다
+- [ ] 로그와 메트릭을 구분하고, Vercel 에이전트에게 "프로젝트/기간/증상/결과"를 담아 질문할 수 있다
+
 ---
 
 ## Phase 2 졸업 체크리스트
@@ -204,5 +224,7 @@ Phase 1이 "혼자서 만들 수 있다"였다면, Phase 2는 두 걸음 더 나
 - [ ] 훅(PreToolUse·Stop)이 등록되어 비밀 값 유출을 구조로 막는다
 - [ ] 기능 4그룹을 워크트리로 병렬 구현하고 충돌 없이 한 코드베이스로 통합했다
 - [ ] 프로필 이미지가 Storage 버킷(UUID 파일명)에 저장되고, DB에는 다운로드 주소만 남는다
+- [ ] 미니 노션을 Github–Vercel로 배포하고, `.env`를 Vercel에 직접 넣어 프로덕션·로컬 양쪽에서 소셜로그인이 동작한다
+- [ ] 배포된 서비스를 로그·메트릭(또는 Vercel 에이전트)으로 관찰할 수 있다
 
 **이전 단계 ←** [Phase 1 · 소개 페이지](../Phase1_IntroducePage/README.md) — 혼자서 만들고 배포하는 기본기.

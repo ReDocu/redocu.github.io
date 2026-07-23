@@ -175,7 +175,7 @@ title : Project Dashboard
           </tr>
           <tr>
             <td><div class="name">Puzzle Lab</div><div class="desc">스도쿠·가쿠로 통합 퍼즐 생성기 · 인쇄 지원 웹 게임</div></td>
-            <td><span class="st st--live">운영중</span></td>
+            <td><span class="st st--done">완료</span></td>
             <td><a href="https://github.com/ReDocu/redocu.github.io" target="_blank" rel="noopener">ReDocu/redocu.github.io</a></td>
             <td><a href="/web_page/PuzzleLab/index.html" target="_blank" rel="noopener">플레이</a></td>
           </tr>

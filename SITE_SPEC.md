@@ -136,11 +136,17 @@ bundle exec jekyll build
 ### 6.3 Contact
 
 - 섹션 ID: `contact`
-- 이메일: `dlehrb103@google.com`
+- 레이아웃: `.contact-box` 2단 그리드. 왼쪽은 구글 문의 폼 CTA, 오른쪽은 이메일/채널 정보. `1080px` 이하에서 1단으로 전환된다.
+- 구글 문의 폼: `_config.yml`의 `contact_form_url`로 연결한다. 임베드가 아니라 새 탭 링크 방식이다.
+  - 폼의 문항 구성은 `CONTACT_FORM.md`에 정의되어 있다. 폼을 수정하면 그 문서도 함께 갱신한다.
+  - 채용·헤드헌팅·강의·협업·버그제보를 문의 유형으로 분기시키는 구조라 문항 수가 많다. 반드시 정의서를 먼저 본다.
+  - 값이 비어 있으면 버튼 대신 `문의 폼 준비 중` 상태(`.contact-form-pending`)가 표시되므로 죽은 링크가 배포되지 않는다.
+  - 구글 폼의 `보내기 > 링크`에서 복사한 응답용 URL을 넣는다. 편집용 URL(`/edit`)을 넣으면 방문자가 폼을 수정할 수 있으므로 주의한다.
+- 이메일: `_config.yml`의 `contact_email`을 참조한다. 페이지에 값을 직접 쓰지 않는다.
 - GitHub 링크: `https://github.com/redocu`
-- Blog 링크: `https://example.com/blog`
+- 포트폴리오 PDF 링크: `/data/포트폴리오.pdf`
 
-주의: `_config.yml`의 이메일은 `dlehrb103@gmail.com`이고, 메인 Contact의 이메일은 `dlehrb103@google.com`이다. 실제 운영 이메일을 하나로 정리하는 것이 좋다.
+임베드 대신 링크 방식을 쓰는 이유: 구글 폼 iframe은 사이트의 다크모드(`body.dark-mode`)를 따르지 않아 흰 배경이 그대로 노출되고, 높이를 하드코딩해야 해서 스크롤이 이중으로 생긴다.
 
 ## 7. 공통 레이아웃 및 UI 동작
 
@@ -392,8 +398,7 @@ GitHub Pages 저장소라면 보통 다음 중 하나로 배포된다.
 정리하면 좋은 항목:
 
 - `index.markdown`에 주석 처리된 대형 템플릿이 많아 장기 관리성이 낮음
-- `_config.yml`의 이메일과 Contact 이메일이 다름
-- Blog 링크가 `https://example.com/blog` placeholder 상태
+- `_config.yml`의 `contact_form_url`이 비어 있어 Contact가 `문의 폼 준비 중` 상태임 — 구글 폼 생성 후 채워야 함
 - `_config.yml`의 `user_img` 경로가 현재 assets 구조와 맞지 않음
 - 이미지/PDF 파일 용량이 큰 편이므로 필요 시 압축 권장
 - PythonArchive 관리자에서 수정한 내용은 브라우저 로컬 저장소에만 저장되므로 배포 데이터와 혼동하지 않도록 운영 규칙 필요

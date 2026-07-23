@@ -43,7 +43,52 @@ title : main
     <div class="portfolio-slider" data-slider>
       <button class="slider-arrow slider-arrow--left" type="button" aria-label="이전 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <div class="slider-track" tabindex="0">
-      <article class="portfolio-card">
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="project/ClaudeCockpit/banner.png" alt="ClaudeCockpit 프로젝트 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>ClaudeCockpit</h3>
+            <p>여러 프로젝트의 Claude Code 세션을 한 화면에서 관리·모니터링하는 로컬 대시보드입니다. 세션 상태 확인과 빠른 전환을 지원합니다.</p>
+            <div class="tag-list"><span class="tag">Claude Code</span><span class="tag">Node.js</span><span class="tag">wmux</span><span class="tag">v0.3</span></div>
+            <div class="card-actions">
+              <a class="btn" href="project/ClaudeCockpit/ClaudeCockpit-v0.3.0.zip" target="_blank" rel="noopener">다운로드</a>
+              <a class="btn" href="https://github.com/ReDocu/ClaudeCodeTemplate" target="_blank" rel="noopener">GitHub</a>
+              <a class="btn" href="project/ClaudeCockpit/Tech_document.html" target="_blank" rel="noopener">기술문서</a>
+            </div>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="project/KnowledgeSharingCenter/banner.png" alt="지식 나눔터 프로젝트 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>지식 나눔터</h3>
+            <p>문서·게시판·노트·일정·채팅을 한 자리에 모아 함께 읽고 나누는 지식 공유 공간입니다. 리서치 문서와 학습 자료를 자동 색인해 함께 관리합니다.</p>
+            <div class="tag-list"><span class="tag">Node.js</span><span class="tag">Vercel</span><span class="tag">Upstash Redis</span><span class="tag">운영중</span></div>
+            <div class="card-actions">
+              <a class="btn" href="https://company-process.vercel.app/" target="_blank" rel="noopener">방문</a>
+              <a class="btn" href="https://github.com/ReDocu/CompanyProcess" target="_blank" rel="noopener">GitHub</a>
+              <a class="btn" href="https://github.com/ReDocu/CompanyProcess#readme" target="_blank" rel="noopener">기술문서</a>
+            </div>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="assets/images/portfolio/EduCraft_hub.svg" alt="EduCraft 프로젝트 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>EduCraft</h3>
+            <p>학습 플랫폼. 책 제작 플랫폼 BookCraft, 학습 관리 LMSCraft, 강의 탐색·리뷰 LecView, 미니게임 네 개의 공방을 사용하는 단일 Next.js 앱입니다.</p>
+            <div class="tag-list"><span class="tag">Next.js</span><span class="tag">Supabase</span><span class="tag">모노레포</span><span class="tag">Vercel</span></div>
+            <div class="card-actions">
+              <a class="btn" href="http://www.eqment.store/" target="_blank" rel="noopener">방문</a>
+              <a class="btn" href="https://github.com/ReDocu/EduCraft" target="_blank" rel="noopener">GitHub</a>
+              <a class="btn" href="https://github.com/ReDocu/CompanyProcess#readme" target="_blank" rel="noopener">기술문서</a>
+            </div>
+          </div>
+        </article>
+        <article class="portfolio-card">
           <div class="portfolio-card__thumb">
             <img src="assets/images/portfolio/ResumeSim.svg" alt="가상 이력서 시뮬레이션 썸네일" />
           </div>
@@ -92,51 +137,6 @@ title : main
             <div class="tag-list"><span class="tag">개발중</span><span class="tag">출시목적</span><span class="tag">개인</span><span class="tag">GitHub</span></div>
             <div class="card-actions">
               <a class="btn" href="https://github.com/ReDocu/DictionaryProject" target="_blank" rel="noopener">GitHub 바로가기</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="project/ClaudeCockpit/banner.png" alt="ClaudeCockpit 프로젝트 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>ClaudeCockpit</h3>
-            <p>여러 프로젝트의 Claude Code 세션을 한 화면에서 관리·모니터링하는 로컬 대시보드입니다. 세션 상태 확인과 빠른 전환을 지원합니다.</p>
-            <div class="tag-list"><span class="tag">Claude Code</span><span class="tag">Node.js</span><span class="tag">wmux</span><span class="tag">v0.3</span></div>
-            <div class="card-actions">
-              <a class="btn" href="project/ClaudeCockpit/ClaudeCockpit-v0.3.0.zip" target="_blank" rel="noopener">다운로드</a>
-              <a class="btn" href="https://github.com/ReDocu/ClaudeCodeTemplate" target="_blank" rel="noopener">GitHub</a>
-              <a class="btn" href="project/ClaudeCockpit/Tech_document.html" target="_blank" rel="noopener">기술문서</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="project/KnowledgeSharingCenter/banner.png" alt="지식 나눔터 프로젝트 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>지식 나눔터</h3>
-            <p>문서·게시판·노트·일정·채팅을 한 자리에 모아 함께 읽고 나누는 지식 공유 공간입니다. 리서치 문서와 학습 자료를 자동 색인해 함께 관리합니다.</p>
-            <div class="tag-list"><span class="tag">Node.js</span><span class="tag">Vercel</span><span class="tag">Upstash Redis</span><span class="tag">운영중</span></div>
-            <div class="card-actions">
-              <a class="btn" href="https://company-process.vercel.app/" target="_blank" rel="noopener">방문</a>
-              <a class="btn" href="https://github.com/ReDocu/CompanyProcess" target="_blank" rel="noopener">GitHub</a>
-              <a class="btn" href="https://github.com/ReDocu/CompanyProcess#readme" target="_blank" rel="noopener">기술문서</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/EduCraft_hub.svg" alt="EduCraft 프로젝트 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>EduCraft</h3>
-            <p>학습 플랫폼. 책 제작 플랫폼 BookCraft, 학습 관리 LMSCraft, 강의 탐색·리뷰 LecView, 미니게임 네 개의 공방을 사용하는 단일 Next.js 앱입니다.</p>
-            <div class="tag-list"><span class="tag">Next.js</span><span class="tag">Supabase</span><span class="tag">모노레포</span><span class="tag">Vercel</span></div>
-            <div class="card-actions">
-              <a class="btn" href="http://www.eqment.store/" target="_blank" rel="noopener">방문</a>
-              <a class="btn" href="https://github.com/ReDocu/EduCraft" target="_blank" rel="noopener">GitHub</a>
-              <a class="btn" href="https://github.com/ReDocu/CompanyProcess#readme" target="_blank" rel="noopener">기술문서</a>
             </div>
           </div>
         </article>
@@ -289,14 +289,45 @@ title : main
     <div class="section-head">
       <p class="section-label">Contact</p>
       <h2>Contact Us</h2>
-      <p class="section-copy"><!--연락 경로는 짧고 직관적으로 정리합니다.--></p>
+      <p class="section-copy">채용 제안과 헤드헌팅, 강의·교육 제안, 프로젝트 협업, 만든 도구에 대한 피드백까지 모두 환영합니다. 문의 폼을 남겨 주시면 가장 빠르게 확인합니다.</p>
     </div>
     <div class="contact-box">
-      <p><strong>Email</strong></p>
-      <a href="mailto:dlehrb103@google.com">dlehrb103@google.com</a>
-      <div class="contact-links">
-        <a class="btn" href="https://github.com/redocu" target="_blank" rel="noopener">GitHub</a>
-        <a class="btn btn--ghost" href="https://example.com/blog" target="_blank" rel="noopener">Blog</a>
+      <div class="contact-primary">
+        <h3 class="contact-primary__title">문의 폼 남기기</h3>
+        <p class="contact-primary__desc">
+          문의 유형을 고르시면 그에 필요한 항목만 보여 드립니다.
+          구글 로그인 없이 바로 작성할 수 있고, 1~2분이면 충분합니다.
+        </p>
+        {% assign has_ko_form = false %}
+        {% if site.contact_form_url and site.contact_form_url != "" %}{% assign has_ko_form = true %}{% endif %}
+        {% assign has_en_form = false %}
+        {% if site.contact_form_url_en and site.contact_form_url_en != "" %}{% assign has_en_form = true %}{% endif %}
+        {% if has_ko_form or has_en_form %}
+        <div class="contact-links">
+          {% if has_ko_form %}
+          <a class="btn" href="{{ site.contact_form_url }}" target="_blank" rel="noopener">문의 폼 작성하기</a>
+          {% endif %}
+          {% if has_en_form %}
+          <a class="btn btn--ghost" href="{{ site.contact_form_url_en }}" target="_blank" rel="noopener" hreflang="en" lang="en">Contact form (English)</a>
+          {% endif %}
+        </div>
+        {% else %}
+        <span class="contact-form-pending">문의 폼 준비 중</span>
+        {% endif %}
+        <p class="contact-note">보통 1~2일 안에 회신드립니다.</p>
+      </div>
+      <div class="contact-aside">
+        <div class="contact-item">
+          <p class="contact-item__label">Email</p>
+          <a href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a>
+        </div>
+        <div class="contact-item">
+          <p class="contact-item__label">채널</p>
+          <div class="contact-links">
+            <a class="btn btn--ghost" href="https://github.com/redocu" target="_blank" rel="noopener">GitHub</a>
+            <a class="btn btn--ghost" href="/data/포트폴리오.pdf" target="_blank" rel="noopener">포트폴리오 PDF</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>

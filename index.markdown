@@ -101,6 +101,7 @@ title : main
             </div>
           </div>
         </article>
+        <!--
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
             <img src="assets/images/portfolio/AutomationTool.svg" alt="소프트웨어 자동화 툴 썸네일" />
@@ -140,6 +141,7 @@ title : main
             </div>
           </div>
         </article>
+        -->
       </div>
       <button class="slider-arrow slider-arrow--right" type="button" aria-label="다음 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5L16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>
@@ -174,6 +176,33 @@ title : main
         </article>
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
+            <img src="assets/images/portfolio/AcademySim.svg" alt="학원 운영 시뮬레이션 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>학원 운영 시뮬레이션</h3>
+            <p>학원을 운영하며 커리큘럼과 수강생을 관리하는 경영 시뮬레이션 게임입니다. 팀 프로젝트로 정식 출시를 목표로 개발하고 있습니다.</p>
+            <div class="tag-list"><span class="tag">개발중</span><span class="tag">출시목적</span><span class="tag">팀</span><span class="tag">GitHub</span></div>
+            <div class="card-actions">
+              <a class="btn" href="https://github.com/ReDocu/Project_Academy_Ops" target="_blank" rel="noopener">GitHub 바로가기</a>
+            </div>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="assets/images/portfolio/AcademySim.svg" alt="학원 운영 시뮬레이션 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>명일방주 모작</h3>
+            <p>실제 게임을 개발하고 어떻게 운영할지에 대한 연구를 위한 게임</p>
+            <div class="tag-list"><span class="tag">개발중</span><span class="tag">모작</span><span class="tag">개인</span><span class="tag">Unity</span></div>
+            <div class="card-actions">
+              <a class="btn" href="https://github.com/ReDocu/Project_Academy_Ops" target="_blank" rel="noopener">GitHub 바로가기</a>
+            </div>
+          </div>
+        </article>
+        <!-- 
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
             <img src="assets/images/portfolio/GameDevTool.svg" alt="게임 개발 운영 툴 썸네일" />
           </div>
           <div class="portfolio-card__body">
@@ -198,19 +227,7 @@ title : main
             </div>
           </div>
         </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/AcademySim.svg" alt="학원 운영 시뮬레이션 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>학원 운영 시뮬레이션</h3>
-            <p>학원을 운영하며 커리큘럼과 수강생을 관리하는 경영 시뮬레이션 게임입니다. 팀 프로젝트로 정식 출시를 목표로 개발하고 있습니다.</p>
-            <div class="tag-list"><span class="tag">개발중</span><span class="tag">출시목적</span><span class="tag">팀</span><span class="tag">GitHub</span></div>
-            <div class="card-actions">
-              <a class="btn" href="https://github.com/ReDocu/Project_Academy_Ops" target="_blank" rel="noopener">GitHub 바로가기</a>
-            </div>
-          </div>
-        </article>
+        -->
       </div>
       <button class="slider-arrow slider-arrow--right" type="button" aria-label="다음 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5L16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>
@@ -247,7 +264,7 @@ title : main
         </article>
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/MBC_Academy.png" alt="MBC컴퓨터아카데미 AI 커리큘럼 썸네일" />
+            <img src="/Academy/MBCAcademy/MBCAcademy_overview.png" alt="MBC컴퓨터아카데미 AI 커리큘럼 썸네일" />
           </div>
           <div class="portfolio-card__body">
             <h3>비전 기반 AI 모델 생성 커리큘럼</h3>
@@ -263,7 +280,7 @@ title : main
         </article>
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/CodeCamp.svg" alt="코드캠프 바이브 코딩 커리큘럼 썸네일" />
+            <img src="/Academy/CodeCampAcademy/CCAcademy_overview.png" alt="코드캠프 바이브 코딩 커리큘럼 썸네일" />
           </div>
           <div class="portfolio-card__body">
             <h3>웹 기반 바이브 코딩 커리큘럼</h3>

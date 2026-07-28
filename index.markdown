@@ -101,45 +101,6 @@ title : main
             </div>
           </div>
         </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/AutomationTool.svg" alt="소프트웨어 자동화 툴 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>소프트웨어 자동화 툴 프로그램</h3>
-            <p>반복되는 작업 과정을 자동화하는 툴 프로그램입니다. 개인 프로젝트로 정식 출시를 목표로 개발하고 있습니다.</p>
-            <div class="tag-list"><span class="tag">개발중</span><span class="tag">출시목적</span><span class="tag">개인</span><span class="tag">GitHub</span></div>
-            <div class="card-actions">
-              <a class="btn" href="https://github.com/ReDocu/ProcessingAuto" target="_blank" rel="noopener">GitHub 바로가기</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/AssetManager.svg" alt="에셋 및 데이터 관리자 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>에셋 및 데이터 관리자</h3>
-            <p>프로젝트의 에셋과 데이터를 한곳에서 정리·관리하는 도구입니다. 개인 프로젝트로 정식 출시를 목표로 개발하고 있습니다.</p>
-            <div class="tag-list"><span class="tag">개발중</span><span class="tag">출시목적</span><span class="tag">개인</span><span class="tag">GitHub</span></div>
-            <div class="card-actions">
-              <a class="btn" href="https://github.com/ReDocu/AssetManager" target="_blank" rel="noopener">GitHub 바로가기</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/DictionaryProject.svg" alt="사전 프로젝트 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>사전 프로젝트</h3>
-            <p>용어와 지식을 모아 정리하고 검색해 보는 사전 프로젝트입니다. 개인 프로젝트로 정식 출시를 목표로 개발하고 있습니다.</p>
-            <div class="tag-list"><span class="tag">개발중</span><span class="tag">출시목적</span><span class="tag">개인</span><span class="tag">GitHub</span></div>
-            <div class="card-actions">
-              <a class="btn" href="https://github.com/ReDocu/DictionaryProject" target="_blank" rel="noopener">GitHub 바로가기</a>
-            </div>
-          </div>
-        </article>
       </div>
       <button class="slider-arrow slider-arrow--right" type="button" aria-label="다음 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5L16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>
@@ -169,32 +130,6 @@ title : main
               <a class="btn" href="project/CSGP/CSGP.zip" target="_blank" rel="noopener">다운로드</a>
               <a class="btn" href="https://github.com/ReDocu/CSGPProject" target="_blank" rel="noopener">GitHub</a>
               <a class="btn" href="project/CSGP/study_doc/index.html" target="_blank" rel="noopener">학습문서</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/GameDevTool.svg" alt="게임 개발 운영 툴 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>게임 개발 운영 툴</h3>
-            <p>게임 개발과 라이브 운영을 돕는 자동화 툴입니다. 개인 프로젝트로 정식 출시를 목표로 개발하고 있습니다.</p>
-            <div class="tag-list"><span class="tag">개발중</span><span class="tag">출시목적</span><span class="tag">개인</span><span class="tag">GitHub</span></div>
-            <div class="card-actions">
-              <a class="btn" href="https://github.com/ReDocu/GameDevAuto" target="_blank" rel="noopener">GitHub 바로가기</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/AnimalGuard.svg" alt="동물수호대 프로젝트 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>동물 수호대</h3>
-            <p>동물들을 지켜내는 디펜스 게임입니다. 개인 프로젝트로 정식 출시를 목표로 개발하고 있습니다.</p>
-            <div class="tag-list"><span class="tag">개발중</span><span class="tag">출시목적</span><span class="tag">개인</span><span class="tag">GitHub</span></div>
-            <div class="card-actions">
-              <a class="btn" href="https://github.com/ReDocu/AnimalDeffence" target="_blank" rel="noopener">GitHub 바로가기</a>
             </div>
           </div>
         </article>

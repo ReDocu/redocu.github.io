@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>팀 워크스페이스 (CompanySystem) — 기술문서 (내부 구조 · UML)</title>
+<script>
+/* 테마 부트 — 스타일보다 먼저 data-theme을 확정해 첫 페인트 깜빡임(FOUC)을 막는다.
+   저장값(cs-theme) > OS 설정(prefers-color-scheme) 순. */
+(function(){var v=null;try{v=localStorage.getItem('cs-theme');}catch(e){}
+  if(v!=='light'&&v!=='dark')v=(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';
+  document.documentElement.setAttribute('data-theme',v);})();
+</script>
+<style>
+  /* ── 테마 토큰 ────────────────────────────────────────────────
+     :root = 다크(기본) · :root[data-theme="light"] = 라이트 오버라이드.
+     색은 전부 토큰 경유 — 새 규칙에 하드코딩 헥사를 쓰지 말 것(한쪽 테마에서 깨짐). */
+  :root{
+    color-scheme:dark;
+    --bg:#0b0e13; --bg-grid:#0e131a; --panel:#141a22; --panel-2:#171f29;
+    --border:#232c37; --border-2:#2c3744;
+    --text:#d8dee7; --muted:#8b97a6; --faint:#828d9c;
+    --accent:#4fd6c9; --accent-dim:#2c8f88; --on-accent:#06201d;
+    --ok:#46c667; --warn:#e2a83e; --crit:#f4685c; --idle:#5a6472; --blue:#5aa9f0;
+    --quiet:#6f8a7e; --violet:#b48cf2;
+    --t-accent:#4fd6c912; --t-warn:#e2a83e14; --e-warn:#e2a83e66;
+    --t-crit:#f4685c16;   --e-crit:#f4685c66; --t-blue:#5aa9f012; --e-blue:#5aa9f066;
+    --e-ok:#2f3d38; --row-alt:#10151d; --svg-ext:#101720;
+    --sh-btn:0 6px 20px -8px #000;
+    --mono:ui-monospace,"Cascadia Code",Consolas,monospace;
+    --ui:system-ui,-apple-system,"Segoe UI",Roboto,"Malgun Gothic",sans-serif;
+  }
+  :root[data-theme="light"]{
+    color-scheme:light;
+    --bg:#f7f9fb; --bg-grid:#e2e8f0; --panel:#ffffff; --panel-2:#f2f5f9;
+    --border:#dde4ec; --border-2:#c6d0dc;
+    --text:#1a2230; --muted:#5b6675; --faint:#6b7683;
+    --accent:#0d8b7f; --accent-dim:#5cb8ae; --on-accent:#ffffff;
+    --ok:#1a8f45; --warn:#9a6a00; --crit:#cf3a2c; --idle:#9aa5b3; --blue:#2c7cd6;
+    --quiet:#3d7a66; --violet:#6d4fe0;
+    --t-accent:#0d8b7f14; --t-warn:#9a6a0016; --e-warn:#9a6a0066;
+    --t-crit:#cf3a2c14;   --e-crit:#cf3a2c66; --t-blue:#2c7cd614; --e-blue:#2c7cd666;
+    --e-ok:#b9d8cb; --row-alt:#f4f7fa; --svg-ext:#eef2f7;
+    --sh-btn:0 6px 20px -10px #1a223038;
+  }
+  *{box-sizing:border-box} html,body{margin:0}
+  body{font-family:var(--ui);color:var(--text);background:var(--bg);
+    background-image:radial-gradient(circle at 1px 1px,var(--bg-grid) 1px,transparent 0);background-size:22px 22px;
+    font-size:14px;line-height:1.55;padding:26px 18px 60px}
+  .wrap{max-width:980px;margin:0 auto}
+  h1{font-size:25px;margin:0 0 4px;letter-spacing:.2px}
+  .lead{color:var(--muted);margin:0 0 10px;font-size:14px}
+  h2{font-size:18px;margin:40px 0 4px;padding-top:20px;border-top:1px solid var(--border)}
+  h2 .n{display:inline-flex;min-width:26px;height:26px;padding:0 6px;border-radius:7px;background:var(--accent);color:var(--on-accent);
+    font-size:14px;font-weight:700;align-items:center;justify-content:center;margin-right:9px;vertical-align:2px}
+  h3{font-size:15px;margin:24px 0 6px;color:var(--accent)}
+  .desc{color:var(--muted);margin:2px 0 14px}
+  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  code{font-family:var(--mono);background:var(--panel);border:1px solid var(--border);border-radius:5px;padding:1px 6px;font-size:12.5px;color:var(--accent)}
+  pre{font-family:var(--mono);font-size:12px;line-height:1.55;background:var(--panel);border:1px solid var(--border);
+    border-radius:10px;padding:14px 16px;overflow-x:auto;color:var(--text)}
+  pre code{background:none;border:0;padding:0;color:inherit}
+  a{color:var(--blue);text-decoration:none} a:hover{text-decoration:underline}
+
+  .badges{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}
+  .badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:2px 10px;border-radius:20px;border:1px solid var(--border-2);
+    color:var(--muted);background:var(--panel)}
+  .badge b{color:var(--text);font-weight:600}
+  .badge.on{color:var(--accent);border-color:var(--accent-dim);background:var(--t-accent)}
+  .badge.warn{color:var(--warn);border-color:var(--e-warn);background:var(--t-warn)}
+
+  table{border-collapse:collapse;width:100%;margin:8px 0 16px;font-size:12.5px}
+  th,td{border:1px solid var(--border);padding:6px 9px;text-align:left;vertical-align:top}
+  th{background:var(--panel-2);color:var(--muted);font-weight:600;white-space:nowrap}
+  td .mono{font-size:11.5px}
+  tr:nth-child(even) td{background:var(--row-alt)}
+  .tblwrap{overflow-x:auto}
+
+  .fig{border:1px solid var(--border);border-radius:12px;background:var(--panel);padding:14px 14px 8px;margin:8px 0 18px;overflow-x:auto}
+  .figcap{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.8px;margin:0 0 8px}
+  .fig svg{width:100%;height:auto;min-width:760px;display:block}
+
+  /* SVG 공통 */
+  .d-box{fill:var(--panel-2);stroke:var(--border-2);stroke-width:1.1}
+  .d-box.hl{stroke:var(--accent-dim)}
+  .d-box.ext{fill:var(--svg-ext);stroke-dasharray:5 3}
+  .d-t{fill:var(--text);font-size:12.5px;font-weight:600;font-family:var(--ui)}
+  .d-s{fill:var(--muted);font-size:10px;font-family:var(--ui)}
+  .d-l{fill:var(--muted);font-size:10px;font-family:var(--ui)}
+  .d-lc{fill:var(--accent);font-size:10px;font-family:var(--ui)}
+  .d-lw{fill:var(--warn);font-size:10px;font-family:var(--ui)}
+  .mid{text-anchor:middle}
+  .fa{stroke:var(--accent);stroke-width:1.3;fill:none}
+  .fm{stroke:var(--muted);stroke-width:1.1;fill:none}
+  .fd{stroke:var(--muted);stroke-width:1.1;fill:none;stroke-dasharray:4 3}
+  .fw{stroke:var(--warn);stroke-width:1.1;fill:none;stroke-dasharray:4 3}
+  .fx{stroke:var(--crit);stroke-width:1.1;fill:none;stroke-dasharray:4 3}
+  .ll{stroke:var(--border-2);stroke-width:1;stroke-dasharray:3 4}
+
+  /* UML 모듈 카드 */
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:10px;margin:10px 0 16px}
+  .card{border:1px solid var(--border-2);border-radius:10px;background:var(--panel-2);overflow:hidden}
+  .card .hd{padding:7px 11px;border-bottom:1px solid var(--border);background:var(--panel)}
+  .card .st{font-size:10px;color:var(--faint)}
+  .card .nm{font-family:var(--mono);font-size:12.5px;font-weight:700;color:var(--text)}
+  .card .rs{padding:6px 11px;border-bottom:1px solid var(--border);font-size:11.5px;color:var(--muted)}
+  .card .ops{padding:6px 11px 9px;font-family:var(--mono);font-size:10.8px;line-height:1.7;color:var(--faint)}
+  .card .ops b{color:var(--accent);font-weight:600}
+
+  .note{border-left:3px solid var(--accent-dim);background:var(--panel);border-radius:0 8px 8px 0;padding:8px 12px;margin:10px 0;color:var(--muted);font-size:12.5px}
+  .note.warn{border-left-color:var(--warn)}
+  .kbd{color:var(--warn)}
+  ol,ul{margin:6px 0 14px;padding-left:22px;color:var(--text)}
+  li{margin:3px 0}
+  .toc{columns:2;column-gap:28px;font-size:13px;margin:8px 0 4px}
+  .toc a{display:block;padding:2px 0;color:var(--text)}
+  .toc a .mono{color:var(--faint);margin-right:6px}
+  @media(max-width:700px){.toc{columns:1}}
+
+  /* 테마 토글 — 문서 우상단 고정(인쇄 시 숨김) */
+  .themebtn{position:fixed;top:13px;right:14px;z-index:30;font-family:var(--ui);font-size:12px;cursor:pointer;
+    border:1px solid var(--border-2);background:var(--panel-2);color:var(--text);border-radius:8px;padding:6px 11px;
+    box-shadow:var(--sh-btn)}
+  .themebtn:hover{border-color:var(--accent-dim)}
+  .themebtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  @media print{.themebtn{display:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="arA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--accent)"/></marker>
+    <marker id="arM" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--muted)"/></marker>
+    <marker id="arW" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--warn)"/></marker>
+  </defs>
+</svg>
+<div class="wrap">
+
+<h1>팀 워크스페이스 (CompanySystem) — 기술문서</h1>
+<p class="lead">내부 코드 · 데이터 흐름 · 구조를 UML 다이어그램과 함께 정리한 개발자 문서 — <b>2026-07-28 코드 실측 기준</b>. 제품 관점 명세는 <span class="mono">docs/PRD.md</span>를, 개요는 <span class="mono">README.md</span>를 함께 본다.</p>
+<div class="badges">
+  <span class="badge on"><b>앱</b> Next.js 15 App Router · React 19 · TS 5.8</span>
+  <span class="badge"><b>스타일</b> Tailwind CSS v4 · 라이트/다크 · PWA</span>
+  <span class="badge"><b>데이터</b> Supabase 16테이블 ⊕ 파일 기반 content/</span>
+  <span class="badge"><b>배포</b> Vercel(서버리스) + Capacitor 껍데기 앱</span>
+  <span class="badge warn"><b>접근 통제</b> 팀 공용 비밀번호 게이트 (앱 로그인은 데모)</span>
+</div>
+<div class="note">이 문서는 <b>구조만</b> 다룬다 — 비밀번호·API 키·프로젝트 URL·배포 주소 같은 값은 싣지 않는다. 실제 값은 로컬 <span class="mono">.env.local</span>과 호스팅 환경변수에만 존재하며, 저장소에는 빈 템플릿(<span class="mono">.env.example</span>)만 추적된다.</div>
+
+<h2 id="toc"><span class="n">§</span>목차</h2>
+<div class="toc">
+  <a href="#s1"><span class="mono">1</span>프로그램 개요 · 현황</a>
+  <a href="#s2"><span class="mono">2</span>시스템 아키텍처 (컴포넌트 다이어그램)</a>
+  <a href="#s3"><span class="mono">3</span>폴더 구조</a>
+  <a href="#s4"><span class="mono">4</span>모듈 구조 (UML 모듈 카드 · 의존 관계)</a>
+  <a href="#s5"><span class="mono">5</span>동작 시퀀스 (UML 시퀀스 다이어그램)</a>
+  <a href="#s6"><span class="mono">6</span>상태 전이 (UML 상태머신)</a>
+  <a href="#s7"><span class="mono">7</span>데이터 모델 · 저장소 매핑</a>
+  <a href="#s8"><span class="mono">8</span>라우트 · API 요약</a>
+  <a href="#s9"><span class="mono">9</span>상태 관리 · 동기화 설계</a>
+  <a href="#s10"><span class="mono">10</span>콘텐츠 파이프라인 (파일 → 화면)</a>
+  <a href="#s11"><span class="mono">11</span>보안 · 불변 규칙</a>
+  <a href="#s12"><span class="mono">12</span>빌드 · 배포 · 코드 규모 · 알려진 경계</a>
+</div>
+
+<!-- ══════════════════════════ 1 ══════════════════════════ -->
+<h2 id="s1"><span class="n">1</span>프로그램 개요 · 현황</h2>
+<p class="desc">소규모 팀의 운영 허브 — 메뉴얼·프로젝트 일정(간트)·게시판/채팅·참조 자료·사내 서재를 <b>한 주소</b>에서 제공하는 Next.js 단일 웹앱. PC·모바일 브라우저와, 같은 주소를 원격 로드하는 Android 껍데기 앱이 동일한 화면을 쓴다.</p>
+
+<table>
+  <tr><th>항목</th><th>내용</th></tr>
+  <tr><td>저장소 루트</td><td><span class="mono">ops/</span> — 프로젝트 폴더(<span class="mono">CompanySystem/</span>)가 아니라 <b>ops가 git 저장소</b>다. 모든 npm 명령·커밋·배포 기준.</td></tr>
+  <tr><td>두 갈래 데이터</td><td><b>운영 데이터</b>(프로젝트·일정·글·메시지) = Supabase 16테이블 / <b>읽기용 콘텐츠</b>(메뉴얼·학습·소설) = <span class="mono">content/**.md</span> 파일</td></tr>
+  <tr><td>상태 소유</td><td>클라이언트 단일 컨텍스트 <span class="mono">WorkspaceProvider</span>가 전 화면 상태를 소유 — 화면은 <span class="mono">update(fn)</span>만 호출하고 저장 경로를 모른다</td></tr>
+  <tr><td>접근 통제</td><td>미들웨어 기반 <b>팀 공용 비밀번호 게이트</b>(HttpOnly 쿠키). 앱 내부 로그인(초대코드)은 기능 플래그로 꺼져 있음</td></tr>
+  <tr><td>전제 환경</td><td>Node 20+ · npm · 브라우저. DB 키가 없으면 <span class="mono">localStorage</span> 폴백으로 그대로 동작</td></tr>
+</table>
+
+<h3>현황 (2026-07-28 실측)</h3>
+<ul>
+  <li><b>데이터 층 이전 완료</b> — <span class="mono">store.tsx</span> + <span class="mono">sync.ts</span>가 16테이블 로드/저장을 담당. 컴포넌트는 수정 없이 그대로 쓴다.</li>
+  <li><b>콘텐츠는 파일 기반</b> — <span class="mono">content/manual · study · novel</span>의 md를 서버가 읽어 API로 내려준다. 앱 내 업로드 UI는 없다(커밋으로 반영).</li>
+  <li><b>인증 단계 비활성</b> — <span class="mono">flags.ts</span>의 <span class="mono">AUTH_STEPS_ENABLED = false</span>. 게이트를 통과하면 <span class="mono">BYPASS_SESSION</span>(admin)이 자동 부여된다. <span class="mono">true</span>로 되돌리면 로그인·초대코드 흐름이 되살아난다.</li>
+  <li><b>빈 템플릿 상태</b> — <span class="mono">seed.ts</span>는 빈 구조를 반환한다. 예시 데이터가 든 스냅샷은 git <span class="mono">template</span> 브랜치에 보존.</li>
+  <li><b>실시간 없음</b> — Supabase Realtime 미적용. 다른 사람의 변경은 새로고침(재로드) 시 반영된다.</li>
+</ul>
+
+<!-- ══════════════════════════ 2 ══════════════════════════ -->
+<h2 id="s2"><span class="n">2</span>시스템 아키텍처 — UML 컴포넌트 다이어그램</h2>
+<p class="desc">요청은 예외 없이 <span class="mono">middleware.ts</span>를 먼저 지난다. 통과한 뒤에야 화면·API가 열리고, 화면 상태는 <span class="mono">store.tsx</span> 하나가 소유한다. 저장 경로(Supabase / localStorage)의 분기는 <span class="mono">store</span>에서 끝나며, 콘텐츠 읽기는 서버 전용 <span class="mono">content.ts</span>에서만 일어난다.</p>
+
+<div class="fig">
+<p class="figcap">component diagram — 실행 컴포넌트와 주요 호출 경로</p>
+<svg viewBox="0 0 960 700" role="img" aria-label="컴포넌트 다이어그램">
+  <!-- 클라이언트 -->
+  <rect class="d-box" x="20" y="20" width="250" height="56" rx="10"/>
+  <text class="d-t mid" x="145" y="42">웹 브라우저 (PC · 모바일)</text>
+  <text class="d-s mid" x="145" y="60">React 19 클라이언트 · PWA 설치 가능</text>
+
+  <rect class="d-box ext" x="340" y="20" width="230" height="56" rx="10"/>
+  <text class="d-t mid" x="455" y="42">Android 앱</text>
+  <text class="d-s mid" x="455" y="60">Capacitor — 같은 URL 원격 로드</text>
+
+  <!-- 게이트 -->
+  <rect class="d-box hl" x="150" y="140" width="420" height="56" rx="10"/>
+  <text class="d-t mid" x="360" y="162">src/middleware.ts — 접속 게이트</text>
+  <text class="d-s mid" x="360" y="180">ws_gate 쿠키 ↔ APP_PASSWORD 파생 토큰 대조 · 공개 경로 예외</text>
+  <path class="fm" d="M145,76 L240,138" marker-end="url(#arM)"/>
+  <path class="fm" d="M455,76 L470,138" marker-end="url(#arM)"/>
+
+  <!-- 라우트 계층 -->
+  <rect class="d-box" x="20" y="256" width="170" height="56" rx="10"/>
+  <text class="d-t mid" x="105" y="278">app/gate · api/gate</text>
+  <text class="d-s mid" x="105" y="296">비밀번호 검증 · 쿠키 발급</text>
+
+  <rect class="d-box hl" x="210" y="256" width="170" height="56" rx="10"/>
+  <text class="d-t mid" x="295" y="278">app/(workspace)/*</text>
+  <text class="d-s mid" x="295" y="296">앱 셸 + 전 화면 (클라이언트)</text>
+
+  <rect class="d-box" x="400" y="256" width="170" height="56" rx="10"/>
+  <text class="d-t mid" x="485" y="278">api/docs · api/novels</text>
+  <text class="d-s mid" x="485" y="296">force-dynamic (서버)</text>
+  <text class="d-lc mid" x="485" y="246">useDocs() — 클라이언트 fetch</text>
+
+  <path class="fw" d="M230,196 L120,254" marker-end="url(#arW)"/>
+  <text class="d-lw" x="20" y="234">미통과 → 302 /gate?next=…</text>
+  <path class="fa" d="M330,196 L300,254" marker-end="url(#arA)"/>
+  <text class="d-lc" x="306" y="232">통과</text>
+  <path class="fm" d="M470,196 L490,254" marker-end="url(#arM)"/>
+
+  <!-- 상태 · 콘텐츠 -->
+  <rect class="d-box hl" x="40" y="372" width="330" height="56" rx="10"/>
+  <text class="d-t mid" x="205" y="394">src/lib/store.tsx — WorkspaceProvider</text>
+  <text class="d-s mid" x="205" y="412">단일 상태 · update() 낙관적 갱신 · 세션 · 테마</text>
+  <path class="fm" d="M280,312 L240,370" marker-end="url(#arM)"/>
+
+  <rect class="d-box" x="400" y="372" width="170" height="56" rx="10"/>
+  <text class="d-t mid" x="485" y="394">src/lib/content.ts</text>
+  <text class="d-s mid" x="485" y="412">서버 전용 md 파서</text>
+  <path class="fm" d="M485,312 L485,370" marker-end="url(#arM)"/>
+  <text class="d-l" x="495" y="346">listContentDocs / listContentNovels</text>
+
+  <rect class="d-box ext" x="650" y="372" width="290" height="56" rx="10"/>
+  <text class="d-t mid" x="795" y="394">content/**.md</text>
+  <text class="d-s mid" x="795" y="412">메뉴얼 · 학습 문서 · 소설 원고</text>
+  <path class="fd" d="M570,400 L648,400" marker-end="url(#arM)"/>
+  <text class="d-l mid" x="609" y="392">fs 읽기</text>
+
+  <!-- 저장 계층 -->
+  <rect class="d-box" x="40" y="488" width="160" height="56" rx="10"/>
+  <text class="d-t mid" x="120" y="510">src/lib/backup.ts</text>
+  <text class="d-s mid" x="120" y="528">JSON 내보내기/불러오기</text>
+
+  <rect class="d-box ext" x="210" y="488" width="160" height="56" rx="10"/>
+  <text class="d-t mid" x="290" y="510">localStorage</text>
+  <text class="d-s mid" x="290" y="528">폴백 · 세션 · 테마</text>
+
+  <rect class="d-box" x="400" y="488" width="170" height="56" rx="10"/>
+  <text class="d-t mid" x="485" y="510">src/lib/sync.ts</text>
+  <text class="d-s mid" x="485" y="528">16테이블 로드 · id diff</text>
+
+  <rect class="d-box ext" x="650" y="488" width="290" height="56" rx="10"/>
+  <text class="d-t mid" x="795" y="510">Supabase (Postgres)</text>
+  <text class="d-s mid" x="795" y="528">16 테이블 + RLS · supabase-js</text>
+
+  <path class="fm" d="M110,428 L110,486" marker-end="url(#arM)"/>
+  <path class="fd" d="M250,428 L280,486" marker-end="url(#arM)"/>
+  <text class="d-lw" x="150" y="462">키 미설정 시</text>
+  <path class="fa" d="M340,428 L455,486" marker-end="url(#arA)"/>
+  <path class="fa" d="M570,516 L648,516" marker-end="url(#arA)"/>
+  <text class="d-lc mid" x="609" y="508">select ×16 / upsert · delete</text>
+
+  <rect class="d-box ext" x="40" y="608" width="160" height="56" rx="10"/>
+  <text class="d-t mid" x="120" y="630">JSON 백업 파일</text>
+  <text class="d-s mid" x="120" y="648">schema_version 검사</text>
+  <path class="fm" d="M120,544 L120,606" marker-end="url(#arM)"/>
+</svg>
+</div>
+
+<div class="note">핵심 계약은 두 개다. ① 화면 ↔ 상태: <code>useWorkspace() → { data, update }</code> — 화면은 저장소를 모른다. ② 서버 ↔ 콘텐츠: <code>GET /api/docs = { docs: ContentDoc[] }</code> · <code>GET /api/novels = { novels: ContentNovel[] }</code> — 파일이 곧 화면이다.</div>
+
+<!-- ══════════════════════════ 3 ══════════════════════════ -->
+<h2 id="s3"><span class="n">3</span>폴더 구조</h2>
+<pre><code>ops/                              # ★ git 저장소 루트 (npm 명령도 여기서)
+├─ src/
+│  ├─ middleware.ts               #   접속 게이트 — 전 경로 선검사
+│  ├─ app/
+│  │  ├─ layout.tsx  globals.css  #   루트 셸 · 테마 토큰(Tailwind v4 @theme)
+│  │  ├─ gate/                    #   비밀번호 입력 화면 (+ APK 다운로드 버튼)
+│  │  ├─ login/  invite/          #   로그인 · 초대코드 (플래그로 비활성)
+│  │  ├─ api/gate/route.ts        #   POST — 검증 후 HttpOnly 쿠키 발급 (nodejs)
+│  │  ├─ api/docs/route.ts        #   GET  — content/manual · study 목록
+│  │  ├─ api/novels/route.ts      #   GET  — content/novel 작품·화 목록
+│  │  └─ (workspace)/             #   앱 셸 (사이드바 + 모바일 탭 + 세션 가드)
+│  │     ├─ page.tsx              #     필수 메뉴얼 (홈)
+│  │     ├─ manual/[slug]/        #     메뉴얼 상세
+│  │     ├─ schedule/             #     일정 관리 — 5개 탭 컨테이너
+│  │     ├─ board/  board/write/  #     게시판 · 글쓰기
+│  │     ├─ chat/                 #     채널 + DM
+│  │     ├─ docs/  docs/[slug]/   #     학습 문서 목록 · 상세
+│  │     ├─ links/  novels/       #     프로그램 링크 · 서재
+│  │     ├─ more/                 #     모바일 더보기
+│  │     └─ admin/                #     logins · accounts · app(APK·QR)
+│  ├─ components/
+│  │  ├─ Sidebar.tsx MobileNav.tsx ui.tsx
+│  │  ├─ DocArticle.tsx DocDetail.tsx      # 마크다운 본문 · 목차 렌더
+│  │  └─ schedule/                          # Gantt · Daily · Logs · Ideas · Data
+│  └─ lib/
+│     ├─ types.ts                 #   전 도메인 타입 (WorkspaceData 포함)
+│     ├─ store.tsx                #   상태 컨텍스트 (단일 소유자)
+│     ├─ sync.ts                  #   Supabase 로드 · diff 동기화
+│     ├─ supabase.ts              #   클라이언트 (키 없으면 null)
+│     ├─ content.ts               #   서버 전용 md 파서
+│     ├─ useDocs.ts               #   /api 문서·소설 fetch 훅
+│     ├─ backup.ts                #   JSON 백업 스키마 · upsert 복원
+│     ├─ gate.ts  flags.ts        #   게이트 토큰 유틸 · 기능 토글
+│     ├─ seed.ts  util.ts providers.tsx
+├─ content/                       # 파일 기반 콘텐츠 (폴더 = 화면)
+│  ├─ manual/  study/  study/html/   #   메뉴얼 · 학습 문서(+변환 전 원본)
+│  └─ novel/&lt;작품&gt;/                  #   NN_제목.md = 한 화 · _index.md = 작품 정보
+├─ supabase/schema.sql            # 16 테이블 + RLS (재실행 안전)
+├─ docs/                          # PRD · handover · prompts/(변환 프롬프트)
+├─ tools/                         # 팔레트 생성·검증 (색각 ΔE 계산)
+├─ public/                        # icons · manifest.webmanifest · downloads/*.apk
+├─ next.config.ts                 # outputFileTracingIncludes — content 번들 포함
+└─ .env.example                   # 값 없는 템플릿 (실제 값은 .env.local · gitignore)</code></pre>
+
+<!-- ══════════════════════════ 4 ══════════════════════════ -->
+<h2 id="s4"><span class="n">4</span>모듈 구조 — UML 모듈 카드</h2>
+<p class="desc">클래스 대신 모듈이 단위다. 각 카드는 UML 클래스 표기(«stereotype» / 책임 / 공개 연산)를 따른다. <b>굵게</b> 표시한 것이 외부에서 가장 많이 호출되는 진입점.</p>
+
+<div class="cards">
+  <div class="card"><div class="hd"><div class="st">«edge» 전 경로 선검사</div><div class="nm">src/middleware.ts</div></div>
+    <div class="rs">게이트 통과 여부 판정 · 미통과 리다이렉트</div>
+    <div class="ops"><b>middleware(req)</b> — isPublic → 쿠키 ↔ gateToken 대조<br>PUBLIC_PREFIXES /gate·/api/gate·/icons·/downloads<br>config.matcher — _next/static·image·favicon 제외</div></div>
+
+  <div class="card"><div class="hd"><div class="st">«util» 게이트 토큰</div><div class="nm">src/lib/gate.ts</div></div>
+    <div class="rs">Edge·Node 양쪽에서 동일 토큰 계산 (Web Crypto만 사용)</div>
+    <div class="ops"><b>gateToken(password)</b> — SHA-256 hex<br>GATE_COOKIE = "ws_gate"</div></div>
+
+  <div class="card"><div class="hd"><div class="st">«route» 인증 API</div><div class="nm">app/api/gate/route.ts</div></div>
+    <div class="rs">비밀번호 검증 → HttpOnly 쿠키 발급 (runtime=nodejs)</div>
+    <div class="ops"><b>POST()</b> — env 미설정 500 · 불일치 401<br>safeEqual() — 길이 차이에도 조기 반환 없음<br>cookie: httpOnly · sameSite=lax · secure(prod) · 30일</div></div>
+
+  <div class="card"><div class="hd"><div class="st">«state» 단일 소유자</div><div class="nm">src/lib/store.tsx</div></div>
+    <div class="rs">전 화면 상태·세션·테마 보유 · 저장 경로 분기 종결점</div>
+    <div class="ops"><b>WorkspaceProvider</b> — 마운트 시 1회 로드 · ready 전 렌더 보류<br><b>update(fn)</b> — setState 즉시 + 동기화 fire-and-forget<br>resetToSeed() · setSession() · toggleDark()<br><b>useWorkspace()</b> · useProfile(id) · dataRef(최신 참조)</div></div>
+
+  <div class="card"><div class="hd"><div class="st">«gateway» DB</div><div class="nm">src/lib/sync.ts</div></div>
+    <div class="rs">16테이블 ↔ WorkspaceData 변환 · 변경분만 반영</div>
+    <div class="ops"><b>loadWorkspace(sb)</b> — 배열 14 + 맵 2 병렬 조회<br><b>syncWorkspace(sb, prev, next)</b> — id 기준 upsert/삭제<br>ARRAY_TABLES · MAP_TABLES(readStates · novelProgress)<br>Promise.allSettled — 실패는 콘솔 기록 (화면 비차단)</div></div>
+
+  <div class="card"><div class="hd"><div class="st">«client» 조건부 생성</div><div class="nm">src/lib/supabase.ts</div></div>
+    <div class="rs">env 없으면 null 반환 — 키 없이도 앱이 뜨게 하는 지점</div>
+    <div class="ops"><b>supabase</b> : SupabaseClient | null<br><b>isSupabaseConfigured</b> — 폴백 판정 플래그<br>auth: persistSession · autoRefreshToken</div></div>
+
+  <div class="card"><div class="hd"><div class="st">«parser» 서버 전용</div><div class="nm">src/lib/content.ts</div></div>
+    <div class="rs">content/ md → ContentDoc · ContentNovel (클라이언트 import 금지)</div>
+    <div class="ops"><b>listContentDocs()</b> — manual·study · updated 내림차순<br><b>listContentNovels()</b> — 폴더 재귀 walk · 하위 폴더 = 별개 작품<br>parseFrontmatter() — 미니 YAML(문자열·숫자·배열)<br>toChapter() — 첫 <span class="mono">#</span> = 화 제목 · 빈 줄 = 문단</div></div>
+
+  <div class="card"><div class="hd"><div class="st">«hook» 콘텐츠 fetch</div><div class="nm">src/lib/useDocs.ts</div></div>
+    <div class="rs">API에서 문서·소설을 받아오는 클라이언트 훅 (null = 로딩)</div>
+    <div class="ops"><b>useContentDocs()</b> · <b>useContentNovels()</b><br>실패 시 빈 배열 — 화면은 EmptyState로 처리<br>alive 플래그로 언마운트 후 setState 방지</div></div>
+
+  <div class="card"><div class="hd"><div class="st">«io» 백업</div><div class="nm">src/lib/backup.ts</div></div>
+    <div class="rs">범위별 JSON 내보내기 · 검증 후 upsert 복원</div>
+    <div class="ops">SCHEMA_VERSION = 2 · scope: schedule | full | login_history<br><b>buildBackup()</b> / <b>exportBackup()</b> — 파일명에 날짜 스탬프<br><b>parseBackup()</b> — 버전·형식 불일치는 에러 목록 반환<br><b>applyBackup()</b> — id 기준 덮어쓰기 + 맵 병합</div></div>
+
+  <div class="card"><div class="hd"><div class="st">«config» 기능 토글</div><div class="nm">src/lib/flags.ts</div></div>
+    <div class="rs">로그인·초대코드 단계 on/off · 우회 세션 정의</div>
+    <div class="ops"><b>AUTH_STEPS_ENABLED</b> = false (현재)<br>BYPASS_SESSION — role: admin · invited: true</div></div>
+
+  <div class="card"><div class="hd"><div class="st">«shell» 가드 + 레이아웃</div><div class="nm">app/(workspace)/layout.tsx</div></div>
+    <div class="rs">세션 가드 · 사이드바/하단탭 반응형 셸</div>
+    <div class="ops">플래그 on: 미세션→/login · 미초대→/invite · admin 가드<br>플래그 off: 세션 없으면 BYPASS_SESSION 자동 부여<br>세션 확정 전에는 null 렌더(깜빡임 차단)</div></div>
+
+  <div class="card"><div class="hd"><div class="st">«view» 최대 모듈</div><div class="nm">components/schedule/GanttTab.tsx</div></div>
+    <div class="rs">프로젝트·역할·구간 CRUD와 간트 렌더 (1,148줄)</div>
+    <div class="ops">pos(start,end) — 전체 범위 대비 % 좌표 계산<br>roleRange / roleProgress / isLate — 구간 집계·지연 판정<br>saveProject · saveRole · saveLog · setSegmentProgress<br>변경 시 addWorkLog() — 작업 로그 자동 적재</div></div>
+
+  <div class="card"><div class="hd"><div class="st">«view» 데이터 탭</div><div class="nm">components/schedule/DataTab.tsx</div></div>
+    <div class="rs">JSON 내보내기/불러오기 UI — backup.ts의 화면측</div>
+    <div class="ops">범위 선택 → exportBackup(scope)<br>파일 선택 → parseBackup → applyBackup → update()</div></div>
+
+  <div class="card"><div class="hd"><div class="st">«ui» 공용 프리미티브</div><div class="nm">src/components/ui.tsx</div></div>
+    <div class="rs">전 화면이 공유하는 표시 단위 · 폼 클래스 상수</div>
+    <div class="ops">Avatar · StatCard · Chip · SearchInput · PageHeader<br>Modal · EmptyState · Field<br>inputCls · btnPrimary · btnGhost</div></div>
+
+  <div class="card"><div class="hd"><div class="st">«util» 날짜·문자열</div><div class="nm">src/lib/util.ts</div></div>
+    <div class="rs">간트 계산과 표시 포맷의 공통 기반</div>
+    <div class="ops">daysBetween · addDays · todayIso · offsetIso · iso<br>fmtDate · fmtDateTime · fmtTime · relTime<br>cls() · uid(prefix) · download(filename, text)</div></div>
+
+  <div class="card"><div class="hd"><div class="st">«schema» DB</div><div class="nm">supabase/schema.sql</div></div>
+    <div class="rs">16 테이블 + RLS 정책 — 재실행 안전(idempotent)</div>
+    <div class="ops">컬럼명 = 앱 필드명(camelCase, 큰따옴표 인용)<br>날짜·시간 text · 중첩 배열 jsonb · id text(앱 생성)<br>do $$ … $$ 루프로 RLS 일괄 활성화</div></div>
+</div>
+
+<h3>모듈 의존 관계 (import 방향)</h3>
+<div class="tblwrap"><table>
+  <tr><th>모듈</th><th>import 하는 것</th><th>비고</th></tr>
+  <tr><td class="mono">middleware.ts</td><td class="mono">lib/gate</td><td>Edge 런타임 — Node API·supabase 금지</td></tr>
+  <tr><td class="mono">api/gate/route.ts</td><td class="mono">lib/gate</td><td>같은 토큰 계산을 공유해 미들웨어와 항상 일치</td></tr>
+  <tr><td class="mono">api/docs · api/novels</td><td class="mono">lib/content</td><td>서버에서만 실행 — fs 접근 지점</td></tr>
+  <tr><td class="mono">app/(workspace)/**</td><td class="mono">lib/store · lib/useDocs · components/*</td><td>전 화면이 클라이언트 컴포넌트</td></tr>
+  <tr><td class="mono">lib/store.tsx</td><td class="mono">lib/seed · lib/supabase · lib/sync · lib/types</td><td>저장 경로 분기의 유일한 지점</td></tr>
+  <tr><td class="mono">lib/sync.ts</td><td class="mono">@supabase/supabase-js(타입) · lib/types</td><td>클라이언트 인스턴스는 인자로 주입받는다</td></tr>
+  <tr><td class="mono">lib/content.ts</td><td class="mono">node:fs · node:path · lib/types</td><td><b>클라이언트에서 import 금지</b> (번들 실패)</td></tr>
+  <tr><td class="mono">lib/backup.ts</td><td class="mono">lib/types · lib/util(download)</td><td>순수 변환 + 브라우저 다운로드</td></tr>
+  <tr><td class="mono">lib/types.ts · util.ts · gate.ts · flags.ts</td><td class="mono">없음(말단)</td><td>어느 계층에서든 안전하게 참조</td></tr>
+</table></div>
+
+<!-- ══════════════════════════ 5 ══════════════════════════ -->
+<h2 id="s5"><span class="n">5</span>동작 시퀀스 — UML 시퀀스 다이어그램</h2>
+
+<h3>5.1 첫 접속 — 비밀번호 게이트</h3>
+<div class="fig">
+<p class="figcap">sequence — 미인증 요청 → /gate → 쿠키 발급 → 원래 경로 복귀</p>
+<svg viewBox="0 0 960 400" role="img" aria-label="게이트 통과 시퀀스">
+  <g>
+    <rect class="d-box" x="25" y="8" width="130" height="36" rx="8"/><text class="d-t mid" x="90" y="31" style="font-size:11.5px">브라우저</text>
+    <rect class="d-box" x="215" y="8" width="130" height="36" rx="8"/><text class="d-t mid" x="280" y="31" style="font-size:11.5px">middleware.ts</text>
+    <rect class="d-box" x="405" y="8" width="130" height="36" rx="8"/><text class="d-t mid" x="470" y="31" style="font-size:11.5px">/gate 화면</text>
+    <rect class="d-box" x="595" y="8" width="150" height="36" rx="8"/><text class="d-t mid" x="670" y="31" style="font-size:11.5px">POST /api/gate</text>
+    <rect class="d-box ext" x="795" y="8" width="140" height="36" rx="8"/><text class="d-t mid" x="865" y="31" style="font-size:11.5px">서버 환경변수</text>
+    <line class="ll" x1="90" y1="44" x2="90" y2="376"/><line class="ll" x1="280" y1="44" x2="280" y2="376"/>
+    <line class="ll" x1="470" y1="44" x2="470" y2="376"/><line class="ll" x1="670" y1="44" x2="670" y2="376"/>
+    <line class="ll" x1="865" y1="44" x2="865" y2="376"/>
+  </g>
+  <path class="fa" d="M90,84 L278,84" marker-end="url(#arA)"/><text class="d-lc mid" x="184" y="77">GET /schedule — ws_gate 쿠키 없음</text>
+  <path class="fm" d="M280,112 h44 v14 h-42" marker-end="url(#arM)"/><text class="d-l" x="330" y="112">isPublic() 예외 아님 → 쿠키 ↔ gateToken(APP_PASSWORD) 대조 실패</text>
+  <path class="fw" d="M278,166 L92,166" marker-end="url(#arW)"/><text class="d-lw mid" x="185" y="159">302 → /gate?next=/schedule</text>
+  <path class="fm" d="M90,206 L403,206" marker-end="url(#arM)"/><text class="d-l mid" x="246" y="199">비밀번호 입력 — next는 safeNext()로 내부 경로만 허용</text>
+  <path class="fa" d="M470,246 L593,246" marker-end="url(#arA)"/><text class="d-lc mid" x="531" y="239">POST {password}</text>
+  <path class="fm" d="M670,286 L793,286" marker-end="url(#arM)"/><text class="d-l mid" x="731" y="279">process.env.APP_PASSWORD</text>
+  <path class="fm" d="M670,314 h44 v14 h-42" marker-end="url(#arM)"/><text class="d-l" x="720" y="314">safeEqual — 타이밍 둔감 비교 · 불일치 401 · 미설정 500</text>
+  <path class="fa" d="M668,366 L92,366" marker-end="url(#arA)"/><text class="d-lc mid" x="380" y="359">200 + Set-Cookie ws_gate (HttpOnly · SameSite=Lax · secure(prod) · 30일) → location.assign(next)</text>
+</svg>
+</div>
+
+<h3>5.2 앱 부팅 — 데이터 로드와 변경 동기화</h3>
+<div class="fig">
+<p class="figcap">sequence — 마운트 1회 로드 · 편집은 낙관적 갱신 후 백그라운드 반영</p>
+<svg viewBox="0 0 960 470" role="img" aria-label="데이터 로드·동기화 시퀀스">
+  <g>
+    <rect class="d-box" x="25" y="8" width="130" height="36" rx="8"/><text class="d-t mid" x="90" y="31" style="font-size:11.5px">화면 컴포넌트</text>
+    <rect class="d-box" x="215" y="8" width="130" height="36" rx="8"/><text class="d-t mid" x="280" y="31" style="font-size:11.5px">store.tsx</text>
+    <rect class="d-box" x="405" y="8" width="130" height="36" rx="8"/><text class="d-t mid" x="470" y="31" style="font-size:11.5px">sync.ts</text>
+    <rect class="d-box ext" x="595" y="8" width="130" height="36" rx="8"/><text class="d-t mid" x="660" y="31" style="font-size:11.5px">Supabase</text>
+    <rect class="d-box ext" x="795" y="8" width="140" height="36" rx="8"/><text class="d-t mid" x="865" y="31" style="font-size:11.5px">localStorage</text>
+    <line class="ll" x1="90" y1="44" x2="90" y2="446"/><line class="ll" x1="280" y1="44" x2="280" y2="446"/>
+    <line class="ll" x1="470" y1="44" x2="470" y2="446"/><line class="ll" x1="660" y1="44" x2="660" y2="446"/>
+    <line class="ll" x1="865" y1="44" x2="865" y2="446"/>
+  </g>
+  <path class="fa" d="M90,84 L278,84" marker-end="url(#arA)"/><text class="d-lc mid" x="184" y="77">마운트 — useWorkspace()</text>
+  <path class="fm" d="M280,112 h44 v14 h-42" marker-end="url(#arM)"/><text class="d-l" x="330" y="112">세션·테마 복원(로컬) · isSupabaseConfigured 판정</text>
+  <path class="fm" d="M280,166 L468,166" marker-end="url(#arM)"/><text class="d-l mid" x="374" y="159">loadWorkspace(sb)</text>
+  <path class="fm" d="M470,206 L658,206" marker-end="url(#arM)"/><text class="d-l mid" x="564" y="199">select * ×16 — Promise.all 병렬</text>
+  <path class="fd" d="M658,246 L472,246" marker-end="url(#arM)"/><text class="d-l mid" x="565" y="239">행 → WorkspaceData 조립 (맵 2종은 key/val 변환)</text>
+  <path class="fa" d="M468,286 L282,286" marker-end="url(#arA)"/><text class="d-lc mid" x="375" y="279">ready = true → 렌더 시작 (실패 시 빈 seed로 시작)</text>
+  <path class="fa" d="M90,326 L278,326" marker-end="url(#arA)"/><text class="d-lc mid" x="184" y="319">update(fn) — 사용자 편집</text>
+  <path class="fm" d="M280,354 h44 v14 h-42" marker-end="url(#arM)"/><text class="d-l" x="330" y="354">dataRef·setState 즉시 반영 (낙관적)</text>
+  <path class="fm" d="M280,408 L658,408" marker-end="url(#arM)"/><text class="d-l mid" x="469" y="401">syncWorkspace(prev, next) — 바뀐 행만 upsert / 사라진 id는 delete (fire-and-forget)</text>
+  <path class="fw" d="M280,442 L863,442" marker-end="url(#arW)"/><text class="d-lw mid" x="571" y="435">[Supabase 키 없음] setItem("tw.data.v2", JSON) — 전량 저장</text>
+</svg>
+</div>
+
+<h3>5.3 콘텐츠 파이프라인 — md 파일이 화면이 되기까지</h3>
+<div class="fig">
+<p class="figcap">sequence — 파일 읽기는 서버에서만 · 응답은 순수 데이터</p>
+<svg viewBox="0 0 960 300" role="img" aria-label="콘텐츠 파이프라인 시퀀스">
+  <g>
+    <rect class="d-box" x="30" y="8" width="160" height="36" rx="8"/><text class="d-t mid" x="110" y="31" style="font-size:11.5px">화면 (useDocs)</text>
+    <rect class="d-box" x="260" y="8" width="160" height="36" rx="8"/><text class="d-t mid" x="340" y="31" style="font-size:11.5px">GET /api/docs</text>
+    <rect class="d-box" x="490" y="8" width="160" height="36" rx="8"/><text class="d-t mid" x="570" y="31" style="font-size:11.5px">lib/content.ts</text>
+    <rect class="d-box ext" x="720" y="8" width="160" height="36" rx="8"/><text class="d-t mid" x="800" y="31" style="font-size:11.5px">content/**.md</text>
+    <line class="ll" x1="110" y1="44" x2="110" y2="272"/><line class="ll" x1="340" y1="44" x2="340" y2="272"/>
+    <line class="ll" x1="570" y1="44" x2="570" y2="272"/><line class="ll" x1="800" y1="44" x2="800" y2="272"/>
+  </g>
+  <path class="fa" d="M110,84 L338,84" marker-end="url(#arA)"/><text class="d-lc mid" x="224" y="77">fetch — dynamic = "force-dynamic" (캐시 없음)</text>
+  <path class="fm" d="M340,124 L568,124" marker-end="url(#arM)"/><text class="d-l mid" x="454" y="117">listContentDocs() / listContentNovels()</text>
+  <path class="fm" d="M570,164 L798,164" marker-end="url(#arM)"/><text class="d-l mid" x="684" y="157">readdirSync · readFileSync (깨진 파일은 건너뜀)</text>
+  <path class="fm" d="M570,192 h44 v14 h-42" marker-end="url(#arM)"/><text class="d-l" x="620" y="192">frontmatter 파싱 · readMinutes 추정 · 정렬(문서=updated 내림차순 / 소설=제목 ko)</text>
+  <path class="fa" d="M338,246 L112,246" marker-end="url(#arA)"/><text class="d-lc mid" x="225" y="239">{ docs: ContentDoc[] } → 화면 상태 (실패 시 빈 배열)</text>
+</svg>
+</div>
+
+<!-- ══════════════════════════ 6 ══════════════════════════ -->
+<h2 id="s6"><span class="n">6</span>상태 전이 — UML 상태머신</h2>
+<p class="desc">왼쪽: 화면에서 다루는 도메인 상태(프로젝트 · 아이디어). 오른쪽: 접속·세션 상태. <b>접속 상태는 쿠키(서버 판정)와 세션(클라이언트 판정)이 분리돼 있고, 둘 다 통과해야 화면이 보인다.</b></p>
+
+<div class="fig">
+<p class="figcap">state machine — 프로젝트 status · 아이디어 · 접속/세션</p>
+<svg viewBox="0 0 960 430" role="img" aria-label="상태 다이어그램">
+  <text class="d-s" x="24" y="18" style="font-size:11px">«프로젝트 status»</text>
+  <circle cx="50" cy="70" r="6" style="fill:var(--muted)"/>
+  <path class="fm" d="M56,70 L98,70" marker-end="url(#arM)"/>
+  <rect class="d-box hl" x="100" y="48" width="140" height="44" rx="14"/><text class="d-t mid" x="170" y="74">active · 진행중</text>
+  <rect class="d-box" x="330" y="48" width="140" height="44" rx="14"/><text class="d-t mid" x="400" y="74">waiting · 대기</text>
+  <rect class="d-box" x="100" y="180" width="140" height="44" rx="14"/><text class="d-t mid" x="170" y="206">done · 완료</text>
+  <rect class="d-box" x="330" y="180" width="140" height="44" rx="14"/><text class="d-t mid" x="400" y="206">dropped · 중단</text>
+  <path class="fm" d="M240,62 L328,62" marker-end="url(#arM)"/><text class="d-l mid" x="284" y="54">보류</text>
+  <path class="fm" d="M328,84 L242,84" marker-end="url(#arM)"/><text class="d-l mid" x="284" y="102">재개</text>
+  <path class="fm" d="M140,92 L140,178" marker-end="url(#arM)"/><text class="d-l" x="24" y="140">전 구간 100%</text>
+  <path class="fm" d="M235,94 L360,178" marker-end="url(#arM)"/><text class="d-l" x="250" y="152">중단</text>
+  <text class="d-l" x="24" y="248">status는 선언값 — 간트 막대·진행률은 역할(segments)에서 계산된다</text>
+
+  <text class="d-s" x="24" y="290" style="font-size:11px">«아이디어»</text>
+  <rect class="d-box" x="100" y="308" width="140" height="44" rx="14"/><text class="d-t mid" x="170" y="334">open</text>
+  <rect class="d-box" x="330" y="308" width="140" height="44" rx="14"/><text class="d-t mid" x="400" y="334">promoted</text>
+  <path class="fa" d="M240,330 L328,330" marker-end="url(#arA)"/><text class="d-lc mid" x="284" y="322">프로젝트로 승격</text>
+  <text class="d-l" x="100" y="374">승격 시 promotedProjectId로 새 프로젝트를 가리킨다 (되돌리기 없음)</text>
+
+  <text class="d-s" x="600" y="18" style="font-size:11px">«접속 · 세션»</text>
+  <circle cx="620" cy="60" r="6" style="fill:var(--muted)"/>
+  <rect class="d-box" x="660" y="38" width="210" height="44" rx="14"/><text class="d-t mid" x="765" y="64">미인증 — /gate로 리다이렉트</text>
+  <path class="fm" d="M626,60 L658,60" marker-end="url(#arM)"/>
+  <rect class="d-box" x="660" y="150" width="210" height="44" rx="14"/><text class="d-t mid" x="765" y="176">게이트 통과 (쿠키 30일)</text>
+  <path class="fa" d="M765,82 L765,148" marker-end="url(#arA)"/><text class="d-lc" x="775" y="118">비밀번호 일치 → ws_gate</text>
+  <rect class="d-box hl" x="660" y="262" width="210" height="56" rx="14"/>
+  <text class="d-t mid" x="765" y="284">세션 보유 — 앱 진입</text>
+  <text class="d-s mid" x="765" y="302">플래그 off → BYPASS_SESSION 자동 부여</text>
+  <path class="fa" d="M765,194 L765,260" marker-end="url(#arA)"/><text class="d-lc" x="775" y="230">(workspace) 레이아웃 가드</text>
+  <rect class="d-box" x="660" y="360" width="210" height="44" rx="14"/><text class="d-t mid" x="765" y="386">/admin/* 화면</text>
+  <path class="fm" d="M765,318 L765,358" marker-end="url(#arM)"/><text class="d-l" x="775" y="342">role === "admin"</text>
+  <path class="fx" d="M655,176 L560,176"/><text class="d-l" x="500" y="196" style="fill:var(--crit)">✕ 쿠키 만료·삭제 → 다시 미인증</text>
+</svg>
+</div>
+
+<div class="note warn"><b>가드는 두 겹이지만 성격이 다르다</b> — 게이트(미들웨어·쿠키)는 <b>서버가 강제</b>하는 실제 차단이고, 세션 가드(레이아웃)는 <b>화면 전환용</b>이다. 현재 <code>AUTH_STEPS_ENABLED = false</code>라 세션 가드는 사실상 통과되므로, 실효 보호선은 게이트 하나다.</div>
+
+<!-- ══════════════════════════ 7 ══════════════════════════ -->
+<h2 id="s7"><span class="n">7</span>데이터 모델 · 저장소 매핑</h2>
+
+<h3>7.1 <span class="mono">WorkspaceData</span> — 클라이언트 상태 ↔ 테이블</h3>
+<div class="tblwrap"><table>
+  <tr><th>필드</th><th>타입</th><th>테이블</th><th>비고</th></tr>
+  <tr><td class="mono">profiles</td><td class="mono">Profile[]</td><td class="mono">profiles</td><td>role: admin | member · dept · active</td></tr>
+  <tr><td class="mono">manualDocs</td><td class="mono">ManualDoc[]</td><td class="mono">manual_docs</td><td>앱에서 작성한 메뉴얼(파일 기반과 별개) · pinned · views</td></tr>
+  <tr><td class="mono">projects</td><td class="mono">Project[]</td><td class="mono">projects</td><td>status 4종 · color · start/end는 역할 없을 때 fallback</td></tr>
+  <tr><td class="mono">roles</td><td class="mono">ProjectRole[]</td><td class="mono">project_roles</td><td>간트의 행 — segments·logs는 jsonb</td></tr>
+  <tr><td class="mono">dailyUpdates</td><td class="mono">DailyUpdate[]</td><td class="mono">daily_updates</td><td>doing | done | planned</td></tr>
+  <tr><td class="mono">workLogs</td><td class="mono">WorkLog[]</td><td class="mono">work_logs</td><td>간트 편집 시 자동 적재(actor·target·action)</td></tr>
+  <tr><td class="mono">ideas</td><td class="mono">Idea[]</td><td class="mono">ideas</td><td>tags jsonb · promotedProjectId</td></tr>
+  <tr><td class="mono">posts</td><td class="mono">Post[]</td><td class="mono">posts</td><td>category 4종 · comments·tags jsonb</td></tr>
+  <tr><td class="mono">conversations</td><td class="mono">Conversation[]</td><td class="mono">conversations</td><td>channel | dm(peerId)</td></tr>
+  <tr><td class="mono">messages</td><td class="mono">Message[]</td><td class="mono">messages</td><td>conversationId · at(ISO)</td></tr>
+  <tr><td class="mono">readStates</td><td class="mono">Record&lt;string,string&gt;</td><td class="mono">read_states</td><td><b>맵 테이블</b> — conversationId → 마지막 읽은 시각</td></tr>
+  <tr><td class="mono">studyDocs</td><td class="mono">StudyDoc[]</td><td class="mono">study_docs</td><td>field · purpose 메타</td></tr>
+  <tr><td class="mono">referenceLinks</td><td class="mono">ReferenceLink[]</td><td class="mono">reference_links</td><td>프로그램/링크 모음</td></tr>
+  <tr><td class="mono">novels</td><td class="mono">Novel[]</td><td class="mono">novels</td><td>chapters jsonb (DB 기반 소설 — 파일 기반과 공존)</td></tr>
+  <tr><td class="mono">novelProgress</td><td class="mono">Record&lt;string,number&gt;</td><td class="mono">novel_progress</td><td><b>맵 테이블</b> — 파일 소설 slug → 마지막 읽은 화</td></tr>
+  <tr><td class="mono">loginHistory</td><td class="mono">LoginRecord[]</td><td class="mono">login_history</td><td>관리자 화면 표시용</td></tr>
+</table></div>
+<p class="desc">배열 14 + 맵 2 = <b>16 테이블</b>. 배열 항목은 전부 <span class="mono">id: string</span>을 가지며, 이 id가 동기화·백업·복원의 유일한 키다.</p>
+
+<h3>7.2 스키마 설계 규칙</h3>
+<ul>
+  <li><b>컬럼명 = 앱 필드명(camelCase)</b> — 매핑 코드를 없애기 위한 선택. Postgres는 기본이 소문자라 <span class="mono">"joinedAt"</span>처럼 큰따옴표로 인용한다. <span class="mono">"end"</span>는 예약어라 반드시 인용.</li>
+  <li><b>날짜·시간은 text</b> — 앱이 쓰는 문자열(ISO 또는 <span class="mono">yyyy-mm-dd</span>)을 왕복 변환 없이 그대로 보존한다.</li>
+  <li><b>항상 함께 편집되는 중첩 배열은 jsonb</b> — segments · logs · comments · chapters · tags. 개별 행으로 쪼개지 않는다.</li>
+  <li><b>id는 text</b> — 앱이 만든 문자열 id(<span class="mono">uid()</span> 기반)를 그대로 PK로 쓴다. DB 생성 id를 쓰지 않으므로 오프라인 폴백과 동일한 데이터 형태가 유지된다.</li>
+  <li><b>project_roles → projects</b>만 FK(<span class="mono">on delete cascade</span>). 나머지는 느슨한 참조라 고아 행이 화면을 깨지 않는다.</li>
+</ul>
+
+<h3>7.3 백업 파일 포맷 (<span class="mono">/schedule</span> → 데이터 탭)</h3>
+<pre><code>{
+  "schema_version": 2,              // 불일치하면 불러오기 거부 (parseBackup)
+  "exported_at": "…ISO…",           // 파일명 스탬프에도 사용
+  "scope": "schedule",              // schedule | full | login_history
+  "data": {                         // scope에 해당하는 키만 포함
+    "projects": [...], "roles": [...], "dailyUpdates": [...],
+    "workLogs": [...], "ideas": [...]
+  }
+}
+// 복원 = upsertById — 같은 id는 덮어쓰고 새 id는 추가(삭제는 하지 않음)
+// readStates · novelProgress는 맵 병합(spread)으로 반영</code></pre>
+
+<h3>7.4 파일 기반 콘텐츠 타입</h3>
+<pre><code>ContentDoc  { slug, type:"manual"|"study", title, category?, field?, purpose?,
+              tags[], summary, author?, updated?, readMinutes, related[], body }
+ContentNovel{ slug, title, author, status, note, featured,
+              chapters: [{ id, title, paragraphs[] }] }
+
+// slug 규칙 — 문서: 파일명(확장자 제외) = URL 슬러그
+//              소설: 폴더 경로를 "--" 로 이은 값 (하위 폴더 = 별개 작품)
+// readMinutes — frontmatter read_minutes 없으면 body.length / 500 으로 추정</code></pre>
+
+<!-- ══════════════════════════ 8 ══════════════════════════ -->
+<h2 id="s8"><span class="n">8</span>라우트 · API 요약</h2>
+<p class="desc"><span class="mono">/gate</span> · <span class="mono">/api/gate</span> · <span class="mono">/icons</span> · <span class="mono">/downloads</span> · 매니페스트/파비콘을 제외한 <b>모든 경로</b>는 게이트 통과가 전제다. 화면은 전부 클라이언트 컴포넌트이며, 서버 코드는 게이트 API와 콘텐츠 API 두 곳뿐이다.</p>
+<div class="tblwrap"><table>
+  <tr><th>분류</th><th>경로</th><th>역할</th></tr>
+  <tr><td rowspan="2">인증(게이트)</td><td class="mono">GET /gate</td><td>비밀번호 입력 화면 · <span class="mono">next</span> 파라미터 보존(내부 경로만) · APK 다운로드 버튼</td></tr>
+  <tr><td class="mono">POST /api/gate</td><td>검증 후 <span class="mono">ws_gate</span> 쿠키 발급 — 401(불일치) · 500(env 미설정)</td></tr>
+  <tr><td>콘텐츠 API</td><td class="mono">GET /api/docs · /api/novels</td><td><span class="mono">content/</span> 폴더를 읽어 JSON으로 반환 (<span class="mono">force-dynamic</span>)</td></tr>
+  <tr><td rowspan="2">문서</td><td class="mono">/ · /manual/[slug]</td><td>필수 메뉴얼 목록(홈) · 상세(번호 섹션 → 목차 자동 생성)</td></tr>
+  <tr><td class="mono">/docs · /docs/[slug]</td><td>학습 문서 목록 · 상세 — 분야/목적/태그 필터</td></tr>
+  <tr><td>일정</td><td class="mono">/schedule</td><td>간트 · 일일 업데이트 · 작업 로그 · 아이디어 · 데이터(JSON) 5탭</td></tr>
+  <tr><td>소통</td><td class="mono">/board · /board/write · /chat</td><td>게시판(댓글) · 글쓰기 · 채널/DM 대화</td></tr>
+  <tr><td>자료</td><td class="mono">/links · /novels · /novels/[id]</td><td>프로그램 링크 · 서재 목록 · 읽기 화면(진행 저장)</td></tr>
+  <tr><td>관리자</td><td class="mono">/admin/logins · /accounts · /app</td><td>로그인 이력 · 계정 관리 · 앱 배포(APK + QR 생성)</td></tr>
+  <tr><td>비활성</td><td class="mono">/login · /invite</td><td>로그인·초대코드 — <span class="mono">AUTH_STEPS_ENABLED=false</span> 동안 진입하지 않음</td></tr>
+</table></div>
+
+<!-- ══════════════════════════ 9 ══════════════════════════ -->
+<h2 id="s9"><span class="n">9</span>상태 관리 · 동기화 설계</h2>
+
+<h3>9.1 단일 상태 · 낙관적 갱신</h3>
+<ul>
+  <li><b>상태 소유자는 하나</b> — <span class="mono">WorkspaceProvider</span>. 화면은 <code>useWorkspace()</code>로 읽고 <code>update(fn)</code>으로 쓴다. 저장 대상(DB냐 로컬이냐)은 화면이 알지 못한다.</li>
+  <li><b>로드는 마운트 1회</b> — 이후 폴링이나 구독이 없다. <span class="mono">ready</span>가 될 때까지 Provider가 <span class="mono">null</span>을 렌더해 미완성 화면이 깜빡이지 않는다.</li>
+  <li><b>쓰기는 낙관적</b> — <code>setData(next)</code>로 화면을 먼저 갱신하고, DB 반영은 <span class="mono">void syncWorkspace(...)</span>로 흘려보낸다. 실패해도 화면은 멈추지 않고 콘솔에 기록만 남는다(= 새로고침하면 되돌아갈 수 있음).</li>
+  <li><b>최신값은 <span class="mono">dataRef</span></b> — diff 계산에 렌더 사이의 낡은 클로저 값이 섞이지 않도록 ref로 병행 보관한다.</li>
+</ul>
+
+<h3>9.2 동기화 규칙 (<span class="mono">sync.ts</span>)</h3>
+<div class="tblwrap"><table>
+  <tr><th>대상</th><th>판정</th><th>동작</th></tr>
+  <tr><td>배열 테이블 14종</td><td>참조가 같으면 <b>즉시 건너뜀</b> (불변 갱신 전제)</td><td>—</td></tr>
+  <tr><td>변경·신규 행</td><td>prev에 없거나 <span class="mono">JSON.stringify</span> 결과가 다름</td><td class="mono">upsert(rows)</td></tr>
+  <tr><td>사라진 행</td><td>prev에 있고 next의 id 집합에 없음</td><td class="mono">delete().in("id", ids)</td></tr>
+  <tr><td>맵 테이블 2종</td><td>값이 달라진 key만 추림</td><td class="mono">upsert({key, val})</td></tr>
+  <tr><td>맵에서 사라진 key</td><td>prev에만 존재</td><td class="mono">delete().in(keyCol, keys)</td></tr>
+  <tr><td>전체</td><td><span class="mono">Promise.allSettled</span></td><td>일부 실패해도 나머지는 반영 · 실패는 <span class="mono">console.error</span></td></tr>
+</table></div>
+<div class="note warn"><b>동시 편집은 last-write-wins</b>다. 같은 행을 두 사람이 동시에 고치면 나중 저장이 이긴다. 버전 컬럼·충돌 감지·Realtime 구독은 현재 없다 — 필요해지면 이 지점(§9.2)이 확장 대상이다.</div>
+
+<h3>9.3 폴백 경로</h3>
+<ul>
+  <li><span class="mono">supabase.ts</span>가 env 부재 시 <span class="mono">null</span> + <span class="mono">isSupabaseConfigured=false</span>를 내보내고, <span class="mono">store</span>가 이를 보고 <span class="mono">localStorage("tw.data.v2")</span> 전량 저장 방식으로 전환한다.</li>
+  <li>로컬 데이터가 깨졌거나 구버전 형태(<span class="mono">roles</span>·<span class="mono">novels</span> 누락)면 <span class="mono">createSeed()</span>로 되돌린다.</li>
+  <li>DB 로드가 예외로 실패하면 <b>빈 상태로 시작</b>한다(화면은 뜬다). 세션·테마는 어느 모드에서든 항상 로컬 저장이다.</li>
+</ul>
+
+<!-- ══════════════════════════ 10 ══════════════════════════ -->
+<h2 id="s10"><span class="n">10</span>콘텐츠 파이프라인 (파일 → 화면)</h2>
+<p class="desc">폴더가 곧 화면이다. <span class="mono">content/</span>에 md를 넣고 새로고침하면 반영되고, 라이브에는 커밋·푸시로 배포된다. 파서는 <span class="mono">content.ts</span> 하나뿐이며 변환 프롬프트(<span class="mono">docs/prompts/</span>)가 이 파서의 입력 형식에 1:1로 맞춰져 있다.</p>
+
+<div class="tblwrap"><table>
+  <tr><th>폴더</th><th>화면</th><th>규칙</th></tr>
+  <tr><td class="mono">content/manual/*.md</td><td>필수 메뉴얼 (홈) · <span class="mono">/manual/&lt;slug&gt;</span></td><td>파일명 = 슬러그 · frontmatter(title·category·summary·updated·tags)</td></tr>
+  <tr><td class="mono">content/study/*.md</td><td>학습 문서 · <span class="mono">/docs/&lt;slug&gt;</span></td><td>동일 + field(분야) · purpose(목적) · related</td></tr>
+  <tr><td class="mono">content/novel/&lt;작품&gt;/NN_*.md</td><td>서재 · <span class="mono">/novels/&lt;slug&gt;</span></td><td>파일 하나 = 한 화 · 파일명 순 정렬 · 첫 <span class="mono">#</span> 줄이 화 제목</td></tr>
+  <tr><td class="mono">content/novel/&lt;작품&gt;/_index.md</td><td>작품 정보</td><td>title·author·status·note·featured (없으면 폴더명에서 유추)</td></tr>
+  <tr><td class="mono">content/study/html/</td><td>표시 안 됨</td><td>변환 전 HTML 원본 보관처 — 앱은 <span class="mono">.md</span>만 읽는다</td></tr>
+</table></div>
+
+<h3>파서 세부 (실측)</h3>
+<ul>
+  <li><b>frontmatter</b>는 미니 파서다 — <span class="mono">---</span> 블록의 <span class="mono">key: value</span>를 읽어 <span class="mono">[a, b]</span>는 배열, 숫자만 있으면 number, 나머지는 따옴표를 벗긴 문자열로 만든다. 중첩 YAML은 지원하지 않는다.</li>
+  <li><b>문서 정렬</b>은 <span class="mono">updated</span> 내림차순, <b>소설 정렬</b>은 제목 한국어 로케일 기준이다.</li>
+  <li><b>소설 폴더는 재귀 탐색</b>한다 — 하위 폴더도 독립 작품이 되고, slug는 경로를 <span class="mono">--</span>로 이어 만든다(예: <span class="mono">작품--생애</span>).</li>
+  <li><b>화 본문</b>은 빈 줄 기준으로 문단을 나누고, 각 문단 안의 줄바꿈은 공백으로 합친다. <span class="mono">##</span> 이상 소제목은 기호만 벗겨 문단으로 넣고, <span class="mono">---</span> 구분선은 버린다.</li>
+  <li><b>실패 내성</b> — 읽기·파싱이 실패한 파일/폴더는 조용히 건너뛰고 나머지를 반환한다. 한 파일이 목록 전체를 깨뜨리지 않는다.</li>
+</ul>
+
+<div class="note warn"><b>배포 시 주의</b> — 이 경로는 런타임 <span class="mono">fs</span> 읽기라 서버리스 번들 추적이 자동으로 되지 않는다. <span class="mono">next.config.ts</span>의 <code>outputFileTracingIncludes</code>에서 <span class="mono">./content/**/*</span>를 함수에 포함시키고 있으며, 이 설정을 빼면 <b>배포 환경에서만</b> 문서·소설이 빈 채로 뜬다(로컬은 정상이라 놓치기 쉽다).</div>
+
+<!-- ══════════════════════════ 11 ══════════════════════════ -->
+<h2 id="s11"><span class="n">11</span>보안 · 불변 규칙</h2>
+
+<h3>11.1 보안 설계</h3>
+<ul>
+  <li><b>비밀번호는 서버에만</b> — 원문은 <span class="mono">process.env.APP_PASSWORD</span>로만 존재하고 클라이언트 번들·응답에 실리지 않는다. 쿠키에는 <span class="mono">SHA-256("companyos::gate::" + 비밀번호)</span> 파생 토큰만 담긴다.</li>
+  <li><b>쿠키 속성</b> — <span class="mono">httpOnly</span> · <span class="mono">sameSite=lax</span> · 프로덕션에서 <span class="mono">secure</span> · <span class="mono">path=/</span> · 30일.</li>
+  <li><b>타이밍 둔감 비교</b> — <span class="mono">safeEqual()</span>은 길이가 달라도 조기 반환하지 않고 XOR 누적으로 판정한다.</li>
+  <li><b>오픈 리다이렉트 차단</b> — <span class="mono">/gate</span>의 <span class="mono">next</span>는 <span class="mono">safeNext()</span>로 <span class="mono">/</span>로 시작하고 <span class="mono">//</span>가 아닌 내부 경로만 허용한다.</li>
+  <li><b>Edge/Node 토큰 일치</b> — 미들웨어(Edge)와 API(Node)가 같은 <span class="mono">lib/gate.ts</span>를 쓰고 Web Crypto만 사용해, 런타임이 달라도 판정이 갈리지 않는다.</li>
+  <li><b>시크릿은 미추적</b> — <span class="mono">.env*</span>(단 <span class="mono">.env.example</span> 제외) · <span class="mono">/backup/</span> · <span class="mono">/docs/*.txt</span>가 <span class="mono">.gitignore</span>로 선제 차단된다.</li>
+</ul>
+
+<h3>11.2 알려진 보안 한계 (설계상 수용)</h3>
+<ul>
+  <li><b>DB는 공개 anon 키로 접근</b>한다. 로그인이 Supabase Auth가 아니라서 RLS 정책은 <span class="mono">anon/authenticated</span> 전체 허용이며, 실제 통제는 앱 게이트에 의존한다. <span class="mono">NEXT_PUBLIC_*</span> 값은 브라우저 번들에 포함되므로 공개 전제로만 써야 한다.</li>
+  <li>사용자별 데이터 보호가 필요해지면 순서는 정해져 있다 — ① Supabase Auth 도입 → ② 정책을 <span class="mono">auth.uid()</span> 기준으로 좁히기 → ③ <span class="mono">flags.ts</span>의 인증 단계 복구.</li>
+  <li>게이트는 <b>팀 단위 공유 비밀</b>이라 개인 식별·감사 기능이 없다. 관리자 화면의 로그인 이력은 앱이 기록한 값이지 인증 로그가 아니다.</li>
+</ul>
+
+<h3>11.3 불변 규칙 (어기면 재발하는 문제)</h3>
+<ol>
+  <li>상태 변경은 반드시 <code>update(fn)</code>로 — 불변 갱신(새 배열/객체)을 지켜야 <span class="mono">sync</span>의 참조 비교가 성립한다. 배열을 제자리 수정하면 저장이 조용히 누락된다.</li>
+  <li><code>lib/content.ts</code>는 서버 전용 — 클라이언트 컴포넌트에서 import하면 <span class="mono">node:fs</span> 때문에 빌드가 깨진다. 화면은 <span class="mono">useDocs</span> 훅만 쓴다.</li>
+  <li>미들웨어는 Edge 런타임 — Node API·supabase-js를 들이지 않는다. 공유 로직은 Web Crypto만 쓰는 <span class="mono">gate.ts</span>에 둔다.</li>
+  <li>새 화면·정적 자산을 게이트 밖에 두려면 <span class="mono">PUBLIC_PREFIXES</span>/<span class="mono">PUBLIC_EXACT</span>에 명시한다(현재 예외: gate·api/gate·icons·downloads·manifest·favicon).</li>
+  <li>새 컬렉션을 추가할 때는 <b>세 곳을 함께</b> 고친다 — <span class="mono">types.ts(WorkspaceData)</span> · <span class="mono">sync.ts(ARRAY_TABLES)</span> · <span class="mono">schema.sql</span>. 백업 대상이면 <span class="mono">backup.ts</span>의 키 목록도.</li>
+  <li>DB 컬럼은 앱 필드명 그대로 — 예약어(<span class="mono">end</span>)와 대문자는 큰따옴표로 인용한다.</li>
+  <li><span class="mono">content/**</span>는 <span class="mono">outputFileTracingIncludes</span>에 유지 — 라우트를 새로 만들어 파일을 읽으면 그 라우트도 목록에 추가한다.</li>
+  <li>실제 비밀값은 <span class="mono">.env.local</span>과 호스팅 환경변수에만 — 문서·스크린샷·커밋에 남기지 않는다.</li>
+</ol>
+
+<!-- ══════════════════════════ 12 ══════════════════════════ -->
+<h2 id="s12"><span class="n">12</span>빌드 · 배포 · 코드 규모 · 알려진 경계</h2>
+
+<h3>12.1 빌드 · 실행</h3>
+<div class="tblwrap"><table>
+  <tr><th>명령</th><th>내용</th><th>비고</th></tr>
+  <tr><td class="mono">npm install</td><td>의존성 설치</td><td>반드시 <span class="mono">ops/</span>에서 — package.json 위치</td></tr>
+  <tr><td class="mono">npm run dev</td><td>개발 서버 (localhost:3000)</td><td>게이트 비밀번호가 없으면 어느 화면에도 못 들어간다</td></tr>
+  <tr><td class="mono">npm run build / start</td><td>프로덕션 빌드·실행</td><td>content 번들 포함 여부는 <span class="mono">next.config.ts</span>가 결정</td></tr>
+  <tr><td class="mono">node tools/gen-palette.mjs</td><td>팔레트 생성 (OKLCh 탐색)</td><td>채도 상한 아래에서 색 구분 최대화</td></tr>
+  <tr><td class="mono">node tools/check-palette.mjs</td><td>팔레트 검증</td><td>명도·채도·색각 이상(1·2·3형) ΔE 분리 검사</td></tr>
+</table></div>
+<p class="desc">배포는 Vercel — 기본 브랜치 푸시가 프로덕션, 기능 브랜치는 프리뷰. 환경변수 3종(게이트 비밀번호 · Supabase URL · anon 키)을 호스팅에 등록해야 한다. Android 앱은 배포 주소를 원격 로드하는 Capacitor 껍데기라 <b>웹 재배포가 곧 앱 갱신</b>이며, 주소·아이콘·앱 이름이 바뀔 때만 재빌드가 필요하다.</p>
+
+<h3>12.2 코드 규모 (2026-07-28 실측 · <span class="mono">src/</span> 합계 6,620줄 / 39파일)</h3>
+<div class="tblwrap"><table>
+  <tr><th>파일</th><th>라인</th><th>파일</th><th>라인</th></tr>
+  <tr><td class="mono">components/schedule/GanttTab.tsx</td><td class="mono">1,148</td><td class="mono">lib/store.tsx</td><td class="mono">149</td></tr>
+  <tr><td class="mono">app/(workspace)/page.tsx</td><td class="mono">331</td><td class="mono">lib/backup.ts</td><td class="mono">148</td></tr>
+  <tr><td class="mono">app/(workspace)/novels/[id]/page.tsx</td><td class="mono">312</td><td class="mono">app/gate/page.tsx</td><td class="mono">124</td></tr>
+  <tr><td class="mono">app/(workspace)/chat/page.tsx</td><td class="mono">294</td><td class="mono">components/schedule/DataTab.tsx</td><td class="mono">114</td></tr>
+  <tr><td class="mono">components/schedule/DailyTab.tsx</td><td class="mono">290</td><td class="mono">lib/sync.ts</td><td class="mono">113</td></tr>
+  <tr><td class="mono">lib/types.ts</td><td class="mono">232</td><td class="mono">app/(workspace)/schedule/page.tsx</td><td class="mono">109</td></tr>
+  <tr><td class="mono">app/(workspace)/admin/accounts/page.tsx</td><td class="mono">222</td><td class="mono">lib/util.ts</td><td class="mono">76</td></tr>
+  <tr><td class="mono">app/(workspace)/board/write/page.tsx</td><td class="mono">220</td><td class="mono">middleware.ts</td><td class="mono">50</td></tr>
+  <tr><td class="mono">components/ui.tsx</td><td class="mono">209</td><td class="mono">app/api/gate/route.ts</td><td class="mono">49</td></tr>
+  <tr><td class="mono">components/schedule/IdeasTab.tsx</td><td class="mono">204</td><td class="mono">lib/useDocs.ts</td><td class="mono">44</td></tr>
+  <tr><td class="mono">lib/content.ts</td><td class="mono">200</td><td class="mono">app/(workspace)/layout.tsx</td><td class="mono">43</td></tr>
+  <tr><td class="mono">app/(workspace)/board/page.tsx</td><td class="mono">199</td><td class="mono">lib/gate.ts · flags.ts · supabase.ts</td><td class="mono">≈45</td></tr>
+</table></div>
+<p class="desc">그 밖에 <span class="mono">supabase/schema.sql</span> 204줄, <span class="mono">src/app/globals.css</span> 238줄(테마 토큰·Tailwind v4 <span class="mono">@theme</span>). 런타임 의존성은 8개(next · react · react-dom · supabase-js · lucide-react · react-markdown 계열 · qrcode · github-slugger).</p>
+
+<h3>12.3 알려진 경계 · 현재 비목표</h3>
+<ul>
+  <li><b>실시간 동기화 없음</b> — Realtime 구독 미적용. 다른 사람의 변경은 재로드 시점에 보인다. 채팅도 같은 조건.</li>
+  <li><b>충돌 처리 없음</b> — 같은 행 동시 편집은 마지막 저장이 이긴다(§9.2).</li>
+  <li><b>파일 업로드 UI 없음</b> — 메뉴얼·학습·소설은 저장소 커밋으로만 추가된다. 첨부파일·Storage 미사용.</li>
+  <li><b>개인화된 접근 제어 없음</b> — 게이트 통과 = 전체 열람. 관리자 화면 가드는 클라이언트 판정이라 방어선이 아니다.</li>
+  <li><b>검색은 클라이언트 필터</b> — 전체 텍스트 검색·인덱스 없음. 데이터가 커지면 이 지점이 먼저 한계에 닿는다.</li>
+  <li><b>테스트 없음</b> — 자동화된 테스트 스위트가 없다. 검증은 <span class="mono">npm run build</span>(타입 검사 포함)와 수동 확인에 의존한다.</li>
+</ul>
+
+<p class="desc" style="margin-top:34px;border-top:1px solid var(--border);padding-top:14px">
+문서 버전: 2026-07-28 · 코드 실측 기준 — 함께 볼 것: <span class="mono">README.md</span>(개요) · <span class="mono">docs/PRD.md</span>(제품 요구사항) · <span class="mono">content/README.md</span>(콘텐츠 작성 규칙) · <span class="mono">Design.md</span>(디자인 규칙)
+</p>
+
+</div>
+<button class="themebtn" id="theme-btn" type="button" onclick="toggleTheme()" title="라이트/다크 전환 — 선택은 이 브라우저에 저장(localStorage cs-theme) · 직접 고르기 전까지는 OS 설정을 따름"></button>
+<script>
+/* 테마 전환 — 버튼은 현재 테마를 표시(누르면 반대로).
+   직접 고른 값만 저장하고, 저장값이 없는 동안에는 OS 설정 변경을 따라간다. */
+(function(){
+  var L={dark:'🌙 다크',light:'☀ 라이트'};
+  var THEME=document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';
+  function paint(){var b=document.getElementById('theme-btn'); if(b){b.textContent=L[THEME]; b.setAttribute('aria-label',L[THEME]);}}
+  window.setTheme=function(v,persist){
+    THEME=(v==='light')?'light':'dark';
+    document.documentElement.setAttribute('data-theme',THEME);
+    if(persist!==false){try{localStorage.setItem('cs-theme',THEME);}catch(e){}}
+    paint();
+  };
+  window.toggleTheme=function(){setTheme(THEME==='light'?'dark':'light');};
+  paint();
+  try{
+    var mq=matchMedia('(prefers-color-scheme: light)');
+    var onOS=function(e){var saved=null; try{saved=localStorage.getItem('cs-theme');}catch(_){}
+      if(saved!=='light'&&saved!=='dark')setTheme(e.matches?'light':'dark',false);};
+    if(mq.addEventListener)mq.addEventListener('change',onOS); else if(mq.addListener)mq.addListener(onOS);
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

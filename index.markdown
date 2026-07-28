@@ -60,16 +60,16 @@ title : main
         </article>
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
-            <img src="project/KnowledgeSharingCenter/banner.png" alt="지식 나눔터 프로젝트 썸네일" />
+            <img src="/project/COS/COS_overview.png" alt="팀 워크스페이스 프로젝트 썸네일" />
           </div>
           <div class="portfolio-card__body">
-            <h3>지식 나눔터</h3>
-            <p>문서·게시판·노트·일정·채팅을 한 자리에 모아 함께 읽고 나누는 지식 공유 공간입니다. 리서치 문서와 학습 자료를 자동 색인해 함께 관리합니다.</p>
-            <div class="tag-list"><span class="tag">Node.js</span><span class="tag">Vercel</span><span class="tag">Upstash Redis</span><span class="tag">운영중</span></div>
+            <h3>팀 워크스페이스</h3>
+            <p>소규모 팀의 운영 허브입니다. 필수 메뉴얼과 프로젝트 일정(간트)·일일 업데이트·게시판·채팅·참조 자료를 한곳에 모았습니다.</p>
+            <div class="tag-list"><span class="tag">Next.js</span><span class="tag">TypeScript</span><span class="tag">사용중</span></div>
             <div class="card-actions">
-              <a class="btn" href="https://company-process.vercel.app/" target="_blank" rel="noopener">방문</a>
-              <a class="btn" href="https://github.com/ReDocu/CompanyProcess" target="_blank" rel="noopener">GitHub</a>
-              <a class="btn" href="https://github.com/ReDocu/CompanyProcess#readme" target="_blank" rel="noopener">기술문서</a>
+              <a class="btn" href="project/COS/index.html" target="_blank" rel="noopener">기능 데모</a>
+              <a class="btn" href="https://team-workspace-zeta.vercel.app" target="_blank" rel="noopener">배포</a>
+              <a class="btn" href="project/COS/Tech_document.html" target="_blank" rel="noopener">기술문서</a>
             </div>
           </div>
         </article>
@@ -101,7 +101,6 @@ title : main
             </div>
           </div>
         </article>
-        <!--
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
             <img src="assets/images/portfolio/AutomationTool.svg" alt="소프트웨어 자동화 툴 썸네일" />
@@ -141,7 +140,6 @@ title : main
             </div>
           </div>
         </article>
-        -->
       </div>
       <button class="slider-arrow slider-arrow--right" type="button" aria-label="다음 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5L16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>
@@ -176,33 +174,6 @@ title : main
         </article>
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/AcademySim.svg" alt="학원 운영 시뮬레이션 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>학원 운영 시뮬레이션</h3>
-            <p>학원을 운영하며 커리큘럼과 수강생을 관리하는 경영 시뮬레이션 게임입니다. 팀 프로젝트로 정식 출시를 목표로 개발하고 있습니다.</p>
-            <div class="tag-list"><span class="tag">개발중</span><span class="tag">출시목적</span><span class="tag">팀</span><span class="tag">GitHub</span></div>
-            <div class="card-actions">
-              <a class="btn" href="https://github.com/ReDocu/Project_Academy_Ops" target="_blank" rel="noopener">GitHub 바로가기</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/AcademySim.svg" alt="학원 운영 시뮬레이션 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>명일방주 모작</h3>
-            <p>실제 게임을 개발하고 어떻게 운영할지에 대한 연구를 위한 게임</p>
-            <div class="tag-list"><span class="tag">개발중</span><span class="tag">모작</span><span class="tag">개인</span><span class="tag">Unity</span></div>
-            <div class="card-actions">
-              <a class="btn" href="https://github.com/ReDocu/Project_Academy_Ops" target="_blank" rel="noopener">GitHub 바로가기</a>
-            </div>
-          </div>
-        </article>
-        <!-- 
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
             <img src="assets/images/portfolio/GameDevTool.svg" alt="게임 개발 운영 툴 썸네일" />
           </div>
           <div class="portfolio-card__body">
@@ -227,7 +198,19 @@ title : main
             </div>
           </div>
         </article>
-        -->
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="assets/images/portfolio/AcademySim.svg" alt="학원 운영 시뮬레이션 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>학원 운영 시뮬레이션</h3>
+            <p>학원을 운영하며 커리큘럼과 수강생을 관리하는 경영 시뮬레이션 게임입니다. 팀 프로젝트로 정식 출시를 목표로 개발하고 있습니다.</p>
+            <div class="tag-list"><span class="tag">개발중</span><span class="tag">출시목적</span><span class="tag">팀</span><span class="tag">GitHub</span></div>
+            <div class="card-actions">
+              <a class="btn" href="https://github.com/ReDocu/Project_Academy_Ops" target="_blank" rel="noopener">GitHub 바로가기</a>
+            </div>
+          </div>
+        </article>
       </div>
       <button class="slider-arrow slider-arrow--right" type="button" aria-label="다음 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5L16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>

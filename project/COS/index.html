@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>팀 워크스페이스 — 기능 데모</title>
+<style>
+  :root{
+    --bg:#eef4fb; --surface:#ffffff; --panel:#f1f6fc; --tint:#e6f1fc;
+    --line:#dce6f2; --line-2:#c9d8e8;
+    --ink:#132234; --ink-2:#48596b; --ink-3:#8095a8;
+    --accent:#2f8fe0; --accent-deep:#1673cc; --accent-ink:#ffffff;
+    --ok:#16a34a; --ok-bg:#dcfce7; --warn:#c47a1c; --warn-bg:#fdecd3;
+    --danger:#dc2626; --danger-bg:#fde4e4;
+    --p1:#2f8fe0; --p2:#14a3a0; --p3:#e0913a; --p4:#7a6bc9; --p5:#5b8a72; --p6:#9c9385;
+    --shadow:0 10px 34px rgba(20,55,100,.10);
+    --shadow-sm:0 4px 14px rgba(20,55,100,.07);
+    --radius:14px; --radius-sm:10px;
+    --font:-apple-system,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;
+    --mono:"Cascadia Mono",Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#0b141d; --surface:#111d29; --panel:#16242f; --tint:#13293c;
+      --line:#22323f; --line-2:#2c3f4e;
+      --ink:#e6eef6; --ink-2:#a7b8c6; --ink-3:#6d8193;
+      --accent:#4aa3e8; --accent-deep:#7cc0f5; --accent-ink:#08131d;
+      --ok:#4ade80; --ok-bg:#0f2a1c; --warn:#e0a458; --warn-bg:#2c2113;
+      --danger:#f87171; --danger-bg:#2c1414;
+      --shadow:0 10px 34px rgba(0,0,0,.4); --shadow-sm:0 4px 14px rgba(0,0,0,.3);
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#eef4fb; --surface:#ffffff; --panel:#f1f6fc; --tint:#e6f1fc;
+    --line:#dce6f2; --line-2:#c9d8e8; --ink:#132234; --ink-2:#48596b; --ink-3:#8095a8;
+    --accent:#2f8fe0; --accent-deep:#1673cc; --accent-ink:#ffffff;
+    --ok:#16a34a; --ok-bg:#dcfce7; --warn:#c47a1c; --warn-bg:#fdecd3;
+    --danger:#dc2626; --danger-bg:#fde4e4;
+    --shadow:0 10px 34px rgba(20,55,100,.10); --shadow-sm:0 4px 14px rgba(20,55,100,.07);
+  }
+  :root[data-theme="dark"]{
+    --bg:#0b141d; --surface:#111d29; --panel:#16242f; --tint:#13293c;
+    --line:#22323f; --line-2:#2c3f4e; --ink:#e6eef6; --ink-2:#a7b8c6; --ink-3:#6d8193;
+    --accent:#4aa3e8; --accent-deep:#7cc0f5; --accent-ink:#08131d;
+    --ok:#4ade80; --ok-bg:#0f2a1c; --warn:#e0a458; --warn-bg:#2c2113;
+    --danger:#f87171; --danger-bg:#2c1414;
+    --shadow:0 10px 34px rgba(0,0,0,.4); --shadow-sm:0 4px 14px rgba(0,0,0,.3);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font);
+    font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4,p{margin:0;text-wrap:balance}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--tint)}
+  .ic{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:2;
+    stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+  /* ---------- shell ---------- */
+  .app{display:grid;grid-template-columns:248px 1fr;height:100vh}
+  .sidebar{background:var(--surface);border-right:1px solid var(--line);
+    padding:18px 14px;display:flex;flex-direction:column;gap:2px;overflow-y:auto}
+  .brand{display:flex;align-items:center;gap:10px;padding:4px 8px 14px}
+  .brand .logo{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--accent),var(--accent-deep));color:#fff;font-size:20px}
+  .brand b{font-size:14.5px;display:block;line-height:1.2}
+  .brand span{font-size:11px;color:var(--ink-3)}
+  .nav-group{display:flex;align-items:center;gap:9px;padding:11px 8px 5px;
+    font-size:12.5px;font-weight:700;color:var(--ink)}
+  .nav-group .ic{font-size:17px;color:var(--ink-2)}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:8px 9px;border-radius:10px;
+    font-size:13px;color:var(--ink-2);cursor:pointer;border:none;background:none;
+    width:100%;text-align:left;font-family:inherit}
+  .nav-item .ic{font-size:17px;color:var(--ink-3)}
+  .nav-item.indent{margin-left:26px}
+  .nav-item:hover{background:var(--panel)}
+  .nav-item.active{background:var(--tint);color:var(--accent-deep);font-weight:600}
+  .nav-item.active .ic{color:var(--accent-deep)}
+  .side-foot{margin-top:auto;padding-top:12px;border-top:1px solid var(--line);
+    display:flex;align-items:center;gap:10px}
+  .side-foot .meta{min-width:0;flex:1}
+  .side-foot b{font-size:12.5px;display:block}
+  .side-foot span{font-size:11px;color:var(--ink-3)}
+  .icon-btn{border:none;background:none;color:var(--ink-3);cursor:pointer;
+    padding:6px;border-radius:8px;font-size:17px;display:grid;place-items:center}
+  .icon-btn:hover{background:var(--panel);color:var(--ink)}
+
+  .main{overflow-y:auto}
+  .banner{display:flex;align-items:center;gap:12px;margin:16px 22px 0;padding:12px 16px;
+    border-radius:12px;background:linear-gradient(120deg,var(--accent),var(--accent-deep));
+    color:#fff;box-shadow:var(--shadow-sm);font-size:12.5px}
+  .banner .ic{font-size:19px}
+  .banner b{font-size:13px}
+
+  .view{display:none;padding:8px 22px 40px}
+  .view.active{display:block;animation:fade .22s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.view.active{animation:none}}
+
+  .page-head{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;
+    padding:18px 0 14px;border-bottom:1px solid var(--line);margin-bottom:18px}
+  .page-head h1{font-size:20px;font-weight:800;letter-spacing:-.01em}
+  .page-head .sub{font-size:12.5px;color:var(--ink-3);padding-bottom:2px}
+  .page-head .spacer{flex:1}
+  .btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line-2);
+    background:var(--surface);color:var(--ink-2);padding:8px 13px;border-radius:10px;
+    font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
+  .btn:hover{background:var(--panel)}
+  .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-deep));
+    color:var(--accent-ink);border:none}
+  .btn-primary:hover{opacity:.92}
+  .btn .ic{font-size:15px}
+
+  /* feature intro callout */
+  .intro{display:flex;gap:13px;padding:15px 17px;border-radius:14px;
+    background:var(--tint);border:1px solid var(--line);margin-bottom:20px}
+  .intro .badge{width:40px;height:40px;border-radius:11px;flex:none;display:grid;place-items:center;
+    background:var(--surface);color:var(--accent-deep);font-size:21px;box-shadow:var(--shadow-sm)}
+  .intro h3{font-size:14px;color:var(--accent-deep)}
+  .intro p{font-size:12.5px;color:var(--ink-2);margin-top:3px}
+
+  /* generic pieces */
+  .grid{display:grid;gap:14px}
+  .g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)}
+  @media (max-width:900px){.g2,.g3{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:16px 17px;box-shadow:var(--shadow-sm)}
+  .card h4{font-size:13.5px;font-weight:700}
+  .card .desc{font-size:12px;color:var(--ink-2);margin-top:6px;line-height:1.6}
+  .row{display:flex;align-items:center;gap:9px}
+  .chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;
+    font-size:10.5px;font-weight:700;background:var(--panel);color:var(--ink-2)}
+  .chip.accent{background:var(--tint);color:var(--accent-deep)}
+  .pill{padding:2px 9px;border-radius:999px;font-size:10.5px;font-weight:700}
+  .pill.ok{background:var(--ok-bg);color:var(--ok)} .pill.warn{background:var(--warn-bg);color:var(--warn)}
+  .pill.danger{background:var(--danger-bg);color:var(--danger)} .pill.muted{background:var(--panel);color:var(--ink-3)}
+  .pill.accent{background:var(--tint);color:var(--accent-deep)}
+  .av{border-radius:50%;display:grid;place-items:center;font-weight:700;color:#fff;flex:none;
+    font-size:12px;width:30px;height:30px}
+  .muted{color:var(--ink-3)} .small{font-size:11.5px}
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+  .kpi .n{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
+  .kpi .l{font-size:11.5px;color:var(--ink-3);margin-top:2px}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  .tbl{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  thead tr{background:var(--panel);color:var(--ink-3);font-size:11px;text-align:left}
+  th,td{padding:10px 14px;border-bottom:1px solid var(--line)}
+  tbody tr:last-child td{border-bottom:none}
+  td.num{font-variant-numeric:tabular-nums}
+
+  /* hero (home) */
+  .hero{border-radius:18px;padding:26px;color:#fff;margin-bottom:20px;
+    background:linear-gradient(125deg,#4aa3e8,var(--accent) 45%,var(--accent-deep))}
+  .hero .eyebrow{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+  .hero h2{font-size:20px;margin-top:8px}
+  .hero p{font-size:13px;opacity:.9;margin-top:6px}
+
+  /* gantt */
+  .gantt{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:6px 0}
+  .grow{display:grid;grid-template-columns:180px 1fr;align-items:center;gap:0;
+    padding:9px 14px;border-bottom:1px solid var(--line)}
+  .grow:last-child{border-bottom:none}
+  .grow .nm{font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .track{position:relative;height:22px;background:var(--panel);border-radius:6px}
+  .bar{position:absolute;top:0;height:22px;border-radius:6px;display:flex;align-items:center;
+    padding:0 8px;font-size:10.5px;color:#fff;font-weight:700;overflow:hidden}
+  .today{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--danger);border-radius:2px}
+
+  /* chat */
+  .chat{display:grid;grid-template-columns:210px 1fr;height:440px;
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .chan{border-right:1px solid var(--line);padding:10px;overflow-y:auto}
+  .chan .h{font-size:10.5px;font-weight:700;color:var(--ink-3);padding:8px 8px 4px}
+  .chan .c{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:9px;font-size:12.5px;cursor:pointer}
+  .chan .c.on{background:var(--tint);color:var(--accent-deep);font-weight:600}
+  .chan .c:hover{background:var(--panel)}
+  .thread{display:flex;flex-direction:column;min-width:0}
+  .thread .top{padding:12px 16px;border-bottom:1px solid var(--line);font-weight:700;font-size:13px}
+  .msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+  .msg{display:flex;gap:9px;max-width:80%}
+  .msg.me{align-self:flex-end;flex-direction:row-reverse}
+  .bub{background:var(--panel);border-radius:12px;padding:8px 12px;font-size:12.5px}
+  .msg.me .bub{background:linear-gradient(135deg,var(--accent),var(--accent-deep));color:#fff}
+  .msg .who{font-size:10.5px;color:var(--ink-3);margin-bottom:3px}
+  .composer{border-top:1px solid var(--line);padding:10px 14px;display:flex;gap:8px}
+  .composer input{flex:1;border:1px solid var(--line);background:var(--panel);border-radius:10px;
+    padding:9px 12px;font-family:inherit;font-size:12.5px;color:var(--ink)}
+
+  /* novel reader */
+  .reader{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px 30px;
+    max-width:640px;line-height:1.9;font-size:14px}
+  .reader p{margin-bottom:14px;color:var(--ink-2)}
+  .chapter-list{display:flex;flex-direction:column;gap:2px}
+  .chapter-list .ch{display:flex;justify-content:space-between;padding:9px 12px;border-radius:9px;font-size:12.5px}
+  .chapter-list .ch:hover{background:var(--panel)}
+  .chapter-list .ch.on{background:var(--tint);color:var(--accent-deep);font-weight:600}
+
+  /* app-deploy */
+  .qr{width:180px;height:180px;border-radius:12px;background:#fff;padding:10px;border:1px solid var(--line)}
+  .qr svg{display:block}
+  .steps{counter-reset:s;display:flex;flex-direction:column;gap:9px;margin-top:4px}
+  .steps li{list-style:none;display:flex;gap:10px;font-size:12.5px;color:var(--ink-2)}
+  .steps li::before{counter-increment:s;content:counter(s);flex:none;width:19px;height:19px;border-radius:50%;
+    background:var(--accent);color:var(--accent-ink);font-size:10.5px;font-weight:700;display:grid;place-items:center;margin-top:1px}
+
+  .post{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--surface)}
+  .post + .post{margin-top:12px}
+  .post .ttl{font-size:14px;font-weight:700}
+  .cmt{display:flex;gap:9px;padding:9px 0;border-top:1px solid var(--line);margin-top:10px}
+</style>
+</head>
+<body>
+<!-- icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-waves" viewBox="0 0 24 24"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+  <symbol id="i-clip" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3M9 12h6M9 16h6"/></symbol>
+  <symbol id="i-msg" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+  <symbol id="i-cap" viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></symbol>
+  <symbol id="i-win" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20M6 6.5h.01M9 6.5h.01"/></symbol>
+  <symbol id="i-open" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+  <symbol id="i-hist" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l4 2"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
+  <symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></symbol>
+</defs></svg>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="logo"><svg class="ic" style="font-size:20px"><use href="#i-waves"/></svg></span>
+      <div><b>팀 워크스페이스</b><span>team.workspace · 데모</span></div>
+    </div>
+    <button class="nav-item active" data-view="home"><svg class="ic"><use href="#i-book"/></svg>필수 메뉴얼</button>
+    <button class="nav-item" data-view="schedule"><svg class="ic"><use href="#i-cal"/></svg>프로젝트 일정 관리</button>
+    <div class="nav-group"><svg class="ic"><use href="#i-msg"/></svg>커뮤니티</div>
+    <button class="nav-item indent" data-view="board"><svg class="ic"><use href="#i-clip"/></svg>게시판</button>
+    <button class="nav-item indent" data-view="chat"><svg class="ic"><use href="#i-msg"/></svg>채팅</button>
+    <div class="nav-group"><svg class="ic"><use href="#i-cap"/></svg>참조 문서</div>
+    <button class="nav-item indent" data-view="docs"><svg class="ic"><use href="#i-cap"/></svg>학습 문서</button>
+    <button class="nav-item indent" data-view="links"><svg class="ic"><use href="#i-win"/></svg>참고 프로그램·사이트</button>
+    <div class="nav-group"><svg class="ic"><use href="#i-open"/></svg>기타</div>
+    <button class="nav-item indent" data-view="novels"><svg class="ic"><use href="#i-open"/></svg>소설</button>
+    <div class="nav-group"><svg class="ic"><use href="#i-shield"/></svg>관리자</div>
+    <button class="nav-item indent" data-view="logins"><svg class="ic"><use href="#i-hist"/></svg>로그인 이력</button>
+    <button class="nav-item indent" data-view="accounts"><svg class="ic"><use href="#i-user"/></svg>계정 관리</button>
+    <button class="nav-item indent" data-view="appdeploy"><svg class="ic"><use href="#i-phone"/></svg>앱 배포</button>
+
+    <div class="side-foot">
+      <span class="av" style="background:#2f8fe0">이</span>
+      <div class="meta"><b>이도현</b><span>관리자 · @dohyun</span></div>
+      <button class="icon-btn" id="theme" title="테마 전환"><svg class="ic"><use href="#i-sun"/></svg></button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="banner">
+      <svg class="ic"><use href="#i-info"/></svg>
+      <div><b>팀 워크스페이스 기능 데모</b> — 왼쪽 메뉴를 눌러 각 기능이 어떤 화면인지 둘러보세요. (실제 데이터가 아닌 예시 데이터입니다)</div>
+    </div>
+
+    <!-- ============ HOME / 필수 메뉴얼 ============ -->
+    <section class="view active" data-view="home">
+      <div class="page-head"><h1>필수 메뉴얼</h1><span class="sub">입사 후 꼭 확인해야 할 핵심 문서</span>
+        <span class="spacer"></span><button class="btn btn-primary">+ 새 문서</button></div>
+      <div class="intro"><div class="badge"><svg class="ic" style="font-size:21px"><use href="#i-book"/></svg></div>
+        <div><h3>회사 운영·업무 규칙을 한곳에</h3>
+        <p>온보딩, 업무 규칙, 개발 환경, 보안 등 팀이 꼭 알아야 할 문서를 카테고리로 정리합니다. 관리자는 문서를 추가·고정할 수 있어요.</p></div></div>
+      <div class="hero"><div class="eyebrow">▶ 시작하기</div>
+        <h2>처음이신가요? 온보딩 가이드부터 시작하세요</h2>
+        <p>계정 설정부터 첫 업무까지, 첫 주 체크리스트를 따라가면 됩니다.</p></div>
+      <div class="grid g3">
+        <div class="card"><div class="row"><span class="chip accent">온보딩</span><span class="pill accent">고정</span></div>
+          <h4 style="margin-top:9px">온보딩 가이드 — 첫 주에 할 일</h4><p class="desc">계정 설정부터 첫 업무까지, 입사 첫 주 체크리스트.</p></div>
+        <div class="card"><div class="row"><span class="chip">업무 규칙</span><span class="pill accent">고정</span></div>
+          <h4 style="margin-top:9px">업무 규칙 — 보고와 커뮤니케이션</h4><p class="desc">일일 업데이트 작성 규칙과 채널 사용 기준.</p></div>
+        <div class="card"><div class="row"><span class="chip">개발 환경</span></div>
+          <h4 style="margin-top:9px">개발 환경 세팅</h4><p class="desc">레포 클론부터 로컬 실행까지.</p></div>
+        <div class="card"><div class="row"><span class="chip">디자인</span></div>
+          <h4 style="margin-top:9px">디자인 가이드 — 토큰과 컴포넌트</h4><p class="desc">디자인 토큰과 공용 컴포넌트 사용법.</p></div>
+        <div class="card"><div class="row"><span class="chip">보안·계정</span></div>
+          <h4 style="margin-top:9px">보안 · 계정 관리 수칙</h4><p class="desc">2FA 필수, 비밀번호 관리, 기기 분실 대응.</p></div>
+        <div class="card"><div class="row"><span class="chip">FAQ</span></div>
+          <h4 style="margin-top:9px">자주 묻는 질문 (FAQ)</h4><p class="desc">휴가 신청, 장비 요청, 계정 문제 해결.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ SCHEDULE ============ -->
+    <section class="view" data-view="schedule">
+      <div class="page-head"><h1>프로젝트 일정 관리</h1><span class="sub">2026년 7월 · 진행중 2</span></div>
+      <div class="intro"><div class="badge"><svg class="ic" style="font-size:21px"><use href="#i-cal"/></svg></div>
+        <div><h3>간트 차트로 보는 프로젝트 진행</h3>
+        <p>프로젝트별 담당·구간·진행률을 한눈에. 매일의 진행 상황(일일 업데이트)과 아이디어도 함께 관리합니다.</p></div></div>
+      <div class="kpis">
+        <div class="kpi"><div class="n">2</div><div class="l">진행 중 프로젝트</div></div>
+        <div class="kpi"><div class="n">4</div><div class="l">오늘의 업데이트</div></div>
+        <div class="kpi"><div class="n">5</div><div class="l">대기 중 아이디어</div></div>
+      </div>
+      <h4 style="margin:6px 0 10px">간트 차트</h4>
+      <div class="gantt">
+        <div class="grow"><div class="nm">사내 근태관리 시스템</div><div class="track"><div class="bar" style="left:4%;width:64%;background:var(--p1)">진행 55%</div><div class="today" style="left:60%"></div></div></div>
+        <div class="grow"><div class="nm">파트너사 온보딩</div><div class="track"><div class="bar" style="left:20%;width:52%;background:var(--p2)">진행 60%</div><div class="today" style="left:60%"></div></div></div>
+        <div class="grow"><div class="nm">물류 자동화 검토</div><div class="track"><div class="bar" style="left:62%;width:26%;background:var(--p3)">대기</div><div class="today" style="left:60%"></div></div></div>
+        <div class="grow"><div class="nm">사내 문서 정리</div><div class="track"><div class="bar" style="left:66%;width:24%;background:var(--p4)">대기</div><div class="today" style="left:60%"></div></div></div>
+        <div class="grow"><div class="nm">1분기 회고 리포트</div><div class="track"><div class="bar" style="left:2%;width:30%;background:var(--p5)">완료</div><div class="today" style="left:60%"></div></div></div>
+      </div>
+      <div class="grid g2" style="margin-top:18px">
+        <div class="card"><h4>오늘의 업데이트</h4>
+          <div class="desc"><b>이도현</b> · 근태관리 <span class="pill warn">진행</span><br>연차 계산 로직 마무리. 내일 리포트 API 착수.</div>
+          <div class="desc" style="border-top:1px solid var(--line);padding-top:8px"><b>한지우</b> · 파트너 온보딩 <span class="pill ok">완료</span><br>파트너 2사 계약 서명 완료.</div></div>
+        <div class="card"><h4>아이디어</h4>
+          <div class="row" style="flex-wrap:wrap;gap:7px;margin-top:8px">
+            <span class="chip">사내 위키 검색 개선</span><span class="chip">주간 뉴스레터 자동화</span>
+            <span class="chip">근태 데이터 대시보드</span><span class="chip">고객 피드백 대시보드</span></div>
+          <p class="desc" style="margin-top:10px">아이디어는 검토 후 프로젝트로 승격할 수 있습니다.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ BOARD ============ -->
+    <section class="view" data-view="board">
+      <div class="page-head"><h1>게시판</h1><span class="sub">팀 공지·자유·질문·공유</span>
+        <span class="spacer"></span><button class="btn btn-primary">+ 글쓰기</button></div>
+      <div class="intro"><div class="badge"><svg class="ic" style="font-size:21px"><use href="#i-clip"/></svg></div>
+        <div><h3>기록이 필요한 논의는 게시판에</h3>
+        <p>공지·자유·질문·공유 카테고리로 글을 쓰고 댓글로 논의합니다. 초안 저장 후 발행할 수 있어요.</p></div></div>
+      <div class="post"><div class="row"><span class="chip accent">공지</span><span class="chip">회의</span></div>
+        <div class="ttl" style="margin-top:8px">7월 전체 회의 안내 (금요일 15시)</div>
+        <p class="desc">이번 금요일 15시에 전체 회의를 진행합니다. 안건: 하반기 로드맵, 프로모션 캠페인 중간 공유.</p>
+        <div class="small muted" style="margin-top:8px">이도현 · 1일 전 · 댓글 1</div>
+        <div class="cmt"><span class="av" style="background:#14a3a0;width:24px;height:24px;font-size:10px">박</span><div class="small"><b>박서준</b> · 참석합니다!</div></div></div>
+      <div class="post"><div class="row"><span class="chip">자유</span><span class="chip">맛집</span></div>
+        <div class="ttl" style="margin-top:8px">점심 맛집 공유합니다</div>
+        <p class="desc">회사 근처에 새로 생긴 국수집, 웨이팅 짧고 맛있어요. 추천!</p>
+        <div class="small muted" style="margin-top:8px">한지우 · 1일 전 · 댓글 2</div></div>
+      <div class="post"><div class="row"><span class="chip">질문</span><span class="chip">Next.js</span></div>
+        <div class="ttl" style="margin-top:8px">서버 액션에서 트랜잭션 처리 어떻게 하시나요?</div>
+        <p class="desc">Supabase RPC로 묶는 게 나을지, 서버 액션에서 순차 처리할지 고민입니다.</p>
+        <div class="small muted" style="margin-top:8px">박서준 · 2일 전 · 댓글 0</div></div>
+    </section>
+
+    <!-- ============ CHAT ============ -->
+    <section class="view" data-view="chat">
+      <div class="page-head"><h1>채팅</h1><span class="sub">채널 · 다이렉트 메시지</span></div>
+      <div class="intro"><div class="badge"><svg class="ic" style="font-size:21px"><use href="#i-msg"/></svg></div>
+        <div><h3>빠른 소통은 채팅으로</h3>
+        <p>주제별 채널과 1:1 DM으로 실시간 대화. 읽음 표시로 새 메시지를 확인합니다.</p></div></div>
+      <div class="chat">
+        <div class="chan">
+          <div class="h">채널</div>
+          <div class="c">＃ 일반</div><div class="c on">＃ 개발</div><div class="c">＃ 디자인</div><div class="c">＃ 공지</div>
+          <div class="h">다이렉트 메시지</div>
+          <div class="c"><span class="av" style="background:#14a3a0;width:22px;height:22px;font-size:9px">박</span>박서준</div>
+          <div class="c"><span class="av" style="background:#7a6bc9;width:22px;height:22px;font-size:9px">김</span>김지현</div>
+        </div>
+        <div class="thread">
+          <div class="top">＃ 개발</div>
+          <div class="msgs">
+            <div class="msg"><span class="av" style="background:#14a3a0">박</span><div><div class="who">박서준</div><div class="bub">푸시 알림 모듈 PR 올렸습니다. 리뷰 부탁드려요.</div></div></div>
+            <div class="msg me"><div><div class="bub">확인했습니다. 오후에 리뷰 남길게요.</div></div></div>
+            <div class="msg"><span class="av" style="background:#14a3a0">박</span><div><div class="who">박서준</div><div class="bub">감사합니다 🙏</div></div></div>
+          </div>
+          <div class="composer"><input placeholder="메시지 입력…" disabled><button class="btn btn-primary">보내기</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ DOCS ============ -->
+    <section class="view" data-view="docs">
+      <div class="page-head"><h1>학습 문서</h1><span class="sub">분야·목적별 학습 자료</span>
+        <span class="spacer"></span><button class="btn btn-primary">+ 문서 추가</button></div>
+      <div class="intro"><div class="badge"><svg class="ic" style="font-size:21px"><use href="#i-cap"/></svg></div>
+        <div><h3>팀의 지식을 쌓는 자료실</h3>
+        <p>개발·디자인·마케팅·기획 분야별 학습 문서를 목적(입문/실무/심화)과 함께 정리합니다. 마크다운 본문을 그대로 읽을 수 있어요.</p></div></div>
+      <div class="grid g2">
+        <div class="card"><div class="row"><span class="chip accent">개발</span><span class="chip">입문</span></div>
+          <h4 style="margin-top:9px">Next.js App Router 입문</h4><p class="desc">서버 컴포넌트와 라우팅 기초를 예제로 익히기.</p><div class="small muted" style="margin-top:6px">박서준</div></div>
+        <div class="card"><div class="row"><span class="chip accent">개발</span><span class="chip">실무</span></div>
+          <h4 style="margin-top:9px">Supabase RLS 실전 패턴</h4><p class="desc">역할 기반 정책 설계와 흔한 함정.</p><div class="small muted" style="margin-top:6px">박서준</div></div>
+        <div class="card"><div class="row"><span class="chip accent">디자인</span><span class="chip">실무</span></div>
+          <h4 style="margin-top:9px">Figma 오토레이아웃 마스터</h4><p class="desc">반응형 컴포넌트 제작 워크플로.</p><div class="small muted" style="margin-top:6px">김지현</div></div>
+        <div class="card"><div class="row"><span class="chip accent">마케팅</span><span class="chip">심화</span></div>
+          <h4 style="margin-top:9px">그로스 마케팅 지표 설계</h4><p class="desc">AARRR 프레임과 실측 사례.</p><div class="small muted" style="margin-top:6px">한지우</div></div>
+      </div>
+    </section>
+
+    <!-- ============ LINKS ============ -->
+    <section class="view" data-view="links">
+      <div class="page-head"><h1>참고 프로그램·사이트</h1><span class="sub">자주 쓰는 도구와 문서 링크</span>
+        <span class="spacer"></span><button class="btn btn-primary">+ 링크 추가</button></div>
+      <div class="intro"><div class="badge"><svg class="ic" style="font-size:21px"><use href="#i-win"/></svg></div>
+        <div><h3>팀이 쓰는 도구를 한곳에</h3>
+        <p>업무에 필요한 사이트·프로그램 링크를 카테고리별로 모아 빠르게 접근합니다.</p></div></div>
+      <div class="grid g3">
+        <div class="card"><div class="row"><svg class="ic" style="font-size:16px;color:var(--accent-deep)"><use href="#i-link"/></svg><span class="chip">개발</span></div><h4 style="margin-top:8px">Supabase Docs</h4><p class="desc">Auth·DB·Realtime 공식 문서</p></div>
+        <div class="card"><div class="row"><svg class="ic" style="font-size:16px;color:var(--accent-deep)"><use href="#i-link"/></svg><span class="chip">개발</span></div><h4 style="margin-top:8px">Next.js Docs</h4><p class="desc">App Router 공식 가이드</p></div>
+        <div class="card"><div class="row"><svg class="ic" style="font-size:16px;color:var(--accent-deep)"><use href="#i-link"/></svg><span class="chip">디자인</span></div><h4 style="margin-top:8px">Lucide Icons</h4><p class="desc">프로젝트 표준 아이콘 세트</p></div>
+        <div class="card"><div class="row"><svg class="ic" style="font-size:16px;color:var(--accent-deep)"><use href="#i-link"/></svg><span class="chip">디자인</span></div><h4 style="margin-top:8px">Pencil</h4><p class="desc">design.pen 편집 도구</p></div>
+        <div class="card"><div class="row"><svg class="ic" style="font-size:16px;color:var(--accent-deep)"><use href="#i-link"/></svg><span class="chip">마케팅</span></div><h4 style="margin-top:8px">Google Trends</h4><p class="desc">검색 트렌드 리서치</p></div>
+      </div>
+    </section>
+
+    <!-- ============ NOVELS ============ -->
+    <section class="view" data-view="novels">
+      <div class="page-head"><h1>소설</h1><span class="sub">팀 창작 · 함께 읽는 책</span></div>
+      <div class="intro"><div class="badge"><svg class="ic" style="font-size:21px"><use href="#i-open"/></svg></div>
+        <div><h3>팀이 함께 쓰고 읽는 공간</h3>
+        <p>연재 소설을 화(話) 단위로 읽고, 읽은 위치를 기억합니다. 추천 도서 목록도 함께 관리해요.</p></div></div>
+      <div class="grid g2">
+        <div>
+          <div class="card"><div class="row"><span class="pill accent">연재 중</span><span class="pill muted">featured</span></div>
+            <h4 style="margin-top:9px">구름 위의 도서관</h4><p class="desc">팀 창작 · 이도현 — 매주 한 화씩 올라오는 연재 소설.</p>
+            <div class="chapter-list" style="margin-top:10px">
+              <div class="ch on">입관 안내<span class="muted">1화</span></div>
+              <div class="ch">사서의 규칙<span class="muted">2화</span></div>
+              <div class="ch">잊혀진 열람실<span class="muted">5화</span></div>
+              <div class="ch">이름이 적힌 책<span class="muted">6화</span></div>
+            </div></div>
+          <div class="card" style="margin-top:14px"><h4>추천 도서</h4>
+            <div class="desc row" style="justify-content:space-between">프로젝트 헤일메리 · 앤디 위어 <span class="pill ok">완독</span></div>
+            <div class="desc row" style="justify-content:space-between">달러구트 꿈 백화점 · 이미예 <span class="pill warn">읽는 중</span></div>
+            <div class="desc row" style="justify-content:space-between">삼체 · 류츠신 <span class="pill warn">읽는 중</span></div></div>
+        </div>
+        <div class="reader">
+          <div class="small muted" style="margin-bottom:14px">구름 위의 도서관 · 5화 — 잊혀진 열람실</div>
+          <p>문이 열리자 오래된 종이 냄새가 밀려왔다. 세아는 한 걸음 안으로 들어섰고, 발밑에서 마룻바닥이 낮게 삐걱였다. 창밖으로는 구름이 서가의 높이만큼 낮게 흐르고 있었다.</p>
+          <p>“여기서부터는 아무도 정리하지 못했어요.” 사서가 말했다. 그의 목소리는 먼지처럼 조용했지만, 이상하게도 방 전체에 또렷이 번졌다.</p>
+          <p>가장 안쪽 서가에 이르렀을 때, 한 권의 책이 스스로 조금 밀려 나와 있었다. 표지에는 그녀 자신의 이름이 적혀 있었다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ADMIN: LOGINS ============ -->
+    <section class="view" data-view="logins">
+      <div class="page-head"><h1>로그인 이력</h1><span class="sub">관리자 전용 — 접속 기록</span></div>
+      <div class="intro"><div class="badge"><svg class="ic" style="font-size:21px"><use href="#i-hist"/></svg></div>
+        <div><h3>누가 언제 접속했는지 추적</h3>
+        <p>멤버별 로그인 시각·IP·기기·성공 여부를 기록해 보안 이상 징후를 확인합니다.</p></div></div>
+      <div class="tbl"><table>
+        <thead><tr><th>멤버</th><th>시각</th><th>IP</th><th>기기</th><th>결과</th></tr></thead>
+        <tbody>
+          <tr><td>이도현</td><td class="num">오늘 09:12</td><td class="num">121.140.22.31</td><td>Chrome · Windows</td><td><span class="pill ok">성공</span></td></tr>
+          <tr><td>박서준</td><td class="num">오늘 10:04</td><td class="num">121.140.22.31</td><td>Chrome · macOS</td><td><span class="pill ok">성공</span></td></tr>
+          <tr><td>김지현</td><td class="num">오늘 08:55</td><td class="num">58.121.9.102</td><td>Safari · macOS</td><td><span class="pill ok">성공</span></td></tr>
+          <tr><td>최민준</td><td class="num">2일 전 22:41</td><td class="num">203.0.113.77</td><td>Firefox · Windows</td><td><span class="pill danger">실패</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <!-- ============ ADMIN: ACCOUNTS ============ -->
+    <section class="view" data-view="accounts">
+      <div class="page-head"><h1>계정 관리</h1><span class="sub">관리자 전용 — 멤버와 초대코드</span>
+        <span class="spacer"></span><button class="btn btn-primary">초대코드 발급</button></div>
+      <div class="intro"><div class="badge"><svg class="ic" style="font-size:21px"><use href="#i-user"/></svg></div>
+        <div><h3>멤버와 권한을 관리</h3>
+        <p>팀원 목록·부서·역할·활성 상태를 확인하고, 초대코드로 새 멤버를 초대합니다. 멤버↔관리자 역할도 전환할 수 있어요.</p></div></div>
+      <div class="kpis">
+        <div class="kpi"><div class="n">5</div><div class="l">전체 멤버</div></div>
+        <div class="kpi"><div class="n">4</div><div class="l">활성</div></div>
+        <div class="kpi"><div class="n">1</div><div class="l">관리자</div></div>
+      </div>
+      <div class="tbl"><table>
+        <thead><tr><th>멤버</th><th>부서</th><th>역할</th><th>상태</th><th>최근 접속</th></tr></thead>
+        <tbody>
+          <tr><td><span class="row"><span class="av" style="background:#2f8fe0;width:26px;height:26px;font-size:11px">이</span>이도현 <span class="muted small">@dohyun</span></span></td><td>기획</td><td><span class="pill accent">관리자</span></td><td><span class="pill ok">활성</span></td><td class="num">오늘</td></tr>
+          <tr><td><span class="row"><span class="av" style="background:#14a3a0;width:26px;height:26px;font-size:11px">박</span>박서준 <span class="muted small">@seojun</span></span></td><td>개발</td><td><span class="pill muted">멤버</span></td><td><span class="pill ok">활성</span></td><td class="num">오늘</td></tr>
+          <tr><td><span class="row"><span class="av" style="background:#7a6bc9;width:26px;height:26px;font-size:11px">김</span>김지현 <span class="muted small">@jihyun</span></span></td><td>디자인</td><td><span class="pill muted">멤버</span></td><td><span class="pill ok">활성</span></td><td class="num">오늘</td></tr>
+          <tr><td><span class="row"><span class="av" style="background:#e0913a;width:26px;height:26px;font-size:11px">최</span>최민준 <span class="muted small">@minjun</span></span></td><td>개발</td><td><span class="pill muted">멤버</span></td><td><span class="pill danger">비활성</span></td><td class="num">20일 전</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <!-- ============ ADMIN: APP DEPLOY ============ -->
+    <section class="view" data-view="appdeploy">
+      <div class="page-head"><h1>앱 배포</h1><span class="sub">관리자 전용 — 안드로이드 앱(APK)</span>
+        <span class="spacer"></span><button class="btn btn-primary"><svg class="ic"><use href="#i-dl"/></svg>APK 다운로드</button></div>
+      <div class="intro"><div class="badge"><svg class="ic" style="font-size:21px"><use href="#i-phone"/></svg></div>
+        <div><h3>모바일 앱을 팀에 배포</h3>
+        <p>팀원이 QR을 스캔하거나 링크로 APK를 받아 폰에 설치합니다. 앱은 서버(웹)를 그대로 불러오는 방식이라, 웹을 업데이트하면 앱에도 즉시 반영됩니다.</p></div></div>
+      <div class="grid" style="grid-template-columns:220px 1fr">
+        <div class="card" style="text-align:center">
+          <div class="small muted" style="margin-bottom:8px">폰으로 스캔해 받기</div>
+          <div class="qr"><svg viewBox="0 0 100 100" width="160" height="160" shape-rendering="crispEdges">
+            <rect width="100" height="100" fill="#fff"/><g fill="#1673cc">
+            <rect x="4" y="4" width="28" height="28"/><rect x="10" y="10" width="16" height="16" fill="#fff"/><rect x="14" y="14" width="8" height="8"/>
+            <rect x="68" y="4" width="28" height="28"/><rect x="74" y="10" width="16" height="16" fill="#fff"/><rect x="78" y="14" width="8" height="8"/>
+            <rect x="4" y="68" width="28" height="28"/><rect x="10" y="74" width="16" height="16" fill="#fff"/><rect x="14" y="78" width="8" height="8"/>
+            <rect x="40" y="8" width="6" height="6"/><rect x="52" y="8" width="6" height="6"/><rect x="40" y="20" width="6" height="6"/><rect x="58" y="20" width="6" height="6"/>
+            <rect x="8" y="40" width="6" height="6"/><rect x="20" y="40" width="6" height="6"/><rect x="40" y="40" width="6" height="6"/><rect x="52" y="46" width="6" height="6"/><rect x="64" y="40" width="6" height="6"/><rect x="76" y="46" width="6" height="6"/><rect x="88" y="40" width="6" height="6"/>
+            <rect x="40" y="58" width="6" height="6"/><rect x="58" y="64" width="6" height="6"/><rect x="70" y="58" width="6" height="6"/><rect x="82" y="64" width="6" height="6"/>
+            <rect x="40" y="76" width="6" height="6"/><rect x="52" y="82" width="6" height="6"/><rect x="64" y="76" width="6" height="6"/><rect x="76" y="82" width="6" height="6"/><rect x="88" y="76" width="6" height="6"/>
+            </g></svg></div>
+          <div class="small muted" style="margin-top:10px">안드로이드 카메라로<br>스캔하면 바로 다운로드</div>
+        </div>
+        <div class="card">
+          <div class="row"><span class="av" style="background:linear-gradient(135deg,#2f8fe0,#1673cc);width:44px;height:44px;border-radius:13px"><svg class="ic" style="font-size:22px"><use href="#i-phone"/></svg></span>
+            <div><h4>팀 워크스페이스 (Android)</h4><div class="small muted">v1.0 · 약 4.3 MB · com.redocu.workspace</div></div></div>
+          <div class="row" style="margin-top:14px;gap:8px"><button class="btn btn-primary"><svg class="ic"><use href="#i-dl"/></svg>APK 다운로드</button><button class="btn"><svg class="ic"><use href="#i-link"/></svg>다운로드 링크 복사</button></div>
+          <div style="margin-top:16px;padding:14px;border-radius:12px;background:var(--tint)">
+            <div class="row" style="color:var(--accent-deep);font-weight:700;font-size:12.5px;margin-bottom:8px"><svg class="ic" style="font-size:15px"><use href="#i-info"/></svg>설치 방법</div>
+            <ol class="steps">
+              <li>QR을 폰으로 스캔하거나 다운로드 링크를 팀원에게 전달합니다.</li>
+              <li>폰에서 받은 .apk 파일을 엽니다.</li>
+              <li>"출처를 알 수 없는 앱" 경고가 뜨면 설치를 허용합니다.</li>
+              <li>앱을 실행하고 접속 비밀번호를 입력하면 사용 시작.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+  // 뷰 전환
+  const items = document.querySelectorAll('.nav-item');
+  const views = document.querySelectorAll('.view');
+  items.forEach(btn => btn.addEventListener('click', () => {
+    const v = btn.dataset.view;
+    items.forEach(b => b.classList.toggle('active', b === btn));
+    views.forEach(s => s.classList.toggle('active', s.dataset.view === v));
+    document.querySelector('.main').scrollTo({top:0});
+  }));
+  // 테마 토글
+  const root = document.documentElement;
+  document.getElementById('theme').addEventListener('click', () => {
+    const dark = getComputedStyle(root).getPropertyValue('--bg').trim().startsWith('#0');
+    root.setAttribute('data-theme', dark ? 'light' : 'dark');
+  });
+</script>
+</body>
+</html>

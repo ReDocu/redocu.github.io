@@ -5,3 +5,7 @@ _site
 vendor
 _working/
 workstation/
+
+# 프로젝트 배포 바이너리는 GitHub Releases 로 관리한다.
+# 저장소에 커밋하지 않고, 카드의 다운로드 버튼은 릴리즈 페이지를 가리킨다.
+project/**/*.zip

@@ -79,10 +79,11 @@ title : main
           </div>
           <div class="portfolio-card__body">
             <h3>가상 이력서 시뮬레이션</h3>
-            <p>이력서를 등록하면 128명 캐릭터 코퍼스와의 성향 근접도를 계산해 개인 분석과 팀 배치 시뮬레이션을 보여 주는 데스크톱 앱입니다.</p>
+            <p>이력서를 등록하면 128명 캐릭터 코퍼스와의 성향 근접도를 계산해 개인 분석과 팀 배치 시뮬레이션을 보여 주는 데스크톱 앱입니다. 219개 키워드를 18차원 벡터로 환산해 캐릭터를 매칭하고, 마찰·시너지·성장 가능성으로 팀 궁합을 진단합니다.</p>
             <div class="tag-list"><span class="tag">Windows 앱</span><span class="tag">Vanilla JS</span><span class="tag">오프라인</span><span class="tag">완료</span></div>
             <div class="card-actions">
               <a class="btn" href="https://github.com/ReDocu/ResumeAnalyze/releases/tag/v0.1" target="_blank" rel="noopener">다운로드</a>
+              <a class="btn" href="https://github.com/ReDocu/ResumeAnalyze" target="_blank" rel="noopener">GitHub</a>
               <a class="btn" href="/project/VRS/Tech_document.html" target="_blank" rel="noopener">기술문서</a>
             </div>
           </div>

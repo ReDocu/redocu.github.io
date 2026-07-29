@@ -129,7 +129,7 @@ title : main
             <p>Win32 API 기반 C++ 콘솔 게임 프레임워크. 엔진과 콘텐츠를 분리한 구조로 9종의 콘솔 게임을 단계적으로 개발하며 학습하는 프로젝트입니다.</p>
             <div class="tag-list"><span class="tag">C++</span><span class="tag">Win32 API</span><span class="tag">콘솔게임</span><span class="tag">교육</span><span class="tag">완료</span></div>
             <div class="card-actions">
-              <a class="btn" href="project/CSGP/CSGP.zip" target="_blank" rel="noopener">다운로드</a>
+              <a class="btn" href="https://github.com/ReDocu/CSGPProject/releases/tag/v1.0" target="_blank" rel="noopener">다운로드</a>
               <a class="btn" href="https://github.com/ReDocu/CSGPProject" target="_blank" rel="noopener">GitHub</a>
               <a class="btn" href="project/CSGP/study_doc/index.html" target="_blank" rel="noopener">학습문서</a>
             </div>

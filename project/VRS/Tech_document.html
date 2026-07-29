@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ResumeAnalyze — 기술명세서</title>
+<style>
+* { box-sizing: border-box; }
+:root {
+  --bg: #0d0e12; --panel: #15171e; --panel2: #1b1e27; --line: #2a2d38;
+  --ink: #e9e6df; --muted: #8b8f9a;
+  --gold: #d9b26a; --gold-soft: rgba(217,178,106,.13);
+  --emer: #5fd0a3; --rose: #e88a7d; --amber: #e0a955; --sky: #7fb5e6; --viol: #b493e6;
+}
+html { background: var(--bg); scroll-behavior: smooth; }
+body { margin: 0; color: var(--ink); font: 14px/1.6 -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif; }
+a { color: var(--sky); text-decoration: none; }
+a:hover { text-decoration: underline; }
+h1, h2, h3 { font-family: Georgia, 'Times New Roman', serif; }
+h1 { font-size: 30px; margin: 0; color: var(--gold); }
+h2 { font-size: 21px; color: var(--gold); margin: 0 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+h2 small { font-family: -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif; font-size: 12px; color: var(--muted); font-weight: 400; margin-left: 8px; }
+h3 { font-size: 15.5px; color: var(--ink); margin: 20px 0 8px; }
+h3 code { font-size: 13px; }
+code { background: var(--panel2); border: 1px solid var(--line); padding: 1px 6px; border-radius: 4px; font-size: 12.5px; }
+pre { background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; overflow-x: auto; font-size: 12.5px; line-height: 1.6; }
+pre code { border: none; background: none; padding: 0; }
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 22px 80px; }
+.head { border-bottom: 1px solid var(--line); background: var(--panel); }
+.head-in { max-width: 980px; margin: 0 auto; padding: 26px 22px 22px; }
+.head .sub { color: var(--muted); margin-top: 6px; font-size: 13px; }
+.meta-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.chip { border: 1px solid var(--line); color: var(--muted); border-radius: 9px; padding: 2px 10px; font-size: 11.5px; }
+.chip.g { border-color: var(--gold); color: var(--gold); }
+
+/* 상단 목차 */
+.toc { background: var(--panel); border: 1px solid var(--gold); border-radius: 14px; padding: 16px 22px; margin: 26px 0 20px; }
+.toc b { display: block; color: var(--gold); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 10px; }
+.toc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 5px 18px; }
+.toc-grid a { color: var(--ink); font-size: 12.5px; padding: 3px 0; border-bottom: 1px dashed transparent; }
+.toc-grid a em { font-style: normal; color: var(--gold); font-family: Georgia, serif; margin-right: 6px; }
+.toc-grid a:hover { color: var(--gold); text-decoration: none; }
+
+section { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 22px 26px; margin-bottom: 20px; }
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 12.5px; }
+th, td { border: 1px solid var(--line); padding: 6px 12px; text-align: left; vertical-align: top; }
+th { background: var(--panel2); color: var(--muted); font-weight: 600; white-space: nowrap; }
+td b { color: var(--gold); }
+ul { margin: 8px 0; padding-left: 20px; }
+li { margin-bottom: 5px; }
+.callout { background: var(--gold-soft); border: 1px solid var(--gold); border-radius: 10px; padding: 10px 14px; font-size: 12.5px; margin: 12px 0; }
+.warn { background: rgba(232,138,125,.1); border-color: var(--rose); }
+
+/* 컴포넌트 플로우 */
+.flow { display: flex; align-items: stretch; gap: 0; flex-wrap: wrap; margin: 14px 0; }
+.fbox { background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; min-width: 150px; flex: 1; }
+.fbox b { display: block; color: var(--gold); font-size: 12.5px; margin-bottom: 3px; }
+.fbox span { font-size: 11.5px; color: var(--muted); display: block; line-height: 1.5; }
+.farr { align-self: center; padding: 0 10px; color: var(--gold); font-size: 18px; font-weight: 700; }
+.fnote { width: 100%; font-size: 11.5px; color: var(--muted); margin-top: 6px; }
+
+/* UML 클래스 박스 */
+.uml-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin: 12px 0; }
+.uml { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--panel2); font-size: 12px; }
+.uml .uh { padding: 7px 12px; border-bottom: 1px solid var(--line); text-align: center; }
+.uml .uh .st { display: block; color: var(--muted); font-size: 10.5px; }
+.uml .uh b { color: var(--gold); font-size: 13px; font-family: Consolas, monospace; }
+.uml .ub { padding: 7px 12px; font-family: Consolas, monospace; font-size: 11.5px; line-height: 1.7; color: var(--ink); }
+.uml .ub .m { color: var(--muted); }
+.uml .ub .fn { color: var(--sky); }
+.uml .dep { padding: 5px 12px; border-top: 1px dashed var(--line); color: var(--muted); font-size: 11px; }
+
+/* 시퀀스 다이어그램 (SVG) */
+.seq { width: 100%; height: auto; margin: 8px 0; background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; }
+.seq text { font: 11px 'Segoe UI', 'Malgun Gothic', sans-serif; fill: var(--ink); }
+.seq .pt rect { fill: #23262f; stroke: var(--gold); rx: 6; }
+.seq .pt text { fill: var(--gold); font-weight: 700; text-anchor: middle; }
+.seq .life { stroke: #3a3f4d; stroke-dasharray: 4 4; }
+.seq .msg { stroke: var(--sky); stroke-width: 1.4; marker-end: url(#arr); }
+.seq .ret { stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 5 4; marker-end: url(#arr2); }
+.seq .lbl { fill: var(--ink); }
+.seq .note { fill: var(--muted); font-size: 10px; }
+.seq .act { fill: var(--gold-soft); stroke: var(--gold); }
+
+.kv { display: grid; grid-template-columns: 150px 1fr; gap: 4px 16px; font-size: 12.5px; margin: 8px 0; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; }
+.formula { font-family: Consolas, monospace; background: var(--bg); border-left: 2px solid var(--gold); border-radius: 8px; padding: 10px 14px; font-size: 12.5px; margin: 10px 0; overflow-x: auto; white-space: pre; line-height: 1.7; }
+.formula .c { color: var(--muted); }
+.formula b { color: var(--gold); font-weight: 700; }
+
+footer { text-align: center; color: var(--muted); font-size: 12px; padding: 20px; border-top: 1px solid var(--line); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--panel2); border-radius: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+</style>
+</head>
+<body>
+
+<div class="head"><div class="head-in">
+  <h1>ResumeAnalyze <span class="muted" style="font-size:16px">기술명세서</span></h1>
+  <div class="sub">이력서 → 가상 캐릭터 128명 치환 → 관계(시너지·마찰·성장)·팀 진단 — 완전 오프라인 rule 엔진</div>
+  <div class="meta-row">
+    <span class="chip g">v0.1 · 2026-07-29</span>
+    <span class="chip">engine rule-v1</span>
+    <span class="chip">taxonomy-v4</span>
+    <span class="chip">코퍼스 128명</span>
+    <span class="chip">LLM·서버·네트워크 없음</span>
+  </div>
+</div></div>
+
+<div class="wrap">
+
+<nav class="toc">
+  <b>목차</b>
+  <div class="toc-grid">
+    <a href="#overview"><em>1</em>개요·목표</a>
+    <a href="#arch"><em>2</em>시스템 아키텍처</a>
+    <a href="#uml-class"><em>3</em>모듈·클래스 (UML)</a>
+    <a href="#data"><em>4</em>데이터 모델</a>
+    <a href="#engine"><em>5</em>엔진 수식 명세</a>
+    <a href="#uml-seq"><em>6</em>시퀀스 (UML)</a>
+    <a href="#screens"><em>7</em>화면 사양</a>
+    <a href="#build"><em>8</em>빌드·배포</a>
+    <a href="#storage"><em>9</em>저장·프라이버시</a>
+    <a href="#perf"><em>10</em>성능 실측</a>
+    <a href="#limits"><em>11</em>한계·고지</a>
+  </div>
+</nav>
+
+<section id="overview">
+  <h2>1. 개요·목표</h2>
+  <p>이력서(마크다운)를 입력하면 <b>가상 캐릭터 코퍼스 128명 중 최근접 유형</b>으로 치환하고,
+  그 캐릭터의 관계망을 통해 개인 궁합·팀 역학을 보여 주는 도구다.
+  결과의 주인공은 점수가 아니라 <b>캐릭터와 그 관계</b>이며, 도구가 답하는 질문은 3개다:</p>
+  <ul>
+    <li>이 이력서는 <b>어떤 인물 유형</b>인가 — 치환 + 후보 5명 + 신뢰도</li>
+    <li>이 사람들이 <b>한 팀이면 무슨 일이</b> 생기나 — 마찰·시너지·안정성·커버리지</li>
+    <li>내 유형 곁에 <b>어떤 팀원이 오면</b> 어떤가 — 가상 팀 시뮬레이션</li>
+  </ul>
+  <h3>비목표 (설계상 하지 않는 것)</h3>
+  <ul>
+    <li>역량 평가·성과 예측·채용 판정 — 출력은 전부 <b>성향 근접도</b>이고 판정 버튼이 없다</li>
+    <li>LLM·외부 API 호출 — 전 연산이 로컬 순수 함수다 (재현 가능·감사 가능)</li>
+    <li>관계 사전계산 저장 — 관계는 항상 온디맨드 계산 (화면 간 값 불일치 = 버그로 정의)</li>
+  </ul>
+  <div class="kv">
+    <dt>스택</dt><dd>Vanilla JS SPA (프레임워크 없음) · Node 빌드 스크립트 · Python(pywebview/WebView2) 셸 · PyInstaller exe</dd>
+    <dt>실행 형태</dt><dd>① 브라우저(<code>docs/design/demo/index.html</code>, 서버 불필요) ② 데스크톱 exe (단일 파일 22.7MB)</dd>
+    <dt>대상 OS</dt><dd>Windows 10/11 (WebView2 런타임 — Edge 탑재 PC는 기본 보유)</dd>
+  </div>
+</section>
+
+<section id="arch">
+  <h2>2. 시스템 아키텍처 <small>원본 → 빌드 파이프라인 → 정적 자산 → 앱</small></h2>
+  <div class="flow">
+    <div class="fbox"><b>원본 코퍼스</b><span>char_make/ 1.5GB (비추적)<br>128명 × 7룩 PNG + 페르소나<br>data/ — taxonomy·calibration·인덱스</span></div>
+    <span class="farr">→</span>
+    <div class="fbox"><b>빌드 파이프라인</b><span>build-thumbs.py — 360px WebP 896장<br>build-demo.js — 엔진 번들 + 데이터 번들<br>(빌드 시 시드·예문 전수 검증)</span></div>
+    <span class="farr">→</span>
+    <div class="fbox"><b>정적 자산</b><span>engine.js 35KB (lib/engine 번들)<br>data.js 765KB (인덱스+발췌+경로)<br>thumbs/ 7.5MB</span></div>
+    <span class="farr">→</span>
+    <div class="fbox"><b>클라이언트</b><span>app.js SPA (해시 라우팅, 화면 7개)<br>pywebview 셸 → PyInstaller exe<br>(--add-data로 자산 동봉)</span></div>
+  </div>
+  <p class="fnote">핵심 원칙: <b>무거운 것은 전부 빌드 타임으로</b>. 백분위 산정·seedStats 전수 스캔·페르소나 발췌·이미지 압축은
+  빌드가 하고, 런타임은 벡터 연산만 한다. 원본 페르소나(생성 프롬프트 포함)와 이미지 원본은 배포물에 포함되지 않는다.</p>
+  <h3>저장소 구조</h3>
+  <table>
+    <tr><th>경로</th><th>내용</th><th>git</th></tr>
+    <tr><td><code>docs/design/demo/</code></td><td>제품 화면 — 수작성 <code>index.html·app.js·style.css</code> + 생성물 <code>engine.js·data.js</code></td><td>추적 (thumbs/ 제외)</td></tr>
+    <tr><td><code>lib/engine/</code></td><td>rule-v1 엔진 소스 (Node/브라우저 공용 — 아래 §3)</td><td>추적</td></tr>
+    <tr><td><code>data/</code></td><td>taxonomy.json(v4) · calibration.json · archetype-index.json · 테스트 이력서 9건</td><td>추적</td></tr>
+    <tr><td><code>scripts/</code></td><td>build-demo.js · build-thumbs.py · build-corpus.js · build-keywords-doc.js</td><td>추적</td></tr>
+    <tr><td><code>app/</code></td><td>pywebview 셸(main.py) · build-exe.ps1 · requirements.txt</td><td>추적</td></tr>
+    <tr><td><code>char_make/</code> · <code>release/</code></td><td>이미지·페르소나 원본 / 배포 패키지(exe+안내문+zip)</td><td>비추적</td></tr>
+  </table>
+</section>
+
+<section id="uml-class">
+  <h2>3. 모듈·클래스 다이어그램 <small>UML — lib/engine 실제 export 기준</small></h2>
+  <p class="small muted">의존 방향: <code>parse ← project</code> · <code>relation ← team</code> · <code>index</code>는 전 모듈 재수출.
+  전 모듈이 순수 함수라 상태는 <code>PairCache</code> 하나뿐이다.</p>
+  <div class="uml-grid">
+    <div class="uml">
+      <div class="uh"><span class="st">«module»</span><b>parse</b></div>
+      <div class="ub">
+        <span class="fn">parseResume</span>(text) <span class="m">→ {sections, name, jobField, traits, ageGroup, team, competencyTitles}</span><br>
+        <span class="fn">sectionWeight</span>(header) <span class="m">→ 1.5|1.3|1.2|1.1|1.0|0.9</span>
+      </div>
+      <div class="dep">의존 없음 — 텍스트만 받는다 (파일 I/O 없음)</div>
+    </div>
+    <div class="uml">
+      <div class="uh"><span class="st">«module»</span><b>project</b></div>
+      <div class="ub">
+        <span class="fn">compile</span>(taxonomy) <span class="m">→ tx {AXES, FAMS, seeds, labels}</span><br>
+        <span class="fn">projectRaw</span>(parsed, tx) <span class="m">→ {rawAxis, rawJob, coverage}</span><br>
+        <span class="fn">applyCalibration</span>(raw, calib, tx) <span class="m">→ 벡터</span><br>
+        <span class="fn">projectText</span>(text, taxonomy, calib) <span class="m">→ 원스톱</span><br>
+        <span class="fn">percentileAgainst</span>(v, sorted) · <span class="fn">buildDistributions</span>
+      </div>
+      <div class="dep">──▶ parse (projectText 내부에서 parseResume 호출)</div>
+    </div>
+    <div class="uml">
+      <div class="uh"><span class="st">«module»</span><b>relation</b></div>
+      <div class="ub">
+        <span class="fn">computeRelation</span>(A, B, calib, tx) <span class="m">→ Relation</span><br>
+        <span class="fn">rawComponents</span>(A, B, AXES, FAMS, p80) <span class="m">→ 원점수 9종</span><br>
+        <span class="fn">adjacency</span>(fa, fb) <span class="m">→ 45|80|65|55</span><br>
+        <span class="m">const</span> W_DISC · W_LEARN · MID=50
+      </div>
+      <div class="dep">의존 없음 — 정규화 상수는 calibration 주입 (사전계산 불필요의 근거)</div>
+    </div>
+    <div class="uml">
+      <div class="uh"><span class="st">«class»</span><b>PairCache</b></div>
+      <div class="ub">
+        − calib · tx · map: Map&lt;"aId|bId", Relation&gt;<br>
+        + <span class="fn">get</span>(a, b) <span class="m">→ Relation (id 사전순 정규화 · miss 시 computeRelation)</span>
+      </div>
+      <div class="dep">시스템 유일의 상태 — 세션 메모이즈. S3·S4·S5·S7이 인스턴스 공유</div>
+    </div>
+    <div class="uml">
+      <div class="uh"><span class="st">«module»</span><b>team</b></div>
+      <div class="ub">
+        <span class="fn">diagnoseTeam</span>(members, …) <span class="m">→ 진단(§5.6)</span><br>
+        <span class="fn">pickLead</span>(members, …) <span class="m">→ 팀장 랭킹(§5.7)</span><br>
+        <span class="fn">composeTeam</span>({pool, k, preset, locked, …}) <span class="m">→ 최적 팀(§5.8)</span><br>
+        <span class="fn">objectiveOf</span> · <span class="fn">teamPairs</span> · <span class="m">const</span> OBJECTIVE_PRESETS
+      </div>
+      <div class="dep">──▶ relation · PairCache — 전부 computeRelation 위의 쿼리 (새 축 없음)</div>
+    </div>
+    <div class="uml">
+      <div class="uh"><span class="st">«module»</span><b>outfit · roles · corpus</b></div>
+      <div class="ub">
+        <span class="fn">analyzeWardrobe</span>(outfits) <span class="m">→ 룩 7종 신호·성향 분석(렉시콘)</span><br>
+        <span class="fn">devRoleFit·recommendDevRoles·assignRoles</span> <span class="m">→ 개발 직무 10종 centroid 매칭</span><br>
+        <span class="fn">loadCorpus</span> <span class="m">→ 빌드 전용 (브라우저 번들 제외)</span>
+      </div>
+      <div class="dep">부속 모듈 — 페르소나 카드·직무 배분 화면이 사용</div>
+    </div>
+  </div>
+  <h3>Relation 반환 계약</h3>
+  <div class="formula">Relation = { a, b,                              <span class="c">// id 사전순</span>
+  relation: 'synergy'|'complement'|'caution'|'friction'|'neutral',
+  score: 0~100,                                 <span class="c">// 종합 (§5.5)</span>
+  dimensions: {
+    synergy:   { level: 0~100, reason },        <span class="c">// 상보량 (§5.3)</span>
+    friction:  { risk: 0~100, reason },         <span class="c">// 마찰 4성분 (§5.3)</span>
+    growth:    { potential, direction: 'a←b'|'b←a'|'mutual', teacher, learner, reason },
+    placement: { fit: 0~100, reason } } }       <span class="c">// 직무군 인접성 (§5.4)</span></div>
+</section>
+
+<section id="data">
+  <h2>4. 데이터 모델</h2>
+  <h3>좌표계 — taxonomy-v4 (18차원)</h3>
+  <p><b>직무군 9종 × 역량축 9종</b>. 각 항목은 시드 단어 목록(합계 219개)을 가진다.
+  시드는 자동 파생 금지 — 128명 전수 오탐 실측을 거쳐 큐레이션·버전 고정한다
+  (기각 예: <code>로그</code>→"프로그램" 오탐 16건, <code>문화</code>→"조직문화" 오탐 11건).</p>
+  <table>
+    <tr><th>직무군</th><td>research_ux · content_editorial · design_craft · brand_gtm · merch_retail · data_analytics · ops_pm · people_cx · engineering_dev</td></tr>
+    <tr><th>역량축</th><td>observation · structuring · detail_qa · communication · coordination · execution · ops_planning · problem_solving · technical_skill</td></tr>
+  </table>
+  <h3>아키타입 (캐릭터) 레코드</h3>
+  <div class="formula">{ id, name, gender, ageGroup, jobField, traits, competencies[],
+  primaryFamily, compatible[],
+  jobVector:  {직무군9: 0~100},   <span class="c">// 128명 기준선 백분위</span>
+  axisVector: {역량축9: 0~100} }  <span class="c">// 0 = 미검출 (낮음이 아님)</span></div>
+  <h3>이력서 레코드 (localStorage <code>ra-demo-resumes-v1</code>)</h3>
+  <div class="formula">{ id, fileName, registeredAt, rawText,
+  parsed: {name, jobField, ageGroup, traits, team},
+  vectors: {axisVector, jobVector, coverage},
+  warnings[],                        <span class="c">// 등록 검증 결과 (등록을 막지 않음)</span>
+  candidates: [{id, pct} ×5],        <span class="c">// 근접 후보 5명</span>
+  sub: {characterId, matchPercent, rank, confirmed},
+  engineVersion, taxonomyVersion }   <span class="c">// 재현성 스탬프</span></div>
+  <h3>calibration.json — 기준선 동결</h3>
+  <p class="small">코퍼스 원점수 <b>분포를 동결</b>한 파일. 축·직무군별 정렬 분포(<code>axisDist·jobDist</code>)와
+  쌍 스케일러(<code>pairScalers: synergyP95 · frictionP95 · growthP95 · overlapBaseline(p80)</code>)를 담는다.
+  분포를 얼리는 이유: 매 빌드마다 백분위를 재계산하면 캐릭터 1명 추가에 전원의 점수가 흔들린다 —
+  지원자를 <b>런타임에 같은 잣대로</b> 투영하려면 기준선이 불변이어야 한다. 코퍼스 개편 시에만 재산정한다.</p>
+</section>
+
+<section id="engine">
+  <h2>5. 엔진 rule-v1 — 수식 명세 <small>lib/engine 소스와 1:1 대응 · 전부 순수 함수</small></h2>
+
+  <h3>5.1 투영 — 이력서 텍스트 → 18차원 벡터 <span class="muted small">(parse.js · project.js)</span></h3>
+  <div class="formula"><span class="c">// ① 섹션 분해 — "## 헤더" 단위, 헤더별 가중치 w(sec)</span>
+w(sec) = 핵심역량 <b>1.5</b> | 성격강점 <b>1.3</b> | 기본정보·커뮤니케이션 <b>1.2</b> | 프로필 <b>1.1</b> | 면접 <b>0.9</b> | 기타 <b>1.0</b>
+
+<span class="c">// ② 원점수 — 시드 s의 섹션 내 등장 횟수 count(s, sec), 부분 문자열 매칭</span>
+raw(k) = Σ_sec Σ_{s∈seeds(k)} count(s, sec) × w(sec)          <span class="c">k = 축 9종 + 직무군 9종</span>
+
+<span class="c">// ③ 결정적 부스트</span>
+rawJob(f)  += <b>12</b>   if 「지원 분야」칸 ⊇ f의 시드
+rawAxis(a) += <b>6</b>    if 「핵심 역량」 ### 제목 ⊇ a의 시드
+
+<span class="c">// ④ 커버리지 — 본문 대비 시드 검출 밀도 (품질 지표)</span>
+coverage = min(1, matchedChars / (totalChars × 0.15))
+
+<span class="c">// ⑤ 백분위 — 동결된 분포 dist(k) 대비. raw 0은 '미검출'로 0 유지</span>
+v(k) = 0                          if raw(k) = 0
+     = round( (lt + 0.5·eq) / n × 100 )   <span class="c">lt = raw보다 작은 수 · eq = 같은 수 · n = 128</span></div>
+
+  <h3>5.2 매칭 — 중심화 코사인 근접도 <span class="muted small">(app.js simPct)</span></h3>
+  <div class="formula">simPct(R, C) = round( 50 × (1 + cosθ) ) ∈ [0, 100]
+cosθ = Σ_k (R_k−50)(C_k−50) / ( ‖R−50‖ · ‖C−50‖ )      <span class="c">k = 18차원 전체 (50 중심화)</span>
+
+후보 = simPct 내림차순 상위 5명 (동률은 id 사전순 — 결정적)
+신뢰도(1·2위 격차 gap):  gap ≥ 8 높음 · gap ≥ 4 중간 · 그 외 낮음  <span class="c">// 128명 코퍼스에서 낮음은 정상</span>
+
+<span class="c">// 팀 일괄 치환 — 선택 순서대로, top1 선점 시 차순위 강하. 한 캐릭터는 팀에 1명만</span></div>
+
+  <h3>5.3 관계 원점수 — <code>rawComponents(A, B)</code> <span class="muted small">(relation.js)</span></h3>
+  <div class="formula"><span class="c">// 상보량 — 상대의 약한 축(&lt;50)을 자기 우위로 채워 주는 양. W_DISC = 축별 변별 가중치</span>
+coverA = Σ_{ax: B[ax]&lt;50} W_DISC[ax] · max(0, A[ax] − B[ax])       <span class="c">(coverB 대칭)</span>
+synRaw = <b>2</b>·min(coverA, coverB) + <b>0.5</b>·|coverA − coverB|            <span class="c">// 상호 보완 &gt; 일방 보완</span>
+
+<span class="c">// 마찰 성분 ① 실행 속도차 — 격차가 트리거, 느린 쪽의 신중함이 증폭</span>
+pace = |A.execution − B.execution| × (느린 쪽의 (detail_qa + structuring)/2) / 100
+
+<span class="c">// 마찰 성분 ② 역할 중복 — "같은 일을(roleSim) 같은 방식으로(axisSim)". 이진 판정은 폐기(97.7% 오탐)</span>
+axisSim = 1 − ‖A.axis − B.axis‖₂ / (√9 × 100)                     <span class="c">// 유클리드 정규화</span>
+roleSim = cos(A.jobVector, B.jobVector)                            <span class="c">// 직무군 9차원 코사인</span>
+overlap = roleSim × axisSim × 100
+overlapExcess = max(0, (overlap − p80) / (100 − p80)) × 100        <span class="c">// 코퍼스 p80 초과분만 마찰로 계상</span>
+
+<span class="c">// 마찰 성분 ③④ — 양쪽 모두 약할 때만 발생 (곱 구조)</span>
+coordGap = max(0, 50−A.coordination) · max(0, 50−B.coordination) / 50    <span class="c">(commGap 동형)</span>
+
+fricRaw = <b>0.45</b>·pace + <b>0.30</b>·overlapExcess + <b>0.15</b>·coordGap + <b>0.10</b>·commGap
+
+<span class="c">// 성장 이득 — 내 약한 축(&lt;50)에서 상대 우위만큼. W_LEARN = 축별 학습 가중치</span>
+gainAB = Σ_{ax: A[ax]&lt;50} W_LEARN[ax] · max(0, B[ax] − A[ax])      <span class="c">// A가 B에게 배움 (gainBA 대칭)</span></div>
+  <table>
+    <tr><th>축</th><th>obs</th><th>str</th><th>detail</th><th>comm</th><th>coord</th><th>exec</th><th>ops</th><th>prob</th><th>tech</th></tr>
+    <tr><td><b>W_DISC</b> (변별)</td><td>0.5</td><td>0.6</td><td>0.5</td><td>1.0</td><td>1.0</td><td>1.2</td><td>0.9</td><td>1.1</td><td>1.1</td></tr>
+    <tr><td><b>W_LEARN</b> (학습)</td><td>0.5</td><td>0.7</td><td>0.7</td><td>0.9</td><td>1.0</td><td>1.0</td><td>0.9</td><td>0.8</td><td>0.8</td></tr>
+  </table>
+
+  <h3>5.4 스케일·성장 게이트·배치 <span class="muted small">(computeRelation)</span></h3>
+  <div class="formula"><span class="c">// p95 스케일 — calibration.pairScalers. clamp = [0,100] 반올림</span>
+시너지 level  = clamp( synRaw / synergyP95 × 100 )
+마찰 risk     = clamp( fricRaw / frictionP95 × 100 )
+
+<span class="c">// 성장 — 마찰 게이트: 마찰이 높은 상대에게서는 배우기 어렵다</span>
+gate = 1 − risk/100
+growthAB = round( clamp(gainAB / growthP95 × 100) × gate )         <span class="c">(growthBA 대칭)</span>
+potential = max(growthAB, growthBA)
+direction = 'a←b' if growthAB − growthBA &gt; 15 | 'b←a' if 역방향 &gt; 15 | 'mutual'
+
+<span class="c">// 배치 — 직무군 인접성 테이블 + 관계 보정</span>
+base = <b>45</b> 동일 직무군(역할 중복 주의) | <b>80</b> 인접 쌍* | <b>65</b> ops_pm 결합 | <b>55</b> 원거리
+fit = clamp( base + 0.3·시너지 − 0.3·마찰 )
+<span class="c">* 인접 7쌍: research_ux–content_editorial · content_editorial–design_craft · research_ux–data_analytics
+  · merch_retail–brand_gtm · brand_gtm–people_cx · brand_gtm–content_editorial · data_analytics–ops_pm</span></div>
+
+  <h3>5.5 종합 점수·관계 분류</h3>
+  <div class="formula">score = clamp( 50 + <b>0.5</b>·시너지 − <b>0.5</b>·마찰 + <b>0.2</b>·(fit − 50) )
+
+분류 (우선순위 순):
+  시너지 ≥55 ∧ 마찰 ≥55  → <b>상보</b> (고긴장 — 마찰로 묻지 않음)
+  마찰 ≥60               → <b>마찰</b>
+  마찰 40~59             → <b>주의</b>
+  시너지 ≥60             → <b>시너지</b>
+  시너지 ≥40             → <b>상보</b>
+  그 외                  → <b>중립</b></div>
+
+  <h3>5.6 팀 진단 — <code>diagnoseTeam(members)</code> <span class="muted small">(team.js — 전부 computeRelation 위의 쿼리)</span></h3>
+  <div class="formula">pairs = C(k,2) 전수                       <span class="c">// 팀 상한 9명 = 36쌍 (사람이 읽는 한계)</span>
+warnings   = {마찰 ≥60}  ·  cautions = {40~59}  ·  highlights = {시너지 ≥60}
+growthEdges = {direction ≠ mutual ∧ potential ≥ 25}               <span class="c">// teacher → learner</span>
+coverage(ax) = max_{m∈팀} m[ax]  (보유자 표기)  ·  holes = {coverage &lt; 50}
+teamScore = clamp( avg(score) − <b>4</b> × |holes| )</div>
+
+  <h3>5.7 팀장 적합도 — <code>pickLead</code></h3>
+  <div class="formula"><span class="c">// leadership 축이 없으므로(코퍼스에 리더십 어휘 부재) 관계 그래프에서 파생한다</span>
+lead(m) = <b>0.35</b>·(100 − 팀내평균마찰) + <b>0.25</b>·teacher비율(%) + <b>0.25</b>·(조율+소통)/2 + <b>0.15</b>·운영일정
+<span class="c">// teacher비율 = 성장 엣지(≥25, 비상호)에서 가르치는 쪽인 비율</span></div>
+
+  <h3>5.8 팀 구성 최적화 — <code>composeTeam({pool, k, preset, locked})</code></h3>
+  <div class="formula">J(T) = w_s·avg(시너지) − w_f·avg(마찰) + w_g·avg(성장) + w_c·축커버리지(%)
+<span class="c">// 축커버리지 = 팀 내 누군가 ≥60인 축의 비율</span>
+
+프리셋:            w_s    w_f    w_g    w_c
+  stable(안정)     0.30   0.50   0.05   0.15
+  balanced(균형)   0.30   0.30   0.20   0.20
+  growth(성장)     0.20   0.15   0.45   0.20
+
+알고리즘 (결정적 — 타이브레이크 고정):
+  ① 시드: locked 있으면 그것부터 · 없으면 J 최고 쌍 beam=6개
+  ② greedy: J를 최대화하는 후보를 1명씩 추가 (k명까지)
+  ③ swap 개선: 비locked 멤버 ↔ 풀 후보 교환, 개선 없을 때까지 ≤4라운드
+  ④ beam 중 최고 J 채택 → {team, J, diagnosis, leadRanking}</div>
+
+  <h3>5.9 등록 검증 5종 (경고만 — 등록을 막지 않음)</h3>
+  <ul>
+    <li><code>지원 분야</code> 칸 누락(+12 부스트 상실) · 본문 600자 미만(축 전반 저평가) · 축 단어 없는 역량 제목 · 필수 섹션 6종 누락 · 연락처 패턴 검출(사용 금지 안내)</li>
+  </ul>
+</section>
+
+<section id="uml-seq">
+  <h2>6. 시퀀스 다이어그램 <small>UML — 핵심 플로우 3종</small></h2>
+
+  <h3>6.1 이력서 등록 (S1 → S2)</h3>
+  <svg class="seq" viewBox="0 0 900 330">
+    <defs>
+      <marker id="arr" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#7fb5e6"/></marker>
+      <marker id="arr2" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#8b8f9a"/></marker>
+    </defs>
+    <g class="pt">
+      <rect x="20" y="12" width="100" height="26"/><text x="70" y="29">사용자</text>
+      <rect x="190" y="12" width="120" height="26"/><text x="250" y="29">app.js (S1)</text>
+      <rect x="390" y="12" width="130" height="26"/><text x="455" y="29">Engine.projectText</text>
+      <rect x="590" y="12" width="120" height="26"/><text x="650" y="29">parse / project</text>
+      <rect x="770" y="12" width="110" height="26"/><text x="825" y="29">localStorage</text>
+    </g>
+    <line class="life" x1="70" y1="38" x2="70" y2="320"/><line class="life" x1="250" y1="38" x2="250" y2="320"/>
+    <line class="life" x1="455" y1="38" x2="455" y2="320"/><line class="life" x1="650" y1="38" x2="650" y2="320"/>
+    <line class="life" x1="825" y1="38" x2="825" y2="320"/>
+    <line class="msg" x1="70" y1="62" x2="248" y2="62"/><text class="lbl" x="80" y="56">텍스트 입력 · [검증하고 등록]</text>
+    <line class="msg" x1="250" y1="90" x2="453" y2="90"/><text class="lbl" x="260" y="84">projectText(text, taxonomy, calib)</text>
+    <line class="msg" x1="455" y1="116" x2="648" y2="116"/><text class="lbl" x="465" y="110">parseResume → 섹션·결정 필드</text>
+    <line class="msg" x1="455" y1="142" x2="648" y2="142"/><text class="lbl" x="465" y="136">projectRaw → 시드×w(sec) + 부스트</text>
+    <line class="ret" x1="648" y1="168" x2="457" y2="168"/><text class="note" x="470" y="162">applyCalibration → 백분위 벡터 (§5.1)</text>
+    <line class="ret" x1="453" y1="192" x2="252" y2="192"/><text class="note" x="270" y="186">{parsed, vectors, coverage}</text>
+    <rect class="act" x="196" y="204" width="240" height="20" rx="4"/><text class="note" x="204" y="218">validateResume — 경고 5종 (§5.9)</text>
+    <rect class="act" x="196" y="232" width="240" height="20" rx="4"/><text class="note" x="204" y="246">rankAll(simPct) → 후보 5 + 신뢰도</text>
+    <line class="msg" x1="250" y1="272" x2="823" y2="272"/><text class="lbl" x="600" y="266">레코드 append (ra-demo-resumes-v1)</text>
+    <line class="ret" x1="248" y1="300" x2="72" y2="300"/><text class="note" x="86" y="294">#/list 이동 · 하이라이트 · 토스트 "이름 → 캐릭터 N%"</text>
+  </svg>
+
+  <h3>6.2 쌍 분석 모달 (S3·S4·S5·S7 공용)</h3>
+  <svg class="seq" viewBox="0 0 900 290">
+    <g class="pt">
+      <rect x="20" y="12" width="100" height="26"/><text x="70" y="29">사용자</text>
+      <rect x="220" y="12" width="150" height="26"/><text x="295" y="29">app.js (전역 위임)</text>
+      <rect x="470" y="12" width="110" height="26"/><text x="525" y="29">PairCache</text>
+      <rect x="680" y="12" width="150" height="26"/><text x="755" y="29">computeRelation</text>
+    </g>
+    <line class="life" x1="70" y1="38" x2="70" y2="280"/><line class="life" x1="295" y1="38" x2="295" y2="280"/>
+    <line class="life" x1="525" y1="38" x2="525" y2="280"/><line class="life" x1="755" y1="38" x2="755" y2="280"/>
+    <line class="msg" x1="70" y1="62" x2="293" y2="62"/><text class="lbl" x="80" y="56">.rel-open 클릭 / 매트릭스 셀 클릭 (aId, bId)</text>
+    <line class="msg" x1="295" y1="90" x2="523" y2="90"/><text class="lbl" x="305" y="84">get(A, B) — id 사전순 정규화 키</text>
+    <line class="msg" x1="525" y1="118" x2="753" y2="118"/><text class="lbl" x="535" y="112">[cache miss] computeRelation(A, B, calib, tx)</text>
+    <rect class="act" x="700" y="130" width="110" height="20" rx="4"/><text class="note" x="555" y="164">rawComponents → 스케일 → 분류 (§5.3~5.5)</text>
+    <line class="ret" x1="753" y1="180" x2="527" y2="180"/><text class="note" x="545" y="196">Relation (memoize)</text>
+    <line class="ret" x1="523" y1="190" x2="297" y2="190"/><text class="note" x="315" y="184">Relation</text>
+    <rect class="act" x="240" y="202" width="320" height="20" rx="4"/><text class="note" x="248" y="216">rawComponents 재호출 → 마찰 성분 분해·성장 양방향</text>
+    <line class="ret" x1="293" y1="248" x2="72" y2="248"/><text class="note" x="86" y="242">모달: 4차원 바 + 성분 분해 + 상보 축 + 겹치는 직무군 (새 연산 없음 — 출력의 시각화)</text>
+  </svg>
+
+  <h3>6.3 팀 시뮬레이터 자동 추천 (S5)</h3>
+  <svg class="seq" viewBox="0 0 900 300">
+    <g class="pt">
+      <rect x="20" y="12" width="100" height="26"/><text x="70" y="29">사용자</text>
+      <rect x="210" y="12" width="120" height="26"/><text x="270" y="29">app.js (S5)</text>
+      <rect x="420" y="12" width="130" height="26"/><text x="485" y="29">composeTeam</text>
+      <rect x="630" y="12" width="110" height="26"/><text x="685" y="29">objectiveOf</text>
+      <rect x="790" y="12" width="95" height="26"/><text x="837" y="29">diagnose 등</text>
+    </g>
+    <line class="life" x1="70" y1="38" x2="70" y2="290"/><line class="life" x1="270" y1="38" x2="270" y2="290"/>
+    <line class="life" x1="485" y1="38" x2="485" y2="290"/><line class="life" x1="685" y1="38" x2="685" y2="290"/>
+    <line class="life" x1="837" y1="38" x2="837" y2="290"/>
+    <line class="msg" x1="70" y1="62" x2="268" y2="62"/><text class="lbl" x="80" y="56">[빈자리 채우기] (preset, 총원 k)</text>
+    <line class="msg" x1="270" y1="90" x2="483" y2="90"/><text class="lbl" x="280" y="84">{pool: 128명, k, preset, locked: 현재 팀}</text>
+    <line class="msg" x1="485" y1="118" x2="683" y2="118"/><text class="lbl" x="495" y="112">greedy: J 최대 후보를 1명씩 추가</text>
+    <line class="msg" x1="485" y1="146" x2="683" y2="146"/><text class="lbl" x="495" y="140">swap 개선 ≤4라운드 (locked 제외)</text>
+    <text class="note" x="495" y="168">J = w·syn − w·fric + w·growth + w·coverage (§5.8)</text>
+    <line class="msg" x1="485" y1="192" x2="835" y2="192"/><text class="lbl" x="600" y="186">finalize: diagnoseTeam + pickLead</text>
+    <line class="ret" x1="483" y1="220" x2="272" y2="220"/><text class="note" x="290" y="214">{team, objective J, diagnosis, leadRanking}</text>
+    <line class="ret" x1="268" y1="252" x2="72" y2="252"/><text class="note" x="86" y="246">관계도 그래프 + 진단 4블록 렌더 · 토스트 "N명 구성 — J=…" (저장하지 않음)</text>
+  </svg>
+</section>
+
+<section id="screens">
+  <h2>7. 화면 사양 <small>Vanilla JS SPA — 해시 라우팅, 전역 위임 이벤트</small></h2>
+  <table>
+    <tr><th>화면</th><th>라우트</th><th>핵심 사양</th></tr>
+    <tr><td>홈 S0</td><td><code>#/home</code></td><td>여정 3개 진입 + 코퍼스 미리보기</td></tr>
+    <tr><td>등록 S1</td><td><code>#/register</code></td><td>붙여넣기/.md 업로드 · 검증 5종 · 샘플 9건(4건은 의도적 경고 시연용) · 템플릿 복사</td></tr>
+    <tr><td>리스트 S2</td><td><code>#/list</code></td><td>보관함 — 선택 개수가 모드 결정 (1건=개인 · 2~9건=팀)</td></tr>
+    <tr><td>캐릭터 상세 S3</td><td><code>#/character/:id</code></td><td>매칭 존(후보 5·신뢰도) + 캐릭터 존(축·관계 하이라이트) + 페르소나 카드(복장 6종 분석 <code>analyzeWardrobe</code>) + 가상 이력서 원문</td></tr>
+    <tr><td>팀 상태 S4</td><td><code>#/team?resumes=</code></td><td>일괄 치환(차순위 규칙) → 관계도 그래프(유의미 쌍만 엣지) + 진단 4블록</td></tr>
+    <tr><td>시뮬레이터 S5</td><td><code>#/sim?anchor=</code></td><td>캐릭터 고정 가정 실험 — <b>저장하지 않음</b> · composeTeam 자동 추천(본인 포함 ≤10명)</td></tr>
+    <tr><td>키워드 사전 S6</td><td><code>#/keywords</code></td><td>시드 219개 + 검사기(엔진과 같은 방향 판정) + seedStats 실측(검출 인원·문맥 발췌)</td></tr>
+    <tr><td>관계 매트릭스 S7</td><td><code>#/matrix</code></td><td>128×128 전수(8,128쌍) 히트맵 — 지표 4종 전환, 직무군 그룹 정렬, 셀 클릭 = 쌍 분석 모달 재사용 + 전체 개요(유형 분포·인물 하이라이트·Top 쌍)</td></tr>
+  </table>
+  <p class="small muted">공용 모달: 쌍 분석(§6.2) · 고려사항/참고(팀 쪽은 <code>teamConsiderations()</code>가 현재 진단에서 동적 생성).
+  표시용 존댓말 변환(<code>politeKo</code>)은 렌더 계층에서만 — 엔진 원문은 평서체를 유지한다.</p>
+</section>
+
+<section id="build">
+  <h2>8. 빌드·배포 파이프라인</h2>
+  <pre><code># 자산이 바뀌었을 때 (순서 고정)
+app\.venv\Scripts\python scripts\build-thumbs.py   # ① 사진 썸네일 — char_make → demo/thumbs (증분, --force 전체)
+node scripts\build-demo.js                          # ② engine.js + data.js 번들 (썸네일 경로 우선 참조)
+powershell -ExecutionPolicy Bypass -File app\build-exe.ps1   # ③ exe (PyInstaller --onefile --windowed)</code></pre>
+  <ul>
+    <li><b>build-thumbs.py</b>: 128명 × 7룩 PNG → 360px WebP q78 · 896장 ≈7.5MB. 썸네일이 없으면 데모는 원본 상대경로 → 이니셜 아바타로 자동 강등</li>
+    <li><b>build-demo.js</b>: lib/engine 번들 + 데이터 번들. 빌드 시 <b>전수 검증</b> — 축 제목 예시·지원 분야 예문이 실제 시드를 포함하는지, 이력서·페르소나·사진 누락 0인지 확인하고 로그로 보고</li>
+    <li><b>build-exe.ps1</b>: <code>--add-data demo</code>로 데모 자산 전체 동봉 → 단일 exe 22.7MB. 배포 구성은 <code>release/ResumeAnalyze-v{버전}-{날짜}/</code> = exe + 배포안내.txt + 동명 zip</li>
+  </ul>
+  <div class="callout">생성물 수정 금지 — <code>engine.js</code>·<code>data.js</code>·<code>keywords-v1.md</code>는 재빌드로만 바꾼다.
+  시드가 바뀌면 재빌드만으로 사전·검사기·통계가 전부 동기화된다.</div>
+</section>
+
+<section id="storage">
+  <h2>9. 저장·프라이버시</h2>
+  <table>
+    <tr><th>항목</th><th>사양</th></tr>
+    <tr><td>이력서 보관함</td><td>localStorage <code>ra-demo-resumes-v1</code> — 원문·벡터·치환 결과. 삭제 시 <b>함께 파기</b>(복구 불가 명시)</td></tr>
+    <tr><td>exe 저장 위치</td><td><code>%LOCALAPPDATA%\ResumeAnalyze</code> (WebView2 프로필 — <code>private_mode=False + storage_path</code> 지정, 미지정 시 pywebview 기본값이 세션 휘발이므로 필수)</td></tr>
+    <tr><td>시뮬레이션</td><td>저장하지 않음 — 화면 이탈 시 소멸 (설계 결정)</td></tr>
+    <tr><td>네트워크</td><td>없음 — 외부 전송 0. 연락처 패턴은 등록 검증이 검출해 제거를 안내</td></tr>
+    <tr><td>재현성</td><td>레코드에 engineVersion·taxonomyVersion 스탬프 — 버전이 다르면 재계산 대상 판별 가능</td></tr>
+  </table>
+</section>
+
+<section id="perf">
+  <h2>10. 성능 실측 <small>2026-07-29 · Windows 11</small></h2>
+  <table>
+    <tr><th>항목</th><th>실측</th><th>비고</th></tr>
+    <tr><td>관계 전수 계산</td><td><b>8,128쌍 / 51ms</b></td><td>Node 기준 · PairCache 공유로 화면 간 재계산 없음</td></tr>
+    <tr><td>매트릭스 렌더</td><td>16,384셀 DOM</td><td>첫 진입 1회 계산 후 세션 메모리 유지 · 지표 전환은 재채색만</td></tr>
+    <tr><td>data.js</td><td>765KB</td><td>인덱스 + 이력서 원문 + 페르소나 발췌 + seedStats + 이미지 경로</td></tr>
+    <tr><td>engine.js</td><td>35KB</td><td>lib/engine 브라우저 번들</td></tr>
+    <tr><td>썸네일</td><td>896장 / 7.5MB</td><td>원본 1.5GB의 0.5%</td></tr>
+    <tr><td>배포 exe</td><td>22.7MB 단일 파일</td><td>데모 자산 + 썸네일 전체 동봉</td></tr>
+  </table>
+</section>
+
+<section id="limits">
+  <h2>11. 한계·고지</h2>
+  <ul>
+    <li>출력은 <b>키워드 기반 성향 근접도</b>다 — 이력서에 쓴 단어가 곧 신호이고, 안 쓴 것은 0(미검출)이다. 짧은 이력서(600자 미만)는 관계 계산까지 함께 흔들린다</li>
+    <li>모든 값은 코퍼스 128명 안의 <b>상대값</b> — 절대 점수·타 코퍼스 비교 불가</li>
+    <li>p95 스케일 포화로 특정 인물(예: 이유나)이 시너지·마찰 순위를 동시 지배하는 아웃라이어가 존재한다 — 코퍼스 검수 대상</li>
+    <li>관계 사전계산 설계(relations.json)는 <b>폐기됨</b> — 온디맨드 순수 함수가 현행이다</li>
+    <li><code>composeTeam</code>은 그리디+스왑 휴리스틱이다 — 전역 최적해 보장 없음 (beam 시드 6개로 국소해 완화)</li>
+  </ul>
+  <div class="callout warn">이 도구는 <b>대화의 시작점</b>을 제공한다. 역량 평가·인성 검사·채용 판정이 아니며, 최종 판단은 사람이 한다.
+  캐릭터·이력서는 전원 가상 인물이다.</div>
+</section>
+
+</div>
+
+<footer>ResumeAnalyze 기술명세서 — v0.1 · rule-v1 · taxonomy-v4 · 2026-07-29</footer>
+</body>
+</html>

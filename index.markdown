@@ -75,6 +75,20 @@ title : main
         </article>
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
+            <img src="/project/VRS/VRS_overview.png" alt="가상 이력서 시뮬레이션 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>가상 이력서 시뮬레이션</h3>
+            <p>이력서를 등록하면 128명 캐릭터 코퍼스와의 성향 근접도를 계산해 개인 분석과 팀 배치 시뮬레이션을 보여 주는 데스크톱 앱입니다.</p>
+            <div class="tag-list"><span class="tag">Windows 앱</span><span class="tag">Vanilla JS</span><span class="tag">오프라인</span><span class="tag">완료</span></div>
+            <div class="card-actions">
+              <a class="btn" href="project/VRS/ResumeAnalyze.zip" target="_blank" rel="noopener">다운로드</a>
+              <a class="btn" href="/project/VRS/Tech_document.html" target="_blank" rel="noopener">기술문서</a>
+            </div>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
             <img src="assets/images/portfolio/EduCraft_hub.svg" alt="EduCraft 프로젝트 썸네일" />
           </div>
           <div class="portfolio-card__body">
@@ -85,19 +99,6 @@ title : main
               <a class="btn" href="http://www.eqment.store/" target="_blank" rel="noopener">방문</a>
               <a class="btn" href="https://github.com/ReDocu/EduCraft" target="_blank" rel="noopener">GitHub</a>
               <a class="btn" href="https://github.com/ReDocu/CompanyProcess#readme" target="_blank" rel="noopener">기술문서</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/ResumeSim.svg" alt="가상 이력서 시뮬레이션 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>가상 이력서 시뮬레이션</h3>
-            <p>가상 인물의 이력서를 만들고 평가해 보는 시뮬레이션 프로젝트입니다. 개인 프로젝트로 정식 출시를 목표로 개발하고 있습니다.</p>
-            <div class="tag-list"><span class="tag">개발중</span><span class="tag">출시목적</span><span class="tag">개인</span><span class="tag">GitHub</span></div>
-            <div class="card-actions">
-              <a class="btn" href="https://github.com/ReDocu/ResumeAnalyze" target="_blank" rel="noopener">GitHub 바로가기</a>
             </div>
           </div>
         </article>

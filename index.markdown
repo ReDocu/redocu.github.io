@@ -154,6 +154,65 @@ title : main
   </div>
 </section>
 
+<!-- Section 03 : 학습 위키 -->
+<section class="section portfolio-section" id="wiki">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-label">Section 03</p>
+      <h2>학습 위키</h2>
+      <p class="section-copy">직접 설계한 커리큘럼을 하루 단위 위키형 학습 문서로 정리했습니다. <a href="/WikiDoc/">위키 홈에서 전체 과정 보기 →</a></p>
+    </div>
+    <div class="portfolio-slider" data-slider>
+      <button class="slider-arrow slider-arrow--left" type="button" aria-label="이전 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="slider-track" tabindex="0">
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="/WikiDoc/GameToUnity_overview.png" alt="게임 개발 24주 학습 위키 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>게임 개발 24주 위키 · C에서 Unity까지</h3>
+            <p>C 콘솔 → WinAPI 프레임워크 → Unity 순서로, 120일 동안 매일 실행되는 게임을 만드는 학습 위키입니다. 게임 17편과 프레임워크 1식을 완성합니다.</p>
+            <div class="tag-list"><span class="tag">C/C++</span><span class="tag">WinAPI</span><span class="tag">Unity</span><span class="tag">120일</span></div>
+            <div class="card-actions">
+              <a class="btn" href="/WikiDoc/GameToUnity/curriculum/커리큘럼_24주차_주차별.html">커리큘럼</a>
+              <a class="btn btn--ghost" href="/WikiDoc/GameToUnity/docs/part1_c/Day001_개발환경과_첫_빌드.html">학습문서</a>
+            </div>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="/WikiDoc/DataAnalasyToVision_overview.png" alt="비전 AI 36주 학습 위키 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>비전 AI 36주 위키 · 데이터에서 Object Detection까지</h3>
+            <p>파이썬 기초부터 데이터 분석, CNN 딥러닝을 거쳐 직접 라벨링한 데이터로 YOLO 모델을 학습시키고 CCTV 웹 서비스로 배포하는 180일 학습 위키입니다.</p>
+            <div class="tag-list"><span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">TensorFlow</span><span class="tag">YOLO</span></div>
+            <div class="card-actions">
+              <a class="btn" href="/WikiDoc/DataAnalasyToVision/curriculum/">커리큘럼</a>
+              <a class="btn btn--ghost" href="/WikiDoc/DataAnalasyToVision/lessons/01-python/day-001.html">학습문서</a>
+            </div>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="/WikiDoc/Git_overview.png" alt="Git 15주 학습 위키 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>Git 15주 위키 · 혼자서, 팀으로, 자동화까지</h3>
+            <p>버전 관리 개념부터 브랜치 전략과 PR 협업, .git 내부 구조·훅·CI 자동화, 사고 복구까지 30강으로 다루는 Git 학습 위키입니다.</p>
+            <div class="tag-list"><span class="tag">Git</span><span class="tag">GitHub</span><span class="tag">브랜치 전략</span><span class="tag">CI · 훅</span></div>
+            <div class="card-actions">
+              <a class="btn" href="/WikiDoc/Git/curriculum/">커리큘럼</a>
+              <a class="btn btn--ghost" href="/WikiDoc/Git/lessons/01-beginner/lesson-01.html">학습문서</a>
+            </div>
+          </div>
+        </article>
+      </div>
+      <button class="slider-arrow slider-arrow--right" type="button" aria-label="다음 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5L16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+</section>
+
 <!-- Section 04 : 학원 교육 -->
 <section class="section portfolio-section" id="academy">
   <div class="container">

@@ -52,6 +52,35 @@ future: true
 theme: minima
 plugins:
   - jekyll-feed
+  - jekyll-optional-front-matter
+  - jekyll-readme-index
+  - jekyll-relative-links
+  - jekyll-titles-from-headings
+
+########################
+# WikiDoc 학습 위키 ####
+########################
+# front matter 없는 md를 그대로 페이지로 렌더링하고,
+# 문서 안의 상대 .md 링크는 렌더링된 페이지 링크로 자동 변환한다.
+optional_front_matter:
+  remove_originals: true
+
+relative_links:
+  enabled: true
+  collections: false
+
+titles_from_headings:
+  enabled: true
+  strip_title: false
+  collections: false
+
+defaults:
+  - scope:
+      path: "WikiDoc"
+    values:
+      layout: "wikidoc"
+      # 학습 문서 코드 예제(Jinja2 {{ }} / {% %})가 Liquid로 해석되지 않도록 차단
+      render_with_liquid: false
 
 # Exclude from processing.
 # The following items will not be processed, by default.

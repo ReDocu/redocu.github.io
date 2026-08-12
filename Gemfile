@@ -16,6 +16,11 @@ gem "minima", "~> 2.5"
 # If you have any plugins, put them here!
 group :jekyll_plugins do
   gem "jekyll-feed", "~> 0.12"
+  # WikiDoc 학습 위키: front matter 없는 md를 페이지로 렌더링 + 상대 .md 링크 변환
+  gem "jekyll-optional-front-matter", "~> 0.3"
+  gem "jekyll-readme-index", "~> 0.3"
+  gem "jekyll-relative-links", "~> 0.7"
+  gem "jekyll-titles-from-headings", "~> 0.5"
 end
 
 # Windows and JRuby does not include zoneinfo files, so bundle the tzinfo-data gem

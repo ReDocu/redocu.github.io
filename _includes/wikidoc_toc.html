@@ -1,0 +1,41 @@
+{% comment %}
+  학습 문서 왼쪽 커리큘럼 목차.
+  wikidoc.html 레이아웃에서 course_prefix 가 설정된 상태로 include 된다.
+  site.pages 에서 현재 과정의 문서를 모아 폴더(파트) 단위로 묶는다 — 수동 목록 관리 없음.
+{% endcomment %}
+{% assign toc_pages = site.pages | where_exp: "p", "p.url contains course_prefix" | sort: "path" %}
+{% assign toc_groups = toc_pages | group_by_exp: "p", "p.path | split: '/' | pop | last" %}
+{% assign current_group = page.path | split: '/' | pop | last %}
+<details class="wikidoc-toc" open>
+  <summary>📚 커리큘럼 목차</summary>
+  <div class="wikidoc-toc__groups">
+    {% for g in toc_groups %}
+    {% assign glabel = g.name %}
+    {% case g.name %}
+      {% when 'curriculum' %}{% assign glabel = '커리큘럼 로드맵' %}
+      {% when 'lessons' %}{% assign glabel = '본문 목차' %}
+      {% when 'docs' %}{% assign glabel = '본문 목차' %}
+      {% when '01-beginner' %}{% assign glabel = '🟢 초급 · 혼자 쓰는 Git' %}
+      {% when '02-intermediate' %}{% assign glabel = '🟡 중급 · 팀으로 쓰는 Git' %}
+      {% when '03-advanced' %}{% assign glabel = '🔴 고급 · 내부와 자동화' %}
+      {% when '01-python' %}{% assign glabel = '01 파이썬 기본 문법' %}
+      {% when '02-numpy-pandas' %}{% assign glabel = '02 Numpy & Pandas' %}
+      {% when '03-ml' %}{% assign glabel = '03 머신러닝' %}
+      {% when '04-dl' %}{% assign glabel = '04 딥러닝' %}
+      {% when '05-object-detection' %}{% assign glabel = '05 Object Detection' %}
+      {% when 'part1_c' %}{% assign glabel = '1부 · C 언어 (Day 1–30)' %}
+      {% when 'part2_winapi' %}{% assign glabel = '2부 · WinAPI (Day 31–70)' %}
+      {% when 'part3_unity' %}{% assign glabel = '3부 · Unity (Day 71–100)' %}
+      {% when 'part4_final' %}{% assign glabel = '4부 · 파이널 (Day 101–120)' %}
+    {% endcase %}
+    <details class="wikidoc-toc__group"{% if g.name == current_group %} open{% endif %}>
+      <summary><span class="wikidoc-toc__glabel">{{ glabel }}</span><span class="wikidoc-toc__count">{{ g.items | size }}</span></summary>
+      <ul>
+        {% for p in g.items %}
+        <li><a href="{{ p.url }}"{% if p.url == page.url %} class="is-active" aria-current="page"{% endif %} title="{{ p.title | default: p.name | escape }}">{{ p.title | default: p.name }}</a></li>
+        {% endfor %}
+      </ul>
+    </details>
+    {% endfor %}
+  </div>
+</details>

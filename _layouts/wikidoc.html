@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+
+<html lang="ko">
+	<head>
+		<title>{% if page.title %}{{ page.title }} · {% endif %}학습 위키 · {{ site.title }}</title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="직접 설계한 커리큘럼을 위키 형태로 정리한 학습 문서" />
+		<link rel="stylesheet" href="/assets/css/styles.css" />
+		<link rel="stylesheet" href="/assets/css/wikidoc.css" />
+	</head>
+	<body class="wikidoc-body">
+		<div id="page-wrapper">
+			{% include nav.html %}
+			<main id="main" class="wikidoc-main">
+				{% comment %} 과정 식별: 경로 기준으로 breadcrumb·목차 구성 {% endcomment %}
+				{% assign course_prefix = '' %}
+				{% assign course_name = '' %}
+				{% assign course_url = '' %}
+				{% if page.url contains '/WikiDoc/GameToUnity/' %}
+					{% assign course_prefix = '/WikiDoc/GameToUnity/' %}
+					{% assign course_name = '게임 개발 24주 · C에서 Unity까지' %}
+					{% assign course_url = '/WikiDoc/GameToUnity/curriculum/커리큘럼_24주차_주차별.html' %}
+				{% elsif page.url contains '/WikiDoc/DataAnalasyToVision/' %}
+					{% assign course_prefix = '/WikiDoc/DataAnalasyToVision/' %}
+					{% assign course_name = '비전 AI 36주 · 데이터에서 Object Detection까지' %}
+					{% assign course_url = '/WikiDoc/DataAnalasyToVision/curriculum/' %}
+				{% elsif page.url contains '/WikiDoc/Git/' %}
+					{% assign course_prefix = '/WikiDoc/Git/' %}
+					{% assign course_name = 'Git 15주 · 혼자서, 팀으로, 자동화까지' %}
+					{% assign course_url = '/WikiDoc/Git/curriculum/' %}
+				{% endif %}
+				{% if page.wide %}
+				<div class="wikidoc-shell wikidoc-shell--wide">
+					{{ content }}
+				</div>
+				{% else %}
+				<div class="wikidoc-shell wikidoc-shell--doc">
+					<aside class="wikidoc-side">
+						{% if course_prefix != '' %}
+						{% include wikidoc_toc.html %}
+						{% endif %}
+					</aside>
+					<div class="wikidoc-content">
+						<nav class="wikidoc-crumbs" aria-label="학습 위키 경로">
+							<a class="wikidoc-crumbs__home" href="/WikiDoc/">🏠 학습 위키</a>
+							{% if course_name != '' %}
+							<span class="wikidoc-crumbs__sep" aria-hidden="true">›</span>
+							<a class="wikidoc-crumbs__course" href="{{ course_url }}">{{ course_name }}</a>
+							{% endif %}
+						</nav>
+						<article class="wikidoc-article">
+							{{ content }}
+						</article>
+						<div class="wikidoc-pagefoot">
+							<a class="btn btn--ghost" href="#top">↑ 맨 위로</a>
+							<a class="btn btn--ghost" href="/WikiDoc/">학습 위키 홈</a>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+			</main>
+		</div>
+		{% include footer.html %}
+		<!-- Scripts -->
+		<script src="/assets/js/main.js"></script>
+		<script>
+			(function () {
+				var toc = document.querySelector('.wikidoc-toc');
+				if (!toc) return;
+				// 모바일에서는 목차를 접힌 상태로 시작
+				if (window.matchMedia('(max-width: 1023px)').matches) { toc.removeAttribute('open'); }
+				// 데스크톱 사이드바에서 현재 문서가 보이도록 스크롤
+				var side = document.querySelector('.wikidoc-side');
+				var active = toc.querySelector('a.is-active');
+				if (side && active && side.scrollHeight > side.clientHeight) {
+					side.scrollTop = active.offsetTop - side.clientHeight / 2;
+				}
+			})();
+		</script>
+	</body>
+</html>

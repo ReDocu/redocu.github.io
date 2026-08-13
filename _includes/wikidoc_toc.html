@@ -27,6 +27,22 @@
       {% when 'part2_winapi' %}{% assign glabel = '2부 · WinAPI (Day 31–70)' %}
       {% when 'part3_unity' %}{% assign glabel = '3부 · Unity (Day 71–100)' %}
       {% when 'part4_final' %}{% assign glabel = '4부 · 파이널 (Day 101–120)' %}
+      {% when '01-python-data' %}{% assign glabel = '01 파이썬과 데이터 다루기' %}
+      {% when '02-sql-pipeline' %}{% assign glabel = '02 SQL과 데이터 파이프라인' %}
+      {% when '03-machine-learning' %}{% assign glabel = '03 머신러닝' %}
+      {% when '04-deep-learning-serving' %}{% assign glabel = '04 딥러닝과 모델 서빙' %}
+      {% when '05-infra-mlops' %}{% assign glabel = '05 인프라와 MLOps' %}
+      {% when '06-final-project' %}{% assign glabel = '06 최종 통합 팀 프로젝트' %}
+      {% when '01-cloud-foundation' %}{% assign glabel = '🟢 01 · 클라우드 기초와 보안 네트워크' %}
+      {% when '02-compute-data' %}{% assign glabel = '🟡 02 · 컴퓨팅 · 트래픽 · 데이터 계층' %}
+      {% when '03-serverless-automation' %}{% assign glabel = '🟡 03 · 서버리스 · 컨테이너 · 자동화' %}
+      {% when '04-final-project' %}{% assign glabel = '🔴 04 · 최종 프로젝트' %}
+      {% when '01-foundation' %}{% assign glabel = '01 기초 다지기' %}
+      {% when '02-programming' %}{% assign glabel = '02 프로그래밍 언어' %}
+      {% when '03-database' %}{% assign glabel = '03 SQL·데이터베이스' %}
+      {% when '04-core-theory' %}{% assign glabel = '04 핵심 이론' %}
+      {% when '05-exam-prep' %}{% assign glabel = '05 실전 대비' %}
+      {% when 'appendix' %}{% assign glabel = '부록 · 요약표와 체크리스트' %}
     {% endcase %}
     <details class="wikidoc-toc__group"{% if g.name == current_group %} open{% endif %}>
       <summary><span class="wikidoc-toc__glabel">{{ glabel }}</span><span class="wikidoc-toc__count">{{ g.items | size }}</span></summary>

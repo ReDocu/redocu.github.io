@@ -87,8 +87,8 @@
 | 본문 | [lesson-07](../lessons/03-database/lesson-07.md) · [lesson-08](../lessons/03-database/lesson-08.md) · [lesson-09](../lessons/03-database/lesson-09.md) · [lesson-10](../lessons/03-database/lesson-10.md) | ✅ 작성 완료 (중간평가 포함) |
 | 본문 | [lesson-11](../lessons/04-core-theory/lesson-11.md) · [lesson-12](../lessons/04-core-theory/lesson-12.md) | ✅ 작성 완료 |
 | 본문 | [lesson-13](../lessons/05-exam-prep/lesson-13.md) · [lesson-14](../lessons/05-exam-prep/lesson-14.md) · [lesson-15](../lessons/05-exam-prep/lesson-15.md) · [lesson-16](../lessons/05-exam-prep/lesson-16.md) | ✅ 작성 완료 (통합 세트·모의고사 포함) |
-| 부록 | [A1](../lessons/appendix/A1-language-comparison.md) 문법 비교표 · [A2](../lessons/appendix/A2-sql-summary.md) SQL 요약 · [A3](../lessons/appendix/A3-db-terms.md) DB 용어 비교 · [A4](../lessons/appendix/A4-theory-checklist.md) 이론 체크리스트 · [A5](../lessons/appendix/A5-top30-traps.md) 함정 30 · [A6](../lessons/appendix/A6-final-7days.md) 직전 7일 계획 · [A7](../lessons/appendix/A7-wrong-note-template.md) 오답노트 양식 · [A8](../lessons/appendix/A8-instructor-checklist.md) 강사용 체크리스트 | ✅ 작성 완료 (`lessons/appendix/`) |
-| 부록(운영) | [A9](../lessons/appendix/A9-mock-exam-retake.md) 모의고사 재응시분(2회차) · [A10](../lessons/appendix/A10-answer-sheet.md) 답안지 양식(인쇄용) | ✅ 작성 완료 |
+| 부록 | [A1](../lessons/appendix/A01-language-comparison.md) 문법 비교표 · [A2](../lessons/appendix/A02-sql-summary.md) SQL 요약 · [A3](../lessons/appendix/A03-db-terms.md) DB 용어 비교 · [A4](../lessons/appendix/A04-theory-checklist.md) 이론 체크리스트 · [A5](../lessons/appendix/A05-top30-traps.md) 함정 30 · [A6](../lessons/appendix/A06-final-7days.md) 직전 7일 계획 · [A7](../lessons/appendix/A07-wrong-note-template.md) 오답노트 양식 · [A8](../lessons/appendix/A08-instructor-checklist.md) 강사용 체크리스트 | ✅ 작성 완료 (`lessons/appendix/`) |
+| 부록(운영) | [A9](../lessons/appendix/A09-mock-exam-retake.md) 모의고사 재응시분(2회차) · [A10](../lessons/appendix/A10-answer-sheet.md) 답안지 양식(인쇄용) | ✅ 작성 완료 |
 
 ---
 

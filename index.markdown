@@ -170,7 +170,7 @@ title : main
             <img src="/WikiDoc/GameToUnity_overview.png" alt="게임 개발 24주 학습 위키 썸네일" />
           </div>
           <div class="portfolio-card__body">
-            <h3>게임 개발 24주 위키 · C에서 Unity까지</h3>
+            <h3>[24주] C에서 Unity까지</h3>
             <p>C 콘솔 → WinAPI 프레임워크 → Unity 순서로, 120일 동안 매일 실행되는 게임을 만드는 학습 위키입니다. 게임 17편과 프레임워크 1식을 완성합니다.</p>
             <div class="tag-list"><span class="tag">C/C++</span><span class="tag">WinAPI</span><span class="tag">Unity</span><span class="tag">120일</span></div>
             <div class="card-actions">
@@ -184,7 +184,7 @@ title : main
             <img src="/WikiDoc/DataAnalasyToVision_overview.png" alt="비전 AI 36주 학습 위키 썸네일" />
           </div>
           <div class="portfolio-card__body">
-            <h3>비전 AI 36주 위키 · 데이터에서 Object Detection까지</h3>
+            <h3>[36주] 데이터에서 Object Detection</h3>
             <p>파이썬 기초부터 데이터 분석, CNN 딥러닝을 거쳐 직접 라벨링한 데이터로 YOLO 모델을 학습시키고 CCTV 웹 서비스로 배포하는 180일 학습 위키입니다.</p>
             <div class="tag-list"><span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">TensorFlow</span><span class="tag">YOLO</span></div>
             <div class="card-actions">
@@ -198,12 +198,54 @@ title : main
             <img src="/WikiDoc/Git_overview.png" alt="Git 15주 학습 위키 썸네일" />
           </div>
           <div class="portfolio-card__body">
-            <h3>Git 15주 위키 · 혼자서, 팀으로, 자동화까지</h3>
+            <h3>[15주] GIT 혼자서, 팀으로, 자동화까지</h3>
             <p>버전 관리 개념부터 브랜치 전략과 PR 협업, .git 내부 구조·훅·CI 자동화, 사고 복구까지 30강으로 다루는 Git 학습 위키입니다.</p>
             <div class="tag-list"><span class="tag">Git</span><span class="tag">GitHub</span><span class="tag">브랜치 전략</span><span class="tag">CI · 훅</span></div>
             <div class="card-actions">
               <a class="btn" href="/WikiDoc/Git/curriculum/">커리큘럼</a>
               <a class="btn btn--ghost" href="/WikiDoc/Git/lessons/01-beginner/lesson-01.html">학습문서</a>
+            </div>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="/WikiDoc/MLOps_overview.png" alt="MLOps 32주 학습 위키 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>[32주] MLOps 엔지니어 양성과정</h3>
+            <p>파이썬·SQL 데이터 파이프라인부터 머신러닝·딥러닝 모델 서빙, Docker·CI/CD 운영까지 AI 서비스 전체 수명주기를 160일 동안 구축하는 학습 위키입니다.</p>
+            <div class="tag-list"><span class="tag">Python</span><span class="tag">SQL</span><span class="tag">Docker</span><span class="tag">MLOps</span></div>
+            <div class="card-actions">
+              <a class="btn" href="/WikiDoc/MLOps/curriculum/">커리큘럼</a>
+              <a class="btn btn--ghost" href="/WikiDoc/MLOps/lessons/01-python-data/day-001.html">학습문서</a>
+            </div>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="/WikiDoc/AWS_preview.png" alt="AWS 16주 학습 위키 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>[16주] AWS 인프라부터 서버리스까지</h3>
+            <p>계정·IAM 기초에서 VPC 네트워크 설계, 고가용성 3계층 아키텍처, 서버리스와 IaC·CI/CD 자동 배포까지 32강으로 다루는 AWS 학습 위키입니다. SAA-C03 자격증과 연계됩니다.</p>
+            <div class="tag-list"><span class="tag">AWS</span><span class="tag">VPC · EC2</span><span class="tag">서버리스</span><span class="tag">IaC · CI/CD</span></div>
+            <div class="card-actions">
+              <a class="btn" href="/WikiDoc/AWS/curriculum/">커리큘럼</a>
+              <a class="btn btn--ghost" href="/WikiDoc/AWS/lessons/01-cloud-foundation/lesson-01.html">학습문서</a>
+            </div>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
+            <img src="/WikiDoc/InfoProcessingEngineer_overview.png" alt="정보처리기사 실기 8주 학습 위키 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>[8주] 정보처리기사 실기 완성</h3>
+            <p>C·Java·Python 코드 추적과 SQL을 집중 훈련하고 핵심 이론 암기와 실전 모의고사로 마무리하는 16강 구성의 정보처리기사 실기 대비 학습 위키입니다.</p>
+            <div class="tag-list"><span class="tag">정보처리기사</span><span class="tag">C · Java · Python</span><span class="tag">SQL</span><span class="tag">실기 필답형</span></div>
+            <div class="card-actions">
+              <a class="btn" href="/WikiDoc/InfoProcessingEngineer/curriculum/">커리큘럼</a>
+              <a class="btn btn--ghost" href="/WikiDoc/InfoProcessingEngineer/lessons/01-foundation/lesson-01.html">학습문서</a>
             </div>
           </div>
         </article>

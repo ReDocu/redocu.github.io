@@ -163,12 +163,14 @@ body.dark-mode .eyebrow { color: #90d9c5; }
 .portfolio-card {
   overflow: hidden; background: var(--bg-elev); border: 1px solid var(--line);
   border-radius: var(--radius); box-shadow: var(--shadow);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease;
   scroll-snap-align: start;
 }
-.portfolio-card:hover { transform: scale(1.03); box-shadow: var(--shadow-strong); }
+/* 카드 자체를 transform하면 트랙 스크롤 폭과 스냅 위치가 흔들려 화살표가 깜빡인다 — 확대 효과는 카드가 잘라내는 내부 이미지에만 준다 */
+.portfolio-card:hover { box-shadow: var(--shadow-strong); }
 .portfolio-card__thumb { aspect-ratio: 3 / 2; background: var(--bg-soft); overflow: hidden; }
-.portfolio-card__thumb img { width: 100%; height: 100%; object-fit: cover; }
+.portfolio-card__thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+.portfolio-card:hover .portfolio-card__thumb img { transform: scale(1.05); }
 .portfolio-card__body { display: grid; gap: 12px; padding: 18px; }
 .portfolio-card__body h3 { margin: 0; }
 .portfolio-card__body p { margin: 0; color: var(--muted); min-height: 3.2em; }

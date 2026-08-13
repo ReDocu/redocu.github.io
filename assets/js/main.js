@@ -116,12 +116,9 @@ document.querySelectorAll('[data-slider]').forEach((slider) => {
   let pendingLeft = null;
   let settleTimer = 0;
 
-  // offsetWidth는 hover scale 같은 transform의 영향을 받지 않는다
-  const metrics = () => {
+  const cardUnit = () => {
     const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
-    const unit = firstCard ? firstCard.offsetWidth + gap : track.clientWidth;
-    const perView = Math.max(1, Math.round((track.clientWidth + gap) / unit));
-    return { unit, perView };
+    return firstCard ? firstCard.offsetWidth + gap : track.clientWidth;
   };
 
   const maxScroll = () => track.scrollWidth - track.clientWidth;
@@ -134,11 +131,11 @@ document.querySelectorAll('[data-slider]').forEach((slider) => {
     rightArrow.classList.toggle('is-visible', overflowing && pos < maxScroll() - 1);
   };
 
-  // 화면에 보이는 카드 수만큼(데스크톱 3 / 태블릿 2 / 모바일 1) 카드 경계에 맞춰 이동
+  // 클릭할 때마다 카드 한 장씩 카드 경계에 맞춰 이동
   const page = (direction) => {
-    const { unit, perView } = metrics();
+    const unit = cardUnit();
     const from = pendingLeft ?? track.scrollLeft;
-    const targetCard = Math.round(from / unit) + direction * perView;
+    const targetCard = Math.round(from / unit) + direction;
     const left = Math.min(Math.max(targetCard, 0) * unit, maxScroll());
     pendingLeft = left;
     track.scrollTo({ left, behavior: 'smooth' });

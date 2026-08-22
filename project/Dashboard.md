@@ -80,8 +80,8 @@ title : Project Dashboard
   </header>
 
   <div class="dash-stats">
-    <div class="dash-stat"><strong>15</strong><span>전체 프로젝트</span></div>
-    <div class="dash-stat"><strong>4</strong><span>운영 · 배포</span></div>
+    <div class="dash-stat"><strong>16</strong><span>전체 프로젝트</span></div>
+    <div class="dash-stat"><strong>5</strong><span>운영 · 배포</span></div>
     <div class="dash-stat"><strong>8</strong><span>개발 · 진행중</span></div>
     <div class="dash-stat"><strong>3</strong><span>완료</span></div>
   </div>
@@ -135,6 +135,12 @@ title : Project Dashboard
             <td><span class="st st--live">운영중</span></td>
             <td><a href="https://github.com/ReDocu/EduCraft" target="_blank" rel="noopener">ReDocu/EduCraft</a></td>
             <td><a href="http://www.eqment.store/" target="_blank" rel="noopener">서비스 방문</a></td>
+          </tr>
+          <tr>
+            <td><div class="name">EQMUX</div><div class="desc">AI 에이전트 팀 관제 터미널 · Windows 데스크톱 앱</div></td>
+            <td><span class="st st--live">v0.3.0 배포</span></td>
+            <td><a href="https://github.com/ReDocu/EQMUX" target="_blank" rel="noopener">ReDocu/EQMUX</a></td>
+            <td><a href="https://eqmux-web-site.vercel.app/ko/" target="_blank" rel="noopener">소개 사이트</a></td>
           </tr>
         </tbody>
       </table>

@@ -45,6 +45,21 @@ title : main
       <div class="slider-track" tabindex="0">
         <article class="portfolio-card">
           <div class="portfolio-card__thumb">
+            <img src="project/EQMUX/banner.png" alt="EQMUX 프로젝트 썸네일" />
+          </div>
+          <div class="portfolio-card__body">
+            <h3>EQMUX</h3>
+            <p>하나의 git 저장소를 AI 에이전트 팀이 함께 작업하고 사람이 관제하는 Windows 데스크톱 앱입니다. 터미널을 나눠 Claude Code 세션을 병렬로 띄우고, 관제 대시보드에서 상태 확인·임무 배정·개입을 처리합니다.</p>
+            <div class="tag-list"><span class="tag">Tauri 2</span><span class="tag">Rust</span><span class="tag">SolidJS</span><span class="tag">v0.3.0</span></div>
+            <div class="card-actions">
+              <a class="btn" href="https://eqmux-web-site.vercel.app/ko/" target="_blank" rel="noopener">사이트</a>
+              <a class="btn" href="https://github.com/ReDocu/EQMUX/releases/latest" target="_blank" rel="noopener">다운로드</a>
+              <a class="btn" href="https://github.com/ReDocu/EQMUX" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </div>
+        </article>
+        <article class="portfolio-card">
+          <div class="portfolio-card__thumb">
             <img src="project/ClaudeCockpit/banner.png" alt="ClaudeCockpit 프로젝트 썸네일" />
           </div>
           <div class="portfolio-card__body">

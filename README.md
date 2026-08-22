@@ -34,14 +34,15 @@ bundle exec jekyll build    # 정적 빌드 → _site/ 에 생성
 ├── assets/                # css, js, 이미지 (포트폴리오 썸네일 포함)
 ├── Academy/               # 학원별 학습 정리 페이지
 │   ├── MBC_Academy.md         # MBC 아카데미 (AI/데이터 학습문서·PDF)
-│   ├── CodeCamp_Academy.md    # 코드캠프 (Phase별 실습 페이지)
+│   ├── CodeCamp_Academy.md    # 코드캠프 (Part별 실습 페이지)
 │   ├── Kyungil_Academy.md     # 경일게임아카데미 (KY16 프로젝트)
 │   ├── MBCAcademy/            # 학습문서 HTML/PDF 원본
-│   ├── CodeCampAcademy/       # Phase1 소개 페이지, Phase2 미니노션
+│   ├── CodeCampAcademy/       # Part1 소개 페이지, Part2 미니노션
 │   └── KYGameAcademy/         # KY16 기술문서·학습정리
 ├── project/               # 개인 프로젝트 자료 (배너, 기술문서, 다운로드)
 │   ├── CSGP/                  # C언어 게임 개발 프레임워크 + 학습 문서(study_doc)
 │   ├── ClaudeCockpit/         # Claude Code 세션 대시보드
+│   ├── EQMUX/                 # AI 에이전트 팀 관제 터미널 (배너)
 │   └── KnowledgeSharingCenter/# 지식 나눔터
 ├── web_page/              # 독립 실행형 웹앱 (Jekyll 비의존, 순수 HTML/CSS/JS)
 │   ├── Kakuro/                # 카쿠로 퍼즐 게임

@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>모바일 배너 실습 — 카피·CTA (Part 4)</title>
+<style>
+/* 토큰 — Part 3 예제안(Moss) 계승. 배너의 강조·CTA만 Amber (Day 31 결과물 문법) */
+:root{
+  --color-brand-50:#F3F7EE; --color-brand-100:#E5EFDB; --color-brand-500:#68954E;
+  --color-brand-600:#4F7A3D; --color-brand-700:#3E6131;
+  --color-neutral-50:#FAF8F3; --color-neutral-100:#F3EFE6; --color-neutral-200:#E7E1D3;
+  --color-neutral-300:#D4CBB8; --color-neutral-400:#B3A892; --color-neutral-500:#8F8471;
+  --color-neutral-600:#6E6555; --color-neutral-700:#554E42; --color-neutral-800:#3D3830;
+  --color-neutral-900:#2A2621;
+  --color-amber-50:#FBF3E3; --color-amber-100:#F6E6C4; --color-amber-500:#D0961F;
+  --color-amber-600:#A97614; --color-amber-700:#855C10;
+  --color-clay-50:#FBEEEA; --color-clay-600:#AB4429;
+
+  --bg:var(--color-neutral-50); --surface:#FFFFFF; --muted-bg:var(--color-neutral-100);
+  --text:var(--color-neutral-800); --text-muted:var(--color-neutral-600);
+  --text-subtle:var(--color-neutral-500); --text-brand:var(--color-brand-700);
+  --border:var(--color-neutral-200); --border-strong:var(--color-neutral-300);
+
+  --font:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,
+         "Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --sp-8:8px; --sp-12:12px; --sp-16:16px; --sp-20:20px; --sp-24:24px; --sp-32:32px;
+  --r-md:12px; --r-lg:16px; --r-full:999px;
+  --shadow-card:0 1px 2px rgba(42,38,33,.05),0 8px 20px -12px rgba(42,38,33,.18);
+  --shadow-float:0 6px 16px -4px rgba(42,38,33,.24);
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;font-family:var(--font);letter-spacing:-.02em;color:var(--text);min-height:100vh;
+  background:
+    radial-gradient(1100px 560px at 10% -8%, var(--color-amber-50), transparent 60%),
+    radial-gradient(900px 480px at 92% 0%, var(--color-brand-100), transparent 55%),
+    var(--bg)}
+.wrap{max-width:1180px;margin:0 auto;padding:var(--sp-24) var(--sp-20) 64px}
+
+.doc-head{margin-bottom:var(--sp-20)}
+.eyebrow{color:var(--text-brand);font-size:12px;font-weight:700;letter-spacing:.04em;margin:0 0 4px}
+.doc-title{margin:0;font-size:26px;font-weight:700;line-height:1.2}
+.doc-sub{margin:8px 0 0;color:var(--text-muted);font-size:14px;line-height:1.6;max-width:70ch}
+
+.mocknote{display:flex;gap:var(--sp-12);background:var(--color-amber-50);border:1px solid var(--color-amber-100);
+  border-left:4px solid var(--color-amber-500);border-radius:var(--r-md);
+  padding:var(--sp-12) var(--sp-16);margin:var(--sp-20) 0}
+.mocknote p{margin:0;font-size:14px;line-height:1.6;color:var(--color-neutral-700)}
+.mocknote strong{color:var(--color-amber-700)}
+
+.section{margin-top:var(--sp-32)}
+.section h2{font-size:18px;margin:0 0 4px}
+.section .lead{margin:0 0 var(--sp-16);font-size:13px;color:var(--text-subtle);line-height:1.6}
+
+/* ── 협업 레이아웃: 마케터 → 디자이너 ── */
+.collab{display:grid;grid-template-columns:minmax(260px,340px) 40px minmax(0,1fr);gap:var(--sp-16);align-items:start}
+@media (max-width:900px){ .collab{grid-template-columns:1fr}.collab .arrow{transform:rotate(90deg);justify-self:center} }
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:var(--sp-20);box-shadow:var(--shadow-card)}
+.panel h3{margin:0 0 2px;font-size:15px}
+.panel .role{font-size:11px;font-weight:700;color:var(--text-subtle);letter-spacing:.06em;margin-bottom:var(--sp-12)}
+.field{margin-top:var(--sp-12)}
+.field label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}
+.field label .tag{font-size:10px;font-weight:700;color:var(--color-amber-700);background:var(--color-amber-50);
+  border-radius:var(--r-full);padding:2px 7px;margin-left:6px;vertical-align:1px}
+.field input{width:100%;height:42px;padding:0 var(--sp-12);border:1px solid var(--border-strong);
+  border-radius:var(--r-md);font:500 14px/1 var(--font);letter-spacing:-.02em;color:var(--text);background:var(--surface)}
+.field input:focus{outline:2px solid var(--color-brand-500);outline-offset:-1px}
+.field input:disabled{background:var(--muted-bg);color:var(--text-subtle);cursor:not-allowed}
+.field .why{font-size:11px;color:var(--text-subtle);margin-top:4px;line-height:1.5}
+.arrow{display:grid;place-items:center;height:100%;font-size:22px;color:var(--text-subtle)}
+
+/* 모드 토글 */
+.modes{display:flex;gap:6px;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-full);padding:5px;width:max-content;max-width:100%;margin-bottom:var(--sp-16)}
+.modes button{border:0;background:transparent;color:var(--text-muted);cursor:pointer;
+  font:600 13px/1.3 var(--font);letter-spacing:-.02em;padding:9px 14px;border-radius:var(--r-full)}
+.modes button[aria-pressed="true"]{background:var(--color-brand-600);color:var(--color-neutral-50)}
+.mode-note{font-size:12px;line-height:1.6;border-radius:var(--r-md);padding:var(--sp-12) var(--sp-16);margin-bottom:var(--sp-16)}
+.mode-note.code{background:var(--color-brand-50);color:var(--text-brand)}
+.mode-note.baked{background:var(--color-clay-50);color:var(--color-clay-600);display:none}
+
+/* ══ 배너 360×180 — 소재는 프레임 밖으로 잘리고, 여백은 과하게 (Day 31) ══ */
+.banner-stage{display:flex;flex-wrap:wrap;gap:var(--sp-24);align-items:flex-start}
+.banner-shell{flex:none}
+.banner-shell .cap{font-size:11px;color:var(--text-subtle);margin-top:8px;text-align:center}
+.mbanner{position:relative;width:360px;height:180px;border-radius:var(--r-lg);overflow:hidden;cursor:default;
+  background:
+    radial-gradient(500px 260px at 85% 115%, #F4EAD6, transparent 70%),
+    radial-gradient(420px 240px at -10% -30%, #FDFBF6, transparent 65%),
+    #F8F3E7;
+  border:1px solid var(--border);box-shadow:var(--shadow-card)}
+/* 미세 질감 — 순백보다 부드러운 아이보리 */
+.mbanner::before{content:"";position:absolute;inset:0;opacity:.5;pointer-events:none;
+  background-image:radial-gradient(rgba(42,38,33,.045) 1px, transparent 1.4px);background-size:9px 9px}
+.mbanner .copy{position:absolute;left:26px;top:34px}
+.mbanner .copy .l1{font-size:19px;font-weight:700;color:var(--color-neutral-900);line-height:1.3}
+.mbanner .copy .l2{font-size:19px;font-weight:700;color:var(--color-amber-600);line-height:1.3}
+.mbanner .cta{position:absolute;left:26px;bottom:26px;display:inline-flex;align-items:center;gap:6px;
+  height:34px;padding:0 14px;border-radius:var(--r-full);border:0;cursor:pointer;
+  background:var(--color-amber-500);color:#FFF;font:700 12px/1 var(--font);letter-spacing:-.02em;
+  box-shadow:0 4px 12px -4px rgba(169,118,20,.55)}
+.mbanner .cta:hover{background:var(--color-amber-600)}
+/* 3D풍 소재 — 절반은 프레임 밖으로 (잘림 유도) */
+.prop{position:absolute;pointer-events:none;filter:drop-shadow(0 8px 10px rgba(42,38,33,.25))}
+.prop.bento{font-size:84px;right:-26px;bottom:-30px;transform:rotate(-8deg)}
+.prop.sushi{font-size:56px;right:64px;top:-22px;transform:rotate(14deg)}
+.prop.sauce{font-size:40px;left:-14px;bottom:-12px;transform:rotate(10deg)}
+.prop.chop{font-size:30px;right:6px;top:78px;transform:rotate(-24deg)}
+
+/* 모드 ② — 이미지에 글자 포함(구워짐) */
+.mbanner.baked{cursor:not-allowed}
+.mbanner.baked .copy,.mbanner.baked .cta{user-select:none}
+.mbanner.baked .cta{pointer-events:none}
+.mbanner.baked::after{content:"PNG · 글자가 이미지에 구워졌어요";position:absolute;right:8px;top:8px;
+  background:rgba(42,38,33,.62);color:#fff;font-size:10px;font-weight:700;
+  padding:4px 8px;border-radius:var(--r-full)}
+
+/* 데스크톱 배너 — 늘이기가 아니라 재배치 */
+.dbanner{position:relative;max-width:1040px;height:150px;border-radius:var(--r-lg);overflow:hidden;
+  background:
+    radial-gradient(700px 320px at 92% 130%, #F4EAD6, transparent 70%),
+    radial-gradient(560px 280px at -6% -40%, #FDFBF6, transparent 65%),
+    #F8F3E7;
+  border:1px solid var(--border);box-shadow:var(--shadow-card)}
+.dbanner::before{content:"";position:absolute;inset:0;opacity:.5;pointer-events:none;
+  background-image:radial-gradient(rgba(42,38,33,.045) 1px, transparent 1.4px);background-size:9px 9px}
+.dbanner .inner{position:absolute;inset:0;display:flex;align-items:center;gap:var(--sp-24);padding:0 44px}
+.dbanner .copy .l1{font-size:21px;font-weight:700;color:var(--color-neutral-900)}
+.dbanner .copy .l2{font-size:21px;font-weight:700;color:var(--color-amber-600)}
+.dbanner .cta{margin-left:auto;display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 18px;
+  border-radius:var(--r-full);border:0;background:var(--color-amber-500);color:#fff;
+  font:700 13px/1 var(--font);cursor:pointer;box-shadow:0 4px 12px -4px rgba(169,118,20,.55)}
+.dbanner .prop.bento{font-size:96px;right:200px;bottom:-36px}
+.dbanner .prop.sushi{font-size:60px;right:420px;top:-26px}
+.dbanner .prop.sauce{font-size:44px;left:-16px;bottom:-14px}
+
+/* 비교표·카드 */
+table{border-collapse:collapse;width:100%;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);overflow:hidden;font-size:13px}
+th,td{padding:10px 14px;border-bottom:1px solid var(--border);text-align:left;line-height:1.5}
+th{background:var(--muted-bg);font-size:12px}
+tr:last-child td{border-bottom:0}
+td b{color:var(--text-brand)}
+.cards2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--sp-16)}
+.qcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:var(--sp-16) var(--sp-20);box-shadow:var(--shadow-card);font-size:13px;line-height:1.7}
+.qcard h4{margin:0 0 6px;font-size:14px}
+.qcard .a{color:var(--text-brand);font-weight:700}
+.footlink{margin-top:var(--sp-32);font-size:13px;color:var(--text-subtle)}
+.footlink a{color:var(--text-brand)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="doc-head">
+    <p class="eyebrow">PART 4 · DAY 31 · 모바일 배너 디자인</p>
+    <h1 class="doc-title">카피·CTA 배너 실습 — 마케터가 둘을 주면, 디자이너가 나머지를 정한다</h1>
+    <p class="doc-sub">마케터가 넘기는 것은 <b>카피</b>와 <b>CTA</b> 딱 둘. 사이즈·폰트·배치·여백·잘림은 디자이너의 몫입니다.
+    아래 입력 칸이 그 협업 구조를 그대로 폼으로 옮긴 것입니다 — 입력을 바꾸면 배너가 즉시 바뀝니다.</p>
+  </header>
+
+  <aside class="mocknote">
+    <p>🧪 <strong>목업 안내</strong> — 실제 실습은 <strong>투명 배경 3D 소재 3종 + 빈 배경(아이보리 질감)</strong>을
+    이미지 생성 모델(ChatGPT 이미지 2.0 / 나노바나나2) 두 곳에 넣어 만듭니다. 이 페이지는 그 결과 구조를
+    CSS로 재현한 것입니다 — 소재는 이모지, 질감은 그라디언트입니다. 우리 상품(요리 수업·미식 모임)은
+    <strong>실물이 없으므로 3D 아이콘</strong>이 정답이고, 실물이 있는 상품이면 <strong>실제 사진</strong>을 씁니다.</p>
+  </aside>
+
+  <!-- ① 협업 구조 + 라이브 배너 -->
+  <section class="section">
+    <h2>① 협업 구조 — 마케터 → (카피 · CTA) → 디자이너</h2>
+    <p class="lead">모드 ①에서는 문구가 코드(HTML)로 얹혀 있어 입력 즉시 바뀝니다. 모드 ②는 글자가 이미지에 "구워진" 상태 — 문구를 바꾸려면 이미지를 다시 생성해야 합니다.</p>
+
+    <div class="modes" id="modes">
+      <button data-mode="code" aria-pressed="true">① 배경이미지 + 코딩글자</button>
+      <button data-mode="baked" aria-pressed="false">② 이미지에 글자 포함</button>
+    </div>
+    <div class="mode-note code" id="noteCode">
+      ✏️ <b>문구 수정 = 코드 수정.</b> 다국어·반응형·접근성에 유리하고, NOL처럼 배너 15장이 도는 서비스라면
+      배경 15장 + 코드 텍스트가 운영 비용을 크게 줄인다.
+    </div>
+    <div class="mode-note baked" id="noteBaked">
+      🔒 <b>글자가 이미지 안에 있다.</b> 입력이 잠겼습니다 — 카피 한 글자를 바꾸려도 이미지를 다시 생성해야 합니다.
+      대신 글자와 소재를 겹치는 자유도가 높고, 한 번에 완결됩니다. 오늘 수업의 실습 방식이 이쪽이었습니다.
+    </div>
+
+    <div class="collab">
+      <div class="panel">
+        <h3>마케터</h3>
+        <div class="role">넘기는 것은 딱 두 가지</div>
+        <div class="field">
+          <label>카피 — 윗줄 <span class="tag">COPY</span></label>
+          <input id="inCopy1" value="심심한 주말" maxlength="16">
+          <div class="why">카피는 <b>마음을 움직인다 — 묻는다.</b></div>
+        </div>
+        <div class="field">
+          <label>카피 — 강조줄 <span class="tag">COPY</span></label>
+          <input id="inCopy2" value="놓치기 아까운 기회" maxlength="16">
+          <div class="why">강조줄만 Amber — 두 줄의 위계가 시선을 만든다.</div>
+        </div>
+        <div class="field">
+          <label>CTA <span class="tag">CALL TO ACTION</span></label>
+          <input id="inCta" value="요리 수업 알아보기" maxlength="14">
+          <div class="why">CTA는 <b>손가락을 움직인다 — 시킨다.</b> 명령형으로.</div>
+        </div>
+      </div>
+
+      <div class="arrow">→</div>
+
+      <div>
+        <div class="banner-stage">
+          <div class="banner-shell">
+            <div class="mbanner" id="mbanner">
+              <span class="prop sushi">🍣</span>
+              <span class="prop bento">🍱</span>
+              <span class="prop sauce">🥫</span>
+              <span class="prop chop">🥢</span>
+              <div class="copy">
+                <div class="l1" id="outCopy1">심심한 주말</div>
+                <div class="l2" id="outCopy2">놓치기 아까운 기회</div>
+              </div>
+              <button class="cta"><span id="outCta">요리 수업 알아보기</span> ›</button>
+            </div>
+            <div class="cap">모바일 360 × 180 (2:1) — Day 18 기준 폭 360px</div>
+          </div>
+          <div class="qcard" style="max-width:330px">
+            <h4>디자이너가 정한 것 (구현 3줄)</h4>
+            · 배경 위에 아이콘 배치<br>
+            · 아이콘 <b>절반은 배너 밖으로</b> 잘리도록 — 프레임에 딱 맞으면 정물 사진, 잘리면 장면의 일부<br>
+            · <b>과하게 넓은 여백</b> — "넓은"으로는 부족하다. AI도 사람처럼 여백을 채우려 든다
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ② 데스크톱 배너 — 재배치 -->
+  <section class="section">
+    <h2>② 데스크톱 배너 — 늘이는 게 아니라 다시 만든다</h2>
+    <p class="lead">모바일 2:1 배너를 가로로 잡아 늘이면 소재가 뭉개지거나 여백만 남습니다. 폭이 다르면 <b>같은 카피·CTA로 재배치</b>합니다 — 소재와 배경을 따로 만들어 둔 이유가 여기서 회수됩니다.</p>
+    <div class="dbanner">
+      <span class="prop sushi">🍣</span>
+      <span class="prop bento">🍱</span>
+      <span class="prop sauce">🥫</span>
+      <div class="inner">
+        <div class="copy">
+          <div class="l1" id="dCopy1">심심한 주말</div>
+          <div class="l2" id="dCopy2">놓치기 아까운 기회</div>
+        </div>
+        <button class="cta"><span id="dCta">요리 수업 알아보기</span> ›</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ③ 배너 2종과 AI 느낌 -->
+  <section class="section">
+    <h2>③ 배너는 두 종류뿐 — 기준은 "실물이 있는가"</h2>
+    <div class="cards2">
+      <div class="qcard">
+        <h4>① 사진 — 상품/실물 O</h4>
+        콜라처럼 <b>실물이 있으면 사진이 이긴다.</b> 3D로 그리면 가짜처럼 보인다 — 사람들은 이미 진짜를 안다.
+        <br><br><b>AI 느낌 피하기</b> — 🐶 사람 디자이너도 실존하는 음식·꽃을 직접 그리지 않는다.
+        AI도 사람 디자이너라고 생각하고 <b>실제 사진</b>(unsplash 등)을 쓰면 AI 느낌이 사라진다.
+      </div>
+      <div class="qcard">
+        <h4>② 3D 일러스트 아이콘 — 상품/실물 X</h4>
+        강연·모임·서비스는 <b>찍을 실물이 없다.</b> 이때가 3D 아이콘의 자리다 — 애초에 그림인 척하는 그림이라
+        AI 티가 문제되지 않는다. 소재는 반드시 <b>투명 배경</b>으로 — 배경이 붙어 있으면 흰 네모가 얹힌다.
+        <br><br>우리 결제 상품(요리 수업 · 미식 모임) = 실물 X → <b>이 페이지의 배너가 ②다.</b>
+      </div>
+    </div>
+  </section>
+
+  <!-- ④ 두 방식 비교 -->
+  <section class="section">
+    <h2>④ 글자를 어디에 둘 것인가 — 다섯 기준</h2>
+    <table>
+      <thead><tr><th style="width:140px"></th><th>① 배경이미지 + 코딩글자</th><th>② 이미지에 글자 포함</th></tr></thead>
+      <tbody>
+        <tr><td><b>문구 수정</b></td><td>코드만 고치면 끝</td><td>이미지를 다시 생성</td></tr>
+        <tr><td><b>폰트</b></td><td>실제 웹폰트, 선명</td><td>이미지 해상도에 종속</td></tr>
+        <tr><td><b>다국어</b></td><td>텍스트만 교체</td><td>언어 수만큼 이미지 필요</td></tr>
+        <tr><td><b>접근성/검색</b></td><td>텍스트로 읽힘</td><td>읽히지 않음</td></tr>
+        <tr><td><b>자유도 · 제작</b></td><td>제한적 · 두 단계</td><td>높음(글자·소재 겹침) · 한 번에</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ⑤ 퀴즈 -->
+  <section class="section">
+    <h2>⑤ 퀴즈</h2>
+    <div class="cards2">
+      <div class="qcard"><h4>🧩 배너 협업을 위해 마케터가 디자이너에게 전달하는 것 2가지?</h4>
+        <span class="a">카피(Copy) · CTA(Call To Action)</span> — 이미지도 색도 아니다. 그건 디자이너가 정한다.</div>
+      <div class="qcard"><h4>🧩 배너 두 종류를 가르는 단 하나의 기준은?</h4>
+        <span class="a">팔 물건의 실물이 있는가</span> — 실물 O → 사진 / 실물 X → 3D 일러스트 아이콘.</div>
+    </div>
+  </section>
+
+  <p class="footlink">이 배너는 <a href="./04-food-payment.html">결제 플로우 목업</a>의 메인 화면 상단 배너와 같은 상품을 팔고,
+  Day 32에서는 검증용 원페이지 판매 사이트의 상품 이미지로 재사용됩니다. · <a href="./README.md">Part 4 가이드</a></p>
+</div>
+
+<script>
+// 마케터 입력 → 배너 즉시 반영 (모드 ①에서만)
+const bind = [
+  ['inCopy1', ['outCopy1','dCopy1']],
+  ['inCopy2', ['outCopy2','dCopy2']],
+  ['inCta',   ['outCta','dCta']],
+];
+bind.forEach(([src, outs]) => {
+  const el = document.getElementById(src);
+  el.addEventListener('input', () => {
+    outs.forEach(id => document.getElementById(id).textContent = el.value || ' ');
+  });
+});
+
+// 모드 토글 — ① 코딩글자(수정 가능) / ② 구워진 글자(입력 잠김)
+const modeBtns = document.querySelectorAll('#modes button');
+modeBtns.forEach(btn => btn.addEventListener('click', () => {
+  const mode = btn.dataset.mode;
+  modeBtns.forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+  const baked = mode === 'baked';
+  document.getElementById('mbanner').classList.toggle('baked', baked);
+  document.getElementById('noteCode').style.display = baked ? 'none' : 'block';
+  document.getElementById('noteBaked').style.display = baked ? 'block' : 'none';
+  bind.forEach(([src]) => document.getElementById(src).disabled = baked);
+}));
+</script>
+</body>
+</html>

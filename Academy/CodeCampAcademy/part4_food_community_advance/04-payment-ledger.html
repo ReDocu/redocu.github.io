@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>insert-only 원장 시뮬레이터 (Part 4)</title>
+<style>
+/* 토큰 — Part 3 예제안(Moss) 계승 */
+:root{
+  --color-brand-50:#F3F7EE; --color-brand-100:#E5EFDB; --color-brand-500:#68954E;
+  --color-brand-600:#4F7A3D; --color-brand-700:#3E6131;
+  --color-neutral-50:#FAF8F3; --color-neutral-100:#F3EFE6; --color-neutral-200:#E7E1D3;
+  --color-neutral-300:#D4CBB8; --color-neutral-500:#8F8471; --color-neutral-600:#6E6555;
+  --color-neutral-700:#554E42; --color-neutral-800:#3D3830; --color-neutral-900:#2A2621;
+  --color-amber-50:#FBF3E3; --color-amber-100:#F6E6C4; --color-amber-500:#D0961F; --color-amber-700:#855C10;
+  --color-leaf-50:#EAF6EE; --color-leaf-600:#2E7D51; --color-leaf-700:#26643F;
+  --color-clay-50:#FBEEEA; --color-clay-400:#D98165; --color-clay-600:#AB4429;
+  --color-sky-50:#EDF3F5; --color-sky-600:#3F6879;
+
+  --bg:var(--color-neutral-50); --surface:#FFFFFF; --muted-bg:var(--color-neutral-100);
+  --text:var(--color-neutral-800); --text-muted:var(--color-neutral-600);
+  --text-subtle:var(--color-neutral-500); --text-brand:var(--color-brand-700);
+  --border:var(--color-neutral-200); --border-strong:var(--color-neutral-300);
+
+  --font:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,
+         "Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --mono:"JetBrains Mono","Cascadia Code",Consolas,monospace;
+  --sp-8:8px; --sp-12:12px; --sp-16:16px; --sp-20:20px; --sp-24:24px; --sp-32:32px;
+  --r-md:12px; --r-lg:16px; --r-full:999px;
+  --shadow-card:0 1px 2px rgba(42,38,33,.05),0 8px 20px -12px rgba(42,38,33,.18);
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;font-family:var(--font);letter-spacing:-.02em;color:var(--text);min-height:100vh;
+  background:
+    radial-gradient(1100px 560px at 10% -8%, var(--color-brand-100), transparent 60%),
+    radial-gradient(900px 480px at 92% 0%, var(--color-amber-50), transparent 55%),
+    var(--bg)}
+.wrap{max-width:1180px;margin:0 auto;padding:var(--sp-24) var(--sp-20) 64px}
+
+.doc-head{margin-bottom:var(--sp-20)}
+.eyebrow{color:var(--text-brand);font-size:12px;font-weight:700;letter-spacing:.04em;margin:0 0 4px}
+.doc-title{margin:0;font-size:26px;font-weight:700;line-height:1.2}
+.doc-sub{margin:8px 0 0;color:var(--text-muted);font-size:14px;line-height:1.6;max-width:72ch}
+
+.mocknote{display:flex;gap:var(--sp-12);background:var(--color-amber-50);border:1px solid var(--color-amber-100);
+  border-left:4px solid var(--color-amber-500);border-radius:var(--r-md);
+  padding:var(--sp-12) var(--sp-16);margin:var(--sp-20) 0}
+.mocknote p{margin:0;font-size:14px;line-height:1.6;color:var(--color-neutral-700)}
+.mocknote strong{color:var(--color-amber-700)}
+
+.section{margin-top:var(--sp-32)}
+.section h2{font-size:18px;margin:0 0 4px}
+.section .lead{margin:0 0 var(--sp-16);font-size:13px;color:var(--text-subtle);line-height:1.6}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:var(--sp-20);box-shadow:var(--shadow-card)}
+
+/* ── ① 정산 계산 ── */
+.settle{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:var(--sp-16)}
+.settle table{border-collapse:collapse;width:100%;font-size:13px}
+.settle td,.settle th{padding:8px 10px;border-bottom:1px solid var(--border);text-align:right}
+.settle th{background:var(--muted-bg);font-size:12px}
+.settle td:first-child,.settle th:first-child{text-align:left}
+.settle tr:last-child td{border-bottom:0;font-weight:700}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:var(--sp-12)}
+.pill{font-size:11px;font-weight:700;padding:5px 10px;border-radius:var(--r-full);
+  background:var(--muted-bg);color:var(--text-muted)}
+.callout{font-size:13px;line-height:1.7;background:var(--color-brand-50);color:var(--text-brand);
+  border-radius:var(--r-md);padding:var(--sp-12) var(--sp-16);margin-top:var(--sp-12)}
+
+/* ── ② 흐름도 ── */
+.flow{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;font-size:12px}
+.fnode{background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--r-md);
+  padding:10px 14px;min-width:96px;text-align:center;line-height:1.5}
+.fnode b{display:block;font-size:13px}
+.fnode small{color:var(--text-subtle)}
+.farrow{align-self:center;color:var(--text-subtle);font-weight:700}
+.fnode.hub{border-color:var(--color-brand-500);background:var(--color-brand-50)}
+.webhook-lines{margin-top:var(--sp-16);display:grid;gap:8px;font-size:13px}
+.wl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:9px 12px;border-radius:var(--r-md)}
+.wl code{font-family:var(--mono);font-size:12px}
+.wl.ok{background:var(--color-leaf-50);color:var(--color-leaf-700)}
+.wl.no{background:var(--color-clay-50);color:var(--color-clay-600)}
+.wl .mark{font-weight:700}
+
+/* ── ③ 시뮬레이터 ── */
+.simgrid{display:grid;grid-template-columns:minmax(300px,420px) minmax(0,1fr);gap:var(--sp-16);align-items:start}
+@media (max-width:960px){ .simgrid{grid-template-columns:1fr} }
+.btnrow{display:flex;flex-wrap:wrap;gap:var(--sp-8);margin-bottom:var(--sp-12)}
+.btn{display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 var(--sp-16);
+  border-radius:var(--r-md);border:1px solid transparent;font:600 13px/1 var(--font);
+  letter-spacing:-.02em;cursor:pointer}
+.btn--primary{background:var(--color-brand-600);color:var(--color-neutral-50)}
+.btn--primary:hover{background:var(--color-brand-700)}
+.btn--danger{background:var(--surface);color:var(--color-clay-600);border-color:var(--color-clay-400)}
+.btn--danger:hover{background:var(--color-clay-50)}
+.btn--ghost{background:var(--surface);color:var(--text);border-color:var(--border-strong)}
+.btn--ghost:hover{background:var(--muted-bg)}
+
+/* 웹훅 로그 — 터미널 */
+.term{background:var(--color-neutral-900);color:var(--color-neutral-100);border-radius:var(--r-lg);
+  padding:var(--sp-16);font-family:var(--mono);font-size:12px;line-height:1.7;
+  height:340px;overflow-y:auto;box-shadow:var(--shadow-card)}
+.term .hd{color:var(--color-neutral-500);border-bottom:1px solid var(--color-neutral-700);
+  padding-bottom:6px;margin-bottom:8px}
+.term .in{color:#9CC8E8}   /* 수신 */
+.term .ok{color:#8FCF9F}   /* 통과/INSERT */
+.term .skip{color:#E8C86A} /* 무시 */
+.term .warn{color:#E89B84} /* 경고 */
+.term .dim{color:var(--color-neutral-500)}
+
+/* 원장 테이블 */
+.ledger h3{margin:0 0 8px;font-size:14px}
+.ledger h3 code{font-family:var(--mono);font-size:12px;background:var(--muted-bg);
+  padding:2px 7px;border-radius:6px}
+.tbl{border-collapse:collapse;width:100%;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);overflow:hidden;font-size:12px}
+.tbl th,.tbl td{padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;
+  font-variant-numeric:tabular-nums}
+.tbl th{background:var(--muted-bg);font-size:11px;color:var(--text-muted)}
+.tbl tr:last-child td{border-bottom:0}
+.tbl .num{text-align:right}
+.tbl .plus{color:var(--color-leaf-600);font-weight:700}
+.tbl .minus{color:var(--color-clay-600);font-weight:700}
+.tbl .empty{color:var(--text-subtle);text-align:center;padding:var(--sp-16)}
+.txchip{font-family:var(--mono);font-size:11px;padding:2px 7px;border-radius:var(--r-full);white-space:nowrap}
+.tx0{background:var(--color-brand-100);color:var(--color-brand-700)}
+.tx1{background:var(--color-amber-100);color:var(--color-amber-700)}
+.tx2{background:var(--color-sky-50);color:var(--color-sky-600)}
+.tx3{background:var(--color-clay-50);color:var(--color-clay-600)}
+.typebadge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:var(--r-full)}
+.typebadge.pay{background:var(--color-leaf-50);color:var(--color-leaf-700)}
+.typebadge.cancel{background:var(--color-clay-50);color:var(--color-clay-600)}
+.sumline{display:flex;justify-content:space-between;font-size:13px;margin-top:8px;
+  padding:9px 12px;background:var(--muted-bg);border-radius:var(--r-md)}
+.jsonc{font-family:var(--mono);font-size:11px;color:var(--text-muted);word-break:break-all}
+.tbl-note{font-size:12px;color:var(--text-subtle);margin-top:8px;line-height:1.6}
+.tbl-note b{color:var(--text-brand)}
+
+/* ── ④ 환경변수 · SSOT ── */
+.envtbl{border-collapse:collapse;width:100%;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);overflow:hidden;font-size:12px}
+.envtbl th,.envtbl td{padding:9px 12px;border-bottom:1px solid var(--border);text-align:left;line-height:1.5}
+.envtbl th{background:var(--muted-bg);font-size:11px}
+.envtbl tr:last-child td{border-bottom:0}
+.envtbl code{font-family:var(--mono);font-size:11px}
+.k-pub{color:var(--color-leaf-600);font-weight:700}
+.k-sec{color:var(--color-clay-600);font-weight:700}
+.ssot{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--color-brand-500);
+  border-radius:var(--r-md);padding:var(--sp-16) var(--sp-20);font-size:13px;line-height:1.8}
+.ssot code{font-family:var(--mono);font-size:12px;background:var(--muted-bg);padding:2px 6px;border-radius:6px}
+.cards2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--sp-16)}
+.qcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:var(--sp-16) var(--sp-20);box-shadow:var(--shadow-card);font-size:13px;line-height:1.7}
+.qcard h4{margin:0 0 6px;font-size:14px}
+.qcard .a{color:var(--text-brand);font-weight:700}
+.footlink{margin-top:var(--sp-32);font-size:13px;color:var(--text-subtle)}
+.footlink a{color:var(--text-brand)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="doc-head">
+    <p class="eyebrow">PART 4 · DAY 32–34 · 결제의 뒷면</p>
+    <h1 class="doc-title">insert-only 원장 시뮬레이터 — 고치지 않는 장부</h1>
+    <p class="doc-sub">결제 화면 뒤에서 실제로 벌어지는 일 — <b>웹훅이 원장을 쓴다.</b>
+    버튼을 눌러 결제·취소·재발송을 일으켜 보세요. 원장(<code>payment</code>)에는 행이 <b>추가만</b> 되고,
+    수정·삭제는 한 번도 일어나지 않습니다.</p>
+  </header>
+
+  <aside class="mocknote">
+    <p>🧪 <strong>목업 안내</strong> — 포트원·PG·카드사·Supabase는 전부 <strong>브라우저 안 시뮬레이션</strong>입니다.
+    실제 네트워크 요청은 없고, 키 값은 자리표시자입니다. 실전 연동은 <strong>PortoneMCP(Day 33)</strong>와
+    <strong>웹훅 URL 등록 + Vercel 배포(Day 34)</strong>로 합니다.</p>
+  </aside>
+
+  <!-- ① 정산 -->
+  <section class="section">
+    <h2>① 정산 — 결제 ≠ 입금 (Day 32)</h2>
+    <p class="lead">돈은 사장님 통장으로 직행하지 않는다. 결제사 서버에 모였다가, 수수료를 떼고, 정해진 주기에 온다.</p>
+    <div class="settle">
+      <div class="panel">
+        <table>
+          <thead><tr><th>판매</th><th>판매금액</th><th>수수료(10%)</th><th>남는 돈</th></tr></thead>
+          <tbody>
+            <tr><td>철수 결제</td><td>1,000원</td><td>−100원</td><td>900원</td></tr>
+            <tr><td>영희 결제</td><td>500원</td><td>−50원</td><td>450원</td></tr>
+            <tr><td>정산 예정 금액</td><td></td><td></td><td>1,350원</td></tr>
+          </tbody>
+        </table>
+        <div class="pills">
+          <span class="pill">1일 후 정산</span><span class="pill">2일 후 정산</span>
+          <span class="pill">주단위</span><span class="pill">월 2회</span><span class="pill">월 1회</span>
+        </div>
+      </div>
+      <div class="panel">
+        <div style="font-size:13px;line-height:1.8">
+          실습(Day 32)에서 페이앱 결제 링크로 <b>1,000원</b>을 실제로 결제하면 관리자 화면에
+          상태 <b>미정산</b> · <b>정산 예정금액 956원</b>(수수료 44원)이 뜬다 — 정산 개념의 실물.
+        </div>
+        <div class="callout">💡 <b>"오늘 판 돈은 오늘 못 쓴다."</b> 정산 주기를 모르고 재고·인건비를 계획하면 흑자 도산이 난다.
+        비즈니스 검증 전이라면 시스템 구축 대신 <b>결제 링크</b>부터 — "먼저 팔고, 팔리면 계약서를 쓴다."</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ② 흐름도 -->
+  <section class="section">
+    <h2>② 돈과 통지의 경로 — 웹훅은 localhost에 오지 않는다 (Day 32·34)</h2>
+    <p class="lead">결제(브라우저 → 포트원)는 어디서든 되지만, 웹훅(포트원 → 내 서버)은 공인 주소가 있어야 도달한다.</p>
+    <div class="panel">
+      <div class="flow">
+        <div class="fnode"><b>브라우저</b><small>결제하기</small></div>
+        <div class="farrow">→</div>
+        <div class="fnode hub"><b>결제솔루션</b><small>포트원 (PG 묶음)</small></div>
+        <div class="farrow">→</div>
+        <div class="fnode"><b>PG사</b><small>카드사 묶음</small></div>
+        <div class="farrow">→</div>
+        <div class="fnode"><b>카드사</b><small>승인</small></div>
+      </div>
+      <div class="webhook-lines">
+        <div class="wl ok"><span class="mark">✅ 도달 O</span> 포트원 ─(결제ID 웹훅)→
+          <code>https://food-community.shop/api/portone/webhook</code> <span>— Vercel 위의 BFF API</span></div>
+        <div class="wl no"><span class="mark">❌ 도달 X</span> 포트원 ─(결제ID 웹훅)→
+          <code>http://localhost:3000/api/portone/webhook</code> <span>— 내 컴퓨터 안에서만 유효한 주소</span></div>
+      </div>
+      <div class="tbl-note">그래서 웹훅 개발 순서도의 마지막은 언제나 <b>"웹훅 API 배포"</b>다.
+      화면·결제는 로컬에서 만들고, <b>웹훅 검증은 배포해서</b> 한다.</div>
+    </div>
+  </section>
+
+  <!-- ③ 시뮬레이터 -->
+  <section class="section">
+    <h2>③ 원장 시뮬레이터 — 웹훅이 쓰고, 화면은 읽는다 (Day 33·34)</h2>
+    <p class="lead">버튼 = 사건. 왼쪽 터미널이 웹훅 처리(서명 검증 → 중복 검사 → INSERT), 오른쪽이 Supabase 원장이다.</p>
+
+    <div class="btnrow">
+      <button class="btn btn--primary" onclick="simPay()">💳 결제하기 30,000원</button>
+      <button class="btn btn--danger" onclick="simCancel()">↩️ 결제 취소</button>
+      <button class="btn btn--ghost" onclick="simResend()">🔁 웹훅 재발송</button>
+      <button class="btn btn--ghost" onclick="simReserveCancel()">📅 예약만 취소 (정기)</button>
+      <button class="btn btn--ghost" onclick="simReset()">🗑 시뮬레이션 초기화</button>
+    </div>
+
+    <div class="simgrid">
+      <div>
+        <div class="term" id="term">
+          <div class="hd">POST /api/portone/webhook — BFF API (서버 로그)</div>
+          <div class="dim">사건을 기다리는 중… [결제하기]를 눌러 보세요.</div>
+        </div>
+        <div class="tbl-note">서명 검증은 <b>PORTONE_WEBHOOK_SECRET</b>, 원장 기록은 세션 없는 서버 작업이라
+        <b>SUPABASE_SERVICE_ROLE_KEY</b>(RLS 우회)가 필요하다. 웹훅은 <b>재발송될 수 있으므로</b> 같은 통지가
+        두 번 와도 원장에 두 줄이 생기면 안 된다 — 중복 검증.</div>
+      </div>
+
+      <div class="ledger">
+        <h3><code>payment</code> — insert-only / append-only</h3>
+        <table class="tbl" id="payTbl">
+          <thead><tr><th>id</th><th>transaction_key</th><th>type</th><th class="num">amount</th><th>created_at</th><th>snapshot</th></tr></thead>
+          <tbody><tr><td colspan="6" class="empty">아직 행이 없습니다 — 이 표에는 UPDATE도 DELETE도 없습니다.</td></tr></tbody>
+        </table>
+        <div class="sumline"><span>SUM(amount) — 같은 키의 결제·취소를 합산하면 0</span><b id="sumOut">0원</b></div>
+
+        <h3 style="margin-top:var(--sp-20)"><code>payment_snapshot</code> — 결제 당시를 보존</h3>
+        <table class="tbl" id="snapTbl">
+          <thead><tr><th>id</th><th>created_at</th><th>snapshot_product</th></tr></thead>
+          <tbody><tr><td colspan="3" class="empty">스냅샷 없음 — 상품이 나중에 바뀌어도, 영수증은 바뀌면 안 된다.</td></tr></tbody>
+        </table>
+        <div class="tbl-note"><b>트랜잭션키</b> — 결제와 그 취소는 <b>같은 키</b>(같은 색 칩), 재결제는 <b>새 키</b>.
+        이 구분이 없으면 환불 대사가 불가능하다. <b>예약만 취소</b>는 돈이 움직이지 않아 원장에 행이 없다 —
+        원장은 돈의 사건만 기록한다.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ④ 환경변수 · SSOT -->
+  <section class="section">
+    <h2>④ 키의 자리, 규칙의 자리 (Day 33·34)</h2>
+    <div class="cards2">
+      <div>
+        <table class="envtbl">
+          <thead><tr><th>환경변수</th><th>공개?</th><th>용도</th></tr></thead>
+          <tbody>
+            <tr><td><code>NEXT_PUBLIC_PORTONE_STORE_ID</code></td><td class="k-pub">공개 식별자</td><td>브라우저 결제창 호출 — 감출 수도, 감출 필요도 없다</td></tr>
+            <tr><td><code>NEXT_PUBLIC_PORTONE_CHANNEL_KEY</code></td><td class="k-pub">공개 식별자</td><td>위와 동일</td></tr>
+            <tr><td><code>PORTONE_V2_API_SECRET</code></td><td class="k-sec">서버 전용</td><td>결제 단건조회·취소 — <code>serverEnv.ts</code>로만 접근</td></tr>
+            <tr><td><code>PORTONE_WEBHOOK_SECRET</code></td><td class="k-sec">서버 전용</td><td>웹훅 서명 검증 — 없으면 가짜 결제 통지를 막을 수 없다</td></tr>
+            <tr><td><code>SUPABASE_SERVICE_ROLE_KEY</code></td><td class="k-sec">서버 전용</td><td>RLS 우회 원장 기록 — 노출되는 순간 DB 전체가 열린다</td></tr>
+          </tbody>
+        </table>
+        <div class="tbl-note">값은 전부 자리표시자다(<code>store-xxxx…</code>). 로컬 <code>.env.local</code>과
+        <b>Vercel 환경 변수 양쪽</b>에 등록해야 프로덕션 웹훅이 산다.</div>
+      </div>
+      <div class="ssot">
+        <b># 결제 규칙 (결제 SSOT)</b> — <code>rules/payment.md</code> 발췌<br><br>
+        결제와 관련된 <b>모든</b> 규칙(결제창 연동 · 환경변수 · 웹훅 · 결제취소 · 결제 내역)은
+        <b>이 문서가 유일한 기준</b>이다.<br>
+        결제 코드를 추가·수정하기 전에 반드시 이 문서를 따르고, <b>규칙이 바뀌면 이 문서를 먼저 고친다.</b><br><br>
+        <span style="color:var(--text-subtle);font-size:12px">— 두 번째 웹훅(취소)부터는 프롬프트가 세 줄로 준다:
+        <i>"SSOT는 rules/payment.md에 있어. 먼저 확인하고 구현해줘."</i>
+        문서에 투자한 것이 프롬프트 길이로 회수되는 순간이다.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑤ 퀴즈 -->
+  <section class="section">
+    <h2>⑤ 퀴즈</h2>
+    <div class="cards2">
+      <div class="qcard"><h4>🧩 결제 취소 시 해당 건을 수정하지 않고 1줄 더 등록하는 로그 형태의 방식?</h4>
+        <span class="a">insert-only (append-only)</span> — "테이블에 2건"은 버그가 아니라 설계다.</div>
+      <div class="qcard"><h4>🧩 카드 정보를 입력하여 받을 수 있는, 결제가 가능한 키?</h4>
+        <span class="a">빌링키</span> — 정기 구독 전용. 카드번호 대신 저장하고, 표시는 마스킹(<code>**23</code>)만.</div>
+      <div class="qcard"><h4>🧩 유저가 결제한 돈에서 수수료를 차감해 최종 받을 돈을 확정하는 일?</h4>
+        <span class="a">정산</span> — 주기(1일/2일/주/월2회/월1회)는 계약 조건이다.</div>
+    </div>
+  </section>
+
+  <p class="footlink">이 원장이 채우는 화면은 <a href="./04-food-payment.html">결제 플로우 목업</a>의
+  마이페이지 결제/취소 내역 탭입니다. · <a href="./README.md">Part 4 가이드</a></p>
+</div>
+
+<script>
+// ── 시뮬레이션 상태 (브라우저 메모리 안에서만) ──
+let payments = [];   // {id, tx, type, amount, at, snap}
+let snapshots = [];  // {id, at, json}
+let seqPay = 0, seqSnap = 0, seqTx = 0;
+let clockMin = 0;          // 2026-08-13 21:04 에서 시작하는 가상 시계
+let lastWebhook = null;    // 재발송용 — 마지막 통지
+const txColors = {};
+
+function now(){
+  const base = new Date(2026, 7, 13, 21, 4);
+  base.setMinutes(base.getMinutes() + clockMin);
+  const p = n => String(n).padStart(2, '0');
+  return `2026-08-13 ${p(base.getHours())}:${p(base.getMinutes())}`;
+}
+function tick(){ clockMin += 3; }
+
+function genTx(){
+  // uuid 흉내 — 표시용 합성 값
+  const hex = () => Math.floor(Math.random() * 16).toString(16);
+  const tx = Array.from({length: 8}, hex).join('') + '…';
+  txColors[tx] = 'tx' + (seqTx++ % 4);
+  return tx;
+}
+
+const term = document.getElementById('term');
+function log(cls, text){
+  const d = document.createElement('div');
+  d.className = cls;
+  d.textContent = text;
+  term.appendChild(d);
+  term.scrollTop = term.scrollHeight;
+}
+
+// ── 웹훅 처리 시뮬레이션: 서명 검증 → 중복 검사 → INSERT ──
+function receiveWebhook(evt, isResend){
+  log('in', `→ POST /api/portone/webhook  { type: "${evt.type}", paymentId: "${evt.tx}" }${isResend ? '  (재발송)' : ''}`);
+  log('ok', '  서명 검증 (PORTONE_WEBHOOK_SECRET) … OK — 진짜 포트원의 통지');
+  const dup = payments.some(p => p.tx === evt.tx && p.type === evt.rowType);
+  if(dup){
+    log('skip', '  중복 검사: 이미 기록된 (payment_id, type) → 원장 변경 없음 (무시)');
+    log('dim', '  ── 재발송이 있어도 원장은 한 번만 쓴다. 이것이 중복결제 검증. ──');
+    return;
+  }
+  log('ok', '  중복 검사: 미기록 통지 → 통과');
+  const snapId = 'S' + String(++seqSnap).padStart(3, '0');
+  const payId = 'PAY' + String(++seqPay).padStart(3, '0');
+  const at = now();
+  snapshots.push({ id: snapId, at,
+    json: '{"이름":"구로 골목 미식회","가격":30000,"상태":"Public"}' });
+  payments.push({ id: payId, tx: evt.tx, type: evt.rowType, amount: evt.amount, at, snap: snapId });
+  const sign = evt.amount > 0 ? '+' : '−';
+  log('ok', `  INSERT payment        (${evt.rowType} ${sign}${Math.abs(evt.amount).toLocaleString()}) — SUPABASE_SERVICE_ROLE_KEY`);
+  log('ok', `  INSERT payment_snapshot (${snapId}) — 결제/취소 당시의 상품 정보 보존`);
+  render();
+}
+
+function activeTx(){
+  // 취소되지 않은 마지막 결제의 트랜잭션키
+  const cancelled = new Set(payments.filter(p => p.type === 'CANCEL').map(p => p.tx));
+  const open = payments.filter(p => p.type === 'PAYMENT' && !cancelled.has(p.tx));
+  return open.length ? open[open.length - 1].tx : null;
+}
+
+function simPay(){
+  tick();
+  const tx = genTx();
+  log('dim', '── 브라우저: [결제 진행] → 포트원 결제창 → 결제 완료 (여기까지는 로컬에서도 된다) ──');
+  lastWebhook = { type: 'Transaction.Paid', rowType: 'PAYMENT', amount: 30000, tx };
+  receiveWebhook(lastWebhook, false);
+  log('dim', '  ※ 취소한 뒤 다시 결제하면 새 키가 발급된다 — 재결제 = 별개의 결제 건.');
+}
+
+function simCancel(){
+  tick();
+  const tx = activeTx();
+  if(!tx){
+    log('warn', '⚠ 취소할 결제가 없습니다 — 먼저 [결제하기]를 누르세요.');
+    return;
+  }
+  log('dim', '── 브라우저: [결제 취소] → BFF → 포트원 취소 API (시크릿이 필요한 일은 전부 서버의 몫) ──');
+  lastWebhook = { type: 'Transaction.Cancelled', rowType: 'CANCEL', amount: -30000, tx };
+  receiveWebhook(lastWebhook, false);
+  log('dim', '  ── 기존 PAYMENT 행은 그대로다. 취소 = 수정이 아니라 반대 부호의 행 추가. ──');
+}
+
+function simResend(){
+  tick();
+  if(!lastWebhook){
+    log('warn', '⚠ 재발송할 통지가 없습니다 — 포트원 콘솔의 [재발송] 버튼은 마지막 통지를 다시 쏩니다.');
+    return;
+  }
+  receiveWebhook(lastWebhook, true);
+}
+
+function simReserveCancel(){
+  tick();
+  log('in', '→ BFF: 다음 결제 예약 취소 (정기 결제 시나리오)');
+  log('ok', '  포트원: 다음 회차 예약 중지 — "해지해도 이번 달 말까지 이용 가능"');
+  log('skip', '  돈의 이동 없음 → 회계 사건 아님 → payment 테이블: 변경 없음');
+  log('dim', '  ── 원장은 돈의 사건만 기록한다. 예약 상태는 포트원의 몫. ──');
+}
+
+function simReset(){
+  payments = []; snapshots = []; seqPay = 0; seqSnap = 0; seqTx = 0;
+  clockMin = 0; lastWebhook = null;
+  for(const k in txColors) delete txColors[k];
+  term.innerHTML = '<div class="hd">POST /api/portone/webhook — BFF API (서버 로그)</div>' +
+                   '<div class="dim">사건을 기다리는 중… [결제하기]를 눌러 보세요.</div>';
+  render();
+}
+
+function render(){
+  const pb = document.querySelector('#payTbl tbody');
+  const sb = document.querySelector('#snapTbl tbody');
+  if(!payments.length){
+    pb.innerHTML = '<tr><td colspan="6" class="empty">아직 행이 없습니다 — 이 표에는 UPDATE도 DELETE도 없습니다.</td></tr>';
+    sb.innerHTML = '<tr><td colspan="3" class="empty">스냅샷 없음 — 상품이 나중에 바뀌어도, 영수증은 바뀌면 안 된다.</td></tr>';
+    document.getElementById('sumOut').textContent = '0원';
+    return;
+  }
+  pb.innerHTML = payments.map(p => {
+    const cls = p.amount > 0 ? 'plus' : 'minus';
+    const sign = p.amount > 0 ? '+' : '−';
+    const tb = p.type === 'PAYMENT' ? 'pay' : 'cancel';
+    return `<tr>
+      <td>${p.id}</td>
+      <td><span class="txchip ${txColors[p.tx]}">${p.tx}</span></td>
+      <td><span class="typebadge ${tb}">${p.type}</span></td>
+      <td class="num ${cls}">${sign}${Math.abs(p.amount).toLocaleString()}</td>
+      <td>${p.at}</td>
+      <td>${p.snap}</td>
+    </tr>`;
+  }).join('');
+  sb.innerHTML = snapshots.map(s =>
+    `<tr><td>${s.id}</td><td>${s.at}</td><td class="jsonc">${s.json}</td></tr>`).join('');
+  const sum = payments.reduce((a, p) => a + p.amount, 0);
+  document.getElementById('sumOut').textContent = sum.toLocaleString() + '원';
+}
+</script>
+</body>
+</html>

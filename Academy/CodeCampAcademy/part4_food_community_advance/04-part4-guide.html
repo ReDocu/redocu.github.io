@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Part 4 학습문서 — 맛집커뮤니티 어드밴스 · 다 만든 제품에 결제를 얹기</title>
+<style>
+  :root {
+    --ink: #1f2430;
+    --muted: #5b6472;
+    --line: #e6e9ef;
+    --bg: #f5f7fa;
+    --card: #ffffff;
+    --amber: #A97614;
+    --amber-soft: #FBF3E3;
+    --moss: #4F7A3D;
+    --moss-soft: #F3F7EE;
+    --mint: #a7f0cd;
+    --sub-card: #f7f8fa;
+    --accent: var(--amber);
+    --accent-soft: var(--amber-soft);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Pretendard", "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    line-height: 1.6;
+    padding: 0 24px 90px;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; }
+  a { color: inherit; }
+
+  /* ── 상단 진행바 (sticky) ───────────────── */
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(245, 247, 250, .92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+    margin: 0 -24px 44px;
+    padding: 12px 24px;
+  }
+  .topbar-in {
+    max-width: 1040px; margin: 0 auto;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .topbar .label { font-size: 14px; font-weight: 800; white-space: nowrap; }
+  .bar { flex: 1; min-width: 160px; height: 8px; border-radius: 999px; background: #e3e8f0; overflow: hidden; }
+  .bar > i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 999px; transition: width .25s; }
+  .topbar .count { font-size: 14px; font-weight: 800; color: var(--accent); white-space: nowrap; }
+  .reset-btn {
+    border: 1px solid var(--line); background: #fff; color: var(--muted);
+    border-radius: 999px; padding: 5px 14px; font-size: 13px; font-weight: 700;
+    font-family: inherit; cursor: pointer;
+  }
+  .reset-btn:hover { background: var(--sub-card); color: var(--ink); }
+
+  /* ── 페이지 헤더 ─────────────────────────── */
+  .page-head { margin-bottom: 36px; }
+  .page-head .eyebrow { font-size: 14px; font-weight: 700; color: var(--muted); letter-spacing: .02em; }
+  .page-head h1 { font-size: 38px; font-weight: 800; margin: 6px 0 12px; line-height: 1.28; }
+  .page-head p { color: var(--muted); font-size: 16px; max-width: 830px; }
+  .page-head p + p { margin-top: 6px; }
+  .page-head b { color: var(--ink); }
+  .tags { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 20px; }
+  .tags span {
+    background: var(--accent-soft); color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 25%, #fff);
+    border-radius: 999px; padding: 6px 15px; font-size: 13.5px; font-weight: 700;
+  }
+  .btns { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; text-decoration: none; font-weight: 800; font-size: 15px;
+    padding: 12px 26px; border-radius: 14px; color: var(--ink); transition: filter .15s;
+  }
+  .btn:hover { filter: brightness(.96); }
+  .btn.primary { background: var(--mint); }
+  .btn.ghost { background: #fff; border: 1px solid var(--line); }
+
+  /* ── 카드 공통 ───────────────────────────── */
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 22px;
+    padding: 36px 40px 40px; margin-bottom: 28px;
+    position: relative; overflow: hidden;
+    box-shadow: 0 2px 10px rgba(31, 36, 48, .04);
+  }
+  .card::before {
+    content: ""; position: absolute; top: 0; left: 24px; right: 24px; height: 5px;
+    border-radius: 0 0 6px 6px; background: var(--accent);
+  }
+  .sec-title {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 18px; font-weight: 800; margin-bottom: 18px;
+  }
+  .sec-title::before { content: ""; width: 5px; height: 18px; border-radius: 3px; background: var(--accent); }
+
+  /* ── 한마디 카드 ─────────────────────────── */
+  .oneline h2 { font-size: 26px; font-weight: 800; margin-bottom: 12px; }
+  .oneline > p { color: var(--muted); font-size: 16px; }
+  .week-split { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 22px; }
+  .week-box {
+    background: var(--sub-card); border: 1px solid var(--line);
+    border-radius: 16px; padding: 20px 22px;
+  }
+  .week-box .wk {
+    display: inline-block; background: #fff; border: 1px solid var(--line);
+    border-radius: 999px; padding: 4px 14px; font-size: 13px; font-weight: 800;
+    color: var(--accent); margin-bottom: 10px;
+  }
+  .week-box p { font-size: 14.5px; color: var(--muted); }
+  .week-box b { color: var(--ink); }
+  .quote {
+    margin-top: 22px; background: var(--accent-soft);
+    border-left: 5px solid var(--accent); border-radius: 0 12px 12px 0;
+    padding: 16px 20px; font-size: 16px; font-weight: 700;
+  }
+  .quote small { display: block; font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+
+  /* ── 로드맵 표 ───────────────────────────── */
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 11px 9px; text-align: left; vertical-align: top; }
+  th { background: var(--sub-card); font-weight: 800; font-size: 13.5px; white-space: nowrap; }
+  td.day, th.day { text-align: center; width: 52px; font-weight: 800; }
+  td.stage {
+    white-space: nowrap; font-size: 13px; font-weight: 700;
+    color: var(--accent);
+  }
+  td.topic { font-weight: 700; }
+  td.key { color: var(--muted); }
+  td a { color: var(--accent); font-weight: 700; text-decoration: none; white-space: nowrap; }
+  td a:hover { text-decoration: underline; }
+  .table-note { margin-top: 16px; font-size: 14.5px; color: var(--muted); }
+  .table-note + .table-note { margin-top: 6px; }
+  .table-note a { color: var(--accent); font-weight: 700; text-decoration: none; }
+  .table-note a:hover { text-decoration: underline; }
+
+  /* ── Day 카드 ────────────────────────────── */
+  .day-head { display: flex; gap: 18px; align-items: flex-start; margin-bottom: 28px; }
+  .badge-icon {
+    flex: 0 0 auto; width: 62px; height: 62px; border-radius: 16px;
+    background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 19px; font-weight: 800;
+  }
+  .stage-chip {
+    display: inline-block; background: var(--sub-card); border: 1px solid var(--line);
+    border-radius: 999px; padding: 3px 12px; font-size: 12.5px; font-weight: 800;
+    color: var(--muted); margin-bottom: 6px;
+  }
+  .day-title { font-size: 25px; font-weight: 800; line-height: 1.3; }
+  .day-sub { color: var(--muted); font-size: 14.5px; margin-top: 4px; }
+  .day-body { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; }
+
+  .learn ul { list-style: none; }
+  .learn li {
+    position: relative; padding-left: 18px; margin: 10px 0;
+    color: var(--muted); font-size: 15.5px;
+  }
+  .learn li::before {
+    content: ""; position: absolute; left: 0; top: 10px;
+    width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+  }
+  .learn b { color: var(--ink); }
+  .learn .star { color: var(--accent); font-weight: 800; }
+  code {
+    font-family: Consolas, "D2Coding", monospace; font-size: 13.5px;
+    background: var(--sub-card); padding: 1px 6px; border-radius: 5px; color: #e0483d;
+  }
+
+  .practice {
+    background: var(--sub-card); border: 1px solid var(--line);
+    border-radius: 16px; padding: 20px 22px; margin-bottom: 22px;
+  }
+  .practice .tag {
+    display: inline-block; background: #fff; border: 1px solid var(--line);
+    border-radius: 999px; padding: 4px 14px; font-size: 13px; font-weight: 700; margin-bottom: 10px;
+  }
+  .practice p { font-size: 15px; color: var(--muted); }
+  .practice b { color: var(--ink); }
+
+  /* ── 체크리스트 ──────────────────────────── */
+  .check-list { list-style: none; }
+  .check-list li { margin: 8px 0; }
+  .check-list label {
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 15px; cursor: pointer; user-select: none;
+    padding: 8px 12px; border-radius: 10px; border: 1px solid transparent;
+    transition: background .15s;
+  }
+  .check-list label:hover { background: var(--sub-card); }
+  .check-list input { display: none; }
+  .box {
+    flex: 0 0 auto; width: 20px; height: 20px; margin-top: 1px;
+    border: 2px solid #cbd3e0; border-radius: 6px; background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: #fff; font-weight: 800; transition: all .15s;
+  }
+  .check-list input:checked + .box { background: var(--accent); border-color: var(--accent); }
+  .check-list input:checked + .box::after { content: "✓"; }
+  .check-list input:checked ~ .txt { color: var(--muted); text-decoration: line-through; }
+
+  /* ── 졸업 카드 ───────────────────────────── */
+  .grad h2 { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+  .grad .lead { color: var(--muted); font-size: 15.5px; margin-bottom: 20px; }
+  .grad .check-list { columns: 2; column-gap: 28px; }
+  .grad .check-list li { break-inside: avoid; }
+  .grad .check-list label { font-size: 15px; font-weight: 600; }
+
+  /* ── 이전 단계 ───────────────────────────── */
+  .prev {
+    background: #fff; border: 1px solid var(--line); border-radius: 22px;
+    padding: 30px 36px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
+  }
+  .prev .arrow-big { font-size: 34px; color: var(--moss); }
+  .prev h3 { font-size: 21px; font-weight: 800; margin-bottom: 4px; }
+  .prev p { color: var(--muted); font-size: 15px; max-width: 620px; }
+  .prev .go { margin-left: auto; }
+  .prev .go a {
+    display: inline-block; text-decoration: none; font-weight: 800; font-size: 15px;
+    padding: 12px 24px; border-radius: 14px;
+    background: var(--moss-soft); color: var(--moss); white-space: nowrap;
+  }
+  .prev .go a:hover { filter: brightness(.97); }
+
+  footer { margin-top: 34px; text-align: center; color: var(--muted); font-size: 13.5px; }
+
+  @media (max-width: 900px) {
+    body { padding: 0 16px 70px; }
+    .topbar { margin: 0 -16px 32px; padding: 10px 16px; }
+    .card { padding: 26px 22px 30px; }
+    .page-head h1 { font-size: 28px; }
+    .week-split { grid-template-columns: 1fr; gap: 14px; }
+    .day-body { grid-template-columns: 1fr; gap: 28px; }
+    .day-title { font-size: 21px; }
+    .grad .check-list { columns: 1; }
+    td.stage, td.topic, td.key { white-space: normal; }
+    .prev .go { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ 진행률 바 ═══════════ -->
+<div class="topbar">
+  <div class="topbar-in">
+    <span class="label">학습 진행률</span>
+    <span class="bar"><i id="bar-fill"></i></span>
+    <span class="count" id="bar-count">0 / 0</span>
+    <button class="reset-btn" id="btn-reset">초기화</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ═══════════ 페이지 헤더 ═══════════ -->
+  <header class="page-head">
+    <div class="eyebrow">새싹 클로드코드 과정 · Part 4 · Day 30 – 34</div>
+    <h1>맛집커뮤니티 어드밴스 — 다 만든 제품에 결제를 얹기</h1>
+    <p><b>PRD 업데이트 → Pencil 증분 디자인·핸드오프 → 카피·CTA 모바일 배너 → 정산·결제 링크 → insert-only 결제 DB → 포트원 실연동 → 웹훅·취소</b>까지,
+       Part 3에서 출시한 맛집커뮤니티(<code>E-food-community-part-2</code>)에 <b>결제의 전 생애</b>를 얹습니다.</p>
+    <p>결과물은 이 폴더의 <b>04-food-payment.html</b>(결제 플로우 목업), <b>04-mobile-banner.html</b>(카피·CTA 배너 실습),
+       <b>04-payment-ledger.html</b>(insert-only 원장·웹훅 시뮬레이터)으로 확인할 수 있습니다.</p>
+    <div class="tags">
+      <span>PRD 업데이트</span><span>delta.txt</span><span>/strategy-red-team</span><span>Node ID 핸드오프</span>
+      <span>카피 · CTA</span><span>3D 아이콘 배너</span><span>정산</span><span>결제 링크</span><span>빌링키</span>
+      <span>insert-only 원장</span><span>결제스냅샷</span><span>트랜잭션키</span><span>PortoneMCP</span><span>결제 SSOT</span><span>웹훅</span>
+    </div>
+    <div class="btns">
+      <a class="btn primary" href="./04-food-payment.html">💳 결과물 페이지 열기</a>
+      <a class="btn ghost" href="./04-mobile-banner.html">📣 배너 실습</a>
+      <a class="btn ghost" href="./04-payment-ledger.html">📒 원장 시뮬레이터</a>
+      <a class="btn ghost" href="./README.md">원문 README</a>
+    </div>
+  </header>
+
+  <!-- ═══════════ Part 4의 한마디 ═══════════ -->
+  <section class="card oneline">
+    <h2>Part 4의 한마디 — "결제는 코드가 전부가 아니다"</h2>
+    <p>Part 3가 "내 서비스를, 시스템으로 만들어, 세상에 내놓는다"였다면 Part 4는 <b>"내놓은 제품에 돈이 흐르게 하고, 끝까지 책임진다"</b> 입니다.</p>
+    <div class="week-split">
+      <div class="week-box">
+        <span class="wk">Day 30–31</span>
+        <p>방치된 PRD를 <b>3단계 업데이트</b>로 살리고, 결제 기획을 <b>기존 배너에 새 역할을 주는 방식</b>으로
+           디자인·핸드오프한 뒤, <b>카피·CTA</b>로 팔 준비를 합니다.</p>
+      </div>
+      <div class="week-box">
+        <span class="wk">Day 32</span>
+        <p><b>정산</b>(결제 ≠ 입금)을 이해하고, 비즈니스 검증 전에는 <b>결제 링크로 먼저 팔고</b>,
+           본격 시스템(카드사 ← PG ← 결제솔루션)의 구조를 익힙니다.</p>
+      </div>
+      <div class="week-box">
+        <span class="wk">Day 33–34</span>
+        <p><b>insert-only 원장</b>(취소 = 음수 행, 과거 = 스냅샷, 정체성 = 트랜잭션키)을 설계해 Supabase에 만들고,
+           <b>포트원MCP</b>로 실연동한 뒤 <b>웹훅 → 내역 조회 → 취소 → 취소 웹훅</b>으로 사이클을 완성합니다.</p>
+      </div>
+    </div>
+    <div class="quote">
+      <small>반복되는 네 문장</small>
+      디자인은 결과를 남기고, PRD는 이유를 남긴다. 먼저 팔고, 팔리면 계약서를 쓴다.
+      결제 데이터는 고치지 않고 쌓는다. 그리고 웹훅은 localhost에 오지 않는다.
+    </div>
+  </section>
+
+  <!-- ═══════════ 학습 로드맵 ═══════════ -->
+  <section class="card">
+    <div class="sec-title">학습 로드맵</div>
+    <table>
+      <thead>
+        <tr><th class="day">Day</th><th>단계</th><th>주제</th><th>핵심 키워드</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="day">30</td><td class="stage">기획→디자인→DB</td>
+          <td class="topic"><a href="#day30">PRD 업데이트와 결제 기획</a></td>
+          <td class="key">업데이트 3단계 · delta.txt · Kill criterion · 배너에 새 역할 · Node ID 8개</td>
+        </tr>
+        <tr>
+          <td class="day">31</td><td class="stage">점검 · 마케팅</td>
+          <td class="topic"><a href="#day31">핸드오프 점검과 모바일 배너</a></td>
+          <td class="key">초보 디자인 징후 3 · 스와이핑·핀치줌 · 카피 · CTA · 배너 2종 · AI 느낌 피하기</td>
+        </tr>
+        <tr>
+          <td class="day">32</td><td class="stage">돈의 구조</td>
+          <td class="topic"><a href="#day32">결제와 정산</a></td>
+          <td class="key">정산 · 결제 링크(페이앱) vs 시스템 구축 · 3층 구조 · 빌링키 · 웹훅의 존재 이유</td>
+        </tr>
+        <tr>
+          <td class="day">33</td><td class="stage">DB · 연동</td>
+          <td class="topic"><a href="#day33">결제 DB와 포트원 실연동</a></td>
+          <td class="key">insert-only · 결제스냅샷 · 트랜잭션키 · PortoneMCP · rules/payment.md(SSOT)</td>
+        </tr>
+        <tr>
+          <td class="day">34</td><td class="stage">완성</td>
+          <td class="topic"><a href="#day34">웹훅 · 내역 조회 · 취소</a></td>
+          <td class="key">웹훅 = localhost X · 서명 검증 · 서비스 롤 키 · 취소의 분류학 · 취소 웹훅</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="table-note">파트 요약본: <a href="../part4.md">part4.md</a> · 원문: <a href="./README.md">README.md</a></p>
+  </section>
+
+  <!-- ── Day 30 ── -->
+  <section class="card" id="day30">
+    <div class="day-head">
+      <div class="badge-icon">D30</div>
+      <div>
+        <span class="stage-chip">기획 → 디자인 → DB</span>
+        <div class="day-title">PRD 업데이트 — 문서 → 디자인 → 코드까지 한 흐름</div>
+        <div class="day-sub">업데이트 3단계 · delta.txt · Kill criterion · 배너에 새 역할 · Node ID 8개</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li>"Premium 구독하면 쿠폰 2개 주기로 했었나?" — 결정도 번복도 기록이 없다. <b>디자인은 "왜"를 못 남긴다</b></li>
+          <li>PRD <b>최초 작성 7단계</b> vs <b>업데이트 3단계</b>(추가 기획 내용(수동) → <code>/strategy-red-team</code> → <code>/create-prd</code>)</li>
+          <li><code>delta.txt</code> — 델타(δ) = <b>변화량</b>, 날짜 폴더로 쌓으면 기획 이력</li>
+          <li>공격 문서의 6항목: 스틸맨 · 공격 · <b>Fails if</b> · 증거 · <b>Kill criterion</b> · <b>가장 싼 테스트</b></li>
+          <li>결제 기획 4페이지 — <b>기존 배너에 새 역할</b>(강연/모임 결제 상품), 결제 바텀시트, 마이 2탭</li>
+          <li>Pencil 4지시(신규 / <b>복사 후 수정</b> / 재사용만 / 없으면 다이렉트) · 디자인에서 <b>DB 필드 8개</b> 도출 · <b>Node ID 8개</b> 증분 핸드오프</li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p><code>delta.txt</code> 작성 → 전략 가정 공격 → PRD 업데이트(Change Log 확인) → 결제 4화면 디자인 → <b>Node ID 핸드오프</b>.</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d30-1"><span class="box"></span><span class="txt">업데이트에서 <b>빠진 4단계</b>와 그 이유(이미 했다)를 말할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d30-2"><span class="box"></span><span class="txt"><b>Kill criterion 없는 기획서</b>가 무엇을 못 하는지 설명할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d30-3"><span class="box"></span><span class="txt">핸드오프에 이름 대신 <b>Node ID</b>를 쓰는 이유를 말할 수 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Day 31 ── -->
+  <section class="card" id="day31">
+    <div class="day-head">
+      <div class="badge-icon">D31</div>
+      <div>
+        <span class="stage-chip">점검 · 마케팅</span>
+        <div class="day-title">핸드오프 점검과 모바일 배너</div>
+        <div class="day-sub">초보 디자인 징후 3 · 스와이핑·핀치줌 · 카피 · CTA · 배너 2종</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li><b>핸드오프는 끝이 아니라 시작</b> — 초보 디자인 징후: ① 타이포그래피 ② 레이아웃·간격 ③ <b>사진·컨텐츠</b>(해법: unsplash)</li>
+          <li>정적 디자인에 없는 <b>동작은 말로 지시</b>한다 — 스와이핑, 핀치줌 인/아웃(양방향)</li>
+          <li>레퍼런스는 구조로 환원 — <b>파란 상자 = 고정(헤더·탭바) / 빨간 상자 = 스크롤</b> · <b>"카드 디자인 X"</b></li>
+          <li><b>카피</b>(마음을 움직인다 — 묻는다) vs <b>CTA</b>(손가락을 움직인다 — 시킨다) — 마케터가 넘기는 건 딱 이 둘</li>
+          <li>배너 2종 — <b>실물 O → 사진 / 실물 X → 3D 아이콘</b> · AI 느낌은 "실존하는 것을 그리게 하지 않는 것"으로 피한다</li>
+          <li>프롬프트 5요소(사이즈 <code>360*180</code> · 카피 · CTA · 폰트 · 구현) — "절반은 밖으로 잘리게", <b>"과하게 넓은 여백"</b></li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p>투명 배경 소재 + 빈 배경 준비 → 두 모델에 같은 프롬프트 → <b>모바일/데스크톱 배너 각각 제작</b>.</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d31-1"><span class="box"></span><span class="txt">카피와 CTA를 예시 문장과 함께 구분할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d31-2"><span class="box"></span><span class="txt">"배경이미지 + 코딩글자"와 "이미지에 글자 포함"의 트레이드오프를 다섯 기준으로 비교할 수 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Day 32 ── -->
+  <section class="card" id="day32">
+    <div class="day-head">
+      <div class="badge-icon">D32</div>
+      <div>
+        <span class="stage-chip">돈의 구조</span>
+        <div class="day-title">결제와 정산 — 먼저 팔고, 그다음 시스템</div>
+        <div class="day-sub">정산 · 결제 링크 vs 시스템 구축 · 3층 구조 · 빌링키 · 웹훅</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li><b>정산</b> = 결제한 돈에서 수수료를 차감해 최종 받을 돈을 확정하는 일 — 돈은 결제사 서버에 쌓였다가 <b>주기</b>로 온다</li>
+          <li>"클로드가 못해주나?" — 코드 밖의 넷: <b>사업자 등록 · 통신판매업 신고 · PG 가입 · 카드사 심사</b></li>
+          <li><b>결제 링크</b>(10분내, 아이디어 검증, "먼저 팔고 팔리면 계약서") vs <b>결제 시스템 구축</b>(본격 판매)</li>
+          <li>3층 구조: <b>카드사 ← PG사 ← 결제솔루션(포트원) ← 내 서비스</b> · 연동 4단계와 <code>paymentId</code>(중복 결제 방지)</li>
+          <li><b>웹훅</b> — 브라우저가 꺼져도 결제 기록을 지키는 서버 대 서버 통지</li>
+          <li>정기 결제 — <b>빌링키</b>(카드번호는 저장하지 않는다) · 다음결제예약일 = 만료일 + 30일(<b>UTC</b>) · <b>빌링키는 정기 구독 전용</b></li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p>페이앱 결제 링크 생성 → 원페이지 판매 사이트(원샷 개발) → <b>1,000원 실결제</b> → 정산 예정 금액(956원) 확인.</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d32-1"><span class="box"></span><span class="txt">"오늘 판 돈은 오늘 못 쓴다"를 정산 주기로 설명할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d32-2"><span class="box"></span><span class="txt">검증용 사이트에 디자인 시스템을 강요하지 않는 이유를 말할 수 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Day 33 ── -->
+  <section class="card" id="day33">
+    <div class="day-head">
+      <div class="badge-icon">D33</div>
+      <div>
+        <span class="stage-chip">DB · 연동</span>
+        <div class="day-title">고치지 않는 장부 — 결제 DB와 포트원 실연동</div>
+        <div class="day-sub">insert-only · 결제스냅샷 · 트랜잭션키 · PortoneMCP · 결제 SSOT</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li>이미지 <b>4컬럼</b>(큰/작은 × 배너/상세) · <b><code>공개상태</code></b>(지우는 대신 내린다) · 유저는 Supabase <b>참조만</b></li>
+          <li><b><code>insert-only / append-only</code></b> — 취소는 수정이 아니라 <b><code>-30000</code> 음수 행</b>, 합산하면 0 (회계 장부 방식)</li>
+          <li><b>결제스냅샷</b> — 결제 당시의 상품 정보를 JSON으로 보존 · <b>트랜잭션키</b> — 결제·취소는 같은 키, 재결제는 새 키</li>
+          <li>default value의 자리(지금은 Supabase / 이전 계획이면 코드) · <b>이미지 주소 = 앞단(환경변수) + 뒷단(DB 컬럼)</b></li>
+          <li>PortoneMCP 설치(공식 가이드 URL) · <code>orderName</code>·<code>totalAmount</code>는 <b>DB에서 조회</b>(1원 결제 조작 방지) · <code>customData: {productId, userId}</code></li>
+          <li>환경변수 2분법(<code>NEXT_PUBLIC_</code> vs 서버 전용) · <b><code>rules/payment.md</code>(결제 SSOT)</b> — 규칙이 바뀌면 문서를 먼저 고친다</li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p>시트 정규화 → <code>product</code>·<code>payment</code>·<code>payment_snapshot</code> 생성 → PortoneMCP 설치 → <b>테스트 모드 결제</b> → 콘솔 확인.</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d33-1"><span class="box"></span><span class="txt">스냅샷이 없으면 석 달 뒤 환불 분쟁에서 무슨 일이 생기는지 말할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d33-2"><span class="box"></span><span class="txt">금액을 브라우저에서 받으면 안 되는 이유를 설명할 수 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Day 34 ── -->
+  <section class="card" id="day34">
+    <div class="day-head">
+      <div class="badge-icon">D34</div>
+      <div>
+        <span class="stage-chip">완성</span>
+        <div class="day-title">끝까지 책임진다 — 웹훅과 취소</div>
+        <div class="day-sub">웹훅 = localhost X · 서명 검증 · 서비스 롤 키 · 취소의 분류학</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li><b>웹훅은 localhost에 오지 않는다</b> — 화면·결제는 로컬 테스트, 웹훅 검증은 배포(Vercel) 후에</li>
+          <li>웹훅 프롬프트 3원칙 — insert-only + type · <b>transaction_key = 포트원 payment_id</b> · <b>중복결제 검증</b>(웹훅은 재발송된다)</li>
+          <li>두 개의 비밀키 — <code>PORTONE_WEBHOOK_SECRET</code>(서명 검증) · <code>SUPABASE_SERVICE_ROLE_KEY</code>(<b>RLS 우회, 노출 금지</b>)</li>
+          <li>취소의 분류학 — 일반 / 정기(<b>전체 취소</b> vs <b>예약만 취소</b> — 돈 이동 없으면 <b>원장에 행 없음</b>)</li>
+          <li>"테이블에 2건이 들어있는 게 정상" — insert-only의 실물 · 취소 웹훅 프롬프트는 <b>SSOT 세 줄</b>이면 된다</li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p>웹훅 API 구현 → 콘솔에 웹훅 URL 등록 → Vercel 재배포 → <b>결제·취소 후 원장(<code>PAYMENT +30000</code> / <code>CANCEL −30000</code>) 확인</b>.</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d34-1"><span class="box"></span><span class="txt">웹훅 개발 순서도의 마지막이 왜 항상 "배포"인지 설명할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d34-2"><span class="box"></span><span class="txt">취소 웹훅 프롬프트가 세 줄로 줄어든 이유(SSOT)를 말할 수 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ 졸업 체크리스트 ═══════════ -->
+  <section class="card grad">
+    <h2>🎓 Part 4 졸업 체크리스트</h2>
+    <p class="lead">열두 가지가 모두 켜지면 결제는 "붙인 기능"이 아니라 "끝까지 책임지는 시스템"이 됩니다.</p>
+    <ul class="check-list">
+      <li><label><input type="checkbox" data-k="g-1"><span class="box"></span><span class="txt">PRD에 <b>Change Log</b>가 있고, 이번 결제 기획이 <code>delta.txt</code> → 공격 → 반영 순서로 들어갔다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-2"><span class="box"></span><span class="txt">새 기획을 <b>기존 UI에 새 역할을 주는 방식</b>으로 먼저 검토했다 (배너 → 결제 상품)</span></label></li>
+      <li><label><input type="checkbox" data-k="g-3"><span class="box"></span><span class="txt">기존 페이지는 <b>복사 후 수정</b>했고, 디자인 시스템 밖의 새 컴포넌트를 만들지 않았다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-4"><span class="box"></span><span class="txt">스와이핑·핀치줌 등 <b>정적 디자인에 없는 동작</b>을 지시문으로 채웠다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-5"><span class="box"></span><span class="txt">배너에 <b>카피와 CTA</b>가 한 쌍으로 있고, 실물 없는 상품이라 3D 아이콘을 썼다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-6"><span class="box"></span><span class="txt"><b>정산 주기</b>를 알고 있고, 검증 단계면 결제 링크부터 검토했다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-7"><span class="box"></span><span class="txt">결제 테이블이 <b>insert-only</b>다 — 취소가 음수 행이고, 수정·삭제 쿼리가 없다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-8"><span class="box"></span><span class="txt">결제 시점의 상품 정보가 <b>스냅샷</b>으로 남고, 결제·취소가 <b>같은 트랜잭션키</b>로 묶인다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-9"><span class="box"></span><span class="txt"><code>orderName</code>·<code>totalAmount</code>가 <b>서버(DB)에서</b> 온다 — 브라우저 금액을 믿지 않는다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-10"><span class="box"></span><span class="txt">결제 규칙이 <b><code>rules/payment.md</code>(SSOT)</b> 한 곳에 있고, 규칙이 바뀌면 문서를 먼저 고친다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-11"><span class="box"></span><span class="txt">웹훅이 <b>서명 검증</b>을 하고, <b>중복 통지</b>를 걸러내며, 환경변수가 <b>Vercel에도</b> 등록되어 있다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-12"><span class="box"></span><span class="txt">결제 → 웹훅 → 내역 조회 → 취소 → 취소 웹훅 사이클을 <b>프로덕션 도메인</b>에서 확인했다</span></label></li>
+    </ul>
+  </section>
+
+  <!-- ═══════════ 이전 단계 ═══════════ -->
+  <section class="prev">
+    <div class="arrow-big">←</div>
+    <div>
+      <h3>이전 단계 · Part 3 — 맛집커뮤니티</h3>
+      <p>내 서비스를, 시스템으로 만들어, 세상에 내놓기. PRD → 디자인 시스템 → 스토리북 SSOT → DB·BFF → 네이버 API → 배포·PWA.</p>
+    </div>
+    <div class="go"><a href="../part3_FoodCommunity/03-part3-guide.html">Part 3 학습문서</a></div>
+  </section>
+
+  <footer>새싹 클로드코드 과정 · Part 4 학습문서 — 원문: <code>part4_food_community_advance/README.md</code></footer>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var KEY = 'part4.progress';
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.check-list input[type=checkbox]'));
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
+  }
+  function save(state) {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* 저장 불가 환경은 무시 */ }
+  }
+  function render() {
+    var done = boxes.filter(function (b) { return b.checked; }).length;
+    var total = boxes.length;
+    document.getElementById('bar-fill').style.width = (total ? done / total * 100 : 0) + '%';
+    document.getElementById('bar-count').textContent = done + ' / ' + total;
+  }
+
+  var state = load();
+  boxes.forEach(function (b) {
+    b.checked = !!state[b.dataset.k];
+    b.addEventListener('change', function () {
+      state[b.dataset.k] = b.checked;
+      save(state);
+      render();
+    });
+  });
+
+  document.getElementById('btn-reset').addEventListener('click', function () {
+    if (!confirm('체크한 내용을 모두 지울까요?')) return;
+    state = {};
+    save(state);
+    boxes.forEach(function (b) { b.checked = false; });
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

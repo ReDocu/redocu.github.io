@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Part 3 학습문서 — 맛집커뮤니티 · 내 서비스를, 시스템으로 만들어, 세상에 내놓기</title>
+<style>
+  :root {
+    --ink: #1f2430;
+    --muted: #5b6472;
+    --line: #e6e9ef;
+    --bg: #f5f7fa;
+    --card: #ffffff;
+    --moss: #4F7A3D;
+    --moss-soft: #F3F7EE;
+    --amber: #A97614;
+    --amber-soft: #FBF3E3;
+    --mint: #a7f0cd;
+    --sub-card: #f7f8fa;
+    --accent: var(--moss);
+    --accent-soft: var(--moss-soft);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Pretendard", "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    line-height: 1.6;
+    padding: 0 24px 90px;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; }
+  a { color: inherit; }
+
+  /* ── 상단 진행바 (sticky) ───────────────── */
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(245, 247, 250, .92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+    margin: 0 -24px 44px;
+    padding: 12px 24px;
+  }
+  .topbar-in {
+    max-width: 1040px; margin: 0 auto;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .topbar .label { font-size: 14px; font-weight: 800; white-space: nowrap; }
+  .bar { flex: 1; min-width: 160px; height: 8px; border-radius: 999px; background: #e3e8f0; overflow: hidden; }
+  .bar > i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 999px; transition: width .25s; }
+  .topbar .count { font-size: 14px; font-weight: 800; color: var(--accent); white-space: nowrap; }
+  .reset-btn {
+    border: 1px solid var(--line); background: #fff; color: var(--muted);
+    border-radius: 999px; padding: 5px 14px; font-size: 13px; font-weight: 700;
+    font-family: inherit; cursor: pointer;
+  }
+  .reset-btn:hover { background: var(--sub-card); color: var(--ink); }
+
+  /* ── 페이지 헤더 ─────────────────────────── */
+  .page-head { margin-bottom: 36px; }
+  .page-head .eyebrow { font-size: 14px; font-weight: 700; color: var(--muted); letter-spacing: .02em; }
+  .page-head h1 { font-size: 38px; font-weight: 800; margin: 6px 0 12px; line-height: 1.28; }
+  .page-head p { color: var(--muted); font-size: 16px; max-width: 830px; }
+  .page-head p + p { margin-top: 6px; }
+  .page-head b { color: var(--ink); }
+  .tags { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 20px; }
+  .tags span {
+    background: var(--accent-soft); color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 25%, #fff);
+    border-radius: 999px; padding: 6px 15px; font-size: 13.5px; font-weight: 700;
+  }
+  .btns { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; text-decoration: none; font-weight: 800; font-size: 15px;
+    padding: 12px 26px; border-radius: 14px; color: var(--ink); transition: filter .15s;
+  }
+  .btn:hover { filter: brightness(.96); }
+  .btn.primary { background: var(--mint); }
+  .btn.ghost { background: #fff; border: 1px solid var(--line); }
+
+  /* ── 카드 공통 ───────────────────────────── */
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 22px;
+    padding: 36px 40px 40px; margin-bottom: 28px;
+    position: relative; overflow: hidden;
+    box-shadow: 0 2px 10px rgba(31, 36, 48, .04);
+  }
+  .card::before {
+    content: ""; position: absolute; top: 0; left: 24px; right: 24px; height: 5px;
+    border-radius: 0 0 6px 6px; background: var(--accent);
+  }
+  .sec-title {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 18px; font-weight: 800; margin-bottom: 18px;
+  }
+  .sec-title::before { content: ""; width: 5px; height: 18px; border-radius: 3px; background: var(--accent); }
+
+  /* ── 한마디 카드 ─────────────────────────── */
+  .oneline h2 { font-size: 26px; font-weight: 800; margin-bottom: 12px; }
+  .oneline > p { color: var(--muted); font-size: 16px; }
+  .week-split { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 22px; }
+  .week-box {
+    background: var(--sub-card); border: 1px solid var(--line);
+    border-radius: 16px; padding: 20px 22px;
+  }
+  .week-box .wk {
+    display: inline-block; background: #fff; border: 1px solid var(--line);
+    border-radius: 999px; padding: 4px 14px; font-size: 13px; font-weight: 800;
+    color: var(--accent); margin-bottom: 10px;
+  }
+  .week-box p { font-size: 14.5px; color: var(--muted); }
+  .week-box b { color: var(--ink); }
+  .quote {
+    margin-top: 22px; background: var(--accent-soft);
+    border-left: 5px solid var(--accent); border-radius: 0 12px 12px 0;
+    padding: 16px 20px; font-size: 16px; font-weight: 700;
+  }
+  .quote small { display: block; font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+
+  /* ── 로드맵 표 ───────────────────────────── */
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 11px 9px; text-align: left; vertical-align: top; }
+  th { background: var(--sub-card); font-weight: 800; font-size: 13.5px; white-space: nowrap; }
+  td.day, th.day { text-align: center; width: 52px; font-weight: 800; }
+  td.stage {
+    white-space: nowrap; font-size: 13px; font-weight: 700;
+    color: var(--accent);
+  }
+  td.topic { font-weight: 700; }
+  td.key { color: var(--muted); }
+  td a { color: var(--accent); font-weight: 700; text-decoration: none; white-space: nowrap; }
+  td a:hover { text-decoration: underline; }
+  tr.wk-sep td { border-top: 2px solid var(--accent-soft); }
+  .table-note { margin-top: 16px; font-size: 14.5px; color: var(--muted); }
+  .table-note + .table-note { margin-top: 6px; }
+  .table-note a { color: var(--accent); font-weight: 700; text-decoration: none; }
+  .table-note a:hover { text-decoration: underline; }
+
+  /* ── 주차 구분선 ─────────────────────────── */
+  .week-head { margin: 44px 0 22px; }
+  .week-head .wk-title {
+    display: inline-flex; align-items: baseline; gap: 12px;
+    font-size: 22px; font-weight: 800;
+  }
+  .week-head .wk-range {
+    background: var(--accent-soft); color: var(--accent);
+    border-radius: 999px; padding: 4px 14px; font-size: 13.5px; font-weight: 800;
+  }
+  .week-head p { color: var(--muted); font-size: 15px; margin-top: 6px; }
+
+  /* ── Day 카드 ────────────────────────────── */
+  .day-head { display: flex; gap: 18px; align-items: flex-start; margin-bottom: 28px; }
+  .badge-icon {
+    flex: 0 0 auto; width: 62px; height: 62px; border-radius: 16px;
+    background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 19px; font-weight: 800;
+  }
+  .stage-chip {
+    display: inline-block; background: var(--sub-card); border: 1px solid var(--line);
+    border-radius: 999px; padding: 3px 12px; font-size: 12.5px; font-weight: 800;
+    color: var(--muted); margin-bottom: 6px;
+  }
+  .day-title { font-size: 25px; font-weight: 800; line-height: 1.3; }
+  .day-sub { color: var(--muted); font-size: 14.5px; margin-top: 4px; }
+  .day-body { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; }
+
+  .learn ul { list-style: none; }
+  .learn li {
+    position: relative; padding-left: 18px; margin: 10px 0;
+    color: var(--muted); font-size: 15.5px;
+  }
+  .learn li::before {
+    content: ""; position: absolute; left: 0; top: 10px;
+    width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+  }
+  .learn b { color: var(--ink); }
+  .learn .star { color: var(--accent); font-weight: 800; }
+  code {
+    font-family: Consolas, "D2Coding", monospace; font-size: 13.5px;
+    background: var(--sub-card); padding: 1px 6px; border-radius: 5px; color: #e0483d;
+  }
+
+  .practice {
+    background: var(--sub-card); border: 1px solid var(--line);
+    border-radius: 16px; padding: 20px 22px; margin-bottom: 22px;
+  }
+  .practice .tag {
+    display: inline-block; background: #fff; border: 1px solid var(--line);
+    border-radius: 999px; padding: 4px 14px; font-size: 13px; font-weight: 700; margin-bottom: 10px;
+  }
+  .practice p { font-size: 15px; color: var(--muted); }
+  .practice b { color: var(--ink); }
+
+  /* ── 체크리스트 ──────────────────────────── */
+  .check-list { list-style: none; }
+  .check-list li { margin: 8px 0; }
+  .check-list label {
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 15px; cursor: pointer; user-select: none;
+    padding: 8px 12px; border-radius: 10px; border: 1px solid transparent;
+    transition: background .15s;
+  }
+  .check-list label:hover { background: var(--sub-card); }
+  .check-list input { display: none; }
+  .box {
+    flex: 0 0 auto; width: 20px; height: 20px; margin-top: 1px;
+    border: 2px solid #cbd3e0; border-radius: 6px; background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: #fff; font-weight: 800; transition: all .15s;
+  }
+  .check-list input:checked + .box { background: var(--accent); border-color: var(--accent); }
+  .check-list input:checked + .box::after { content: "✓"; }
+  .check-list input:checked ~ .txt { color: var(--muted); text-decoration: line-through; }
+
+  /* ── 졸업 카드 ───────────────────────────── */
+  .grad h2 { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+  .grad .lead { color: var(--muted); font-size: 15.5px; margin-bottom: 20px; }
+  .grad .check-list { columns: 2; column-gap: 28px; }
+  .grad .check-list li { break-inside: avoid; }
+  .grad .check-list label { font-size: 15px; font-weight: 600; }
+
+  /* ── 이전 · 다음 단계 ────────────────────── */
+  .prev, .next {
+    background: #fff; border: 1px solid var(--line); border-radius: 22px;
+    padding: 30px 36px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+  .prev .arrow-big { font-size: 34px; color: #7c6cf0; }
+  .next .arrow-big { font-size: 34px; color: var(--amber); }
+  .prev h3, .next h3 { font-size: 21px; font-weight: 800; margin-bottom: 4px; }
+  .prev p, .next p { color: var(--muted); font-size: 15px; max-width: 620px; }
+  .prev .go, .next .go { margin-left: auto; }
+  .prev .go a, .next .go a {
+    display: inline-block; text-decoration: none; font-weight: 800; font-size: 15px;
+    padding: 12px 24px; border-radius: 14px; white-space: nowrap;
+  }
+  .prev .go a { background: #efedfd; color: #7c6cf0; }
+  .next .go a { background: var(--amber-soft); color: var(--amber); }
+  .prev .go a:hover, .next .go a:hover { filter: brightness(.97); }
+
+  footer { margin-top: 34px; text-align: center; color: var(--muted); font-size: 13.5px; }
+
+  @media (max-width: 900px) {
+    body { padding: 0 16px 70px; }
+    .topbar { margin: 0 -16px 32px; padding: 10px 16px; }
+    .card { padding: 26px 22px 30px; }
+    .page-head h1 { font-size: 28px; }
+    .week-split { grid-template-columns: 1fr; gap: 14px; }
+    .day-body { grid-template-columns: 1fr; gap: 28px; }
+    .day-title { font-size: 21px; }
+    .grad .check-list { columns: 1; }
+    td.stage, td.topic, td.key { white-space: normal; }
+    .prev .go, .next .go { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ 진행률 바 ═══════════ -->
+<div class="topbar">
+  <div class="topbar-in">
+    <span class="label">학습 진행률</span>
+    <span class="bar"><i id="bar-fill"></i></span>
+    <span class="count" id="bar-count">0 / 0</span>
+    <button class="reset-btn" id="btn-reset">초기화</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ═══════════ 페이지 헤더 ═══════════ -->
+  <header class="page-head">
+    <div class="eyebrow">새싹 클로드코드 과정 · Part 3 · Day 17 – 29</div>
+    <h1>맛집커뮤니티 — 내 서비스를, 시스템으로 만들어, 세상에 내놓기</h1>
+    <p><b>기획(PRD) → 디자인 시스템 → UI 컴포넌트 → 스토리북 핸드오프 → DB 설계 → BFF → 외부 API 연동 → 배포 · 도메인 · 상표권 · PWA</b> 까지,
+       남의 서비스를 따라 만드는 것이 아니라 <b>내 서비스 하나를 기획부터 출시까지 완주</b>합니다.</p>
+    <p>결과물은 이 폴더의 <b>03-food-community.html</b>(맛집커뮤니티 목업)과 <b>03-design-system.html</b>(디자인 시스템)으로 확인할 수 있습니다.</p>
+    <div class="tags">
+      <span>솔로프리너</span><span>비즈니스 모델</span><span>반응형 360</span><span>디자인 토큰</span>
+      <span>UI 컴포넌트 23종</span><span>스토리북 · SSOT</span><span>DB 정규화</span><span>BFF</span>
+      <span>소프트 삭제</span><span>네이버 검색/지도 API</span><span>배포 · 도메인</span><span>상표권 · 로고</span><span>PWA</span>
+    </div>
+    <div class="btns">
+      <a class="btn primary" href="./03-food-community.html">🍜 결과물 페이지 열기</a>
+      <a class="btn ghost" href="./03-design-system.html">🎨 디자인 시스템</a>
+      <a class="btn ghost" href="./README.md">원문 README</a>
+    </div>
+  </header>
+
+  <!-- ═══════════ Part 3의 한마디 ═══════════ -->
+  <section class="card oneline">
+    <h2>Part 3의 한마디 — "내 서비스를, 시스템으로"</h2>
+    <p>Part 1이 "혼자서 만들 수 있다", Part 2가 "팀처럼, 통제하며 만든다"였다면 Part 3는 <b>"내 서비스를, 시스템으로 만들어, 세상에 내놓는다"</b> 입니다.</p>
+    <div class="week-split">
+      <div class="week-box">
+        <span class="wk">Week 4 · Day 17–22</span>
+        <p>솔로프리너의 기획(PRD)에서 시작해 <b>디자인 시스템</b>(토큰 → 파운데이션 → 컴포넌트 23종)을 쌓고,
+           <b>스토리북을 SSOT 삼아 코드로 핸드오프</b>합니다.</p>
+      </div>
+      <div class="week-box">
+        <span class="wk">Week 5 · Day 23–25</span>
+        <p>화면 뒤에 <b>데이터가 앉을 자리</b>를 만듭니다.
+           정규화 · 썸네일 · <b>BFF</b> · 소프트 삭제.</p>
+      </div>
+      <div class="week-box">
+        <span class="wk">Week 6 · Day 26–29</span>
+        <p><b>바깥 API</b>(네이버 검색/지도)를 붙이고,
+           <b>배포 · 도메인 · 상표권 · PWA</b>로 출시합니다.</p>
+      </div>
+    </div>
+    <div class="quote">
+      <small>반복되는 세 문장</small>
+      구현이 아니라 수정이 문제다. 컴포넌트는 복사가 아니라 연결이다. 그리고 프론트엔드 코드에는 비밀이 존재할 수 없다.
+    </div>
+  </section>
+
+  <!-- ═══════════ 학습 로드맵 ═══════════ -->
+  <section class="card">
+    <div class="sec-title">학습 로드맵</div>
+    <table>
+      <thead>
+        <tr><th class="day">Day</th><th>단계</th><th>주제</th><th>핵심 키워드</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="day">17</td><td class="stage">기획</td>
+          <td class="topic"><a href="#day17">나 혼자 MVP 만들기</a></td>
+          <td class="key">솔로프리너 · 3축 · BM 4가지 · 수요 검증 · PRD</td>
+        </tr>
+        <tr>
+          <td class="day">18</td><td class="stage">디자인</td>
+          <td class="topic"><a href="#day18">MVP 디자인 프로세스</a></td>
+          <td class="key">툴 선택 · 적응형 vs 반응형 · 360×780 · Pencil 시안</td>
+        </tr>
+        <tr>
+          <td class="day">19</td><td class="stage">디자인</td>
+          <td class="topic"><a href="#day19">디자인 시스템 ① 컬러</a></td>
+          <td class="key">프리미티브→시맨틱 2층 토큰 · 명암비 4.5:1 · 프롬프트 5블록</td>
+        </tr>
+        <tr>
+          <td class="day">20</td><td class="stage">디자인</td>
+          <td class="topic"><a href="#day20">디자인 시스템 ② 타이포·아이콘</a></td>
+          <td class="key">타이포 10종 · 아이콘 144개 · 아이콘 24 / 터치 48</td>
+        </tr>
+        <tr>
+          <td class="day">21</td><td class="stage">디자인</td>
+          <td class="topic"><a href="#day21">UI 컴포넌트 본편</a></td>
+          <td class="key">5그룹 23종 · 타입×상태 매트릭스 · 스페이싱 · 리팩토링</td>
+        </tr>
+        <tr>
+          <td class="day">22</td><td class="stage">핸드오프</td>
+          <td class="topic"><a href="#day22">스토리북과 SSOT</a></td>
+          <td class="key">3000 vs 6006 · 핸드오프 2번 · 확률론 vs 결정론</td>
+        </tr>
+        <tr class="wk-sep">
+          <td class="day">23</td><td class="stage">DB</td>
+          <td class="topic"><a href="#day23">맛집 DB와 이미지 썸네일</a></td>
+          <td class="key">정규화 4단계 · place/place_image/profile · S/M/L</td>
+        </tr>
+        <tr>
+          <td class="day">24</td><td class="stage">아키텍처</td>
+          <td class="topic"><a href="#day24">BaaS 로직 노출과 BFF</a></td>
+          <td class="key">비즈니스 로직 · 프록시 vs BFF · Request URL 판정</td>
+        </tr>
+        <tr>
+          <td class="day">25</td><td class="stage">기능</td>
+          <td class="topic"><a href="#day25">BFF CRUD · 소프트 삭제 · 위치</a></td>
+          <td class="key">목록/상세 분리 · deleted_at · 지오코딩 3종</td>
+        </tr>
+        <tr class="wk-sep">
+          <td class="day">26</td><td class="stage">외부 API</td>
+          <td class="topic"><a href="#day26">네이버 검색 / 지도 API</a></td>
+          <td class="key">지도 6종 · JS-API vs REST-API · Node ID 핸드오프</td>
+        </tr>
+        <tr>
+          <td class="day">27</td><td class="stage">외부 API</td>
+          <td class="topic"><a href="#day27">지도·검색 연동</a></td>
+          <td class="key">name/lat/lng · Nullable vs Default · NEXT_PUBLIC_</td>
+        </tr>
+        <tr>
+          <td class="day">28</td><td class="stage">출시</td>
+          <td class="topic"><a href="#day28">배포 · 도메인 · 상표권 · PWA</a></td>
+          <td class="key">파이프라인 · 1인 2단계 · 308 · 권리 3종 · PWA 3종</td>
+        </tr>
+        <tr>
+          <td class="day">29</td><td class="stage">출시</td>
+          <td class="topic"><a href="#day29">로고와 함께 PWA 배포</a></td>
+          <td class="key">KIPRIS 2,458건 · 에셋 16종 · 브랜치 · 하이드레이션</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="table-note">파트 요약본: <a href="../part3.md">part3.md</a> · 원문: <a href="./README.md">README.md</a></p>
+  </section>
+
+  <!-- ═══════════ Week 4 ═══════════ -->
+  <div class="week-head">
+    <div class="wk-title">Week 4 — 디자인 시스템을 쌓아 핸드오프까지 <span class="wk-range">Day 17 – 22</span></div>
+    <p>솔로프리너의 기획(PRD) → 토큰 · 파운데이션 · 컴포넌트 23종 → 스토리북 SSOT 핸드오프.</p>
+  </div>
+
+  <!-- ── Day 17 ── -->
+  <section class="card" id="day17">
+    <div class="day-head">
+      <div class="badge-icon">D17</div>
+      <div>
+        <span class="stage-chip">기획</span>
+        <div class="day-title">나 혼자 MVP 만들기 — 솔로프리너와 PRD</div>
+        <div class="day-sub">솔로프리너 · 3축 · BM 4가지 · 수요 검증 · PRD</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li><b>솔로프리너</b>가 지금 가능해진 이유 — AI가 <b>규모의 장벽</b>(사람·기술·관계)을 한 사람이 넘을 높이로 낮췄다</li>
+          <li>전체 프로세스 <b>3축</b>: ① 구성원 및 역할 ② 제품 구성 요소 ③ 전자상거래 유형(B2C·B2B·<b>B2B2C</b>·B2G·C2C)</li>
+          <li><b>하이브리드 앱</b> — 웹 하나를 만들어 앱으로 씌운다 / 일반 구조도 vs 플랫폼 구조도(<b>정산</b>이 생긴다)</li>
+          <li><b>비즈니스 모델 4가지</b>(상품 판매·구독·광고·플랫폼 수수료)와 <b>BM 도식화</b></li>
+          <li>시장 유형 두 갈래 — 아이디어 O → <b>수요 검증</b> / 아이디어 X → <b>차별화</b></li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p>맛집커뮤니티 <b>PRD</b> 만들기 — 누가(구로 주변 차량 보유 가족/커플) · 무엇을(페이지 5개) · 왜(일상에서 벗어난 색다른 경험).</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d17-1"><span class="box"></span><span class="txt">"아이디어 좋네요"와 <b>"돈 내고서라도 쓸게요"</b>의 차이를 설명할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d17-2"><span class="box"></span><span class="txt">내 상황(왕초보·생활비·투자·아이디어 유무)에 따라 피해야 할 BM을 판단할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d17-3"><span class="box"></span><span class="txt">PRD를 누가·무엇을·왜 + 성공 지표(KR)까지 써낼 수 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Day 18 ── -->
+  <section class="card" id="day18">
+    <div class="day-head">
+      <div class="badge-icon">D18</div>
+      <div>
+        <span class="stage-chip">디자인</span>
+        <div class="day-title">MVP 디자인 프로세스 — 툴 선택과 반응형</div>
+        <div class="day-sub">툴 선택 · 적응형 vs 반응형 · 360×780 · Pencil 시안</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li>프로토타입 툴의 한계 = <b>단방향 핸드오프</b> — 추가 디자인이 원본으로 돌아오지 않는다</li>
+          <li>상황별 툴: <b>클로드 디자인</b>(프로토타입) · <b>Pencil</b>(1인 MVP) · <b>Figma</b>(팀 협업)</li>
+          <li><b>적응형 vs 반응형</b>, 하이브리드 앱은 반응형이 전제</li>
+          <li>반응형은 <b>작게 만들고 늘인다</b> — 기준은 <b>[인기 기기] ∩ [최소 사이즈] = 가로 360</b>(세로 가변)</li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p>레퍼런스 + PRD + <b>사이즈 가이드(360×780)</b> + 페이지 가이드(메인·상세·<b>등록 에러 상태</b>)로 시안 생성.</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d18-1"><span class="box"></span><span class="txt">점유율 1위(384)가 아니라 <b>360</b>을 기준으로 잡는 이유를 설명할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d18-2"><span class="box"></span><span class="txt">등록 페이지를 <b>에러 상태로</b> 그려야 하는 이유를 말할 수 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Day 19 ── -->
+  <section class="card" id="day19">
+    <div class="day-head">
+      <div class="badge-icon">D19</div>
+      <div>
+        <span class="stage-chip">디자인</span>
+        <div class="day-title">디자인 시스템 ① — 컬러와 디자인 토큰</div>
+        <div class="day-sub">프리미티브→시맨틱 2층 토큰 · 명암비 4.5:1 · 프롬프트 5블록</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li>"70페이지 다 만들었는데 브랜드 컬러를 바꿔달라" — 디자인 시스템은 <b>"예쁘게"가 아니라 "바꿀 수 있게"</b></li>
+          <li><b>프리미티브 → 시맨틱 2층 토큰</b>, 팔레트 50~950(11단계), <b>500이 기준</b></li>
+          <li>명암비 <b>일반 텍스트 4.5:1 / 큰 텍스트 3:1</b>(WCAG 1.4.3) — 눈이 아니라 <b>숫자로 검증</b></li>
+          <li>파운데이션 프롬프트 <b>5블록 · 3단 서식</b>(대상 / 명칭 / 주의사항)</li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p>프리미티브 → 시맨틱 → 팔레트 렌더 → <b>기존 시안 리팩토링</b>.</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d19-1"><span class="box"></span><span class="txt"><code>hex 직접 입력 금지</code> + <code>프리미티브 토큰 참조</code> 두 줄이 왜 절대 규칙인지 설명할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d19-2"><span class="box"></span><span class="txt">토큰을 만드는 것과 <b>적용하는 것(리팩토링)</b>이 별개임을 안다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Day 20 ── -->
+  <section class="card" id="day20">
+    <div class="day-head">
+      <div class="badge-icon">D20</div>
+      <div>
+        <span class="stage-chip">디자인</span>
+        <div class="day-title">디자인 시스템 ② — 타이포·아이콘, 그리고 첫 컴포넌트</div>
+        <div class="day-sub">타이포 10종 · 아이콘 144개 · 아이콘 24 / 터치 48</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li>컬러는 <b>값</b>으로 끝나지만 타이포·아이콘은 <b>컴포넌트</b>까지 가야 끝난다</li>
+          <li>프리미티브 3종(사이즈 9 · 두께 3 · 행간 2) → <b>구조 10종</b>(display/heading/body/label), 자간 <b>-2%(상대값)</b></li>
+          <li>루시드 아이콘 <b>36종 × 4사이즈 = 144개</b>, 레이아웃을 <b>문장으로</b> 지정(20행 / 넘치면 오른쪽 열)</li>
+          <li>첫 UI 컴포넌트 — 아이콘 버튼 <b>48×48</b> 안에 아이콘 <b>24</b> (여백 12px이 오터치 방지 영역)</li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p>타이포 10종 · 아이콘 144개 · 아이콘 버튼 3종 렌더 후 <b>컴포넌트 전환</b>.</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d20-1"><span class="box"></span><span class="txt">같은 16px인데 <code>heading-sm</code>과 <code>body-lg</code>가 갈리는 두 값을 말할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d20-2"><span class="box"></span><span class="txt"><b>"안은 컴포넌트, 밖은 프레임"</b> 규칙이 왜 세 번 반복되는지 설명할 수 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Day 21 ── -->
+  <section class="card" id="day21">
+    <div class="day-head">
+      <div class="badge-icon">D21</div>
+      <div>
+        <span class="stage-chip">디자인</span>
+        <div class="day-title">UI 컴포넌트 본편 — 5그룹 23종</div>
+        <div class="day-sub">5그룹 23종 · 타입×상태 매트릭스 · 스페이싱 · 리팩토링</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li><b>"구현이 문제가 아니야… 수정이 문제지"</b> — 병목이 구현에서 <b>수정 비용</b>으로 이동했다</li>
+          <li><b>"컴포넌트는 복사가 아닌 연결"</b> — 수정 비용이 화면 수에서 <b>1</b>로 떨어진다</li>
+          <li>5그룹(액션·폼·내비게이션·피드백·기타) <b>23종</b>, 프롬프트에 <b>공통조건</b> 블록이 등장</li>
+          <li><b>타입(행) × 상태(열) 매트릭스</b> = 렌더 방식이자 <b>QA 체크리스트</b></li>
+          <li>마지막 파운데이션 <b>스페이싱</b>(8~32) → <b>최종 리팩토링</b>(2-1 유지 / 2-2 시스템이 이긴다)</li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p>컴포넌트 23종 렌더 → 스페이싱 토큰 → <b>시안 3장 재조립</b>.</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d21-1"><span class="box"></span><span class="txt">입력류의 상태 축(<code>focused</code>·<code>error</code>)이 버튼과 다른 이유를 설명할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d21-2"><span class="box"></span><span class="txt"><b>누르면 칩, 못 누르면 배지</b>를 구분할 수 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Day 22 ── -->
+  <section class="card" id="day22">
+    <div class="day-head">
+      <div class="badge-icon">D22</div>
+      <div>
+        <span class="stage-chip">핸드오프</span>
+        <div class="day-title">핸드오프 — 스토리북과 SSOT</div>
+        <div class="day-sub">3000 vs 6006 · 핸드오프 2번 · 확률론 vs 결정론</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li>문제는 이제 수정이 아니라 <b>추적</b> — "이거 코드로 구현까지 된 건가?"</li>
+          <li><b>스토리북 = 코드로 구현된 디자인 시스템을 보여주는 홈페이지</b>, <code>localhost:6006</code></li>
+          <li>핸드오프는 <b>2번</b> — 디자인 시스템 → 하이파이. <b>재료 먼저, 화면 나중</b></li>
+          <li><span class="star">★</span> <code>design.md</code> 가이드 = <b>확률론</b> / 스토리북 결과물 갖다쓰기 = <b>결정론</b></li>
+          <li><b>SSOT 규칙 6줄</b>을 <code>CLAUDE.md</code>에 <b>강제형</b>으로</li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p>Next 프로젝트 + 스토리북 셋팅 → 파운데이션·컴포넌트 핸드오프 → <b>SSOT 규칙 등록</b>.</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d22-1"><span class="box"></span><span class="txt"><code>3000</code>과 <code>6006</code>이 각각 무엇을 보여주는지 구분할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d22-2"><span class="box"></span><span class="txt">규칙을 <code>design.md</code>가 아니라 <code>CLAUDE.md</code>에 두는 이유를 설명할 수 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ Week 5 ═══════════ -->
+  <div class="week-head">
+    <div class="wk-title">Week 5 — 데이터가 앉을 자리 <span class="wk-range">Day 23 – 25</span></div>
+    <p>정규화 · 썸네일 · BFF · 소프트 삭제 — 화면 뒤의 구조를 만든다.</p>
+  </div>
+
+  <!-- ── Day 23 ── -->
+  <section class="card" id="day23">
+    <div class="day-head">
+      <div class="badge-icon">D23</div>
+      <div>
+        <span class="stage-chip">DB</span>
+        <div class="day-title">맛집 DB 설계와 이미지 썸네일</div>
+        <div class="day-sub">정규화 4단계 · place/place_image/profile · S/M/L</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li><b>DB가 1번이 아니라 4번</b>인 순서도: 기획/디자인 → 데이터 추출 → <b>정규화</b> → DB 생성</li>
+          <li>정규화의 두 질문 — <b>"몇 번 반복되는가"</b>(쪼갠다) · <b>"주인이 누구인가"</b>(Supabase면 안 만든다)</li>
+          <li>결과물 <b>3 tables</b>: <code>place</code> · <code>place_image</code> · <code>profile</code> (유저는 Supabase 몫)</li>
+          <li>느림의 정체는 <b>다운로드 용량</b> → 썸네일 <b>S/M/L</b></li>
+          <li>썸네일 2방식: <b>영구 저장</b>(등록시) vs <b>온디맨드 리사이징</b>(조회시) + <b>캐시</b></li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p>Supabase 프로젝트 생성 → <b>맛집·이미지·프로필 테이블 생성</b>.</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d23-1"><span class="box"></span><span class="txt">이미지를 <code>이미지1·이미지2</code> 컬럼으로 넣으면 안 되는 이유를 표로 설명할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d23-2"><span class="box"></span><span class="txt">두 썸네일 방식의 트레이드오프를 <b>"저장 공간 vs 계산"</b>으로 말할 수 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Day 24 ── -->
+  <section class="card" id="day24">
+    <div class="day-head">
+      <div class="badge-icon">D24</div>
+      <div>
+        <span class="stage-chip">아키텍처</span>
+        <div class="day-title">BaaS와 비즈니스 로직 노출, 그리고 BFF</div>
+        <div class="day-sub">비즈니스 로직 · 프록시 vs BFF · Request URL 판정</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li>자산의 기준은 <b>"여러 단계로 조합되어 있는가"</b> — 이달의 우수회원(4단계) ⭕ / 프로필 조회 ❌</li>
+          <li>BaaS는 <b>백엔드 + DB</b> → 백엔드 자리가 비면 <b>로직이 브라우저로 밀려난다</b></li>
+          <li>F12 → Sources → <code>supabase</code> 검색이면 <b>코드·주석·ANON KEY까지</b> 보인다</li>
+          <li><b>프록시는 요청을 그대로 대신, BFF는 요청에 맞게 조립</b> — BFF 자리 둘(Edge Function 150초 / 프론트 서버)</li>
+          <li>판정법 한 줄: Request URL이 <code>*.supabase.co</code>면 ❌ / <code>localhost:3000/api/*</code>면 ⭕ (<b>둘 다 200 OK</b>가 함정)</li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p>맛집 조회를 BFF 경유로 바꾸고 <b>네트워크 탭으로 판정</b>.</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d24-1"><span class="box"></span><span class="txt">서버를 하나 끼웠는데도 로직이 노출되는 경우(프록시)를 설명할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d24-2"><span class="box"></span><span class="txt">브라우저에 내려가는 키를 <b>공개된 값</b>으로 취급할 수 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Day 25 ── -->
+  <section class="card" id="day25">
+    <div class="day-head">
+      <div class="badge-icon">D25</div>
+      <div>
+        <span class="stage-chip">기능</span>
+        <div class="day-title">BFF로 CRUD, 소프트 삭제, 그리고 위치 정보</div>
+        <div class="day-sub">목록/상세 분리 · deleted_at · 지오코딩 3종</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li>CRUD 프롬프트 <b>6줄</b> — 도구·기능(<b>조회를 목록/상세로 쪼갬</b>)·저장 위치·검증·<b>기본값</b>·<b>아키텍처</b></li>
+          <li>삭제 두 가지: 하드 삭제(+<b>CASCADE</b> / No Action) vs <b>소프트 삭제</b>(<code>deleted_at timestamptz</code>)</li>
+          <li>소프트 삭제는 <b>자식을 건드리지 않는다</b> — 대신 모든 조회에 <code>IS NULL</code> 조건이 영구히 붙는다</li>
+          <li>위치 두 갈래(주소/우편번호 vs 지도/위치)와 지도 기능 <b>3종</b>(지도·지오코딩·<b>리버스</b> 지오코딩)</li>
+          <li>네이버 지역 검색 API — <code>mapx</code>=<b>경도</b>, <code>mapy</code>=<b>위도</b>(순서 반대) + 소수점 없는 정수</li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p>BFF로 맛집 등록/목록/상세/수정 + <code>deleted_at</code> 컬럼 + <b>Postman으로 지역 검색 호출</b>.</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d25-1"><span class="box"></span><span class="txt">"조회"를 목록조회·상세조회로 쪼개는 이유를 화면으로 설명할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d25-2"><span class="box"></span><span class="txt"><code>mapx</code>/<code>mapy</code>를 지도 좌표로 바꿀 때 조심할 <b>두 가지</b>를 말할 수 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ Week 6 ═══════════ -->
+  <div class="week-head">
+    <div class="wk-title">Week 6 — 바깥과 연결하고, 세상에 내놓기 <span class="wk-range">Day 26 – 29</span></div>
+    <p>네이버 검색/지도 API 연동, 그리고 배포 · 도메인 · 상표권 · PWA 출시.</p>
+  </div>
+
+  <!-- ── Day 26 ── -->
+  <section class="card" id="day26">
+    <div class="day-head">
+      <div class="badge-icon">D26</div>
+      <div>
+        <span class="stage-chip">외부 API</span>
+        <div class="day-title">네이버 검색/지도 API — 무엇을 고를 것인가</div>
+        <div class="day-sub">지도 6종 · JS-API vs REST-API · Node ID 핸드오프</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li>화면 5장에 필요한 API는 <b>정확히 두 개</b> — 지역 검색 API · 지도 API</li>
+          <li>지도 API <b>6종</b>과 결정적 표기: <b>JS-API는 동적 지도 하나뿐</b>, 나머지는 REST-API</li>
+          <li><span class="star">★</span> 판서 — <b>REST-API = 백엔드 / JS-API = 프론트엔드</b>, 그리고 둘 다 "이미 만들어져 있는 기능"</li>
+          <li>오늘 고른 것은 <b>동적 지도 + 리버스 지오코딩</b>, <b>지오코딩은 ✕</b>(지역 검색이 좌표를 준다)</li>
+          <li>Dynamic Map만 <b>Web service URL 등록</b>을 강제한다 — 브라우저에 보이는 키는 <b>도메인으로 묶어</b> 보호</li>
+          <li>Pencil 증분 디자인과 <b>Node ID</b> 핸드오프</li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p>NCP에서 키 발급 → Postman 요청 테스트 → Pencil 증분 디자인 → <b>PencilMCP 핸드오프</b>.</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d26-1"><span class="box"></span><span class="txt">JS-API / REST-API 표기 하나로 <b>키를 어디 둘지</b>가 정해지는 이유를 설명할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d26-2"><span class="box"></span><span class="txt">핸드오프에 이름 대신 <b>Node ID</b>를 쓰는 이유를 말할 수 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Day 27 ── -->
+  <section class="card" id="day27">
+    <div class="day-head">
+      <div class="badge-icon">D27</div>
+      <div>
+        <span class="stage-chip">외부 API</span>
+        <div class="day-title">지도·검색 연동 — 컬럼, 환경변수, 왕복 규약</div>
+        <div class="day-sub">name/lat/lng · Nullable vs Default · NEXT_PUBLIC_</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li>작업 순서는 <b>① DB 컬럼 → ② 지도 → ③ 검색</b> — 저장할 자리부터 만든다</li>
+          <li>추가 컬럼 <b><code>name</code> · <code>lat float8</code> · <code>lng float8</code></b>, 그리고 <b>Nullable vs Default</b>
+              (좌표에 <code>0</code>은 "모름"이 아니라 <b>적도</b>다 → Nullable)</li>
+          <li><span class="star">★</span> <b><code>NEXT_PUBLIC_</code> 한 줄이 비밀/공개의 경계선</b> — Supabase·검색 키는 금지, 지도 SDK 키는 필수</li>
+          <li><code>.env.example</code>(설명서, 커밋 O) / <code>.env.local</code>(실값, 커밋 X), <b>환경변수는 시작 시점에만 읽힌다</b></li>
+          <li>화면 왕복 규약 — <b>무엇을 들고 / 어디로 돌아가 / 어디에 넣는지</b> 세 가지를 다 적는다</li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p>컬럼 추가 → 네이버 지도 연동(핀 고정+지도 이동) → <b>지역 검색 연동</b>(결과 있음/없음 분기).</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d27-1"><span class="box"></span><span class="txt">같은 키인데 접두사가 갈리는 이유를 <b>누가 호출하는가</b>로 설명할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d27-2"><span class="box"></span><span class="txt">"키를 넣었는데 왜 안 되지?"의 답(<b>서버 재시작</b>)을 알고 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Day 28 ── -->
+  <section class="card" id="day28">
+    <div class="day-head">
+      <div class="badge-icon">D28</div>
+      <div>
+        <span class="stage-chip">출시</span>
+        <div class="day-title">배포 · 도메인 · 상표권 · PWA</div>
+        <div class="day-sub">파이프라인 · 1인 2단계 · 308 · 권리 3종 · PWA 3종</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li>배포는 파이프라인 — <b>빌드 → 커밋 → 푸쉬 → GitHub → Vercel</b>, 그리고 <b>환경변수는 별도 갈래</b></li>
+          <li>배포 환경 <b>4단계의 대가</b>(도메인4·<code>.env</code>4·Supabase4·스토리지4·소셜로그인4·Vercel3) → <b>1인은 둘로 시작</b></li>
+          <li>푸시 전 <b>두 방향 검사</b>(내 키 ↔ 저장소 대조 / 시크릿 패턴) · <code>.gitignore</code> 정비</li>
+          <li>도메인은 <b>1년 임대</b>, <code>www</code>와 non-<code>www</code> <b>둘 다 등록</b>(308 리다이렉트), 자동 부여 주소는 제거</li>
+          <li><b>상표권 · 디자인권 · 저작권</b> — 등록 필요 O / O / <b>X</b>, 로고 제작 <b>6단계</b></li>
+          <li><b>PWA 3종</b> — 홈 화면 설치 · 푸시 알림 · 오프라인 모드</li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p>하드코딩 검사 → 커밋·푸시 → Vercel 배포 → <b>도메인 연결</b> → 로고 제작 6단계.</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d28-1"><span class="box"></span><span class="txt">"로컬에선 되는데 배포하면 안 된다"의 1순위 원인을 말할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d28-2"><span class="box"></span><span class="txt"><b>일반명사·지명 단독</b>으로 브랜드명을 정하면 안 되는 이유를 설명할 수 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Day 29 ── -->
+  <section class="card" id="day29">
+    <div class="day-head">
+      <div class="badge-icon">D29</div>
+      <div>
+        <span class="stage-chip">출시</span>
+        <div class="day-title">로고와 함께 PWA 배포하기</div>
+        <div class="day-sub">KIPRIS 2,458건 · 에셋 16종 · 브랜치 · 하이드레이션</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="learn">
+        <div class="sec-title">배우는 것</div>
+        <ul>
+          <li>유사 상표 검색은 <b>이름 검색과 다른 검색</b> — 도형 조건만으로 <b>국내 2,458건</b></li>
+          <li>PWA 프롬프트의 4요소: <b>범위 자르기</b>(오프라인·푸시알림 제외) · <b>플랫폼 분기</b>(iOS엔 설치 API가 없다) · <b>시스템 UI는 재사용 X</b> · <b>변형은 스크립트로</b></li>
+          <li><code>logo.svg</code> 한 장 → <b>에셋 16종</b>(manifest 아이콘 <code>any</code>/<code>maskable</code>, 파비콘, 스플래시)</li>
+          <li><span class="star">★</span> <b>"너 지금 어떤 브랜치에서 작업하고 있니?"</b> — <code>main</code> 직접 작업은 되돌릴 단위를 없앤다</li>
+          <li>배포는 푸시로 끝나지 않는다 — <b>하이드레이션 레이스</b> 버그와 <b>시크릿 탭</b> 확인</li>
+        </ul>
+      </div>
+      <div>
+        <div class="practice">
+          <span class="tag">실습 · 과제</span>
+          <p>로고 만들기(6단계) → 로고 다운받기 → <b>PWA 배포</b>(로고·스플래시·파비콘 포함).</p>
+        </div>
+        <div class="sec-title">이걸 할 수 있으면 통과</div>
+        <ul class="check-list">
+          <li><label><input type="checkbox" data-k="d29-1"><span class="box"></span><span class="txt"><code>maskable</code> 아이콘을 빠뜨리면 무슨 일이 생기는지 설명할 수 있다</span></label></li>
+          <li><label><input type="checkbox" data-k="d29-2"><span class="box"></span><span class="txt">배포 후 <b>실제 기기·처음 방문 상태</b>에서 확인해야 하는 이유를 말할 수 있다</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ 졸업 체크리스트 ═══════════ -->
+  <section class="card grad">
+    <h2>🎓 Part 3 졸업 체크리스트</h2>
+    <p class="lead">열한 가지가 모두 켜지면 맛집커뮤니티는 "따라 만든 것"이 아니라 "출시된 내 서비스"가 됩니다.</p>
+    <ul class="check-list">
+      <li><label><input type="checkbox" data-k="g-1"><span class="box"></span><span class="txt">수요를 검증한 기획을 <b>PRD(누가·무엇을·왜 + 지표)</b>로 확정했다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-2"><span class="box"></span><span class="txt"><b>360 기준 반응형</b> 위에 시안을 그렸고, 등록 화면은 <b>에러 상태</b>까지 있다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-3"><span class="box"></span><span class="txt"><b>프리미티브 → 시맨틱 2층 토큰</b>이 있고, 화면에 hex 하드코딩이 없다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-4"><span class="box"></span><span class="txt">UI 컴포넌트가 <b>타입 × 상태 매트릭스</b>로 정의되어 있고, 시안이 그 컴포넌트로 재조립됐다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-5"><span class="box"></span><span class="txt">스토리북(<code>6006</code>)이 <b>SSOT</b>로 서 있고, 규칙이 <code>CLAUDE.md</code>에 강제형으로 들어갔다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-6"><span class="box"></span><span class="txt">DB가 <b>정규화</b>되어 있고(<code>place</code>/<code>place_image</code>/<code>profile</code>), 유저 테이블은 만들지 않았다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-7"><span class="box"></span><span class="txt">브라우저가 DB에 직접 말을 걸지 않는다 — 네트워크 탭이 <b><code>/api/*</code></b>를 보여준다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-8"><span class="box"></span><span class="txt">삭제가 <b>소프트 삭제</b>이고, 모든 조회에 <code>deleted_at IS NULL</code>이 붙어 있다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-9"><span class="box"></span><span class="txt">지도·검색이 붙어 있고, <b><code>NEXT_PUBLIC_</code> 접두사 규칙</b>을 지켰다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-10"><span class="box"></span><span class="txt">커스텀 도메인으로 배포됐고, <code>.env</code>는 <b>Vercel에 직접</b> 등록했다</span></label></li>
+      <li><label><input type="checkbox" data-k="g-11"><span class="box"></span><span class="txt">로고가 <b>svg</b>로 저장소에 있고, <b>PWA 설치 배너</b>가 실제 기기에서 뜬다</span></label></li>
+    </ul>
+  </section>
+
+  <!-- ═══════════ 다음 단계 ═══════════ -->
+  <section class="next">
+    <div class="arrow-big">→</div>
+    <div>
+      <h3>다음 단계 · Part 4 — 맛집커뮤니티 어드밴스</h3>
+      <p>다 만든 제품에 결제를 얹습니다. PRD 업데이트 → 카피·CTA 배너 → 정산 → insert-only 원장 → 포트원 · 웹훅.</p>
+    </div>
+    <div class="go"><a href="../part4_food_community_advance/04-part4-guide.html">Part 4 학습문서</a></div>
+  </section>
+
+  <!-- ═══════════ 이전 단계 ═══════════ -->
+  <section class="prev">
+    <div class="arrow-big">←</div>
+    <div>
+      <h3>이전 단계 · Part 2 — 미니 노션</h3>
+      <p>팀처럼, 통제하며 만드는 실무형 협업 구조. 기획 → 디자인 → 개발 핸드오프와 훅스·워크트리·배포.</p>
+    </div>
+    <div class="go"><a href="../part2_MiniNotion/02-part2-guide.html">Part 2 학습문서</a></div>
+  </section>
+
+  <footer>새싹 클로드코드 과정 · Part 3 학습문서 — 원문: <code>part3_FoodCommunity/README.md</code></footer>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var KEY = 'part3.progress';
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.check-list input[type=checkbox]'));
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
+  }
+  function save(state) {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* 저장 불가 환경은 무시 */ }
+  }
+  function render() {
+    var done = boxes.filter(function (b) { return b.checked; }).length;
+    var total = boxes.length;
+    document.getElementById('bar-fill').style.width = (total ? done / total * 100 : 0) + '%';
+    document.getElementById('bar-count').textContent = done + ' / ' + total;
+  }
+
+  var state = load();
+  boxes.forEach(function (b) {
+    b.checked = !!state[b.dataset.k];
+    b.addEventListener('change', function () {
+      state[b.dataset.k] = b.checked;
+      save(state);
+      render();
+    });
+  });
+
+  document.getElementById('btn-reset').addEventListener('click', function () {
+    if (!confirm('체크한 내용을 모두 지울까요?')) return;
+    state = {};
+    save(state);
+    boxes.forEach(function (b) { b.checked = false; });
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

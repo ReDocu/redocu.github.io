@@ -1,0 +1,804 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>맛집커뮤니티 디자인 시스템 — Part 3 예제안</title>
+<style>
+/* ══════════════════════════════════════════════════════════════
+   ①  프리미티브 토큰 — hex에 이름을 붙인 층 (Day 19)
+   ══════════════════════════════════════════════════════════════ */
+:root{
+  --color-brand-50:#F3F7EE;  --color-brand-100:#E5EFDB; --color-brand-200:#CADFBB;
+  --color-brand-300:#A9C994; --color-brand-400:#86AF6C; --color-brand-500:#68954E;
+  --color-brand-600:#4F7A3D; --color-brand-700:#3E6131; --color-brand-800:#324D28;
+  --color-brand-900:#2A4022; --color-brand-950:#16240F;
+
+  --color-neutral-50:#FAF8F3;  --color-neutral-100:#F3EFE6; --color-neutral-200:#E7E1D3;
+  --color-neutral-300:#D4CBB8; --color-neutral-400:#B3A892; --color-neutral-500:#8F8471;
+  --color-neutral-600:#6E6555; --color-neutral-700:#554E42; --color-neutral-800:#3D3830;
+  --color-neutral-900:#2A2621; --color-neutral-950:#1A1714;
+
+  --color-leaf-50:#EAF6EE;  --color-leaf-100:#D3EBDC; --color-leaf-200:#B0DCC0;
+  --color-leaf-300:#84C79C; --color-leaf-400:#57B27B; --color-leaf-500:#3C9A63;
+  --color-leaf-600:#2E7D51; --color-leaf-700:#26643F; --color-leaf-800:#1F4F33;
+  --color-leaf-900:#193F29; --color-leaf-950:#0C2115;
+
+  --color-amber-50:#FBF3E3;  --color-amber-100:#F6E6C4; --color-amber-200:#EED29A;
+  --color-amber-300:#E3B968; --color-amber-400:#DAA53F; --color-amber-500:#D0961F;
+  --color-amber-600:#A97614; --color-amber-700:#855C10; --color-amber-800:#6A490D;
+  --color-amber-900:#553A0B; --color-amber-950:#2D1E05;
+
+  --color-clay-50:#FBEEEA;  --color-clay-100:#F6DCD4; --color-clay-200:#EEBCAB;
+  --color-clay-300:#E39C83; --color-clay-400:#D98165; --color-clay-500:#C75A3B;
+  --color-clay-600:#AB4429; --color-clay-700:#8B3620; --color-clay-800:#6E2B1A;
+  --color-clay-900:#582214; --color-clay-950:#2F110A;
+
+  --color-sky-50:#EDF3F5;   --color-sky-100:#D8E5EA;  --color-sky-200:#B4CDD6;
+  --color-sky-300:#8AB0BE;  --color-sky-400:#6595A7;  --color-sky-500:#4E8095;
+  --color-sky-600:#3F6879;  --color-sky-700:#33535F;  --color-sky-800:#29424C;
+  --color-sky-900:#22363E;  --color-sky-950:#121D21;
+
+  /* ════════════════════════════════════════════════════════════
+     ②  시맨틱 토큰 — 프리미티브만 참조한다 (hex 직접 입력 금지)
+     ════════════════════════════════════════════════════════════ */
+  --color-background-default:var(--color-neutral-50);
+  --color-background-surface:#FFFFFF;
+  --color-background-muted:var(--color-neutral-100);
+  --color-background-brand:var(--color-brand-600);
+  --color-background-brand-subtle:var(--color-brand-50);
+  --color-background-destructive:var(--color-clay-600);
+  --color-background-disabled:var(--color-neutral-200);
+
+  --color-text-default:var(--color-neutral-800);
+  --color-text-muted:var(--color-neutral-600);
+  --color-text-subtle:var(--color-neutral-500);
+  --color-text-brand:var(--color-brand-700);
+  --color-text-on-brand:var(--color-neutral-50);
+  --color-text-error:var(--color-clay-600);
+  --color-text-disabled:var(--color-neutral-400);
+
+  --color-border-default:var(--color-neutral-200);
+  --color-border-strong:var(--color-neutral-300);
+  --color-border-brand:var(--color-brand-500);
+  --color-border-error:var(--color-clay-400);
+
+  --font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,
+                "Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --font-size-900:40px; --font-size-800:36px; --font-size-700:32px; --font-size-600:28px;
+  --font-size-500:24px; --font-size-400:20px; --font-size-300:16px; --font-size-200:14px;
+  --font-size-100:12px;
+  --font-weight-bold:700; --font-weight-semibold:600; --font-weight-regular:400;
+  --font-line-height-tight:1.2; --font-line-height-normal:1.4;
+
+  --spacing-8:8px; --spacing-12:12px; --spacing-16:16px;
+  --spacing-20:20px; --spacing-24:24px; --spacing-32:32px;
+
+  --radius-sm:8px; --radius-md:12px; --radius-lg:16px; --radius-full:999px;
+  --shadow-card:0 1px 2px rgba(42,38,33,.05), 0 8px 20px -12px rgba(42,38,33,.18);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0;font-family:var(--font-family);letter-spacing:-.02em;
+  color:var(--color-text-default);
+  background:
+    radial-gradient(1100px 520px at 8% -6%, var(--color-brand-100), transparent 58%),
+    radial-gradient(800px 460px at 96% 2%, var(--color-amber-50), transparent 52%),
+    var(--color-background-default);
+}
+.wrap{max-width:1080px;margin:0 auto;padding:var(--spacing-32) var(--spacing-20) 72px}
+
+header.top{display:flex;gap:var(--spacing-16);align-items:center;margin-bottom:var(--spacing-24)}
+header.top .logo{
+  width:48px;height:48px;flex:none;border-radius:15px;display:grid;place-items:center;
+  background:linear-gradient(150deg,var(--color-brand-500),var(--color-brand-700));color:#fff;
+  box-shadow:0 6px 16px -4px rgba(42,38,33,.28)
+}
+header.top .logo svg{width:26px;height:26px}
+.eyebrow{margin:0 0 3px;font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--color-text-brand)}
+h1{margin:0;font-size:var(--font-size-600);font-weight:700;line-height:1.2}
+.lede{margin:var(--spacing-12) 0 0;font-size:var(--font-size-200);line-height:1.65;color:var(--color-text-muted);max-width:76ch}
+
+nav.toc{display:flex;flex-wrap:wrap;gap:6px;margin:var(--spacing-20) 0 var(--spacing-32)}
+nav.toc a{
+  text-decoration:none;border:1px solid var(--color-border-default);background:var(--color-background-surface);
+  color:var(--color-text-muted);border-radius:var(--radius-full);padding:7px 13px;font-size:12px;font-weight:600
+}
+nav.toc a:hover{border-color:var(--color-border-brand);color:var(--color-text-brand);background:var(--color-background-brand-subtle)}
+
+section{margin:0 0 var(--spacing-32);scroll-margin-top:var(--spacing-20)}
+h2{margin:0 0 6px;font-size:var(--font-size-400);font-weight:700;display:flex;align-items:center;gap:var(--spacing-8)}
+h2 .n{
+  width:26px;height:26px;flex:none;border-radius:8px;display:grid;place-items:center;
+  background:var(--color-background-brand);color:var(--color-text-on-brand);font-size:12px;font-weight:700
+}
+h3{margin:var(--spacing-24) 0 var(--spacing-8);font-size:var(--font-size-300);font-weight:700}
+.sub{margin:0 0 var(--spacing-16);font-size:var(--font-size-200);line-height:1.65;color:var(--color-text-muted);max-width:78ch}
+.panel{
+  background:var(--color-background-surface);border:1px solid var(--color-border-default);
+  border-radius:var(--radius-lg);padding:var(--spacing-20);box-shadow:var(--shadow-card)
+}
+.rule{
+  display:flex;gap:var(--spacing-12);align-items:flex-start;border-radius:var(--radius-md);
+  padding:var(--spacing-12) var(--spacing-16);font-size:var(--font-size-200);line-height:1.6;
+  background:var(--color-brand-50);border:1px solid var(--color-brand-100);border-left:4px solid var(--color-brand-500);
+  color:var(--color-neutral-700);margin:var(--spacing-16) 0 0
+}
+.rule b{color:var(--color-brand-700)}
+.rule.warn{background:var(--color-amber-50);border-color:var(--color-amber-100);border-left-color:var(--color-amber-500)}
+.rule.warn b{color:var(--color-amber-700)}
+
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.92em;
+  background:var(--color-background-muted);border-radius:5px;padding:1px 5px;color:var(--color-brand-700)}
+
+table{width:100%;border-collapse:collapse;font-size:var(--font-size-200)}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--color-border-default);vertical-align:top}
+th{font-size:12px;letter-spacing:.02em;color:var(--color-text-subtle);font-weight:700;white-space:nowrap}
+td code{white-space:nowrap}
+
+/* 팔레트 */
+.pal{margin-bottom:var(--spacing-20)}
+.pal-head{display:flex;align-items:baseline;gap:var(--spacing-8);margin-bottom:6px}
+.pal-head .nm{font-size:var(--font-size-200);font-weight:700}
+.pal-head .ds{font-size:12px;color:var(--color-text-subtle)}
+.ramp{display:grid;grid-template-columns:repeat(11,1fr);gap:4px}
+.sw{border-radius:8px;overflow:hidden;border:1px solid rgba(42,38,33,.08)}
+.sw .c{height:52px;position:relative}
+.sw .c .ok{position:absolute;left:4px;bottom:4px;font-size:9px;font-weight:800;letter-spacing:0;
+  background:rgba(255,255,255,.9);color:var(--color-neutral-800);border-radius:4px;padding:1px 4px}
+.sw .l{padding:4px 5px;font-size:9.5px;line-height:1.35;background:var(--color-background-surface);color:var(--color-text-subtle)}
+.sw .l b{display:block;color:var(--color-text-default);font-size:10px}
+@media (max-width:760px){ .ramp{grid-template-columns:repeat(6,1fr)} }
+
+/* 타이포 샘플 */
+.typerow{display:flex;gap:var(--spacing-16);align-items:baseline;padding:var(--spacing-12) 0;border-bottom:1px solid var(--color-border-default)}
+.typerow .meta{flex:none;width:210px;font-size:11px;color:var(--color-text-subtle);line-height:1.5}
+.typerow .meta b{display:block;color:var(--color-text-brand);font-size:12px}
+.typerow .smp{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* 아이콘 */
+.icongrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:var(--spacing-12)}
+.iconcell{text-align:center;border:1px solid var(--color-border-default);border-radius:var(--radius-md);padding:var(--spacing-12) 6px;background:var(--color-background-surface)}
+.iconcell svg{width:24px;height:24px;color:var(--color-text-default)}
+.iconcell span{display:block;margin-top:6px;font-size:10px;color:var(--color-text-subtle)}
+.sizes{display:flex;align-items:flex-end;gap:var(--spacing-16);flex-wrap:wrap}
+.sizecell{text-align:center}
+.sizecell span{display:block;margin-top:6px;font-size:11px;color:var(--color-text-subtle)}
+.touch{
+  position:relative;width:48px;height:48px;border-radius:var(--radius-md);
+  border:1px dashed var(--color-border-error);display:grid;place-items:center
+}
+.touch svg{width:24px;height:24px;color:var(--color-text-brand)}
+.touch::after{content:"48";position:absolute;right:-4px;bottom:-16px;font-size:10px;color:var(--color-clay-600);font-weight:700}
+
+/* 스페이싱 */
+.sprow{display:flex;align-items:center;gap:var(--spacing-12);padding:7px 0}
+.sprow .bar{height:16px;border-radius:4px;background:var(--color-brand-300)}
+.sprow .lb{font-size:12px;color:var(--color-text-subtle);width:150px;flex:none}
+.sprow .lb b{color:var(--color-text-default)}
+
+/* 컴포넌트 매트릭스 */
+.mx{width:100%;border-collapse:separate;border-spacing:0;font-size:12px}
+.mx th{padding:8px 10px;color:var(--color-text-subtle);font-size:11px;border-bottom:1px solid var(--color-border-default)}
+.mx td{padding:10px;border-bottom:1px solid var(--color-border-default)}
+.mx td:first-child,.mx th:first-child{white-space:nowrap;color:var(--color-text-default);font-weight:700;font-size:12px}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;height:40px;padding:0 var(--spacing-16);
+  border-radius:var(--radius-md);border:1px solid transparent;cursor:pointer;
+  font:600 14px/1 var(--font-family);letter-spacing:-.02em
+}
+.btn svg{width:20px;height:20px}
+.btn--primary{background:var(--color-background-brand);color:var(--color-text-on-brand)}
+.btn--secondary{background:var(--color-background-surface);color:var(--color-text-default);border-color:var(--color-border-strong)}
+.btn--destructive{background:var(--color-background-destructive);color:#fff}
+.btn[disabled]{background:var(--color-background-disabled);color:var(--color-text-disabled);border-color:transparent;cursor:not-allowed}
+.btn--sm{height:32px;padding:0 var(--spacing-12);font-size:12px}
+.btn--lg{height:48px;padding:0 var(--spacing-20)}
+
+.spin{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,.4);
+  border-top-color:#fff;animation:sp .8s linear infinite;display:inline-block}
+.spin--brand{border-color:var(--color-brand-200);border-top-color:var(--color-brand-600)}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+.tf{max-width:280px}
+.tf label{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
+.tf .box{display:flex;align-items:center;height:40px;padding:0 11px;border:1px solid var(--color-border-strong);
+  border-radius:var(--radius-md);background:var(--color-background-surface);font-size:14px;color:var(--color-text-default)}
+.tf .box.ph{color:var(--color-text-subtle)}
+.tf.focused .box{border-color:var(--color-border-brand);box-shadow:0 0 0 3px var(--color-brand-100)}
+.tf.err .box{border-color:var(--color-border-error);background:var(--color-clay-50)}
+.tf.dis .box{background:var(--color-background-muted);color:var(--color-text-disabled);border-color:var(--color-border-default)}
+.tf .hp{margin-top:5px;font-size:11px;color:var(--color-text-subtle)}
+.tf.err .hp{color:var(--color-text-error);font-weight:600}
+
+.ctl{display:inline-flex;align-items:center;gap:8px;font-size:13px}
+.box20{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--color-border-strong);background:#fff;
+  display:grid;place-items:center;flex:none}
+.box20.on{background:var(--color-background-brand);border-color:transparent;color:#fff}
+.box20.ind{background:var(--color-background-brand);border-color:transparent;color:#fff}
+.box20 svg{width:13px;height:13px}
+.rad{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--color-border-strong);background:#fff;
+  display:grid;place-items:center;flex:none}
+.rad.on{border-color:var(--color-brand-600)}
+.rad.on::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--color-background-brand)}
+.sw40{width:40px;height:22px;border-radius:99px;background:var(--color-neutral-300);position:relative;flex:none;transition:.2s}
+.sw40::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s;
+  box-shadow:0 1px 3px rgba(42,38,33,.3)}
+.sw40.on{background:var(--color-background-brand)}
+.sw40.on::after{left:20px}
+
+.chip{display:inline-flex;align-items:center;height:32px;padding:0 12px;border-radius:var(--radius-full);
+  border:1px solid var(--color-border-default);background:#fff;color:var(--color-text-muted);
+  font:600 12px/1 var(--font-family);letter-spacing:-.02em;cursor:pointer}
+.chip.on{background:var(--color-background-brand);border-color:transparent;color:var(--color-text-on-brand)}
+.badge{display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 9px;border-radius:var(--radius-full);
+  font:600 11px/1 var(--font-family);letter-spacing:-.02em}
+.badge svg{width:12px;height:12px}
+.badge--neutral{background:var(--color-neutral-100);color:var(--color-text-muted)}
+.badge--brand{background:var(--color-brand-100);color:var(--color-brand-700)}
+.badge--success{background:var(--color-leaf-50);color:var(--color-leaf-700)}
+.badge--warning{background:var(--color-amber-50);color:var(--color-amber-700)}
+.badge--error{background:var(--color-clay-50);color:var(--color-clay-700)}
+
+.toast{display:inline-flex;align-items:center;gap:8px;background:var(--color-neutral-900);color:var(--color-neutral-50);
+  border-radius:var(--radius-md);padding:11px 13px;font-size:13px;max-width:320px}
+.toast svg{width:18px;height:18px;flex:none}
+.sk{background:linear-gradient(90deg,var(--color-neutral-200) 25%,var(--color-neutral-100) 37%,var(--color-neutral-200) 63%);
+  background-size:400% 100%;animation:shim 1.4s ease infinite;border-radius:6px}
+@keyframes shim{0%{background-position:100% 0}100%{background-position:0 0}}
+
+.demo{display:flex;flex-wrap:wrap;gap:var(--spacing-16);align-items:flex-end}
+.demo>div{min-width:0}
+.cap{font-size:11px;color:var(--color-text-subtle);margin-top:6px}
+
+.footer{margin-top:48px;padding-top:var(--spacing-20);border-top:1px solid var(--color-border-default);
+  font-size:12px;color:var(--color-text-subtle);line-height:1.75}
+.footer a{color:var(--color-text-brand)}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+ <g id="i-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></g>
+ <g id="i-plus"><path d="M5 12h14M12 5v14"/></g>
+ <g id="i-home"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></g>
+ <g id="i-user"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></g>
+ <g id="i-left"><path d="m15 18-6-6 6-6"/></g>
+ <g id="i-right"><path d="m9 18 6-6-6-6"/></g>
+ <g id="i-up"><path d="m6 15 6-6 6 6"/></g>
+ <g id="i-down"><path d="m6 9 6 6 6-6"/></g>
+ <g id="i-heart"><path d="M20.8 5.6a5.5 5.5 0 0 0-7.8 0L12 6.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l8.8 8.6 8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></g>
+ <g id="i-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></g>
+ <g id="i-image"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-4.6-4.6a2 2 0 0 0-2.8 0L3 21"/></g>
+ <g id="i-camera"><path d="M14.5 4h-5L8 6H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-4z"/><circle cx="12" cy="13" r="4"/></g>
+ <g id="i-x"><path d="M18 6 6 18M6 6l12 12"/></g>
+ <g id="i-check"><path d="M20 6 9 17l-5-5"/></g>
+ <g id="i-minus"><path d="M5 12h14"/></g>
+ <g id="i-alert"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></g>
+ <g id="i-info"><circle cx="12" cy="12" r="10"/><path d="M12 16v-5M12 8h.01"/></g>
+ <g id="i-edit"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></g>
+ <g id="i-trash"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></g>
+ <g id="i-share"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></g>
+ <g id="i-more"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></g>
+ <g id="i-star"><path d="m12 3 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.8 6.2 20.9l1.1-6.5L2.6 9.8l6.5-.9z"/></g>
+ <g id="i-filter"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></g>
+ <g id="i-utensils"><path d="M4 3v7a3 3 0 0 0 6 0V3M7 10v11"/><path d="M17 3c-1.7 1.2-2.5 3-2.5 5.5 0 2 .8 3.2 2.5 3.5V21"/></g>
+ <g id="i-bell"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></g>
+ <g id="i-settings"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 15a2 2 0 1 1 0-4 1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9 3a2 2 0 1 1 4 0 1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 21 11a2 2 0 1 1 0 4"/></g>
+ <g id="i-logout"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></g>
+</defs></svg>
+
+<div class="wrap">
+
+<header class="top">
+  <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-utensils"/></svg></div>
+  <div>
+    <p class="eyebrow">PART 3 예제안 · DAY 19–21</p>
+    <h1>맛집커뮤니티 디자인 시스템</h1>
+  </div>
+</header>
+
+<p class="lede">
+  Day 19~21에서 쌓은 순서 그대로 — <b>프리미티브 토큰 → 시맨틱 토큰 → 파운데이션(타이포·아이콘·스페이싱) → UI 컴포넌트</b> 입니다.
+  책 본편의 브랜드 컬러는 주황이지만 이 예제안은 <b>따뜻한 녹색(Moss)</b>으로 다시 뽑았습니다.
+  시맨틱 토큰 이름(<code>--color-brand-*</code>)은 그대로 두고 <b>참조하는 프리미티브만 교체</b>했기 때문에,
+  팔레트 한 곳만 고치면 목업 화면 전체가 함께 바뀝니다. 이것이 Day 19가 말한 <i>"한 곳만 바꾸면 전 페이지가 바뀐다"</i> 입니다.
+</p>
+
+<nav class="toc">
+  <a href="#c1">1 · 프리미티브 컬러</a>
+  <a href="#c2">2 · 시맨틱 토큰</a>
+  <a href="#c3">3 · 타이포그래피</a>
+  <a href="#c4">4 · 아이코노그래피</a>
+  <a href="#c5">5 · 스페이싱</a>
+  <a href="#c6">6 · UI 컴포넌트</a>
+  <a href="#c7">7 · 규칙</a>
+</nav>
+
+<!-- ══════════ 1 · 프리미티브 컬러 ══════════ -->
+<section id="c1">
+  <h2><span class="n">1</span> 프리미티브 컬러 토큰</h2>
+  <p class="sub">
+    6계열 × <b>11단계(50~950)</b>, <b>500이 기준(base)</b>입니다. 스와치의 배지는 <code>neutral-50</code> 배경 대비 명암비 판정입니다 —
+    <b>3:1은 500부터</b>(큰 텍스트·아이콘), <b>4.5:1은 600부터</b>(일반 텍스트). 왼쪽(50~400)은 배경·서피스, 오른쪽(600~950)은 텍스트용으로 갈립니다.
+  </p>
+
+  <div class="panel" id="palettes"></div>
+
+  <div class="rule">
+    <div><b>왜 11단계를 다 만드나</b> — 전부 쓰기 위해서가 아니라 <b>고를 수 있게</b> 하기 위해서입니다.
+    프롬프트의 <code>neutral-50 대비 3:1, 4.5:1을 만족하는 컬러 <b>선택이 가능하도록</b> 생성</code> 이라는 표현이 정확히 이 뜻입니다 — 팔레트는 고르는 도구이므로 고를 것이 있어야 합니다.</div>
+  </div>
+</section>
+
+<!-- ══════════ 2 · 시맨틱 토큰 ══════════ -->
+<section id="c2">
+  <h2><span class="n">2</span> 시맨틱 토큰</h2>
+  <p class="sub">
+    프리미티브가 <b>"무슨 색인가"</b>라면 시맨틱은 <b>"무엇에 쓰는 색인가"</b>입니다.
+    같은 에러 빨강도 <b>테두리용(400)</b>과 <b>텍스트용(600)</b>이 갈립니다 — 텍스트는 4.5:1을 넘겨야 하기 때문이고,
+    이 판단을 매번 하지 않도록 <b>이름으로 굳혀 둡니다</b>.
+  </p>
+  <div class="panel">
+    <table>
+      <thead><tr><th>시맨틱 토큰</th><th>참조 프리미티브</th><th>용도</th></tr></thead>
+      <tbody>
+        <tr><td><code>--color-background-default</code></td><td><code>neutral-50</code></td><td>화면 바탕 (따뜻한 크림)</td></tr>
+        <tr><td><code>--color-background-surface</code></td><td><code>#FFFFFF</code></td><td>카드·입력창 표면</td></tr>
+        <tr><td><code>--color-background-muted</code></td><td><code>neutral-100</code></td><td>보조 배경·비활성 영역</td></tr>
+        <tr><td><code>--color-background-brand</code></td><td><code>brand-600</code></td><td>주요 액션(Primary 버튼·FAB·선택 칩)</td></tr>
+        <tr><td><code>--color-background-brand-subtle</code></td><td><code>brand-50</code></td><td>선택·호버 배경</td></tr>
+        <tr><td><code>--color-background-destructive</code></td><td><code>clay-600</code></td><td>되돌리기 어려운 액션</td></tr>
+        <tr><td><code>--color-background-disabled</code></td><td><code>neutral-200</code></td><td>비활성 버튼</td></tr>
+        <tr><td><code>--color-text-default</code></td><td><code>neutral-800</code></td><td>본문 (10.9:1)</td></tr>
+        <tr><td><code>--color-text-muted</code></td><td><code>neutral-600</code></td><td>보조 텍스트 (5.4:1)</td></tr>
+        <tr><td><code>--color-text-subtle</code></td><td><code>neutral-500</code></td><td>캡션·플레이스홀더 (3.5:1 — 큰 글자·비필수)</td></tr>
+        <tr><td><code>--color-text-brand</code></td><td><code>brand-700</code></td><td>브랜드 텍스트·링크</td></tr>
+        <tr><td><code>--color-text-on-brand</code></td><td><code>neutral-50</code></td><td>브랜드 배경 위 글자</td></tr>
+        <tr><td><code>--color-text-error</code></td><td><code>clay-600</code></td><td>에러 메시지 (5.5:1)</td></tr>
+        <tr><td><code>--color-border-default</code></td><td><code>neutral-200</code></td><td>카드·구분선</td></tr>
+        <tr><td><code>--color-border-strong</code></td><td><code>neutral-300</code></td><td>입력창 테두리</td></tr>
+        <tr><td><code>--color-border-brand</code></td><td><code>brand-500</code></td><td>포커스 테두리</td></tr>
+        <tr><td><code>--color-border-error</code></td><td><code>clay-400</code></td><td>에러 테두리 (텍스트보다 연한 단계)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="rule">
+    <div><b>절대 규칙 두 줄</b> — <code>hex 직접 입력 금지</code> + <code>프리미티브 토큰 참조</code>.
+    이 둘이 2층 구조 전체를 지탱합니다. 금지만 있으면 우회로를 찾고, 지시만 있으면 hex를 함께 적습니다 — <b>둘을 한 쌍으로</b> 씁니다.</div>
+  </div>
+</section>
+
+<!-- ══════════ 3 · 타이포그래피 ══════════ -->
+<section id="c3">
+  <h2><span class="n">3</span> 타이포그래피</h2>
+  <p class="sub">
+    프리미티브 3종(<b>사이즈 9단계 · 두께 3단계 · 행간 2단계</b>)을 조합해 <b>구조 10종</b>을 만듭니다.
+    계층은 크기 순서가 아니라 <b>크기 × 두께 × 행간</b>의 조합입니다 — 같은 16px에 <code>heading-sm</code>과 <code>body-lg</code>가 함께 있는 이유입니다.
+    공통 자간은 <b>-2%(상대값)</b> — 36px에서 -0.72px, 12px에서 -0.24px로 모든 크기에서 같은 밀도감이 납니다.
+  </p>
+  <div class="panel" id="typo"></div>
+  <div class="rule">
+    <div><b>토큰 이름에는 값이 아니라 역할을 넣는다</b> — 행간을 <code>120</code>/<code>140</code>이 아니라 <code>tight</code>/<code>normal</code>로 부릅니다.
+    값이 바뀌어도 <code>tight</code>는 여전히 tight입니다. 그리고 <code>font-size-900</code>(40)은 <b>어느 구조에도 쓰이지 않습니다</b> — 스케일은 고를 수 있게 두는 것입니다.</div>
+  </div>
+</section>
+
+<!-- ══════════ 4 · 아이코노그래피 ══════════ -->
+<section id="c4">
+  <h2><span class="n">4</span> 아이코노그래피</h2>
+  <p class="sub">
+    아이콘은 직접 그리지 않고 <b>루시드(Lucide) 계열</b>에서 색·굵기·크기를 통일해 가져옵니다(Stroke 2px).
+    사이즈는 <b>16 · 20 · 24 · 32</b> 네 종 — <b>24가 기준</b>이고 위아래로 벌린 구성입니다.
+  </p>
+  <div class="panel">
+    <h3 style="margin-top:0">세트</h3>
+    <div class="icongrid" id="icons"></div>
+
+    <h3>사이즈 4종</h3>
+    <div class="sizes">
+      <div class="sizecell"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-heart"/></svg><span>16</span></div>
+      <div class="sizecell"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-heart"/></svg><span>20</span></div>
+      <div class="sizecell"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-heart"/></svg><span>24 · 기준</span></div>
+      <div class="sizecell"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-heart"/></svg><span>32</span></div>
+    </div>
+
+    <h3>아이콘 24 · 터치 48</h3>
+    <div class="demo" style="align-items:center;gap:var(--spacing-32)">
+      <div style="padding-bottom:var(--spacing-16)">
+        <div class="touch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-heart"/></svg></div>
+        <div class="cap">점선 = 보이지 않는 터치 영역</div>
+      </div>
+      <div class="demo" style="gap:var(--spacing-12);padding-bottom:var(--spacing-16)">
+        <div style="text-align:center">
+          <div style="width:48px;height:48px;border-radius:99px;display:grid;place-items:center">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-heart"/></svg>
+          </div><div class="cap">고스트</div>
+        </div>
+        <div style="text-align:center">
+          <div style="width:48px;height:48px;border-radius:99px;background:var(--color-background-brand);color:#fff;display:grid;place-items:center">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-heart"/></svg>
+          </div><div class="cap">원형 · 브랜드</div>
+        </div>
+        <div style="text-align:center">
+          <div style="width:48px;height:48px;border-radius:99px;background:var(--color-background-muted);display:grid;place-items:center">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-heart"/></svg>
+          </div><div class="cap">원형 · 뉴트럴</div>
+        </div>
+      </div>
+    </div>
+    <div class="rule warn">
+      <div><b>보이는 크기와 누를 수 있는 크기는 다르다</b> — 아이콘 <b>24</b>, 터치 영역 <b>48</b>. 상하좌우 <b>12px 여백</b>이 오터치 방지 영역입니다.
+      고스트 버튼은 배경이 투명해서 크기를 잊기 쉬운데, <b>안 보이는 것이 없는 것은 아닙니다</b>.</div>
+    </div>
+    <div class="rule">
+      <div><b>비슷하게 생긴 것일수록 의미로 갈라 둔다</b> — <code>arrow</code>(→)는 <b>이동</b>, <code>chevron</code>(›)은 <b>펼침</b>입니다.
+      하나로 합치면 사용자가 눌렀을 때 무슨 일이 일어날지 예측하지 못합니다. 색이 약속이듯 <b>아이콘도 약속</b>입니다.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 5 · 스페이싱 ══════════ -->
+<section id="c5">
+  <h2><span class="n">5</span> 스페이싱</h2>
+  <p class="sub">
+    <b>마지막 파운데이션</b>입니다. 컬러·타이포·아이콘은 <b>컴포넌트 안</b>에서 소비되지만, 스페이싱은 <b>컴포넌트 사이</b>에서 소비됩니다 —
+    갭과 마진은 부품이 아니라 <b>조립</b>의 값이라 컴포넌트를 다 만든 뒤, 리팩토링 직전에 만듭니다.
+  </p>
+  <div class="panel" id="spacing"></div>
+</section>
+
+<!-- ══════════ 6 · UI 컴포넌트 ══════════ -->
+<section id="c6">
+  <h2><span class="n">6</span> UI 컴포넌트</h2>
+  <p class="sub">
+    5개 그룹 — <b>액션 · 폼 · 내비게이션 · 피드백 · 기타</b>. 모든 컴포넌트는 <b>타입(행) × 상태(열) 매트릭스</b>로 렌더합니다.
+    이 정렬의 진짜 효용은 <b>누락 검출</b>입니다 — 빈 칸이 있으면 안 만든 상태가 한눈에 보입니다. 렌더 방식이자 QA 체크리스트입니다.
+  </p>
+
+  <div class="panel">
+    <h3 style="margin-top:0">① 액션 — 버튼</h3>
+    <table class="mx">
+      <thead><tr><th></th><th>default</th><th>disabled</th><th>loading</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>primary</td>
+          <td><button class="btn btn--primary">등록하기</button></td>
+          <td><button class="btn btn--primary" disabled>등록하기</button></td>
+          <td><button class="btn btn--primary"><span class="spin"></span>등록하기</button></td>
+        </tr>
+        <tr>
+          <td>secondary</td>
+          <td><button class="btn btn--secondary">취소</button></td>
+          <td><button class="btn btn--secondary" disabled>취소</button></td>
+          <td><button class="btn btn--secondary"><span class="spin spin--brand"></span>취소</button></td>
+        </tr>
+        <tr>
+          <td>destructive</td>
+          <td><button class="btn btn--destructive">삭제</button></td>
+          <td><button class="btn btn--destructive" disabled>삭제</button></td>
+          <td><button class="btn btn--destructive"><span class="spin"></span>삭제</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="demo" style="margin-top:var(--spacing-16)">
+      <div><button class="btn btn--primary btn--sm">sm · 32</button><div class="cap">아이콘 16</div></div>
+      <div><button class="btn btn--primary">md · 40</button><div class="cap">아이콘 20</div></div>
+      <div><button class="btn btn--primary btn--lg">lg · 48</button><div class="cap">아이콘 20</div></div>
+    </div>
+    <div class="rule">
+      <div><b>loading은 좌측 아이콘만 스피너로 바꾸고 레이블은 유지</b>합니다. 레이블까지 바꾸면 버튼 너비가 널뛰고, 사용자는 무엇이 로딩 중인지 잊습니다.</div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:var(--spacing-16)">
+    <h3 style="margin-top:0">② 폼</h3>
+    <p class="sub" style="margin-bottom:var(--spacing-16)">
+      상태 축이 버튼과 다릅니다 — 버튼은 <code>default · disabled · loading</code>(누르는 물건), 입력류는 <code>default · <b>focused</b> · disabled · <b>error</b></code>(입력하는 물건).
+      <b>컴포넌트의 상태 목록은 그 컴포넌트가 하는 일에서 나옵니다.</b>
+    </p>
+    <div class="demo" style="gap:var(--spacing-20)">
+      <div class="tf"><label>맛집 이름</label><div class="box ph">맛집 이름을 입력하세요</div><div class="hp">공개 프로필에 표시됩니다</div><div class="cap">default</div></div>
+      <div class="tf focused"><label>맛집 이름</label><div class="box">온기식당</div><div class="hp">공개 프로필에 표시됩니다</div><div class="cap">focused</div></div>
+      <div class="tf dis"><label>맛집 이름</label><div class="box">온기식당</div><div class="hp">수정할 수 없습니다</div><div class="cap">disabled</div></div>
+      <div class="tf err"><label>맛집 이름</label><div class="box ph">맛집 이름을 입력하세요</div><div class="hp">제목은 필수입니다</div><div class="cap">error</div></div>
+    </div>
+    <div class="rule">
+      <div><b>헬퍼텍스트는 에러 시 힌트를 대체</b>합니다. 힌트("공개 프로필에 표시됩니다")와 에러("제목은 필수입니다")가 <b>같은 자리를 놓고 교대</b>합니다 — 둘을 쌓으면 폼 높이가 상태마다 널뜁니다.</div>
+    </div>
+
+    <h3>컨트롤</h3>
+    <div class="demo" style="gap:var(--spacing-24)">
+      <div>
+        <div class="demo" style="gap:var(--spacing-16)">
+          <span class="ctl"><span class="box20"></span>unchecked</span>
+          <span class="ctl"><span class="box20 on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-check"/></svg></span>checked</span>
+          <span class="ctl"><span class="box20 ind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><use href="#i-minus"/></svg></span>indeterminate</span>
+        </div>
+        <div class="cap">체크박스 · 선택 축 3 × 상태 축 3 (단독 O · 그룹 O)</div>
+      </div>
+    </div>
+    <div class="demo" style="gap:var(--spacing-24);margin-top:var(--spacing-16)">
+      <div>
+        <div class="demo" style="gap:var(--spacing-16)">
+          <span class="ctl"><span class="rad"></span>최신순</span>
+          <span class="ctl"><span class="rad on"></span>추천순</span>
+        </div>
+        <div class="cap">라디오 · <b>단독 사용 금지</b> (혼자면 해제 불가)</div>
+      </div>
+      <div>
+        <div class="demo" style="gap:var(--spacing-16)">
+          <span class="ctl"><span class="sw40"></span>off</span>
+          <span class="ctl"><span class="sw40 on"></span>영업중만 보기</span>
+        </div>
+        <div class="cap">스위치 · <b>단독 사용 전용</b> (즉시 적용)</div>
+      </div>
+    </div>
+    <div class="rule warn">
+      <div><b>컨트롤과 표시를 구분한다</b> — 체크박스·라디오·스위치의 체크 표시는 <b>컨트롤 자체의 일부</b>라 직접 그립니다(아이코노그래피에서 가져오지 않음).
+      반대로 셀렉트 아이템의 선택 체크는 <b>표시</b>라 아이콘을 씁니다. 공통조건에 예외가 필요하면 <b>예외를 개별조건에 명시</b>합니다.</div>
+    </div>
+
+    <h3>칩 (입력) vs 배지 (표시)</h3>
+    <div class="demo" style="gap:var(--spacing-24)">
+      <div>
+        <div class="demo" style="gap:6px">
+          <button class="chip on">전체</button><button class="chip">한식</button><button class="chip">카페</button>
+        </div>
+        <div class="cap"><b>칩</b> — 눌러서 선택/해제 · 상태 있음</div>
+      </div>
+      <div>
+        <div class="demo" style="gap:6px">
+          <span class="badge badge--neutral">위치 미등록</span>
+          <span class="badge badge--brand">양식</span>
+          <span class="badge badge--success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><use href="#i-check"/></svg>등록 완료</span>
+          <span class="badge badge--warning">기본 위치</span>
+          <span class="badge badge--error">삭제됨</span>
+        </div>
+        <div class="cap"><b>배지</b> — 읽기 전용 상태 라벨 · 상태 없음 · 시맨틱 타입 5종</div>
+      </div>
+    </div>
+    <div class="rule">
+      <div>생김새(알약 모양)가 비슷해 가장 잘 섞이는 둘입니다. 갈림길은 하나 — <b>누르면 칩, 못 누르면 배지</b>.</div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:var(--spacing-16)">
+    <h3 style="margin-top:0">③ 내비게이션</h3>
+    <div class="demo" style="gap:var(--spacing-20);align-items:flex-start">
+      <div style="width:300px">
+        <div style="height:56px;display:flex;align-items:center;gap:8px;padding:0 8px;background:#fff;border:1px solid var(--color-border-default);border-radius:var(--radius-md)">
+          <span style="width:40px;height:40px;display:grid;place-items:center"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-left"/></svg></span>
+          <span style="flex:1;text-align:center;font-size:16px;font-weight:600">맛집 상세</span>
+          <span style="width:40px;height:40px;display:grid;place-items:center"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-heart"/></svg></span>
+        </div>
+        <div class="cap">탑 내비게이션 · 56px · 제목 <code>heading-sm</code></div>
+      </div>
+      <div style="width:300px">
+        <div style="height:56px;display:flex;background:#fff;border:1px solid var(--color-border-default);border-radius:var(--radius-md);overflow:hidden">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--color-text-brand);font-size:11px;font-weight:600">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="var(--color-brand-100)" stroke="var(--color-brand-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-home"/></svg>홈</div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--color-text-subtle);font-size:11px">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-user"/></svg>내 정보</div>
+        </div>
+        <div class="cap">바텀 내비게이션 · 선택 시 <b>색과 형태(아웃라인↔필)를 둘 다</b> 바꿈</div>
+      </div>
+    </div>
+    <div class="rule">
+      <div><b>색약 사용자를 위한 이중 부호화</b> — 선택 상태를 색으로만 표현하지 않고 아이콘 형태(아웃라인 → 필)까지 바꿉니다.</div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:var(--spacing-16)">
+    <h3 style="margin-top:0">④ 피드백</h3>
+    <div class="demo" style="gap:var(--spacing-24);align-items:flex-start">
+      <div>
+        <span class="spin spin--brand" style="width:24px;height:24px;border-width:3px"></span>
+        <div class="cap">스피너 · md(24) · 브랜드 컬러</div>
+      </div>
+      <div style="width:220px">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div class="sk" style="width:44px;height:44px;border-radius:50%"></div>
+          <div style="flex:1">
+            <div class="sk" style="height:12px;width:80%"></div>
+            <div class="sk" style="height:10px;width:55%;margin-top:7px"></div>
+          </div>
+        </div>
+        <div class="cap">스켈레톤 · <b>자기 크기가 없다</b>(대상 요소에 상대적) · 뉴트럴</div>
+      </div>
+    </div>
+    <div class="demo" style="gap:var(--spacing-12);margin-top:var(--spacing-16)">
+      <div class="toast"><svg viewBox="0 0 24 24" fill="none" stroke="var(--color-leaf-300)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-check"/></svg>저장이 완료되었습니다.</div>
+      <div class="toast"><svg viewBox="0 0 24 24" fill="none" stroke="var(--color-clay-300)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-alert"/></svg>요청을 처리하지 못했습니다.</div>
+      <div class="toast"><svg viewBox="0 0 24 24" fill="none" stroke="var(--color-sky-300)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-info"/></svg>새 업데이트를 확인해 주세요.</div>
+      <div class="toast"><svg viewBox="0 0 24 24" fill="none" stroke="var(--color-amber-300)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-alert"/></svg>입력 내용을 다시 확인해 주세요.</div>
+    </div>
+    <div class="cap" style="margin-top:6px">토스트 4타입 — success · error · info · warning</div>
+    <div class="rule">
+      <div><b>같은 의미 체계가 세 번 반복됩니다</b> — Day 19의 <b>시맨틱 컬러 4종</b> → Day 20의 <b>상태 아이콘 4종</b>(check·error·info·warning) → Day 21의 <b>토스트·배지 타입</b>.
+      색 → 아이콘 → 컴포넌트로 층층이 조립된 결과입니다.</div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:var(--spacing-16)">
+    <h3 style="margin-top:0">⑤ 기타</h3>
+    <div class="demo" style="gap:var(--spacing-20);align-items:flex-start">
+      <div style="width:180px">
+        <div style="border:1px solid var(--color-border-default);border-radius:var(--radius-lg);overflow:hidden;background:#fff;box-shadow:var(--shadow-card)">
+          <div style="aspect-ratio:4/3;display:grid;place-items:center;font-size:36px;background:linear-gradient(145deg,var(--color-amber-50),var(--color-brand-100))">🍝</div>
+          <div style="padding:12px">
+            <div style="font-size:14px;font-weight:700;line-height:1.35">대부도 인기 파스타</div>
+            <div style="display:flex;gap:5px;margin-top:6px;font-size:11px;color:var(--color-text-subtle)">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px"><use href="#i-pin"/></svg>
+              <span>경기도 안산시 단원구 대부남동</span>
+            </div>
+          </div>
+        </div>
+        <div class="cap">카드 · 이미지 영역 추가/제외 가능</div>
+      </div>
+      <div style="width:230px">
+        <div style="border:1px solid var(--color-border-default);border-radius:var(--radius-lg);background:#fff;padding:var(--spacing-20);text-align:center">
+          <div style="width:48px;height:48px;margin:0 auto 10px;border-radius:99px;background:var(--color-background-muted);display:grid;place-items:center;color:var(--color-text-subtle)">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-search"/></svg>
+          </div>
+          <div style="font-size:16px;font-weight:600">아직 등록된 맛집이 없어요</div>
+          <div style="font-size:13px;color:var(--color-text-muted);margin-top:5px;line-height:1.5">첫 번째 맛집을 등록하고 이웃과 나눠 보세요.</div>
+          <div class="demo" style="justify-content:center;gap:8px;margin-top:14px">
+            <button class="btn btn--secondary btn--sm">둘러보기</button>
+            <button class="btn btn--primary btn--sm">맛집 등록</button>
+          </div>
+        </div>
+        <div class="cap">엠티 · 비주얼 + 제목 + 설명 + 액션(primary 1 · secondary 1)</div>
+      </div>
+      <div style="width:230px">
+        <div style="border:1px solid var(--color-border-default);border-radius:var(--radius-lg);background:#fff;overflow:hidden">
+          <div style="padding:var(--spacing-16) var(--spacing-16) 0;display:flex;align-items:flex-start;gap:8px">
+            <div style="flex:1;font-size:16px;font-weight:600">맛집을 삭제할까요?</div>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--color-text-subtle)" stroke-width="2.4" stroke-linecap="round"><use href="#i-x"/></svg>
+          </div>
+          <div style="padding:8px var(--spacing-16) var(--spacing-16);font-size:13px;color:var(--color-text-muted);line-height:1.5">
+            삭제해도 글은 사라지지 않고 <code>deleted_at</code>에 시각만 기록됩니다.
+          </div>
+          <div style="display:flex;gap:8px;padding:0 var(--spacing-16) var(--spacing-16)">
+            <button class="btn btn--secondary btn--sm" style="flex:1">취소</button>
+            <button class="btn btn--destructive btn--sm" style="flex:1">삭제</button>
+          </div>
+        </div>
+        <div class="cap">모달 · 중앙 · 스크림 탭 시 <b>닫힘</b> (바텀시트는 <b>선택 없이</b> 닫힘)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 7 · 규칙 ══════════ -->
+<section id="c7">
+  <h2><span class="n">7</span> 이 시스템의 규칙</h2>
+  <div class="panel">
+    <table>
+      <thead><tr><th>규칙</th><th>막는 실수</th></tr></thead>
+      <tbody>
+        <tr><td>시맨틱 토큰에 <b>hex 직접 입력 금지</b>, 프리미티브 참조만</td><td>2층 구조 붕괴 — 브랜드 컬러 변경이 다시 전수 수정이 된다</td></tr>
+        <tr><td>텍스트는 <b>600 이상</b>, 큰 텍스트라도 <b>500 이상</b></td><td>읽히지 않는 화면 (명암비 미달)</td></tr>
+        <tr><td><b>subtle 계열(파스텔/틴트)은 명시하지 않는 한 사용 금지</b></td><td>"예쁘라고" 깔린 파스텔 배경 — 토큰을 쓰되 아무 토큰이나 쓰지는 않는다</td></tr>
+        <tr><td>렌더는 <b>신규 프레임</b>, 컴포넌트 전환은 <b>신규 프레임 생성하지 않음</b></td><td>같은 문서가 두 장 생기고 컴포넌트가 엉뚱한 쪽에 붙는다</td></tr>
+        <tr><td><b>안은 컴포넌트, 밖은 프레임</b></td><td>문서 통째로가 부품이 되어 <code>display-lg</code> 하나 쓰려 해도 10개가 딸려온다</td></tr>
+        <tr><td>개수·크기는 <b>반드시 숫자로</b>, 같은 말을 다르게 두 번</td><td>AI가 11단계를 5·7단계로 임의 축약한다</td></tr>
+        <tr><td>완료된 컴포넌트에는 <b>"수정 금지"</b> 명시</td><td>지난 세션의 산출물이 덮어써진다</td></tr>
+        <tr><td>컴포넌트 사이 갭·마진은 <b>스페이싱 토큰만</b></td><td>임의 숫자가 섞여 리듬이 깨진다</td></tr>
+        <tr><td>시안에 없던 <b>타입이 있으면 시스템이 이긴다</b> (2-2)<br>타입 자체가 없으면 <b>시안을 유지</b> (2-1)</td><td>"조금 다른 버튼"이 개성이 아니라 부채로 남는다 / 시스템 밖의 것까지 컴포넌트화하려다 일정을 태운다</td></tr>
+      </tbody>
+    </table>
+    <div class="rule">
+      <div><b>구현이 아니라 수정이 문제다.</b> 입력창을 화면마다 따로 만들면 수정 비용은 화면 수에 비례합니다.
+      <b>컴포넌트는 복사가 아니라 연결</b>이므로, 원본 하나만 고치면 수정 비용이 <b>1</b>로 떨어집니다.</div>
+    </div>
+  </div>
+</section>
+
+<p class="footer">
+  Part 3 예제안 · 디자인 시스템 —
+  <a href="./README.md">커리큘럼 가이드</a> ·
+  <a href="./03-food-community.html">맛집커뮤니티 목업</a> ·
+  <a href="../part3.md">Part 3 요약본</a><br>
+  이 페이지의 모든 색·글자·간격은 위 목업과 <b>같은 토큰</b>을 씁니다. 팔레트를 바꾸면 두 파일이 함께 바뀝니다 —
+  그것을 확인하는 것이 이 문서의 목적입니다.
+</p>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var STEPS = [50,100,200,300,400,500,600,700,800,900,950];
+
+  /* 팔레트 — 3:1은 500부터, 4.5:1은 600부터 (neutral-50 배경 대비) */
+  var PALETTES = [
+    { key:"brand",   nm:"Brand / Moss",        ds:"브랜드 · 강조가 될 모든 부분" },
+    { key:"neutral", nm:"Neutral / Warm Sand", ds:"중립 · Surface, Text, Card, Line" },
+    { key:"amber",   nm:"Warning / Amber",     ds:"경고" },
+    { key:"leaf",    nm:"Success / Leaf",      ds:"성공" },
+    { key:"sky",     nm:"Info / Sage Blue",    ds:"정보" },
+    { key:"clay",    nm:"Error / Clay",        ds:"에러 · 되돌리기 어려운 액션" }
+  ];
+  var cs = getComputedStyle(document.documentElement);
+  var host = document.getElementById("palettes");
+
+  PALETTES.forEach(function(p){
+    var wrap = document.createElement("div");
+    wrap.className = "pal";
+    var head = '<div class="pal-head"><span class="nm">'+p.nm+'</span><span class="ds">'+p.ds+'</span></div>';
+    var ramp = '<div class="ramp">';
+    STEPS.forEach(function(s){
+      var v = cs.getPropertyValue("--color-"+p.key+"-"+s).trim();
+      var ok = s >= 600 ? "4.5:1" : (s >= 500 ? "3:1" : "");
+      ramp += '<div class="sw">'
+            +   '<div class="c" style="background:'+v+'">'+(ok?'<span class="ok">'+ok+'</span>':'')+'</div>'
+            +   '<div class="l"><b>'+s+'</b>'+v.toUpperCase()+'</div>'
+            + '</div>';
+    });
+    ramp += "</div>";
+    wrap.innerHTML = head + ramp;
+    host.appendChild(wrap);
+  });
+
+  /* 타이포 10종 */
+  var TYPES = [
+    ["display-lg","font-size-800",36,"bold 700","tight 1.2","오늘 뭐 먹을까요?"],
+    ["display-md","font-size-700",32,"bold 700","tight 1.2","오늘 뭐 먹을까요?"],
+    ["display-sm","font-size-600",28,"bold 700","tight 1.2","오늘 뭐 먹을까요?"],
+    ["heading-lg","font-size-500",24,"bold 700","tight 1.2","대부도 인기 파스타"],
+    ["heading-md","font-size-400",20,"bold 700","tight 1.2","대부도 인기 파스타"],
+    ["heading-sm","font-size-300",16,"semibold 600","tight 1.2","위치"],
+    ["body-lg","font-size-300",16,"regular 400","normal 1.4","가족과 함께 가기 정말 좋은 파스타집이에요."],
+    ["body-md","font-size-200",14,"regular 400","normal 1.4","가족과 함께 가기 정말 좋은 파스타집이에요."],
+    ["label-lg","font-size-200",14,"semibold 600","normal 1.4","이 위치로 등록하기"],
+    ["label-md","font-size-100",12,"regular 400","normal 1.4","경기도 안산시 단원구 대부남동 1126-396"]
+  ];
+  var typo = document.getElementById("typo");
+  TYPES.forEach(function(t){
+    var row = document.createElement("div");
+    row.className = "typerow";
+    var w = t[3].indexOf("700")>-1 ? 700 : (t[3].indexOf("600")>-1 ? 600 : 400);
+    var lh = t[4].indexOf("1.2")>-1 ? 1.2 : 1.4;
+    row.innerHTML =
+      '<div class="meta"><b>'+t[0]+'</b>'+t[1]+' · '+t[2]+'px<br>'+t[3]+' · '+t[4]+' · 자간 '+(t[2]*-0.02).toFixed(2)+'px</div>'
+      + '<div class="smp" style="font-size:'+t[2]+'px;font-weight:'+w+';line-height:'+lh+'">'+t[5]+'</div>';
+    typo.appendChild(row);
+  });
+
+  /* 아이콘 세트 */
+  var ICONS = ["left","right","up","down","home","user","search","filter","plus","edit","trash",
+               "share","more","heart","star","pin","image","camera","bell","settings",
+               "check","x","alert","info","logout","utensils"];
+  var ig = document.getElementById("icons");
+  ICONS.forEach(function(n){
+    var d = document.createElement("div");
+    d.className = "iconcell";
+    d.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-'+n+'"/></svg><span>'+n+'</span>';
+    ig.appendChild(d);
+  });
+
+  /* 스페이싱 */
+  var SP = [
+    [8,"컴포넌트 내부 요소 간 · 아이콘과 레이블"],
+    [12,"카드 내부 패딩 · 리스트 아이템 간"],
+    [16,"화면 좌우 마진 · 섹션 내부"],
+    [20,"카드 사이 (넉넉)"],
+    [24,"섹션 사이"],
+    [32,"큰 블록 사이 · 화면 상하 여백"]
+  ];
+  var sp = document.getElementById("spacing");
+  SP.forEach(function(s){
+    var r = document.createElement("div");
+    r.className = "sprow";
+    r.innerHTML = '<div class="lb"><b>spacing-'+s[0]+'</b> · '+s[0]+'px</div>'
+                + '<div class="bar" style="width:'+s[0]*4+'px"></div>'
+                + '<div style="font-size:12px;color:var(--color-text-muted)">'+s[1]+'</div>';
+    sp.appendChild(r);
+  });
+})();
+</script>
+</body>
+</html>

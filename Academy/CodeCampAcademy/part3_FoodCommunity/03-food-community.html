@@ -1,0 +1,1271 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>맛집커뮤니티 — Part 3 예제안 (목업)</title>
+<style>
+/* ══════════════════════════════════════════════════════════════
+   ①  프리미티브 토큰 — hex에 이름을 붙인 층 (Day 19)
+       각 계열 50~950 · 11단계 · 500이 기준(base)
+   ══════════════════════════════════════════════════════════════ */
+:root{
+  /* Brand / Moss — 따뜻한 녹색 */
+  --color-brand-50:#F3F7EE;  --color-brand-100:#E5EFDB; --color-brand-200:#CADFBB;
+  --color-brand-300:#A9C994; --color-brand-400:#86AF6C; --color-brand-500:#68954E;
+  --color-brand-600:#4F7A3D; --color-brand-700:#3E6131; --color-brand-800:#324D28;
+  --color-brand-900:#2A4022; --color-brand-950:#16240F;
+
+  /* Neutral / Warm Sand */
+  --color-neutral-50:#FAF8F3;  --color-neutral-100:#F3EFE6; --color-neutral-200:#E7E1D3;
+  --color-neutral-300:#D4CBB8; --color-neutral-400:#B3A892; --color-neutral-500:#8F8471;
+  --color-neutral-600:#6E6555; --color-neutral-700:#554E42; --color-neutral-800:#3D3830;
+  --color-neutral-900:#2A2621; --color-neutral-950:#1A1714;
+
+  /* Success / Leaf */
+  --color-leaf-50:#EAF6EE;  --color-leaf-100:#D3EBDC; --color-leaf-500:#3C9A63;
+  --color-leaf-600:#2E7D51; --color-leaf-700:#26643F;
+  /* Warning / Amber */
+  --color-amber-50:#FBF3E3; --color-amber-100:#F6E6C4; --color-amber-500:#D0961F;
+  --color-amber-600:#A97614; --color-amber-700:#855C10;
+  /* Error / Clay */
+  --color-clay-50:#FBEEEA;  --color-clay-100:#F6DCD4; --color-clay-400:#D98165;
+  --color-clay-500:#C75A3B; --color-clay-600:#AB4429; --color-clay-700:#8B3620;
+  /* Info / Sage Blue */
+  --color-sky-50:#EDF3F5;   --color-sky-100:#D8E5EA;  --color-sky-500:#4E8095;
+  --color-sky-600:#3F6879;  --color-sky-700:#33535F;
+
+  /* ════════════════════════════════════════════════════════════
+     ②  시맨틱 토큰 — 프리미티브 토큰만 참조한다 (hex 직접 입력 금지)
+     ════════════════════════════════════════════════════════════ */
+  --color-background-default:var(--color-neutral-50);
+  --color-background-surface:#FFFFFF;
+  --color-background-muted:var(--color-neutral-100);
+  --color-background-brand:var(--color-brand-600);
+  --color-background-brand-subtle:var(--color-brand-50);
+  --color-background-error-subtle:var(--color-clay-50);
+  --color-background-disabled:var(--color-neutral-200);
+  --color-background-scrim:rgba(42,38,33,.44);
+
+  --color-text-default:var(--color-neutral-800);
+  --color-text-muted:var(--color-neutral-600);
+  --color-text-subtle:var(--color-neutral-500);
+  --color-text-brand:var(--color-brand-700);
+  --color-text-on-brand:var(--color-neutral-50);
+  --color-text-error:var(--color-clay-600);
+  --color-text-disabled:var(--color-neutral-400);
+
+  --color-border-default:var(--color-neutral-200);
+  --color-border-strong:var(--color-neutral-300);
+  --color-border-brand:var(--color-brand-500);
+  --color-border-error:var(--color-clay-400);
+
+  /* ── 타이포그래피 프리미티브 (Day 20) */
+  --font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,
+                "Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --font-size-900:40px; --font-size-800:36px; --font-size-700:32px; --font-size-600:28px;
+  --font-size-500:24px; --font-size-400:20px; --font-size-300:16px; --font-size-200:14px;
+  --font-size-100:12px;
+  --font-weight-bold:700; --font-weight-semibold:600; --font-weight-regular:400;
+  --font-line-height-tight:1.2; --font-line-height-normal:1.4;
+
+  /* ── 스페이싱 프리미티브 (Day 21) */
+  --spacing-8:8px; --spacing-12:12px; --spacing-16:16px;
+  --spacing-20:20px; --spacing-24:24px; --spacing-32:32px;
+
+  --radius-sm:8px; --radius-md:12px; --radius-lg:16px; --radius-full:999px;
+  --shadow-card:0 1px 2px rgba(42,38,33,.05), 0 8px 20px -12px rgba(42,38,33,.18);
+  --shadow-float:0 6px 16px -4px rgba(42,38,33,.24);
+}
+
+/* ══ 타이포 구조 10종 — 프리미티브의 조합, 공통 자간 -2% ══ */
+.display-lg{font-size:var(--font-size-800);font-weight:var(--font-weight-bold);line-height:var(--font-line-height-tight)}
+.heading-lg{font-size:var(--font-size-500);font-weight:var(--font-weight-bold);line-height:var(--font-line-height-tight)}
+.heading-md{font-size:var(--font-size-400);font-weight:var(--font-weight-bold);line-height:var(--font-line-height-tight)}
+.heading-sm{font-size:var(--font-size-300);font-weight:var(--font-weight-semibold);line-height:var(--font-line-height-tight)}
+.body-lg{font-size:var(--font-size-300);font-weight:var(--font-weight-regular);line-height:var(--font-line-height-normal)}
+.body-md{font-size:var(--font-size-200);font-weight:var(--font-weight-regular);line-height:var(--font-line-height-normal)}
+.label-lg{font-size:var(--font-size-200);font-weight:var(--font-weight-semibold);line-height:var(--font-line-height-normal)}
+.label-md{font-size:var(--font-size-100);font-weight:var(--font-weight-regular);line-height:var(--font-line-height-normal)}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;font-family:var(--font-family);letter-spacing:-.02em;
+  background:
+    radial-gradient(1200px 600px at 12% -8%, var(--color-brand-100), transparent 60%),
+    radial-gradient(900px 500px at 92% 0%, var(--color-amber-50), transparent 55%),
+    var(--color-background-default);
+  color:var(--color-text-default);min-height:100vh;
+}
+
+/* ══════════════ 문서 셸 ══════════════ */
+.wrap{max-width:1360px;margin:0 auto;padding:var(--spacing-24) var(--spacing-20) 64px}
+.doc-head{display:flex;flex-wrap:wrap;gap:var(--spacing-16);align-items:flex-end;justify-content:space-between;margin-bottom:var(--spacing-20)}
+.brandmark{display:flex;align-items:center;gap:var(--spacing-12)}
+.brandmark .logo{
+  width:44px;height:44px;border-radius:14px;flex:none;display:grid;place-items:center;
+  background:linear-gradient(150deg,var(--color-brand-500),var(--color-brand-700));
+  color:var(--color-text-on-brand);box-shadow:var(--shadow-float);
+}
+.brandmark .logo svg{width:24px;height:24px}
+.eyebrow{color:var(--color-text-brand);font-size:var(--font-size-100);font-weight:700;letter-spacing:.04em;margin:0 0 2px}
+.doc-title{margin:0;font-size:var(--font-size-500);font-weight:var(--font-weight-bold);line-height:1.2}
+.doc-sub{margin:6px 0 0;color:var(--color-text-muted);font-size:var(--font-size-200);line-height:1.5;max-width:62ch}
+
+.pillbar{display:flex;gap:6px;background:var(--color-background-surface);border:1px solid var(--color-border-default);
+  border-radius:var(--radius-full);padding:5px}
+.pillbar button{
+  border:0;background:transparent;color:var(--color-text-muted);cursor:pointer;
+  font:600 13px/1 var(--font-family);letter-spacing:-.02em;padding:9px 14px;border-radius:var(--radius-full)
+}
+.pillbar button[aria-pressed="true"]{background:var(--color-background-brand);color:var(--color-text-on-brand)}
+
+.mocknote{
+  display:flex;gap:var(--spacing-12);align-items:flex-start;
+  background:var(--color-amber-50);border:1px solid var(--color-amber-100);
+  border-left:4px solid var(--color-amber-500);
+  border-radius:var(--radius-md);padding:var(--spacing-12) var(--spacing-16);margin-bottom:var(--spacing-20)
+}
+.mocknote p{margin:0;font-size:var(--font-size-200);line-height:1.55;color:var(--color-neutral-700)}
+.mocknote strong{color:var(--color-amber-700)}
+
+/* 화면 선택 칩 */
+.chips{display:flex;flex-wrap:wrap;gap:var(--spacing-8);margin-bottom:var(--spacing-20)}
+.chip{
+  border:1px solid var(--color-border-default);background:var(--color-background-surface);
+  color:var(--color-text-muted);border-radius:var(--radius-full);padding:8px 14px;cursor:pointer;
+  font:600 13px/1 var(--font-family);letter-spacing:-.02em;display:inline-flex;align-items:center;gap:7px;
+}
+.chip .num{font-size:11px;color:var(--color-text-subtle);font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{
+  background:var(--color-background-brand-subtle);border-color:var(--color-border-brand);color:var(--color-text-brand)
+}
+.chip[aria-pressed="true"] .num{color:var(--color-brand-600)}
+
+/* 스테이지 */
+.stage{display:grid;gap:var(--spacing-32)}
+.stage[data-view="canvas"]{grid-template-columns:repeat(auto-fill,minmax(360px,1fr));align-items:start}
+.stage[data-view="single"]{grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:var(--spacing-32);align-items:start}
+.stage[data-view="single"] .board{display:none}
+.stage[data-view="single"] .board.is-active{display:block}
+@media (max-width:860px){ .stage[data-view="single"]{grid-template-columns:1fr;justify-items:center} }
+
+.board{margin:0}
+.board-cap{margin:var(--spacing-12) 0 0}
+.board-cap .t{font-size:var(--font-size-200);font-weight:700}
+.board-cap .d{font-size:var(--font-size-100);color:var(--color-text-subtle);margin-top:2px}
+.stage[data-view="single"] .board-cap{display:none}
+
+/* ══════════════ 폰 프레임 360×740 ══════════════ */
+.phone{
+  width:360px;height:740px;border-radius:28px;overflow:hidden;position:relative;
+  background:var(--color-background-default);border:1px solid var(--color-neutral-300);
+  box-shadow:0 2px 4px rgba(42,38,33,.06), 0 24px 60px -28px rgba(42,38,33,.45);
+  display:flex;flex-direction:column;
+}
+.statusbar{
+  height:26px;flex:none;display:flex;align-items:center;justify-content:space-between;
+  padding:0 var(--spacing-16);font-size:11px;font-weight:600;color:var(--color-text-muted);
+  background:var(--color-background-surface);border-bottom:1px solid var(--color-border-default)
+}
+.screen{flex:1;overflow-y:auto;overflow-x:hidden;position:relative;scrollbar-width:thin}
+.screen::-webkit-scrollbar{width:5px}
+.screen::-webkit-scrollbar-thumb{background:var(--color-neutral-300);border-radius:99px}
+
+/* 탑 내비게이션 — 56px (Day 21) */
+.topnav{
+  height:56px;flex:none;display:flex;align-items:center;gap:var(--spacing-8);
+  padding:0 var(--spacing-8);background:var(--color-background-surface);
+  border-bottom:1px solid var(--color-border-default);position:sticky;top:0;z-index:5
+}
+.topnav .ttl{flex:1;text-align:center;font-size:var(--font-size-300);font-weight:600}
+
+/* 아이콘 버튼 — 터치 48 / 아이콘 24 (Day 20) */
+.iconbtn{
+  width:48px;height:48px;flex:none;border:0;background:transparent;border-radius:var(--radius-full);
+  display:grid;place-items:center;cursor:pointer;color:var(--color-text-default)
+}
+.iconbtn:hover{background:var(--color-background-muted)}
+.iconbtn svg{width:24px;height:24px}
+.iconbtn--brand{background:var(--color-background-brand);color:var(--color-text-on-brand)}
+.iconbtn--brand:hover{background:var(--color-brand-700)}
+.iconbtn--neutral{background:var(--color-background-muted)}
+
+.pad{padding:var(--spacing-16)}
+.stack-8>*+*{margin-top:var(--spacing-8)}
+.stack-12>*+*{margin-top:var(--spacing-12)}
+.stack-16>*+*{margin-top:var(--spacing-16)}
+.stack-24>*+*{margin-top:var(--spacing-24)}
+.muted{color:var(--color-text-muted)}
+.subtle{color:var(--color-text-subtle)}
+
+/* 버튼 (Day 21 — 타입 3 × 상태 3 × 사이즈 3) */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--spacing-8);
+  height:48px;padding:0 var(--spacing-20);border-radius:var(--radius-md);border:1px solid transparent;
+  font:600 14px/1 var(--font-family);letter-spacing:-.02em;cursor:pointer;width:100%
+}
+.btn svg{width:20px;height:20px}
+.btn--primary{background:var(--color-background-brand);color:var(--color-text-on-brand)}
+.btn--primary:hover{background:var(--color-brand-700)}
+.btn--secondary{background:var(--color-background-surface);color:var(--color-text-default);border-color:var(--color-border-strong)}
+.btn--secondary:hover{background:var(--color-background-muted)}
+.btn--ghost{background:transparent;color:var(--color-text-brand)}
+.btn[disabled]{background:var(--color-background-disabled);color:var(--color-text-disabled);border-color:transparent;cursor:not-allowed}
+.btn--sm{height:32px;padding:0 var(--spacing-12);font-size:12px;width:auto}
+.btn--md{height:40px;width:auto;padding:0 var(--spacing-16)}
+
+/* 텍스트필드 (default / focused / error) */
+.field label{display:block;font-size:var(--font-size-200);font-weight:600;margin-bottom:6px}
+.field .box{
+  display:flex;align-items:center;gap:var(--spacing-8);height:48px;padding:0 var(--spacing-12);
+  border:1px solid var(--color-border-strong);border-radius:var(--radius-md);
+  background:var(--color-background-surface)
+}
+.field .box svg{width:20px;height:20px;color:var(--color-text-subtle);flex:none}
+.field .box input,.field .box textarea{
+  border:0;outline:0;background:transparent;flex:1;font:400 16px/1.4 var(--font-family);
+  letter-spacing:-.02em;color:var(--color-text-default);min-width:0
+}
+.field .box input::placeholder,.field .box textarea::placeholder{color:var(--color-text-subtle)}
+.field .box--area{height:auto;align-items:flex-start;padding:var(--spacing-12)}
+.field .box--area textarea{resize:none;height:76px}
+.field.is-focused .box{border-color:var(--color-border-brand);box-shadow:0 0 0 3px var(--color-brand-100)}
+.field.is-error .box{border-color:var(--color-border-error);background:var(--color-background-error-subtle)}
+.field .helper{margin-top:6px;font-size:var(--font-size-100);color:var(--color-text-subtle);display:flex;justify-content:space-between;gap:var(--spacing-8)}
+.field.is-error .helper .msg{color:var(--color-text-error);font-weight:600}
+
+/* 칩(입력) vs 배지(표시) — Day 21 판서 */
+.filterrow{display:flex;gap:var(--spacing-8);overflow-x:auto;padding:0 var(--spacing-16) var(--spacing-4);scrollbar-width:none}
+.filterrow::-webkit-scrollbar{display:none}
+.fchip{
+  flex:none;height:32px;padding:0 var(--spacing-12);border-radius:var(--radius-full);
+  border:1px solid var(--color-border-default);background:var(--color-background-surface);
+  color:var(--color-text-muted);font:600 12px/1 var(--font-family);letter-spacing:-.02em;cursor:pointer;
+  display:inline-flex;align-items:center
+}
+.fchip[aria-pressed="true"]{background:var(--color-background-brand);border-color:transparent;color:var(--color-text-on-brand)}
+.badge{
+  display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 var(--spacing-8);
+  border-radius:var(--radius-full);font:600 11px/1 var(--font-family);letter-spacing:-.02em
+}
+.badge svg{width:12px;height:12px}
+.badge--neutral{background:var(--color-neutral-100);color:var(--color-text-muted)}
+.badge--brand{background:var(--color-brand-100);color:var(--color-brand-700)}
+.badge--success{background:var(--color-leaf-50);color:var(--color-leaf-700)}
+.badge--warning{background:var(--color-amber-50);color:var(--color-amber-700)}
+.badge--error{background:var(--color-clay-50);color:var(--color-clay-700)}
+
+/* 카드 */
+.card{
+  background:var(--color-background-surface);border:1px solid var(--color-border-default);
+  border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-card)
+}
+.photo{
+  aspect-ratio:4/3;display:grid;place-items:center;font-size:40px;
+  background:linear-gradient(145deg,var(--color-amber-50),var(--color-brand-100));
+  color:transparent;position:relative
+}
+.photo::after{content:attr(data-emoji);filter:saturate(.92)}
+.photo--tall{aspect-ratio:3/2}
+.photo--wide{aspect-ratio:16/9}
+.cardbody{padding:var(--spacing-12)}
+.cardbody .t{font-size:var(--font-size-200);font-weight:700;line-height:1.35;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cardbody .loc{display:flex;align-items:flex-start;gap:5px;margin-top:6px;font-size:11px;color:var(--color-text-subtle);line-height:1.4}
+.cardbody .loc svg{width:13px;height:13px;flex:none;margin-top:1px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-12)}
+
+/* 리스트 아이템 (검색 결과) */
+.listitem{
+  display:flex;gap:var(--spacing-12);padding:var(--spacing-12);border-radius:var(--radius-md);
+  border:1px solid transparent;cursor:pointer;background:var(--color-background-surface)
+}
+.listitem:hover{border-color:var(--color-border-brand);background:var(--color-background-brand-subtle)}
+.listitem .n{font-size:var(--font-size-200);font-weight:600}
+.listitem .a{font-size:var(--font-size-100);color:var(--color-text-subtle);margin-top:3px;line-height:1.45}
+
+/* 지도 목업 */
+.map{
+  position:relative;height:210px;border-radius:var(--radius-md);overflow:hidden;
+  background:var(--color-brand-50);border:1px solid var(--color-border-default)
+}
+.map--tall{height:280px}
+.map--mini{height:132px}
+.mblock{position:absolute;left:var(--x);top:var(--y);width:var(--w);height:var(--h);
+  background:var(--color-brand-100);border-radius:4px}
+.mblock.alt{background:var(--color-neutral-100)}
+.mroad{position:absolute;background:var(--color-background-surface)}
+.mroad.h{left:-4%;width:108%;height:12px;top:var(--y);box-shadow:0 0 0 1px var(--color-neutral-200) inset}
+.mroad.v{top:-4%;height:108%;width:12px;left:var(--x);box-shadow:0 0 0 1px var(--color-neutral-200) inset}
+.mpin{position:absolute;left:50%;top:50%;transform:translate(-50%,-100%);color:var(--color-clay-500);
+  filter:drop-shadow(0 4px 6px rgba(42,38,33,.28))}
+.mpin svg{width:34px;height:34px}
+.mpin.center-lock::after{
+  content:"";position:absolute;left:50%;top:100%;width:8px;height:4px;border-radius:99px;
+  transform:translate(-50%,2px);background:rgba(42,38,33,.22)
+}
+.mtag{
+  position:absolute;left:var(--spacing-8);top:var(--spacing-8);
+  background:rgba(255,255,255,.92);border:1px solid var(--color-border-default);
+  border-radius:var(--radius-full);padding:4px 9px;font:600 10px/1 var(--font-family);
+  color:var(--color-text-muted);letter-spacing:-.01em
+}
+.mhint{
+  position:absolute;inset:auto var(--spacing-8) var(--spacing-8);text-align:center;
+  background:rgba(255,255,255,.92);border:1px solid var(--color-border-default);
+  border-radius:var(--radius-sm);padding:7px;font-size:11px;color:var(--color-text-muted)
+}
+
+/* 사진 업로더 */
+.uploader{display:flex;gap:var(--spacing-8)}
+.slot{
+  flex:1;aspect-ratio:1;border-radius:var(--radius-md);border:1px dashed var(--color-border-strong);
+  background:var(--color-background-muted);display:grid;place-items:center;color:var(--color-text-subtle)
+}
+.slot svg{width:22px;height:22px}
+.slot.is-error{border-color:var(--color-border-error);background:var(--color-background-error-subtle);color:var(--color-text-error)}
+
+/* 바텀 내비 — 56px, 미선택=아웃라인+뉴트럴 / 선택=필+브랜드 */
+.bottomnav{
+  height:56px;flex:none;display:flex;background:var(--color-background-surface);
+  border-top:1px solid var(--color-border-default)
+}
+.bottomnav button{
+  flex:1;border:0;background:transparent;cursor:pointer;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:2px;color:var(--color-text-subtle);
+  font:400 11px/1 var(--font-family);letter-spacing:-.02em
+}
+.bottomnav button svg{width:24px;height:24px}
+.bottomnav button[aria-current="page"]{color:var(--color-text-brand);font-weight:600}
+.bottomnav button[aria-current="page"] svg{fill:var(--color-brand-100);stroke:var(--color-brand-700)}
+
+/* FAB */
+.fab{
+  position:absolute;right:var(--spacing-16);bottom:calc(56px + var(--spacing-16));
+  width:56px;height:56px;border-radius:var(--radius-full);border:0;cursor:pointer;
+  background:var(--color-background-brand);color:var(--color-text-on-brand);
+  display:grid;place-items:center;box-shadow:var(--shadow-float);z-index:6
+}
+.fab svg{width:26px;height:26px}
+
+/* PWA 설치 띠배너 — 디자인 시스템 밖의 시스템 UI (Day 29) */
+.pwabar{
+  position:absolute;left:0;right:0;bottom:56px;z-index:7;display:flex;align-items:center;
+  gap:var(--spacing-12);padding:var(--spacing-12) var(--spacing-12);
+  background:var(--color-neutral-900);color:var(--color-neutral-50);
+  box-shadow:0 -8px 20px -12px rgba(42,38,33,.6)
+}
+.pwabar .ico{width:36px;height:36px;border-radius:10px;flex:none;display:grid;place-items:center;
+  background:linear-gradient(150deg,var(--color-brand-400),var(--color-brand-600))}
+.pwabar .ico svg{width:20px;height:20px}
+.pwabar .tx{flex:1;min-width:0}
+.pwabar .tx b{display:block;font-size:13px}
+.pwabar .tx span{display:block;font-size:11px;color:var(--color-neutral-300);margin-top:1px}
+.pwabar .go{border:0;border-radius:var(--radius-sm);background:var(--color-brand-500);color:#fff;
+  font:600 12px/1 var(--font-family);padding:9px 12px;cursor:pointer}
+.pwabar .cl{border:0;background:transparent;color:var(--color-neutral-400);cursor:pointer;display:grid;place-items:center;width:28px;height:28px}
+.pwabar .cl svg{width:16px;height:16px}
+
+/* 토스트 */
+.toast{
+  position:absolute;left:var(--spacing-16);right:var(--spacing-16);bottom:calc(56px + var(--spacing-16));
+  display:flex;align-items:center;gap:var(--spacing-8);z-index:8;
+  background:var(--color-neutral-900);color:var(--color-neutral-50);
+  border-radius:var(--radius-md);padding:var(--spacing-12);font-size:var(--font-size-200);
+  box-shadow:var(--shadow-float)
+}
+.toast svg{width:20px;height:20px;flex:none;color:var(--color-brand-300)}
+.toast[hidden]{display:none}
+
+/* 세그먼트 (등록 화면 상태 토글) */
+.seg{display:flex;gap:4px;background:var(--color-background-muted);border-radius:var(--radius-full);padding:4px}
+.seg button{
+  flex:1;border:0;background:transparent;border-radius:var(--radius-full);cursor:pointer;
+  font:600 12px/1 var(--font-family);letter-spacing:-.02em;padding:8px;color:var(--color-text-muted)
+}
+.seg button[aria-pressed="true"]{background:var(--color-background-surface);color:var(--color-text-brand);box-shadow:0 1px 2px rgba(42,38,33,.1)}
+
+/* 로그인 */
+.login-hero{padding:var(--spacing-32) var(--spacing-24) var(--spacing-24);text-align:center}
+.login-hero .mark{
+  width:76px;height:76px;margin:0 auto var(--spacing-16);border-radius:24px;display:grid;place-items:center;
+  background:linear-gradient(150deg,var(--color-brand-400),var(--color-brand-700));
+  color:#fff;box-shadow:var(--shadow-float)
+}
+.login-hero .mark svg{width:38px;height:38px}
+.gbtn{
+  display:flex;align-items:center;justify-content:center;gap:var(--spacing-12);width:100%;height:48px;
+  border-radius:var(--radius-md);border:1px solid var(--color-border-strong);
+  background:var(--color-background-surface);cursor:pointer;
+  font:600 14px/1 var(--font-family);letter-spacing:-.02em;color:var(--color-text-default)
+}
+.gbtn .g{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(from -45deg,#EA4335 0 25%,#FBBC05 0 50%,#34A853 0 75%,#4285F4 0);
+  color:#fff;font:800 11px/1 var(--font-family)}
+.gbtn .g span{background:#fff;color:#4285F4;width:13px;height:13px;border-radius:50%;display:grid;place-items:center;font-size:9px}
+
+/* 프로필 */
+.avatar{
+  width:72px;height:72px;border-radius:50%;display:grid;place-items:center;font-size:30px;
+  background:linear-gradient(145deg,var(--color-amber-50),var(--color-brand-200));flex:none
+}
+.rowlink{
+  display:flex;align-items:center;gap:var(--spacing-12);padding:var(--spacing-12);
+  border-radius:var(--radius-md);cursor:pointer
+}
+.rowlink:hover{background:var(--color-background-muted)}
+.rowlink svg{width:20px;height:20px;color:var(--color-text-subtle)}
+.rowlink .t{flex:1;font-size:var(--font-size-200);font-weight:600}
+
+/* 노트 패널 */
+.note{
+  background:var(--color-background-surface);border:1px solid var(--color-border-default);
+  border-radius:var(--radius-lg);padding:var(--spacing-20);box-shadow:var(--shadow-card);
+  position:sticky;top:var(--spacing-24)
+}
+.stage[data-view="canvas"] .notewrap{display:none}
+.note h3{margin:0 0 4px;font-size:var(--font-size-400);font-weight:700}
+.note .sc{font-size:var(--font-size-100);color:var(--color-text-subtle);margin:0 0 var(--spacing-16)}
+.note h4{margin:var(--spacing-20) 0 var(--spacing-8);font-size:var(--font-size-100);letter-spacing:.04em;
+  text-transform:uppercase;color:var(--color-text-brand);font-weight:700}
+.note ul{margin:0;padding-left:1.1em}
+.note li{font-size:var(--font-size-200);line-height:1.6;color:var(--color-neutral-700);margin:5px 0}
+.note li code,.note p code{
+  background:var(--color-background-muted);border-radius:5px;padding:1px 5px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--color-brand-700)
+}
+.note .daytag{
+  display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:var(--radius-full);
+  background:var(--color-brand-100);color:var(--color-brand-700);font:700 11px/1 var(--font-family);
+  margin:0 5px 5px 0
+}
+.note .mockflag{
+  margin-top:var(--spacing-16);padding:var(--spacing-12);border-radius:var(--radius-md);
+  background:var(--color-amber-50);border:1px solid var(--color-amber-100);
+  font-size:var(--font-size-100);line-height:1.55;color:var(--color-neutral-700)
+}
+.note .mockflag b{color:var(--color-amber-700)}
+
+.footer{margin-top:48px;padding-top:var(--spacing-20);border-top:1px solid var(--color-border-default);
+  font-size:var(--font-size-100);color:var(--color-text-subtle);line-height:1.7}
+.footer a{color:var(--color-text-brand)}
+</style>
+</head>
+<body>
+
+<!-- 아이콘 스프라이트 (루시드 계열 · 24px 기준) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <defs>
+  <g id="i-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></g>
+  <g id="i-plus"><path d="M5 12h14M12 5v14"/></g>
+  <g id="i-home"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></g>
+  <g id="i-user"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></g>
+  <g id="i-left"><path d="m15 18-6-6 6-6"/></g>
+  <g id="i-right"><path d="m9 18 6-6-6-6"/></g>
+  <g id="i-heart"><path d="M20.8 5.6a5.5 5.5 0 0 0-7.8 0L12 6.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l8.8 8.6 8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></g>
+  <g id="i-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></g>
+  <g id="i-image"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-4.6-4.6a2 2 0 0 0-2.8 0L3 21"/></g>
+  <g id="i-camera"><path d="M14.5 4h-5L8 6H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-4z"/><circle cx="12" cy="13" r="4"/></g>
+  <g id="i-x"><path d="M18 6 6 18M6 6l12 12"/></g>
+  <g id="i-check"><path d="M20 6 9 17l-5-5"/></g>
+  <g id="i-alert"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></g>
+  <g id="i-edit"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></g>
+  <g id="i-trash"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></g>
+  <g id="i-share"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></g>
+  <g id="i-more"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></g>
+  <g id="i-utensils"><path d="M4 3v7a3 3 0 0 0 6 0V3M7 10v11"/><path d="M17 3c-1.7 1.2-2.5 3-2.5 5.5 0 2 .8 3.2 2.5 3.5V21"/></g>
+  <g id="i-external"><path d="M14 4h6v6"/><path d="M20 4 11 13"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></g>
+  <g id="i-download"><path d="M12 3v12M7 11l5 5 5-5M4 21h16"/></g>
+ </defs>
+</svg>
+
+<div class="wrap">
+
+  <header class="doc-head">
+    <div class="brandmark">
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-utensils"/></svg></div>
+      <div>
+        <p class="eyebrow">PART 3 예제안 · DAY 17–29</p>
+        <h1 class="doc-title">맛집커뮤니티 — 화면 목업</h1>
+        <p class="doc-sub">360×740 기준 반응형 화면 8장. 디자인 토큰·타이포·스페이싱·컴포넌트 상태는 책의 규칙을 그대로 따랐고, 브랜드 컬러만 <strong>따뜻한 녹색(Moss)</strong>으로 다시 뽑았습니다.</p>
+      </div>
+    </div>
+    <div class="pillbar" role="group" aria-label="보기 방식">
+      <button type="button" data-view-btn="single" aria-pressed="true">한 화면씩</button>
+      <button type="button" data-view-btn="canvas" aria-pressed="false">전체 캔버스</button>
+    </div>
+  </header>
+
+  <div class="mocknote">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;flex:none;color:var(--color-amber-600)"><use href="#i-alert"/></svg>
+    <p><strong>이 페이지는 목업입니다.</strong> 지도는 CSS로 그린 모형이고, 네이버 지역 검색 결과·구글 로그인·DB·이미지 업로드는 모두 화면 안에 넣어 둔 더미 데이터입니다. 실제 연동은 Day 24~27에서 BFF와 API 키로 대체합니다. <strong>화면 전환과 상태 변화는 실제로 동작</strong>하니 눌러 보세요.</p>
+  </div>
+
+  <nav class="chips" id="chips" aria-label="화면 선택"></nav>
+
+  <div class="stage" id="stage" data-view="single">
+
+    <!-- ══════════ 04 로그인 ══════════ -->
+    <figure class="board" data-screen="login">
+      <div class="phone">
+        <div class="statusbar"><span>9:41</span><span>5G · 100%</span></div>
+        <div class="screen">
+          <div class="login-hero">
+            <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-utensils"/></svg></div>
+            <h2 class="heading-lg" style="margin:0">숨은 맛집</h2>
+            <p class="body-md muted" style="margin:8px 0 0">광고보다 가까운 사람의 추천을 믿고,<br>주말에 차로 다녀올 만한 식당을 발견하세요.</p>
+          </div>
+          <div class="pad stack-12">
+            <button class="gbtn" data-go="home"><span class="g"><span>G</span></span> Google로 계속하기</button>
+            <button class="btn btn--secondary" data-go="home">이메일로 계속하기</button>
+            <p class="label-md subtle" style="text-align:center;margin:8px 0 0;line-height:1.6">
+              계속하면 <u>이용약관</u>과 <u>개인정보 처리방침</u>에 동의하게 됩니다.
+            </p>
+          </div>
+          <div class="pad" style="padding-top:0">
+            <div style="background:var(--color-background-muted);border-radius:var(--radius-md);padding:var(--spacing-12)">
+              <span class="badge badge--warning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><use href="#i-alert"/></svg> 목업</span>
+              <p class="label-md muted" style="margin:8px 0 0;line-height:1.6">실제로는 <code>비밀 CODE → 구글 전용 토큰 → Supabase 전용 토큰(JWT)</code> 9단계를 거칩니다. 여기서는 버튼만 눌러도 다음 화면으로 넘어갑니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <figcaption class="board-cap"><div class="t">04 Login Page</div><div class="d">소셜로그인 · Day 12–13</div></figcaption>
+    </figure>
+
+    <!-- ══════════ 01 맛집 목록 ══════════ -->
+    <figure class="board" data-screen="home">
+      <div class="phone">
+        <div class="statusbar"><span>9:41</span><span>5G · 100%</span></div>
+        <div class="topnav">
+          <div style="width:48px"></div>
+          <div class="ttl">숨은 맛집</div>
+          <button class="iconbtn" data-go="mypage" aria-label="내 정보"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-user"/></svg></button>
+        </div>
+        <div class="screen" id="homeScreen">
+          <div class="pad" style="padding-bottom:var(--spacing-12)">
+            <h2 class="heading-md" style="margin:0 0 var(--spacing-12)">오늘 뭐 먹을까요?</h2>
+            <div class="field">
+              <div class="box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-search"/></svg>
+                <input placeholder="음식, 식당, 레시피 검색" aria-label="검색">
+              </div>
+            </div>
+          </div>
+          <div class="filterrow" role="group" aria-label="카테고리">
+            <button class="fchip" aria-pressed="true">전체</button>
+            <button class="fchip" aria-pressed="false">한식</button>
+            <button class="fchip" aria-pressed="false">양식</button>
+            <button class="fchip" aria-pressed="false">카페</button>
+            <button class="fchip" aria-pressed="false">디저트</button>
+            <button class="fchip" aria-pressed="false">주차 편함</button>
+          </div>
+          <div class="pad">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--spacing-12)">
+              <h3 class="heading-sm" style="margin:0">인기 게시글</h3>
+              <span class="label-md subtle">2곳</span>
+            </div>
+            <div class="grid2">
+              <article class="card" data-go="detail" style="cursor:pointer">
+                <div class="photo" data-emoji="🍝"></div>
+                <div class="cardbody">
+                  <div class="t">대부도 인기 파스타</div>
+                  <div class="loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-pin"/></svg><span>경기도 안산시 단원구 대부남동 1126-396</span></div>
+                </div>
+              </article>
+              <article class="card" style="cursor:pointer">
+                <div class="photo" data-emoji="🥩"></div>
+                <div class="cardbody">
+                  <div class="t">대부도 1등 고기</div>
+                  <div class="loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-pin"/></svg><span class="subtle">위치 미등록</span></div>
+                </div>
+              </article>
+              <article class="card" style="cursor:pointer">
+                <div class="photo" data-emoji="🍜"></div>
+                <div class="cardbody">
+                  <div class="t">골목 끝 화덕 생선구이</div>
+                  <div class="loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-pin"/></svg><span>서울 구로구 구로동 123-4</span></div>
+                </div>
+              </article>
+              <article class="card" style="cursor:pointer">
+                <div class="photo" data-emoji="🍰"></div>
+                <div class="cardbody">
+                  <div class="t">망원동 티라미수</div>
+                  <div class="loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-pin"/></svg><span>서울 마포구 희우정로 87</span></div>
+                </div>
+              </article>
+            </div>
+            <p class="label-md subtle" style="text-align:center;margin:var(--spacing-20) 0 96px">
+              소프트 삭제된 글은 목록에 나오지 않습니다 · <code style="background:var(--color-background-muted);border-radius:4px;padding:1px 4px">deleted_at IS NULL</code>
+            </p>
+          </div>
+
+          <div class="toast" id="homeToast" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-check"/></svg>
+            <span>등록이 완료되었습니다.</span>
+          </div>
+        </div>
+
+        <button class="fab" data-go="register" aria-label="맛집 등록">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-plus"/></svg>
+        </button>
+
+        <div class="pwabar" id="pwabar">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-utensils"/></svg></div>
+          <div class="tx"><b>홈 화면에 추가하기</b><span>주소창 없이 앱처럼 바로 열려요</span></div>
+          <button class="go" id="pwaInstall">설치</button>
+          <button class="cl" id="pwaClose" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><use href="#i-x"/></svg></button>
+        </div>
+
+        <nav class="bottomnav">
+          <button aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-home"/></svg>홈</button>
+          <button data-go="mypage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-user"/></svg>내 정보</button>
+        </nav>
+      </div>
+      <figcaption class="board-cap"><div class="t">01 Main Page</div><div class="d">목록조회 · PWA 설치 배너 · Day 25 · 29</div></figcaption>
+    </figure>
+
+    <!-- ══════════ 02 상세 ══════════ -->
+    <figure class="board" data-screen="detail">
+      <div class="phone">
+        <div class="statusbar"><span>9:41</span><span>5G · 100%</span></div>
+        <div class="topnav">
+          <button class="iconbtn" data-go="home" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-left"/></svg></button>
+          <div class="ttl">맛집 상세</div>
+          <button class="iconbtn" aria-label="더보기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><use href="#i-more"/></svg></button>
+        </div>
+        <div class="screen">
+          <div class="photo photo--wide" data-emoji="🍝"></div>
+          <div class="pad stack-16">
+            <div>
+              <span class="badge badge--brand">양식</span>
+              <h2 class="heading-lg" style="margin:8px 0 0">대부도 인기 파스타</h2>
+              <p class="label-md subtle" style="margin:6px 0 0">영희 · 2026. 8. 7. · 방문 완료</p>
+            </div>
+            <p class="body-lg" style="margin:0">가족과 함께 가기 정말 좋은 파스타집이에요. 창가 자리에서 바다가 보이고, 주차장이 넓어서 차로 가기 편합니다.</p>
+
+            <div>
+              <h3 class="heading-sm" style="margin:0 0 var(--spacing-8)">위치</h3>
+              <div class="map map--mini">
+                <div class="mblock" style="--x:6%;--y:10%;--w:30%;--h:30%"></div>
+                <div class="mblock alt" style="--x:62%;--y:8%;--w:32%;--h:26%"></div>
+                <div class="mblock" style="--x:10%;--y:62%;--w:26%;--h:28%"></div>
+                <div class="mroad h" style="--y:46%"></div>
+                <div class="mroad v" style="--x:48%"></div>
+                <div class="mpin"><svg viewBox="0 0 24 24" fill="var(--color-clay-100)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-pin"/></svg></div>
+                <div class="mtag">NAVER 지도 · 목업</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:var(--spacing-8);margin-top:var(--spacing-8)">
+                <p class="body-md" style="margin:0;flex:1">경기도 안산시 단원구 대부남동 1126-396</p>
+                <button class="btn btn--ghost btn--sm">복사</button>
+              </div>
+              <button class="btn btn--secondary btn--md" style="margin-top:var(--spacing-8)">
+                네이버 지도에서 보기
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-external"/></svg>
+              </button>
+            </div>
+
+            <div style="display:flex;gap:var(--spacing-8);padding-top:var(--spacing-8);border-top:1px solid var(--color-border-default)">
+              <button class="btn btn--secondary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-edit"/></svg>수정</button>
+              <button class="btn btn--secondary" style="color:var(--color-text-error);border-color:var(--color-border-error)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-trash"/></svg>삭제</button>
+            </div>
+            <p class="label-md subtle" style="margin:0 0 var(--spacing-24)">삭제해도 행은 남고 <code style="background:var(--color-background-muted);border-radius:4px;padding:1px 4px">deleted_at</code>에 시각만 기록됩니다(소프트 삭제).</p>
+          </div>
+        </div>
+      </div>
+      <figcaption class="board-cap"><div class="t">02 Detail Page</div><div class="d">상세조회 · 미니 지도 · Day 25 · 26</div></figcaption>
+    </figure>
+
+    <!-- ══════════ 03 게시글 등록 (에러 상태) ══════════ -->
+    <figure class="board" data-screen="register">
+      <div class="phone">
+        <div class="statusbar"><span>9:41</span><span>5G · 100%</span></div>
+        <div class="topnav">
+          <button class="iconbtn" data-go="home" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-x"/></svg></button>
+          <div class="ttl">맛집 등록</div>
+          <div style="width:48px"></div>
+        </div>
+        <div class="screen" id="regScreen" data-state="error">
+          <div class="pad stack-16">
+            <div class="seg" role="group" aria-label="상태 전환">
+              <button type="button" data-reg-state="error" aria-pressed="true">에러 상태</button>
+              <button type="button" data-reg-state="filled" aria-pressed="false">입력 완료</button>
+            </div>
+
+            <div id="regBanner" style="display:flex;gap:var(--spacing-8);align-items:flex-start;background:var(--color-background-error-subtle);border:1px solid var(--color-clay-100);border-radius:var(--radius-md);padding:var(--spacing-12)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;flex:none;color:var(--color-text-error)"><use href="#i-alert"/></svg>
+              <p class="body-md" style="margin:0;color:var(--color-clay-700);font-weight:600">필수 정보를 확인해 주세요</p>
+            </div>
+
+            <div>
+              <label class="label-lg" style="display:block;margin-bottom:6px">사진 <span class="subtle" id="photoCount">0/3</span></label>
+              <div class="uploader">
+                <div class="slot is-error" id="slot1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-camera"/></svg></div>
+                <div class="slot" id="slot2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-plus"/></svg></div>
+                <div class="slot" id="slot3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-plus"/></svg></div>
+              </div>
+              <p class="label-md" id="photoHelp" style="margin:6px 0 0;color:var(--color-text-error);font-weight:600">사진은 1장 이상 등록해 주세요</p>
+            </div>
+
+            <div class="field is-error" id="titleField">
+              <label>제목</label>
+              <div class="box"><input id="titleInput" placeholder="맛집 이름을 입력하세요"></div>
+              <div class="helper"><span class="msg" id="titleMsg">제목은 필수입니다</span></div>
+            </div>
+
+            <div class="field is-error" id="contentField">
+              <label>내용</label>
+              <div class="box box--area"><textarea id="contentInput" placeholder="어떤 점이 좋았는지 알려주세요"></textarea></div>
+              <div class="helper"><span class="msg" id="contentMsg">내용은 10자 이상 입력해 주세요</span><span id="contentCount">0/500</span></div>
+            </div>
+
+            <div>
+              <label class="label-lg" style="display:block;margin-bottom:6px">장소</label>
+              <button class="btn btn--secondary" data-go="place" style="justify-content:space-between">
+                <span style="display:flex;align-items:center;gap:var(--spacing-8)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-pin"/></svg>
+                  <span id="placeLabel" class="subtle">장소 입력하기</span>
+                </span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-right"/></svg>
+              </button>
+              <p class="label-md subtle" style="margin:6px 0 0">선택하지 않으면 <code style="background:var(--color-background-muted);border-radius:4px;padding:1px 4px">"등록 대기중"</code>으로 저장됩니다</p>
+            </div>
+
+            <button class="btn btn--primary" id="regSubmit" disabled style="margin-bottom:var(--spacing-24)">+ 등록하기</button>
+          </div>
+        </div>
+      </div>
+      <figcaption class="board-cap"><div class="t">03 Register · Error State</div><div class="d">입력 검증 · 상태 매트릭스 · Day 18 · 21 · 25</div></figcaption>
+    </figure>
+
+    <!-- ══════════ 06 장소 등록 ══════════ -->
+    <figure class="board" data-screen="place">
+      <div class="phone">
+        <div class="statusbar"><span>9:41</span><span>5G · 100%</span></div>
+        <div class="topnav">
+          <button class="iconbtn" data-go="register" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-left"/></svg></button>
+          <div class="ttl">장소 등록</div>
+          <div style="width:48px"></div>
+        </div>
+        <div class="screen">
+          <div class="pad stack-16">
+            <div class="field" data-go="search" style="cursor:pointer">
+              <div class="box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-search"/></svg>
+                <input id="placeSearchInput" placeholder="장소 또는 주소 검색" readonly style="cursor:pointer">
+              </div>
+            </div>
+
+            <div class="map map--tall">
+              <div class="mblock" style="--x:4%;--y:6%;--w:34%;--h:24%"></div>
+              <div class="mblock alt" style="--x:58%;--y:4%;--w:36%;--h:22%"></div>
+              <div class="mblock" style="--x:6%;--y:56%;--w:28%;--h:30%"></div>
+              <div class="mblock alt" style="--x:64%;--y:60%;--w:30%;--h:26%"></div>
+              <div class="mroad h" style="--y:42%"></div>
+              <div class="mroad v" style="--x:46%"></div>
+              <div class="mpin center-lock"><svg viewBox="0 0 24 24" fill="var(--color-clay-100)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-pin"/></svg></div>
+              <div class="mtag">NAVER 동적 지도 · 목업</div>
+              <div class="mhint" id="mapHint">장소를 검색해 위치를 확인해 주세요.</div>
+            </div>
+            <p class="label-md subtle" style="margin:0;text-align:center">핀은 화면 중앙에 고정되고 <b>지도가 움직입니다</b></p>
+
+            <div style="background:var(--color-background-surface);border:1px solid var(--color-border-default);border-radius:var(--radius-md);padding:var(--spacing-12)">
+              <p class="label-md subtle" style="margin:0 0 4px">주소</p>
+              <p class="body-md" id="placeAddr" style="margin:0;color:var(--color-text-subtle)">검색 결과에서 선택한 위치의 주소가 표시됩니다.</p>
+            </div>
+
+            <button class="btn btn--primary" id="placeSubmit" disabled>+ 이 위치로 등록하기</button>
+            <p class="label-md subtle" style="margin:0 0 var(--spacing-24);text-align:center">
+              좌표는 <code style="background:var(--color-background-muted);border-radius:4px;padding:1px 4px">lat</code> · <code style="background:var(--color-background-muted);border-radius:4px;padding:1px 4px">lng</code> 두 컬럼으로 저장됩니다
+            </p>
+          </div>
+        </div>
+      </div>
+      <figcaption class="board-cap"><div class="t">06 Place Register</div><div class="d">동적 지도 · 핀 고정 · Day 26 · 27</div></figcaption>
+    </figure>
+
+    <!-- ══════════ 07 장소 검색 (결과 있음) ══════════ -->
+    <figure class="board" data-screen="search">
+      <div class="phone">
+        <div class="statusbar"><span>9:41</span><span>5G · 100%</span></div>
+        <div class="topnav">
+          <button class="iconbtn" data-go="place" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-left"/></svg></button>
+          <div class="ttl">장소 검색</div>
+          <div style="width:48px"></div>
+        </div>
+        <div class="screen">
+          <div class="pad" style="padding-bottom:var(--spacing-12)">
+            <div class="field is-focused">
+              <div class="box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-search"/></svg>
+                <input id="searchQuery" value="대부도 포도">
+                <button class="iconbtn" style="width:28px;height:28px" data-go="empty" aria-label="지우기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="width:16px;height:16px"><use href="#i-x"/></svg></button>
+              </div>
+            </div>
+          </div>
+          <div class="pad" style="padding-top:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--spacing-8)">
+              <span class="label-lg">검색 결과 5개</span>
+              <span class="badge badge--success">N 네이버 지역검색</span>
+            </div>
+            <div class="stack-8" id="searchList">
+              <div class="listitem" data-pick="대부도포도찐빵|경기도 안산시 단원구 대부북동 1857-3">
+                <div style="flex:1"><div class="n">대부도포도찐빵</div><div class="a">경기도 안산시 단원구 대부북동 1857-3</div></div>
+              </div>
+              <div class="listitem" data-pick="대부도포도빵|경기도 안산시 단원구 대부북동 1844-2">
+                <div style="flex:1"><div class="n">대부도포도빵</div><div class="a">경기도 안산시 단원구 대부북동 1844-2</div></div>
+              </div>
+              <div class="listitem" data-pick="포도밭할머니칼국수 대부도본점|경기도 안산시 단원구 대부북동 1854-1">
+                <div style="flex:1"><div class="n">포도밭할머니칼국수 대부도본점</div><div class="a">경기도 안산시 단원구 대부북동 1854-1</div></div>
+              </div>
+              <div class="listitem" data-pick="그랑꼬또 와이너리|경기도 안산시 단원구 대부북동 1011-3">
+                <div style="flex:1"><div class="n">그랑꼬또 와이너리</div><div class="a">경기도 안산시 단원구 대부북동 1011-3</div></div>
+              </div>
+              <div class="listitem" data-pick="포도향기펜션|경기도 안산시 단원구 대부북동 1865-7">
+                <div style="flex:1"><div class="n">포도향기펜션</div><div class="a">경기도 안산시 단원구 대부북동 1865-7</div></div>
+              </div>
+            </div>
+            <p class="label-md subtle" style="margin:var(--spacing-16) 0 var(--spacing-24);text-align:center;line-height:1.6">
+              원하는 장소를 선택하면 지도에서 위치를 확인할 수 있어요.<br>
+              가져오는 값 — 검색어 · <b>지번주소</b> · 경도(mapx) · 위도(mapy)
+            </p>
+          </div>
+        </div>
+      </div>
+      <figcaption class="board-cap"><div class="t">07 Place Search Results</div><div class="d">지역 검색 API · 왕복 규약 · Day 25 · 27</div></figcaption>
+    </figure>
+
+    <!-- ══════════ 08 검색 결과 없음 ══════════ -->
+    <figure class="board" data-screen="empty">
+      <div class="phone">
+        <div class="statusbar"><span>9:41</span><span>5G · 100%</span></div>
+        <div class="topnav">
+          <button class="iconbtn" data-go="search" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-left"/></svg></button>
+          <div class="ttl">장소 검색</div>
+          <div style="width:48px"></div>
+        </div>
+        <div class="screen">
+          <div class="pad" style="padding-bottom:var(--spacing-12)">
+            <div class="field is-focused">
+              <div class="box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-search"/></svg>
+                <input value="우리동네 비밀식당">
+              </div>
+            </div>
+          </div>
+          <div class="pad" style="padding-top:0;text-align:center">
+            <div style="padding:var(--spacing-24) 0 var(--spacing-16)">
+              <div style="width:56px;height:56px;margin:0 auto var(--spacing-12);border-radius:var(--radius-full);background:var(--color-background-muted);display:grid;place-items:center;color:var(--color-text-subtle)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:26px;height:26px"><use href="#i-search"/></svg>
+              </div>
+              <p class="heading-sm" style="margin:0">검색 결과가 없어요</p>
+              <p class="body-md subtle" style="margin:6px 0 0">신규 가게이거나 지도에 없는 장소일 수 있어요.</p>
+            </div>
+          </div>
+          <div class="pad stack-12" style="padding-top:0;text-align:left">
+            <div class="field">
+              <label>장소명 직접 입력</label>
+              <div class="box"><input value="우리동네 비밀식당"></div>
+            </div>
+            <span class="badge badge--warning">기본 위치로 등록</span>
+            <button class="btn btn--primary" data-go="place" data-manual="1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-check"/></svg>
+              장소명으로 등록하기
+            </button>
+            <p class="label-md subtle" style="margin:0 0 var(--spacing-24);line-height:1.6">
+              직접 입력한 장소는 지도에 표시된 <b>현재 위치를 그대로 사용</b>해요.
+              주소·경도·위도는 디폴트값이 유지되고, 나중에 <b>리버스 지오코딩</b>으로 사용자가 지도를 움직여 고를 수 있게 확장합니다.
+            </p>
+          </div>
+        </div>
+      </div>
+      <figcaption class="board-cap"><div class="t">08 Search · Empty</div><div class="d">빈 상태 · 직접 입력 · Day 25 · 27</div></figcaption>
+    </figure>
+
+    <!-- ══════════ 05 마이페이지 ══════════ -->
+    <figure class="board" data-screen="mypage">
+      <div class="phone">
+        <div class="statusbar"><span>9:41</span><span>5G · 100%</span></div>
+        <div class="topnav">
+          <button class="iconbtn" data-go="home" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-left"/></svg></button>
+          <div class="ttl">내 정보</div>
+          <div style="width:48px"></div>
+        </div>
+        <div class="screen">
+          <div class="pad">
+            <div style="display:flex;gap:var(--spacing-16);align-items:center">
+              <div class="avatar">🧑‍🍳</div>
+              <div style="flex:1;min-width:0">
+                <p class="heading-sm" style="margin:0">영희</p>
+                <p class="label-md subtle" style="margin:4px 0 0">yeonghee@example.com</p>
+                <button class="btn btn--secondary btn--sm" style="margin-top:var(--spacing-8)">프로필 수정</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="pad" style="padding-top:0">
+            <div style="display:flex;gap:var(--spacing-8)">
+              <div style="flex:1;background:var(--color-background-surface);border:1px solid var(--color-border-default);border-radius:var(--radius-md);padding:var(--spacing-12);text-align:center">
+                <p class="heading-md" style="margin:0;color:var(--color-text-brand)">3</p>
+                <p class="label-md subtle" style="margin:2px 0 0">내가 쓴 글</p>
+              </div>
+              <div style="flex:1;background:var(--color-background-surface);border:1px solid var(--color-border-default);border-radius:var(--radius-md);padding:var(--spacing-12);text-align:center">
+                <p class="heading-md" style="margin:0;color:var(--color-text-brand)">12</p>
+                <p class="label-md subtle" style="margin:2px 0 0">저장한 맛집</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="pad" style="padding-top:var(--spacing-8)">
+            <h3 class="heading-sm" style="margin:0 0 var(--spacing-8)">내가 쓴 글</h3>
+            <div class="stack-8">
+              <div class="listitem" data-go="detail">
+                <div class="photo" data-emoji="🍝" style="width:56px;height:56px;aspect-ratio:auto;border-radius:var(--radius-sm);font-size:24px;flex:none"></div>
+                <div style="flex:1;min-width:0"><div class="n">대부도 인기 파스타</div><div class="a">경기도 안산시 단원구 대부남동 1126-396</div></div>
+              </div>
+              <div class="listitem">
+                <div class="photo" data-emoji="🥩" style="width:56px;height:56px;aspect-ratio:auto;border-radius:var(--radius-sm);font-size:24px;flex:none"></div>
+                <div style="flex:1;min-width:0"><div class="n">대부도 1등 고기</div><div class="a">위치 미등록</div></div>
+              </div>
+              <div class="listitem" style="opacity:.55">
+                <div class="photo" data-emoji="🦑" style="width:56px;height:56px;aspect-ratio:auto;border-radius:var(--radius-sm);font-size:24px;flex:none"></div>
+                <div style="flex:1;min-width:0">
+                  <div class="n">꼼장어 맛집 <span class="badge badge--neutral">삭제됨</span></div>
+                  <div class="a">deleted_at · 2026-07-23 08:34</div>
+                </div>
+              </div>
+            </div>
+            <p class="label-md subtle" style="margin:var(--spacing-12) 0 var(--spacing-24);line-height:1.6">
+              소프트 삭제된 글은 <b>행이 남아 있어</b> 내 기록에서만 흐리게 보입니다. 목록·상세에서는 조회되지 않습니다.
+            </p>
+          </div>
+        </div>
+        <nav class="bottomnav">
+          <button data-go="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-home"/></svg>홈</button>
+          <button aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-user"/></svg>내 정보</button>
+        </nav>
+      </div>
+      <figcaption class="board-cap"><div class="t">05 My Page</div><div class="d">프로필 · 소프트 삭제 확인 · Day 23 · 25</div></figcaption>
+    </figure>
+
+    <!-- ══════════ 노트 패널 ══════════ -->
+    <div class="notewrap">
+      <aside class="note" id="note">
+        <h3 id="noteTitle">—</h3>
+        <p class="sc" id="noteScreen">—</p>
+        <div id="noteTags"></div>
+        <h4>이 화면이 구현한 것</h4>
+        <ul id="noteList"></ul>
+        <div class="mockflag" id="noteMock"></div>
+      </aside>
+    </div>
+
+  </div>
+
+  <p class="footer">
+    Part 3 예제안 · 맛집커뮤니티 목업 —
+    <a href="./README.md">커리큘럼 가이드</a> ·
+    <a href="./03-design-system.html">디자인 시스템</a> ·
+    <a href="../part3.md">Part 3 요약본</a><br>
+    브랜드 컬러는 <b>따뜻한 녹색(Moss)</b> 계열로 다시 뽑았습니다. 시맨틱 토큰 이름(<code>--color-brand-*</code>)은 그대로 두고 참조하는 프리미티브만 바꾼 것이라, 팔레트 한 곳만 고치면 전 화면이 함께 바뀝니다.
+  </p>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ── 화면 메타데이터 : 칩 라벨 + 노트 ─────────────────────── */
+  var SCREENS = [
+    { id:"login", num:"04", label:"로그인", title:"로그인",
+      screen:"04 Login Page", tags:["Day 12","Day 13"],
+      list:[
+        "구글로그인은 <b>연동 설정이 8할</b> — GCP의 Client ID/Secret ↔ Supabase의 Callback URL을 맞바꾼다.",
+        "브라우저가 최종적으로 쥐는 것은 <b>Supabase 전용 토큰(JWT)</b> 하나뿐이다.",
+        "이후 모든 요청은 <code>Authorization: Bearer &lt;JWT&gt;</code> 헤더로 인가를 통과한다."
+      ],
+      mock:"<b>목업</b> — 실제 OAuth 흐름(비밀 CODE → 구글 전용 토큰 → Supabase 전용 토큰) 없이 버튼만 눌러도 넘어갑니다." },
+
+    { id:"home", num:"01", label:"맛집 목록", title:"맛집 목록",
+      screen:"01 Main Page", tags:["Day 18","Day 25","Day 29"],
+      list:[
+        "<b>목록조회</b> 화면 — 상세조회와 필요한 데이터도 응답 모양도 다르므로 프롬프트에서 둘로 쪼갠다.",
+        "위치가 없는 글은 <code>등록 대기중</code>/<code>위치 미등록</code>으로 표시된다 — 좌표 컬럼이 <b>Nullable</b>이라 가능한 표기다.",
+        "카드는 <b>칩(입력)</b>이 아니라 <b>배지(표시)</b>를 쓴다 — 누르면 칩, 못 누르면 배지.",
+        "하단 <b>PWA 설치 띠배너</b>는 디자인 시스템 밖의 시스템 UI라 컴포넌트를 재사용하지 않는다."
+      ],
+      mock:"<b>목업</b> — 카드는 더미 데이터입니다. 실제로는 BFF <code>/api/places</code>가 목록을 돌려주고 <code>deleted_at IS NULL</code> 조건이 붙습니다." },
+
+    { id:"detail", num:"02", label:"맛집 상세", title:"맛집 상세",
+      screen:"02 Detail Page", tags:["Day 23","Day 25","Day 26"],
+      list:[
+        "<b>상세조회</b> — 큰 이미지 + 본문 한 건. 목록과 응답 모양이 다르다.",
+        "위치 섹션의 <b>미니 지도</b>는 정적 지도로도 충분한 자리다(동적 지도는 장소 등록 화면에서만).",
+        "삭제는 <b>소프트 삭제</b> — 행은 남고 <code>deleted_at timestamptz</code>에 시각만 기록된다.",
+        "사진은 DB가 아니라 Storage에 두고 DB에는 <b>주소만</b> 저장한다(비동기 분리)."
+      ],
+      mock:"<b>목업</b> — 지도는 CSS로 그린 모형입니다. 실제로는 네이버 지도 API(JS-API)와 좌표 <code>lat</code>/<code>lng</code>가 들어갑니다." },
+
+    { id:"register", num:"03", label:"등록 · 에러", title:"맛집 등록 (에러 상태)",
+      screen:"03 Register · Error State", tags:["Day 18","Day 21","Day 25"],
+      list:[
+        "등록 화면은 <b>정상이 아니라 에러 상태로</b> 그린다 — 검증 문구와 비활성 버튼이 시안에서 확정되어야 한다.",
+        "검증 규칙은 프롬프트에서 정한 그대로 — 사진 <b>1장 이상</b>, 제목 <b>필수</b>, 내용 <b>10자 이상</b>.",
+        "입력류의 상태 축은 버튼과 다르다 — <code>default · focused · disabled · error</code>.",
+        "헬퍼텍스트는 <b>에러 시 힌트를 대체</b>한다. 둘을 쌓으면 폼 높이가 상태마다 널뛴다.",
+        "상단 세그먼트로 <b>에러 ↔ 입력 완료</b>를 전환해 보세요 — 타입 × 상태 매트릭스가 이렇게 쓰입니다."
+      ],
+      mock:"<b>목업</b> — 사진 업로드는 동작하지 않습니다. 실제로는 <code>place-image</code> 버킷에 <b>uuidv4</b> 파일명으로 올라갑니다." },
+
+    { id:"place", num:"06", label:"장소 등록", title:"장소 등록",
+      screen:"06 Place Register Page", tags:["Day 26","Day 27"],
+      list:[
+        "위에서부터 <b>① 검색창 ② 지도 ③ 주소 박스 ④ 등록 버튼</b> — 배치 순서를 프롬프트가 지정했다.",
+        "<b>핀은 화면 중앙에 고정되고 지도가 움직인다</b> — 손가락에 핀이 가려지지 않는다.",
+        "이 화면만 <b>동적 지도(JS-API)</b>를 쓴다. JS-API 키는 브라우저에 노출되므로 <b>도메인 제한</b>으로 보호한다.",
+        "좌표는 <code>lat</code> · <code>lng</code> <b>두 컬럼</b>으로 나눠 저장한다 — 순서 함정을 이름으로 고정."
+      ],
+      mock:"<b>목업</b> — 지도는 CSS 모형입니다. 검색 결과를 고르면 주소와 버튼 활성 상태가 실제로 바뀝니다." },
+
+    { id:"search", num:"07", label:"장소 검색", title:"장소 검색 (결과 있음)",
+      screen:"07 Place Search Results", tags:["Day 25","Day 27"],
+      list:[
+        "네이버 <b>지역 검색 API</b>의 결과 — 상호 + 지번주소 + 좌표가 함께 온다.",
+        "왕복 규약 — <b>무엇을 들고</b>(검색어·지번주소·경도·위도) <b>어디로 돌아가</b>(장소 등록) <b>어디에 넣는지</b>(검색창·주소영역·지도 중심)를 다 적는다.",
+        "<code>mapx</code>=경도 · <code>mapy</code>=위도로 <b>지도 표기와 순서가 반대</b>이고, 소수점 없는 정수 문자열로 온다.",
+        "<code>address</code>(지번)와 <code>roadAddress</code>(도로명) 중 <b>지번</b>을 쓰기로 정했다."
+      ],
+      mock:"<b>목업</b> — 결과 5건은 더미입니다. 실제 호출은 서버 전용 키(<code>NAVER_CLIENT_ID/SECRET</code>)로 BFF <code>/api/places/search</code>가 대신합니다." },
+
+    { id:"empty", num:"08", label:"검색 결과 없음", title:"장소 검색 (결과 없음)",
+      screen:"08 Place Search · Empty", tags:["Day 25","Day 27"],
+      list:[
+        "<b>빈 상태는 덤이 아니라 개수에 포함되는 화면</b>이다 — 디자인 단계에서 \"총 2장\"으로 셌다.",
+        "지도에 없는 신규 가게를 위한 <b>탈출구</b>이고, 그 대가를 화면이 미리 알린다.",
+        "결과가 없을 때 좌표를 <b>지어내지 않는다</b> — 디폴트값을 유지하고, 나중에 리버스 지오코딩으로 확장한다.",
+        "지시 한 줄이 카피를 바꿨다 — \"지도 위치가 표시되지 않아요\" → <b>\"현재 위치를 그대로 사용해요\"</b>."
+      ],
+      mock:"<b>목업</b> — 검색 결과 없음 상태를 고정으로 보여줍니다. 실제로는 API 응답이 0건일 때 이 화면으로 분기합니다." },
+
+    { id:"mypage", num:"05", label:"내 정보", title:"마이페이지",
+      screen:"05 My Page", tags:["Day 22","Day 23","Day 25"],
+      list:[
+        "로그인·목록·상세·등록이 끝난 뒤 <b>시스템만으로 추가한 신규 페이지</b>다 — 시스템의 값어치가 여기서 실현된다.",
+        "프로필은 <code>auth.users</code>가 아니라 <b><code>profile</code> 테이블</b>이 담당한다(이름·프로필 이미지).",
+        "소프트 삭제된 글은 <b>행이 남아 있어</b> 내 기록에서 흐리게 확인된다 — 복구도 감사(audit)도 가능하다.",
+        "프로필 이미지는 Storage 버킷에, DB에는 <b>다운로드 주소만</b> 저장된다."
+      ],
+      mock:"<b>목업</b> — 통계 숫자와 목록은 더미입니다. 실제로는 <code>profile</code>과 <code>place</code>를 <code>user_id</code>로 조인해 가져옵니다." }
+  ];
+
+  var stage   = document.getElementById("stage");
+  var chips   = document.getElementById("chips");
+  var boards  = {};
+  Array.prototype.forEach.call(stage.querySelectorAll("[data-screen]"), function(el){
+    boards[el.getAttribute("data-screen")] = el;
+  });
+
+  /* ── 칩 렌더 ─────────────────────────────────────────────── */
+  SCREENS.forEach(function(s){
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "chip";
+    b.setAttribute("data-chip", s.id);
+    b.setAttribute("aria-pressed","false");
+    b.innerHTML = '<span class="num">'+s.num+'</span>'+s.label;
+    chips.appendChild(b);
+  });
+
+  var noteTitle  = document.getElementById("noteTitle");
+  var noteScreen = document.getElementById("noteScreen");
+  var noteTags   = document.getElementById("noteTags");
+  var noteList   = document.getElementById("noteList");
+  var noteMock   = document.getElementById("noteMock");
+
+  var current = "home";
+
+  function show(id){
+    if(!boards[id]) return;
+    current = id;
+    Object.keys(boards).forEach(function(k){
+      boards[k].classList.toggle("is-active", k === id);
+    });
+    Array.prototype.forEach.call(chips.children, function(c){
+      c.setAttribute("aria-pressed", String(c.getAttribute("data-chip") === id));
+    });
+    var meta = SCREENS.filter(function(s){ return s.id === id; })[0];
+    if(meta){
+      noteTitle.textContent  = meta.title;
+      noteScreen.textContent = meta.screen;
+      noteTags.innerHTML     = meta.tags.map(function(t){ return '<span class="daytag">'+t+'</span>'; }).join("");
+      noteList.innerHTML     = meta.list.map(function(li){ return "<li>"+li+"</li>"; }).join("");
+      noteMock.innerHTML     = meta.mock;
+    }
+    var sc = boards[id].querySelector(".screen");
+    if(sc) sc.scrollTop = 0;
+  }
+
+  chips.addEventListener("click", function(e){
+    var b = e.target.closest("[data-chip]");
+    if(b) show(b.getAttribute("data-chip"));
+  });
+
+  /* ── 보기 방식 토글 ──────────────────────────────────────── */
+  Array.prototype.forEach.call(document.querySelectorAll("[data-view-btn]"), function(btn){
+    btn.addEventListener("click", function(){
+      var v = btn.getAttribute("data-view-btn");
+      stage.setAttribute("data-view", v);
+      Array.prototype.forEach.call(document.querySelectorAll("[data-view-btn]"), function(o){
+        o.setAttribute("aria-pressed", String(o === btn));
+      });
+    });
+  });
+
+  /* ── 화면 안 내비게이션 ──────────────────────────────────── */
+  document.addEventListener("click", function(e){
+    var go = e.target.closest("[data-go]");
+    if(!go) return;
+    if(go.hasAttribute("data-manual")) manualPlace();
+    stage.setAttribute("data-view","single");
+    Array.prototype.forEach.call(document.querySelectorAll("[data-view-btn]"), function(o){
+      o.setAttribute("aria-pressed", String(o.getAttribute("data-view-btn") === "single"));
+    });
+    show(go.getAttribute("data-go"));
+  });
+
+  /* ── 카테고리 칩 ─────────────────────────────────────────── */
+  document.addEventListener("click", function(e){
+    var f = e.target.closest(".fchip");
+    if(!f) return;
+    var row = f.parentNode;
+    Array.prototype.forEach.call(row.children, function(o){
+      o.setAttribute("aria-pressed", String(o === f));
+    });
+  });
+
+  /* ── PWA 배너 ────────────────────────────────────────────── */
+  var pwabar = document.getElementById("pwabar");
+  document.getElementById("pwaClose").addEventListener("click", function(){ pwabar.style.display = "none"; });
+  document.getElementById("pwaInstall").addEventListener("click", function(){
+    pwabar.style.display = "none";
+    toast("홈 화면에 추가했어요 (목업)");
+  });
+
+  var homeToast = document.getElementById("homeToast");
+  var toastTimer;
+  function toast(msg){
+    homeToast.querySelector("span").textContent = msg;
+    homeToast.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ homeToast.hidden = true; }, 2600);
+  }
+
+  /* ── 등록 화면 : 에러 ↔ 입력 완료 (타입 × 상태 매트릭스) ── */
+  var regScreen = document.getElementById("regScreen");
+  var regState  = {
+    error:{
+      banner:true, photoCount:"0/3", photoHelp:"사진은 1장 이상 등록해 주세요",
+      slot1Err:true, slot1Emoji:"", title:"", titleErr:true, titleMsg:"제목은 필수입니다",
+      content:"", contentErr:true, contentMsg:"내용은 10자 이상 입력해 주세요", contentCount:"0/500",
+      submit:true
+    },
+    filled:{
+      banner:false, photoCount:"2/3", photoHelp:"대표 사진은 첫 번째 사진이에요",
+      slot1Err:false, slot1Emoji:"🍝", title:"대부도 인기 파스타", titleErr:false, titleMsg:"",
+      content:"가족과 함께 가기 정말 좋은 파스타집이에요. 주차장이 넓습니다.",
+      contentErr:false, contentMsg:"", contentCount:"38/500", submit:false
+    }
+  };
+
+  function applyReg(state){
+    var s = regState[state];
+    regScreen.setAttribute("data-state", state);
+    document.getElementById("regBanner").style.display = s.banner ? "flex" : "none";
+    document.getElementById("photoCount").textContent  = s.photoCount;
+    var ph = document.getElementById("photoHelp");
+    ph.textContent = s.photoHelp;
+    ph.style.color = s.banner ? "var(--color-text-error)" : "var(--color-text-subtle)";
+    ph.style.fontWeight = s.banner ? "600" : "400";
+
+    var slot1 = document.getElementById("slot1");
+    slot1.classList.toggle("is-error", s.slot1Err);
+    if(s.slot1Emoji){
+      slot1.innerHTML = "";
+      slot1.className = "slot";
+      slot1.style.cssText = "background:linear-gradient(145deg,var(--color-amber-50),var(--color-brand-100));border-style:solid;border-color:var(--color-border-default);font-size:26px;display:grid;place-items:center";
+      slot1.textContent = s.slot1Emoji;
+    } else {
+      slot1.style.cssText = "";
+      slot1.className = "slot" + (s.slot1Err ? " is-error" : "");
+      slot1.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-camera"/></svg>';
+    }
+
+    document.getElementById("titleInput").value = s.title;
+    document.getElementById("titleField").className = "field" + (s.titleErr ? " is-error" : "");
+    document.getElementById("titleMsg").textContent = s.titleMsg;
+
+    document.getElementById("contentInput").value = s.content;
+    document.getElementById("contentField").className = "field" + (s.contentErr ? " is-error" : "");
+    document.getElementById("contentMsg").textContent = s.contentMsg;
+    document.getElementById("contentCount").textContent = s.contentCount;
+
+    document.getElementById("regSubmit").disabled = s.submit;
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll("[data-reg-state]"), function(btn){
+    btn.addEventListener("click", function(){
+      Array.prototype.forEach.call(document.querySelectorAll("[data-reg-state]"), function(o){
+        o.setAttribute("aria-pressed", String(o === btn));
+      });
+      applyReg(btn.getAttribute("data-reg-state"));
+    });
+  });
+
+  document.getElementById("regSubmit").addEventListener("click", function(){
+    show("home");
+    toast("등록이 완료되었습니다.");
+  });
+
+  /* ── 장소 선택 → 장소 등록 화면으로 값 되돌리기 (왕복 규약) ── */
+  var placeAddr    = document.getElementById("placeAddr");
+  var placeSubmit  = document.getElementById("placeSubmit");
+  var placeInput   = document.getElementById("placeSearchInput");
+  var mapHint      = document.getElementById("mapHint");
+  var placeLabel   = document.getElementById("placeLabel");
+
+  document.getElementById("searchList").addEventListener("click", function(e){
+    var item = e.target.closest("[data-pick]");
+    if(!item) return;
+    var v = item.getAttribute("data-pick").split("|");
+    placeInput.value = v[0];
+    placeAddr.textContent = v[1];
+    placeAddr.style.color = "var(--color-text-default)";
+    mapHint.textContent = v[0] + " · 지도 중심이 이동했어요";
+    placeSubmit.disabled = false;
+    placeLabel.textContent = v[0];
+    placeLabel.className = "";
+    stage.setAttribute("data-view","single");
+    show("place");
+  });
+
+  function manualPlace(){
+    placeInput.value = "우리동네 비밀식당";
+    placeAddr.textContent = "등록 대기중 (기본 위치)";
+    placeAddr.style.color = "var(--color-text-subtle)";
+    mapHint.textContent = "직접 입력한 장소 · 현재 위치를 그대로 사용";
+    placeSubmit.disabled = false;
+    placeLabel.textContent = "우리동네 비밀식당";
+    placeLabel.className = "";
+  }
+
+  placeSubmit.addEventListener("click", function(){ show("register"); });
+
+  /* ── 시작 ────────────────────────────────────────────────── */
+  applyReg("error");
+  show("home");
+})();
+</script>
+</body>
+</html>

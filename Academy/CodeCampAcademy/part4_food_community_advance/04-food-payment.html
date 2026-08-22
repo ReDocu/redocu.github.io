@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>맛집커뮤니티 — Part 4 결제 플로우 (목업)</title>
+<style>
+/* ══════════════════════════════════════════════════════════
+   디자인 토큰 — Part 3 예제안(Moss)을 그대로 이어받는다 (Day 19~21)
+   결제 화면도 "기존 디자인 시스템 재사용만" — Day 30의 Pencil 지시 3
+   ══════════════════════════════════════════════════════════ */
+:root{
+  --color-brand-50:#F3F7EE;  --color-brand-100:#E5EFDB; --color-brand-200:#CADFBB;
+  --color-brand-300:#A9C994; --color-brand-500:#68954E; --color-brand-600:#4F7A3D;
+  --color-brand-700:#3E6131; --color-brand-900:#2A4022;
+
+  --color-neutral-50:#FAF8F3;  --color-neutral-100:#F3EFE6; --color-neutral-200:#E7E1D3;
+  --color-neutral-300:#D4CBB8; --color-neutral-400:#B3A892; --color-neutral-500:#8F8471;
+  --color-neutral-600:#6E6555; --color-neutral-700:#554E42; --color-neutral-800:#3D3830;
+  --color-neutral-900:#2A2621;
+
+  --color-amber-50:#FBF3E3; --color-amber-100:#F6E6C4; --color-amber-500:#D0961F;
+  --color-amber-600:#A97614; --color-amber-700:#855C10;
+  --color-leaf-50:#EAF6EE;  --color-leaf-100:#D3EBDC; --color-leaf-600:#2E7D51; --color-leaf-700:#26643F;
+  --color-clay-50:#FBEEEA;  --color-clay-100:#F6DCD4; --color-clay-400:#D98165;
+  --color-clay-500:#C75A3B; --color-clay-600:#AB4429;
+
+  /* 시맨틱 — 프리미티브 참조만 (hex 직접 입력 금지) */
+  --bg:var(--color-neutral-50); --surface:#FFFFFF; --muted-bg:var(--color-neutral-100);
+  --brand-bg:var(--color-brand-600); --brand-subtle:var(--color-brand-50);
+  --scrim:rgba(42,38,33,.44);
+  --text:var(--color-neutral-800); --text-muted:var(--color-neutral-600);
+  --text-subtle:var(--color-neutral-500); --text-brand:var(--color-brand-700);
+  --text-on-brand:var(--color-neutral-50); --text-error:var(--color-clay-600);
+  --border:var(--color-neutral-200); --border-strong:var(--color-neutral-300);
+
+  --font:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,
+         "Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --sp-8:8px; --sp-12:12px; --sp-16:16px; --sp-20:20px; --sp-24:24px; --sp-32:32px;
+  --r-sm:8px; --r-md:12px; --r-lg:16px; --r-full:999px;
+  --shadow-card:0 1px 2px rgba(42,38,33,.05),0 8px 20px -12px rgba(42,38,33,.18);
+  --shadow-float:0 6px 16px -4px rgba(42,38,33,.24);
+}
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0;font-family:var(--font);letter-spacing:-.02em;color:var(--text);min-height:100vh;
+  background:
+    radial-gradient(1100px 560px at 10% -8%, var(--color-brand-100), transparent 60%),
+    radial-gradient(900px 480px at 92% 0%, var(--color-amber-50), transparent 55%),
+    var(--bg);
+}
+.wrap{max-width:1360px;margin:0 auto;padding:var(--sp-24) var(--sp-20) 64px}
+
+/* ── 문서 헤더 ── */
+.doc-head{display:flex;flex-wrap:wrap;gap:var(--sp-16);align-items:flex-end;justify-content:space-between;margin-bottom:var(--sp-20)}
+.brandmark{display:flex;align-items:center;gap:var(--sp-12)}
+.brandmark .logo{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;flex:none;
+  background:linear-gradient(150deg,var(--color-brand-500),var(--color-brand-700));
+  color:var(--text-on-brand);box-shadow:var(--shadow-float);font-size:22px}
+.eyebrow{color:var(--text-brand);font-size:12px;font-weight:700;letter-spacing:.04em;margin:0 0 2px}
+.doc-title{margin:0;font-size:24px;font-weight:700;line-height:1.2}
+.doc-sub{margin:6px 0 0;color:var(--text-muted);font-size:14px;line-height:1.5;max-width:64ch}
+
+.mocknote{display:flex;gap:var(--sp-12);background:var(--color-amber-50);border:1px solid var(--color-amber-100);
+  border-left:4px solid var(--color-amber-500);border-radius:var(--r-md);
+  padding:var(--sp-12) var(--sp-16);margin-bottom:var(--sp-20)}
+.mocknote p{margin:0;font-size:14px;line-height:1.55;color:var(--color-neutral-700)}
+.mocknote strong{color:var(--color-amber-700)}
+
+/* ── 화면 선택 칩 ── */
+.chips{display:flex;flex-wrap:wrap;gap:var(--sp-8);margin-bottom:var(--sp-20)}
+.chip{border:1px solid var(--border);background:var(--surface);color:var(--text-muted);
+  border-radius:var(--r-full);padding:8px 14px;cursor:pointer;
+  font:600 13px/1 var(--font);letter-spacing:-.02em;display:inline-flex;align-items:center;gap:7px}
+.chip .num{font-size:11px;color:var(--text-subtle)}
+.chip[aria-pressed="true"]{background:var(--brand-subtle);border-color:var(--color-brand-500);color:var(--text-brand)}
+
+/* ── 스테이지 ── */
+.stage{display:grid;gap:var(--sp-32);grid-template-columns:repeat(auto-fill,minmax(360px,1fr));align-items:start}
+.board{margin:0}
+.board.hidden{display:none}
+.board-cap{margin:var(--sp-12) 0 0;max-width:360px}
+.board-cap .t{font-size:14px;font-weight:700}
+.board-cap .d{font-size:12px;color:var(--text-subtle);margin-top:3px;line-height:1.55}
+.board-cap .d b{color:var(--text-brand);font-weight:700}
+
+/* ══ 폰 프레임 360×740 (Day 18 기준 사이즈) ══ */
+.phone{width:360px;height:740px;border-radius:28px;overflow:hidden;position:relative;
+  background:var(--bg);border:1px solid var(--border-strong);display:flex;flex-direction:column;
+  box-shadow:0 2px 4px rgba(42,38,33,.06),0 24px 60px -28px rgba(42,38,33,.45)}
+.statusbar{height:26px;flex:none;display:flex;align-items:center;justify-content:space-between;
+  padding:0 var(--sp-16);font-size:11px;font-weight:600;color:var(--text-muted);
+  background:var(--surface);border-bottom:1px solid var(--border)}
+.screen{flex:1;overflow-y:auto;overflow-x:hidden;position:relative;scrollbar-width:thin}
+.screen::-webkit-scrollbar{width:5px}
+.screen::-webkit-scrollbar-thumb{background:var(--color-neutral-300);border-radius:99px}
+
+.topnav{height:56px;flex:none;display:flex;align-items:center;gap:var(--sp-8);padding:0 var(--sp-8);
+  background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:5}
+.topnav .ttl{flex:1;text-align:center;font-size:16px;font-weight:600}
+.iconbtn{width:48px;height:48px;flex:none;border:0;background:transparent;border-radius:var(--r-full);
+  display:grid;place-items:center;cursor:pointer;color:var(--text);font-size:20px}
+.iconbtn:hover{background:var(--muted-bg)}
+
+.pad{padding:var(--sp-16)}
+.stack-8>*+*{margin-top:var(--sp-8)}
+.stack-16>*+*{margin-top:var(--sp-16)}
+.muted{color:var(--text-muted)} .subtle{color:var(--text-subtle)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-8);height:48px;
+  padding:0 var(--sp-20);border-radius:var(--r-md);border:1px solid transparent;width:100%;
+  font:600 14px/1 var(--font);letter-spacing:-.02em;cursor:pointer}
+.btn--primary{background:var(--brand-bg);color:var(--text-on-brand)}
+.btn--primary:hover{background:var(--color-brand-700)}
+.btn--secondary{background:var(--surface);color:var(--text);border-color:var(--border-strong)}
+.btn--secondary:hover{background:var(--muted-bg)}
+.btn--danger{background:var(--surface);color:var(--text-error);border-color:var(--color-clay-400)}
+.btn--danger:hover{background:var(--color-clay-50)}
+.btn--sm{height:34px;padding:0 var(--sp-12);font-size:12px;width:auto}
+
+.badge{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:var(--r-full);
+  font-size:11px;font-weight:700}
+.badge--leaf{background:var(--color-leaf-50);color:var(--color-leaf-700)}
+.badge--clay{background:var(--color-clay-50);color:var(--color-clay-600)}
+.badge--amber{background:var(--color-amber-50);color:var(--color-amber-700)}
+
+/* 하단 탭 (고정 영역 — Day 31 NOL 판서: 파란 상자) */
+.bottomnav{height:60px;flex:none;display:flex;background:var(--surface);border-top:1px solid var(--border)}
+.bottomnav button{flex:1;border:0;background:transparent;cursor:pointer;color:var(--text-subtle);
+  font:600 11px/1.3 var(--font);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+.bottomnav button.on{color:var(--text-brand)}
+.bottomnav .ic{font-size:20px;line-height:1}
+.fab{position:absolute;right:16px;bottom:76px;width:52px;height:52px;border-radius:var(--r-full);border:0;
+  background:var(--brand-bg);color:var(--text-on-brand);font-size:24px;cursor:pointer;box-shadow:var(--shadow-float);z-index:6}
+
+/* ── 메인: 배너 (기존 UI에 새 역할 — Day 30) ── */
+.search{display:flex;align-items:center;gap:10px;height:48px;padding:0 var(--sp-16);
+  background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--r-full);
+  color:var(--text-subtle);font-size:14px}
+.banner{position:relative;overflow:hidden;border-radius:var(--r-lg);cursor:pointer;
+  background:linear-gradient(135deg,var(--color-brand-900),var(--color-brand-700) 62%,var(--color-brand-600));
+  color:var(--text-on-brand);padding:var(--sp-20);min-height:132px;box-shadow:var(--shadow-card)}
+.banner .kicker{font-size:11px;font-weight:700;letter-spacing:.08em;opacity:.75}
+.banner .copy1{font-size:18px;font-weight:700;line-height:1.25;margin-top:8px}
+.banner .copy2{font-size:18px;font-weight:700;line-height:1.25;color:#F2C464}
+.banner .meta{margin-top:10px;font-size:12px;opacity:.85}
+.banner .plate{position:absolute;right:-26px;bottom:-30px;width:120px;height:120px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #FAF8F3, var(--color-neutral-200) 62%, var(--color-neutral-400));
+  display:grid;place-items:center;font-size:46px;box-shadow:0 10px 24px -10px rgba(0,0,0,.5)}
+.banner .dots{position:absolute;left:var(--sp-20);bottom:12px;display:flex;gap:5px}
+.banner .dots i{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.4)}
+.banner .dots i.on{background:#fff;width:14px;border-radius:99px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  overflow:hidden;box-shadow:var(--shadow-card)}
+.card .thumb{height:96px;display:grid;place-items:center;font-size:36px;background:var(--muted-bg)}
+.card .cbody{padding:var(--sp-12)}
+.card .cttl{font-size:14px;font-weight:700}
+.card .csub{font-size:12px;color:var(--text-subtle);margin-top:3px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-12)}
+
+/* ── 상세 ── */
+.hero{position:relative;height:200px;overflow:hidden;flex:none;
+  background:linear-gradient(160deg,var(--color-amber-100),var(--color-neutral-200));
+  display:grid;place-items:center;font-size:64px}
+.hero .indicator{position:absolute;top:12px;right:12px;background:rgba(42,38,33,.55);color:#fff;
+  font-size:11px;font-weight:700;padding:3px 9px;border-radius:var(--r-full)}
+.hero .capn{position:absolute;left:12px;bottom:12px;background:rgba(42,38,33,.55);color:#fff;
+  font-size:11px;padding:3px 9px;border-radius:var(--r-full)}
+.kv{display:flex;gap:var(--sp-12);align-items:baseline;font-size:13px}
+.kv .k{width:52px;flex:none;font-weight:700;color:var(--text-subtle);font-size:11px;letter-spacing:.06em}
+.notice{background:var(--muted-bg);border-radius:var(--r-md);padding:var(--sp-12) var(--sp-16)}
+.notice li{font-size:12px;color:var(--text-muted);line-height:1.7}
+.paybar{flex:none;padding:var(--sp-12) var(--sp-16);background:var(--surface);border-top:1px solid var(--border)}
+
+/* 바텀시트 (Day 30 — 이 제품의 모달 관용구) */
+.sheetwrap{position:absolute;inset:0;z-index:20;display:none}
+.sheetwrap.open{display:block}
+.sheetwrap .scrim{position:absolute;inset:0;background:var(--scrim)}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--surface);
+  border-radius:var(--r-lg) var(--r-lg) 0 0;padding:var(--sp-20) var(--sp-16) var(--sp-16);
+  box-shadow:0 -12px 32px -12px rgba(42,38,33,.4);animation:up .22s ease-out}
+@keyframes up{from{transform:translateY(24px);opacity:.4}to{transform:none;opacity:1}}
+.sheet .grip{width:36px;height:4px;border-radius:99px;background:var(--color-neutral-300);margin:0 auto var(--sp-16)}
+.progress{height:8px;border-radius:99px;background:var(--muted-bg);overflow:hidden}
+.progress i{display:block;height:100%;width:70%;border-radius:99px;background:var(--brand-bg)}
+.legal{font-size:11px;color:var(--text-subtle);text-align:center;line-height:1.5}
+
+/* ── 결제 완료 ── */
+.done{display:flex;flex-direction:column;align-items:center;text-align:center;padding:var(--sp-32) var(--sp-16) var(--sp-16)}
+.done .mark{width:72px;height:72px;border-radius:50%;background:var(--color-leaf-50);color:var(--color-leaf-600);
+  display:grid;place-items:center;font-size:34px;margin-bottom:var(--sp-16)}
+.rows{width:100%;background:var(--muted-bg);border-radius:var(--r-md);padding:var(--sp-12) var(--sp-16);margin-top:var(--sp-20)}
+.rows .r{display:flex;justify-content:space-between;font-size:13px;padding:7px 0}
+.rows .r .k{color:var(--text-subtle)} .rows .r .v{font-weight:600}
+
+/* ── 마이페이지: 카드 디자인 X — 구분선만 (Day 31) ── */
+.profile{display:flex;gap:var(--sp-12);align-items:center}
+.avatar{width:52px;height:52px;border-radius:50%;background:var(--color-brand-200);display:grid;place-items:center;font-size:24px;flex:none}
+.tabs{display:flex;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:56px;z-index:4}
+.tabs button{flex:1;height:44px;border:0;background:transparent;cursor:pointer;
+  font:600 13px/1 var(--font);letter-spacing:-.02em;color:var(--text-subtle);
+  border-bottom:2px solid transparent}
+.tabs button.on{color:var(--text-brand);border-bottom-color:var(--color-brand-600)}
+.payitem{padding:var(--sp-16) 0;border-bottom:1px solid var(--border)}
+.payitem .row1{display:flex;align-items:center;gap:var(--sp-8)}
+.payitem .ttl{font-size:15px;font-weight:700;flex:1}
+.payitem .meta{font-size:12px;color:var(--text-subtle);margin-top:5px;line-height:1.6}
+.payitem .money{display:flex;justify-content:space-between;font-size:13px;margin-top:8px}
+.payitem .money b{font-weight:700}
+.hint{background:var(--color-brand-50);border-radius:var(--r-md);padding:var(--sp-12) var(--sp-16);
+  font-size:12px;color:var(--text-brand);line-height:1.6}
+
+/* 모달 + 토스트 (Day 34 취소 플로우) */
+.modalwrap{position:absolute;inset:0;z-index:30;display:none;place-items:center}
+.modalwrap.open{display:grid}
+.modalwrap .scrim{position:absolute;inset:0;background:var(--scrim)}
+.modal{position:relative;width:296px;background:var(--surface);border-radius:var(--r-lg);
+  padding:var(--sp-24) var(--sp-20) var(--sp-16);box-shadow:var(--shadow-float);animation:up .18s ease-out}
+.modal h4{margin:0 0 8px;font-size:16px}
+.modal p{margin:0 0 var(--sp-16);font-size:13px;color:var(--text-muted);line-height:1.6}
+.modal .acts{display:flex;gap:var(--sp-8)}
+.toast{position:absolute;left:16px;right:16px;bottom:74px;z-index:40;display:none;align-items:flex-start;gap:10px;
+  background:var(--color-neutral-900);color:var(--color-neutral-50);border-radius:var(--r-md);
+  padding:var(--sp-12) var(--sp-16);font-size:12px;line-height:1.55;box-shadow:var(--shadow-float)}
+.toast.open{display:flex;animation:up .2s ease-out}
+.toast .tick{color:#8FCF9F;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="doc-head">
+    <div class="brandmark">
+      <div class="logo">🍽️</div>
+      <div>
+        <p class="eyebrow">PART 4 · DAY 30–34 · E-FOOD-COMMUNITY-PART-2</p>
+        <h1 class="doc-title">맛집커뮤니티 — 결제 플로우 목업</h1>
+        <p class="doc-sub">한 상품(<b>구로 골목 미식회 · 30,000원</b>)이 배너 → 상세 → 바텀시트 → 결제 완료 → 마이페이지까지
+        5화면을 관통합니다. 기존 디자인 시스템(Moss)을 <b>재사용만</b> 해서 조립했습니다.</p>
+      </div>
+    </div>
+  </header>
+
+  <aside class="mocknote">
+    <p>🧪 <strong>목업 안내</strong> — 결제창·포트원·웹훅·DB는 모두 <strong>시뮬레이션</strong>입니다. 실제 결제는 일어나지 않습니다.
+    [결제 진행]을 누르면 결제 완료 화면으로, 마이페이지의 [결제 취소]는 확인 모달 → 토스트(<em>"환불까지 3–5일"</em>) → 취소 내역 탭으로 이어집니다.
+    실전에서는 이 사이 화살표마다 <strong>포트원 결제창(Day 33)</strong>과 <strong>웹훅 → insert-only 원장(Day 34)</strong>이 끼어듭니다 —
+    <a href="./04-payment-ledger.html">원장 시뮬레이터</a>에서 그 뒷면을 볼 수 있습니다.</p>
+  </aside>
+
+  <nav class="chips" id="chips">
+    <button class="chip" data-target="all" aria-pressed="true">전체 보기 <span class="num">5</span></button>
+    <button class="chip" data-target="s1" aria-pressed="false">① 메인 · 배너</button>
+    <button class="chip" data-target="s2" aria-pressed="false">② 모임 상세 + 바텀시트</button>
+    <button class="chip" data-target="s3" aria-pressed="false">③ 결제 완료</button>
+    <button class="chip" data-target="s4" aria-pressed="false">④ 마이 · 결제 내역</button>
+    <button class="chip" data-target="s5" aria-pressed="false">⑤ 마이 · 취소 내역</button>
+  </nav>
+
+  <div class="stage" id="stage">
+
+    <!-- ① 메인 — 상단 배너에 새 역할 (Day 30) -->
+    <figure class="board" id="s1">
+      <div class="phone">
+        <div class="statusbar"><span>21:04</span><span>🛜 ▮▮▮</span></div>
+        <div class="screen">
+          <div class="pad stack-16">
+            <div>
+              <div style="font-size:12px;font-weight:700;color:var(--text-brand)">📍 맛집커뮤니티</div>
+              <div style="font-size:20px;font-weight:700;margin-top:4px">이번 주말, 어디 가볼까?</div>
+            </div>
+            <div class="search">🔍 <span>가족 외식, 주차 가능, 조용한 골목</span></div>
+            <div class="banner" onclick="go('s2')">
+              <div class="kicker">GURO TABLE · VOL.01</div>
+              <div class="copy1">동네 미식가들과</div>
+              <div class="copy2">한 테이블에 앉는 밤</div>
+              <div class="meta">8.29 (토) 19:30 · 30,000원 · 10명 한정</div>
+              <div class="plate">🍲</div>
+              <div class="dots"><i class="on"></i><i></i><i></i></div>
+            </div>
+            <div>
+              <div style="font-size:16px;font-weight:700">이 맛집 어때요?</div>
+              <div style="font-size:12px;color:var(--text-subtle);margin-top:2px">대부도 숨은 맛집</div>
+            </div>
+            <div class="grid2">
+              <div class="card"><div class="thumb">🍝</div>
+                <div class="cbody"><div class="cttl">구로 골목 화덕 파스타</div><div class="csub">서울 구로구</div></div></div>
+              <div class="card"><div class="thumb">🦀</div>
+                <div class="cbody"><div class="cttl">오늘 다녀온 대부도 맛집~</div><div class="csub">경기도 안산시</div></div></div>
+            </div>
+            <div style="height:64px"></div>
+          </div>
+        </div>
+        <button class="fab">＋</button>
+        <div class="bottomnav">
+          <button class="on"><span class="ic">🏠</span>홈</button>
+          <button onclick="go('s4')"><span class="ic">👤</span>마이</button>
+        </div>
+      </div>
+      <figcaption class="board-cap">
+        <div class="t">① 메인 — 배너에 새 역할을 준다</div>
+        <div class="d"><b>Day 30</b> 결제 기획 1페이지. 배너를 새로 만들지 않고 <b>기존 상단 배너를 강연/모임 결제 상품</b>으로 쓴다.
+        카피 2줄(아랫줄 강조)과 날짜·가격은 <b>Day 31</b>의 카피·CTA 문법. 헤더·탭바는 고정, 가운데만 스크롤(<b>NOL 판서</b>).</div>
+      </figcaption>
+    </figure>
+
+    <!-- ② 모임 상세 + 결제 바텀시트 -->
+    <figure class="board" id="s2">
+      <div class="phone">
+        <div class="statusbar"><span>21:04</span><span>🛜 ▮▮▮</span></div>
+        <div class="topnav">
+          <button class="iconbtn" onclick="go('s1')">←</button>
+          <div class="ttl">모임 상세</div>
+          <div style="width:48px"></div>
+        </div>
+        <div class="screen">
+          <div class="hero">🍲
+            <div class="indicator">1 / 2</div>
+            <div class="capn">구로시장 키친 · 저녁 테이블</div>
+          </div>
+          <div class="pad stack-16">
+            <div>
+              <span class="badge badge--amber">GURO TABLE · VOL.01</span>
+              <div style="font-size:20px;font-weight:700;margin-top:8px;line-height:1.3">동네 미식가들과<br>한 테이블에 앉는 밤</div>
+            </div>
+            <div class="stack-8">
+              <div class="kv"><span class="k">DATE</span><span>8.29 (토) 19:30</span></div>
+              <div class="kv"><span class="k">PLACE</span><span>구로시장 키친</span></div>
+              <div class="kv"><span class="k">SEATS</span><span><b>7 / 10명</b> · 3자리 남음</span></div>
+            </div>
+            <p class="muted" style="font-size:13px;line-height:1.7;margin:0">
+              이번엔 후기 너머에서 만나요. 우리가 저장해 둔 골목의 맛을,
+              같은 동네 사람들과 한 테이블에서 나눕니다. 재료·도구·레시피가 모두 준비돼요.
+            </p>
+            <div class="notice">
+              <div style="font-size:12px;font-weight:700;margin-bottom:6px">참여 전 확인하세요</div>
+              <ul style="margin:0;padding-left:16px">
+                <li>모임 3일 전까지 취소 시 전액 환불돼요.</li>
+                <li>알레르기가 있다면 미리 알려주세요.</li>
+              </ul>
+            </div>
+            <div style="height:8px"></div>
+          </div>
+        </div>
+        <div class="paybar">
+          <button class="btn btn--primary" onclick="sheet(true)">30,000원 결제하기</button>
+        </div>
+        <!-- 결제 바텀시트 -->
+        <div class="sheetwrap" id="sheetwrap">
+          <div class="scrim" onclick="sheet(false)"></div>
+          <div class="sheet stack-16">
+            <div class="grip"></div>
+            <div>
+              <div style="font-size:17px;font-weight:700">한 자리, 곧 확정돼요</div>
+              <div class="subtle" style="font-size:12px;margin-top:3px">8월 구로 골목 미식회</div>
+            </div>
+            <div class="stack-8">
+              <div style="display:flex;justify-content:space-between;font-size:13px">
+                <span class="muted">참여 현황</span><b>7 / 10명</b>
+              </div>
+              <div class="progress"><i></i></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline">
+              <span class="muted" style="font-size:13px">결제 금액</span>
+              <b style="font-size:20px">30,000원</b>
+            </div>
+            <button class="btn btn--primary" onclick="sheet(false);go('s3')">결제 진행</button>
+            <p class="legal">결제 진행 시 취소·환불 정책에 동의한 것으로 간주합니다.</p>
+          </div>
+        </div>
+      </div>
+      <figcaption class="board-cap">
+        <div class="t">② 모임 상세 + 결제 바텀시트</div>
+        <div class="d"><b>Day 30</b> — 바텀시트가 이 제품의 모달 관용구. <b>참여자 수 / 최대 인원</b>은 모임 결제 특유의 필드.
+        사진의 <b>1/2 인디케이터</b>는 <b>Day 31</b> "스와이핑 처리해줘"의 흔적 — 동작은 디자인 파일이 아니라 지시문이 담는다.
+        실전에서 금액 30,000원은 화면이 아니라 <b>서버의 product 테이블</b>에서 온다(Day 33).</div>
+      </figcaption>
+    </figure>
+
+    <!-- ③ 결제 완료 -->
+    <figure class="board" id="s3">
+      <div class="phone">
+        <div class="statusbar"><span>21:04</span><span>🛜 ▮▮▮</span></div>
+        <div class="screen">
+          <div class="done">
+            <div class="mark">✓</div>
+            <div style="font-size:20px;font-weight:700">결제가 완료되었어요</div>
+            <div class="subtle" style="font-size:13px;margin-top:6px">한 자리, 확정됐어요</div>
+            <div class="rows">
+              <div class="r"><span class="k">상품</span><span class="v">구로 골목 미식회</span></div>
+              <div class="r"><span class="k">결제 금액</span><span class="v">30,000원</span></div>
+              <div class="r"><span class="k">결제 일시</span><span class="v">2026.08.13 21:04</span></div>
+              <div class="r"><span class="k">참여 일정</span><span class="v">2026.08.29 (토) 19:30</span></div>
+              <div class="r"><span class="k">장소</span><span class="v">구로시장 키친</span></div>
+            </div>
+            <div class="stack-8" style="width:100%;margin-top:var(--sp-24)">
+              <button class="btn btn--primary" onclick="go('s4')">결제 내역 보기</button>
+              <button class="btn btn--secondary" onclick="go('s1')">홈으로 돌아가기</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <figcaption class="board-cap">
+        <div class="t">③ 결제 완료 — 버튼 위계가 다르다</div>
+        <div class="d"><b>Day 30</b> — 결제 직후 유저가 궁금한 건 "내 결제가 잘 남았나". 그래서 <b>[결제 내역 보기]가 주 동작</b>,
+        [홈으로]는 보조. 실전에서는 이 화면이 <b>redirectUrl</b>의 목적지다(Day 32 — 모바일은 콜백이 못 돌아올 수 있어 페이지 전환이 정답 동선).</div>
+      </figcaption>
+    </figure>
+
+    <!-- ④ 마이 — 결제 내역 -->
+    <figure class="board" id="s4">
+      <div class="phone">
+        <div class="statusbar"><span>21:04</span><span>🛜 ▮▮▮</span></div>
+        <div class="topnav">
+          <div style="width:48px"></div>
+          <div class="ttl">마이페이지</div>
+          <button class="iconbtn">⎋</button>
+        </div>
+        <div class="screen">
+          <div class="pad">
+            <div class="profile">
+              <div class="avatar">🚗</div>
+              <div style="flex:1">
+                <div style="font-size:16px;font-weight:700">구로 드라이버 <span style="font-size:13px">✏️</span></div>
+                <div class="subtle" style="font-size:12px;margin-top:2px">6개의 숨은 맛집을 기록했어요.</div>
+              </div>
+            </div>
+          </div>
+          <div class="tabs">
+            <button>내가 쓴 글</button>
+            <button class="on">결제 내역</button>
+            <button onclick="go('s5')">취소 내역</button>
+          </div>
+          <div class="pad">
+            <div class="subtle" style="font-size:12px;font-weight:700;margin-bottom:4px">결제 내역 1건</div>
+            <div class="payitem">
+              <div class="row1">
+                <span class="badge badge--leaf">참여 확정</span>
+                <span class="ttl">구로 골목 미식회</span>
+              </div>
+              <div class="meta">8.29 (토) 19:30 · 구로시장 키친</div>
+              <div class="money"><span class="muted">결제 금액</span><b>30,000원</b></div>
+              <div class="money"><span class="muted">결제 일시</span><span>2026.08.13 21:04</span></div>
+              <div style="margin-top:10px;text-align:right">
+                <button class="btn btn--danger btn--sm" onclick="modal(true)">결제 취소</button>
+              </div>
+            </div>
+            <div style="margin-top:var(--sp-16)" class="hint">
+              이 카드의 상품명·일정·장소는 <b>결제스냅샷</b>에서 옵니다 — 상품이 나중에 바뀌어도
+              결제한 그날의 정보가 남아요. (Day 33·34)
+            </div>
+          </div>
+        </div>
+        <div class="bottomnav">
+          <button onclick="go('s1')"><span class="ic">🏠</span>홈</button>
+          <button class="on"><span class="ic">👤</span>마이</button>
+        </div>
+        <!-- 취소 확인 모달 -->
+        <div class="modalwrap" id="modalwrap">
+          <div class="scrim" onclick="modal(false)"></div>
+          <div class="modal">
+            <h4>이 결제를 취소할까요?</h4>
+            <p>'구로 골목 미식회' 결제 금액 <b>30,000원</b>이 전액 환불됩니다.</p>
+            <div class="acts">
+              <button class="btn btn--secondary" style="height:40px" onclick="modal(false)">닫기</button>
+              <button class="btn btn--danger" style="height:40px" onclick="cancelPay()">결제 취소</button>
+            </div>
+          </div>
+        </div>
+        <div class="toast" id="toast">
+          <span class="tick">✓</span>
+          <span>결제를 취소했어요. <b>환불까지 3–5일</b> 걸릴 수 있어요.</span>
+        </div>
+      </div>
+      <figcaption class="board-cap">
+        <div class="t">④ 마이 · 결제 내역 — "카드 디자인 X"</div>
+        <div class="d"><b>Day 31</b> — 항목마다 카드를 두르면 상자 안의 상자가 된다. 여기선 <b>구분선만</b> 쓴다.
+        [결제 취소] → 확인 모달 → 토스트(<b>"환불까지 3–5일"</b>, Day 30 디자인의 문구가 Day 34에서 실제로 살아났다).
+        실전에서 취소는 <b>BFF → 포트원 → 취소 웹훅 → CANCEL −30000 행 추가</b>로 이어진다.</div>
+      </figcaption>
+    </figure>
+
+    <!-- ⑤ 마이 — 취소 내역 -->
+    <figure class="board" id="s5">
+      <div class="phone">
+        <div class="statusbar"><span>21:04</span><span>🛜 ▮▮▮</span></div>
+        <div class="topnav">
+          <div style="width:48px"></div>
+          <div class="ttl">마이페이지</div>
+          <button class="iconbtn">⎋</button>
+        </div>
+        <div class="screen">
+          <div class="pad">
+            <div class="profile">
+              <div class="avatar">🚗</div>
+              <div style="flex:1">
+                <div style="font-size:16px;font-weight:700">구로 드라이버 <span style="font-size:13px">✏️</span></div>
+                <div class="subtle" style="font-size:12px;margin-top:2px">6개의 숨은 맛집을 기록했어요.</div>
+              </div>
+            </div>
+          </div>
+          <div class="tabs">
+            <button>내가 쓴 글</button>
+            <button onclick="go('s4')">결제 내역</button>
+            <button class="on">취소 내역</button>
+          </div>
+          <div class="pad">
+            <div class="subtle" style="font-size:12px;font-weight:700;margin-bottom:4px">취소 내역 1건</div>
+            <div class="payitem">
+              <div class="row1">
+                <span class="badge badge--clay">취소 완료</span>
+                <span class="ttl">구로 골목 디저트 산책</span>
+              </div>
+              <div class="meta">카카오페이 20,000원 환불</div>
+              <div class="money"><span class="muted">취소 접수</span><span>2026.07.12</span></div>
+              <div class="money"><span class="muted">환불 금액</span><b>20,000원</b></div>
+              <div class="money"><span class="muted">환불 수단</span><span>카카오페이</span></div>
+            </div>
+            <div id="cancelItem2" style="display:none">
+              <div class="payitem">
+                <div class="row1">
+                  <span class="badge badge--clay">취소 완료</span>
+                  <span class="ttl">구로 골목 미식회</span>
+                </div>
+                <div class="meta">방금 취소한 결제예요</div>
+                <div class="money"><span class="muted">환불 금액</span><b>30,000원</b></div>
+                <div class="money"><span class="muted">환불 수단</span><span>신용카드</span></div>
+              </div>
+            </div>
+            <div style="margin-top:var(--sp-16)" class="hint">
+              환불은 결제 수단에 따라 <b>영업일 기준 3~5일</b> 소요될 수 있어요.
+              — 돈이 오가는 화면은, 가장 많이 오는 문의에 미리 답한다. (Day 30)
+            </div>
+          </div>
+        </div>
+        <div class="bottomnav">
+          <button onclick="go('s1')"><span class="ic">🏠</span>홈</button>
+          <button class="on"><span class="ic">👤</span>마이</button>
+        </div>
+      </div>
+      <figcaption class="board-cap">
+        <div class="t">⑤ 마이 · 취소 내역 — 원장의 type을 읽을 뿐</div>
+        <div class="d"><b>Day 33·34</b> — 취소는 결제 행을 고친 게 아니라 <b>CANCEL 음수 행이 추가</b>된 것.
+        결제/취소 탭은 같은 <code>payment</code> 원장의 <b>type</b>을 분류해 보여줄 뿐이다.
+        환불 수단 표기(카카오페이)는 스냅샷이 보존한 결제 시점 정보다.</div>
+      </figcaption>
+    </figure>
+
+  </div>
+</div>
+
+<script>
+// 화면 선택 칩 — 전체/단일 보기
+const chips = document.querySelectorAll('#chips .chip');
+function select(target){
+  chips.forEach(c => c.setAttribute('aria-pressed', String(c.dataset.target === target)));
+  document.querySelectorAll('.board').forEach(b => {
+    b.classList.toggle('hidden', target !== 'all' && b.id !== target);
+  });
+}
+chips.forEach(c => c.addEventListener('click', () => select(c.dataset.target)));
+
+// 화면 간 이동 — 전체 보기면 스크롤, 단일 보기면 보드 전환
+function go(id){
+  const isAll = document.querySelector('[data-target="all"]').getAttribute('aria-pressed') === 'true';
+  if(isAll){
+    document.getElementById(id).scrollIntoView({behavior:'smooth', block:'start'});
+  }else{
+    select(id);
+  }
+}
+
+// 결제 바텀시트 / 취소 모달 / 토스트
+function sheet(open){ document.getElementById('sheetwrap').classList.toggle('open', open); }
+function modal(open){ document.getElementById('modalwrap').classList.toggle('open', open); }
+let toastTimer = null;
+function cancelPay(){
+  modal(false);
+  const t = document.getElementById('toast');
+  t.classList.add('open');
+  document.getElementById('cancelItem2').style.display = 'block';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    t.classList.remove('open');
+    go('s5');
+  }, 1800);
+}
+</script>
+</body>
+</html>

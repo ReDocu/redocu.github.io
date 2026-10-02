@@ -38,24 +38,11 @@ window.addEventListener('resize', () => {
   if (window.innerWidth > 1080) setOpen(mobileNavToggle, mobileNavPanel, false);
 });
 
-// 현재 페이지 메뉴 강조 (서브 페이지)
-document.querySelectorAll('.main-nav a').forEach((a) => {
-  const path = new URL(a.href).pathname;
-  if (path !== '/' && location.pathname.startsWith(path)) a.setAttribute('aria-current', 'page');
-});
-
 // ── 모션 API ──
 // data-reveal[=up|fade|left|right|scale|clip] : 화면에 들어오면 .is-in
 // data-stagger (부모)                          : 자식 data-reveal 에 --i 순번 → 순차 지연
 // data-count="607"                             : 화면에 들어오면 0부터 카운트업
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-document.querySelectorAll('[data-stagger]').forEach((parent) => {
-  [...parent.children].forEach((child, i) => {
-    if (!child.hasAttribute('data-reveal')) child.setAttribute('data-reveal', parent.dataset.stagger || '');
-    child.style.setProperty('--i', i);
-  });
-});
 
 function countUp(el) {
   const target = parseFloat(el.dataset.count);
@@ -72,14 +59,32 @@ function countUp(el) {
   requestAnimationFrame(tick);
 }
 
-const revealTargets = document.querySelectorAll('[data-reveal], [data-count]');
 const reveal = (el) => {
   el.classList.add('is-in');
   if (el.dataset.count) countUp(el);
 };
-if (!('IntersectionObserver' in window)) {
-  revealTargets.forEach(reveal);
-} else {
+
+// 페이지마다 할 일. 본문만 바꿔 끼우는 이동(sound-player.js) 뒤에도 'page:load'로 다시 돈다
+function initPage() {
+  // 현재 페이지 메뉴 강조 (서브 페이지)
+  document.querySelectorAll('.main-nav a').forEach((a) => {
+    const path = new URL(a.href).pathname;
+    if (path !== '/' && location.pathname.startsWith(path)) a.setAttribute('aria-current', 'page');
+    else a.removeAttribute('aria-current');
+  });
+
+  document.querySelectorAll('[data-stagger]').forEach((parent) => {
+    [...parent.children].forEach((child, i) => {
+      if (!child.hasAttribute('data-reveal')) child.setAttribute('data-reveal', parent.dataset.stagger || '');
+      child.style.setProperty('--i', i);
+    });
+  });
+
+  const revealTargets = document.querySelectorAll('[data-reveal]:not(.is-in), [data-count]:not(.is-in)');
+  if (!('IntersectionObserver' in window)) {
+    revealTargets.forEach(reveal);
+    return;
+  }
   // clip 은 시작 시 면적이 0이라 IO가 교차를 못 본다 → 부모를 대신 관찰한다
   const watchers = new Map();
   const io = new IntersectionObserver((entries) => {
@@ -95,3 +100,5 @@ if (!('IntersectionObserver' in window)) {
     watchers.get(target).push(el);
   });
 }
+initPage();
+document.addEventListener('page:load', initPage);

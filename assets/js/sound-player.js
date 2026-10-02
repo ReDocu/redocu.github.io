@@ -174,6 +174,89 @@
     });
   }
 
+  // ── 사이트 안 이동: 페이지를 새로 읽지 않고 <main>만 바꿔 끼운다 → 플레이어가 살아 있어 음악이 안 끊긴다 ──
+  // 플레이어가 없는 페이지(학습 문서 원본 HTML 등)·파일·실패는 일반 이동. 인트로는 첫 진입에만 쓰므로 가져오지 않는다.
+  const FILE = /\.(pdf|zip|png|jpe?g|gif|svg|webp|mp3|mp4)$/i;
+  const here = () => location.pathname + location.search;
+  let shown = here();
+  let navId = 0;
+  const sheets = (doc) => [...doc.head.querySelectorAll('link[rel="stylesheet"]')];
+  // DOMParser로 만든 <script>는 실행되지 않는다 → 새로 만들어 끼우고, 외부 파일이면 다 읽을 때까지 기다린다
+  const run = (old) => new Promise((done) => {
+    const s = document.createElement('script');
+    [...old.attributes].forEach((a) => s.setAttribute(a.name, a.value));
+    s.textContent = old.textContent;
+    if (s.src) s.onload = s.onerror = done;
+    old.replaceWith(s);
+    if (!s.src) done();
+  });
+
+  const go = async (url, push) => {
+    const id = ++navId;
+    const fallback = () => (push ? location.assign(url) : location.reload());
+    let doc;
+    try {
+      const res = await fetch(url);
+      if (!res.ok || !res.headers.get('content-type')?.includes('text/html')) throw 0;
+      doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+    } catch (e) { if (id === navId) fallback(); return; }
+    if (id !== navId) return; // 그새 다른 링크를 눌렀다
+    const next = doc.getElementById('main');
+    if (!next || !doc.getElementById('player')) { fallback(); return; }
+
+    // CSS: 새 페이지 순서대로 맞추고(있는 건 재사용), 새로 받는 파일은 다 읽은 뒤 바꿔 끼워 깜빡임을 막는다
+    const old = new Map(sheets(document).map((l) => [l.href, l]));
+    const links = sheets(doc).map((l) => {
+      const href = new URL(l.getAttribute('href'), url).href;
+      return old.get(href) || Object.assign(document.createElement('link'), { rel: 'stylesheet', href });
+    });
+    await Promise.all(links.filter((l) => !l.isConnected).map((l) => new Promise((done) => {
+      l.onload = l.onerror = done;
+      document.head.append(l);
+    })));
+    if (id !== navId) return;
+    old.forEach((l) => { if (!links.includes(l)) l.remove(); });
+    document.head.append(...links);
+
+    document.title = doc.title;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', doc.querySelector('meta[name="description"]')?.content || '');
+    if (push) {
+      history.replaceState({ y: scrollY }, ''); // 뒤로 가기 때 돌아올 위치
+      history.pushState({}, '', url);
+    }
+    shown = here();
+    document.getElementById('main').replaceWith(next);
+    document.querySelectorAll('script[data-page]').forEach((s) => s.remove());
+
+    // 원래 페이지 순서대로: 본문 인라인 스크립트 → main.js 페이지 처리 → 페이지 전용 스크립트(home.js 등)
+    for (const s of next.querySelectorAll('script')) await run(s);
+    document.dispatchEvent(new Event('page:load'));
+    for (const s of doc.querySelectorAll('script[data-page]')) {
+      document.body.append(s);
+      await run(s);
+    }
+
+    const target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if (target) target.scrollIntoView({ behavior: 'instant' });
+    else scrollTo({ top: push ? 0 : history.state?.y || 0, behavior: 'instant' });
+    next.tabIndex = -1;
+    next.focus({ preventScroll: true }); // 스크린리더가 새 본문부터 읽게
+  };
+
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href]');
+    if (!a || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if ((a.target && a.target !== '_self') || a.hasAttribute('download') || a.origin !== location.origin) return;
+    const url = new URL(a.href);
+    if (FILE.test(url.pathname)) return;
+    if (url.pathname + url.search === here() && url.hash) return; // 같은 페이지 앵커는 브라우저가 처리
+    e.preventDefault();
+    go(url.href, true);
+  });
+  // 앵커만 바뀐 뒤로/앞으로는 같은 페이지라 무시
+  addEventListener('popstate', () => { if (here() !== shown) go(location.href, false); });
+  document.addEventListener('page:load', mark); // /music/ 곡 버튼 현재 곡 표시
+
   window.soundPlayer = {
     play,
     // 인트로 입장 (VO-5): MUTE ENTER거나 이전에 음소거했으면 무음으로 입장 = 재생하지 않음

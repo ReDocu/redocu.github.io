@@ -1,0 +1,11 @@
+---
+layout: main
+css: [wikidoc]
+---
+{% comment %} 독립 문서 페이지 (예: /personal-assistant/). 위키 문서와 같은 본문 타이포그래피 {% endcomment %}
+<div class="container doc-page">
+  <article class="wikidoc-article">
+    {% if page.title %}<h1>{{ page.title }}</h1>{% endif %}
+    {{ content }}
+  </article>
+</div>

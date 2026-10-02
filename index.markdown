@@ -3,7 +3,8 @@ layout: main
 intro: true
 css: [home]
 js: [home]
-description: 게임 클라이언트에서 비전 AI, 웹 서비스까지 — 콘텐츠·메타버스 개발자 DOCU의 포트폴리오
+portfolio: [eqmux, spm, resume-sim]   # 메인 소프트웨어 카드 고정 목록
+description: C/C++ · Unity · Unreal · Full Stack · AI Agent — AX 개발자 DOCU의 포트폴리오
 # 학습 위키 그리드 (PRD 4.6). 문서 수는 수동 입력 — 과정 추가 시 SITE_SPEC 7장 절차에 포함
 courses:
   - { slug: game-to-unity,  name: 게임 개발 24주,      docs: 125 }
@@ -37,27 +38,28 @@ academies:
       - { label: 학습문서, url: /academy/mbc/study-notes.html }
   - title: 웹 기반 바이브 코딩 커리큘럼
     url: /academy/codecamp/
-    status: progress
+    status: complete
     meta: 코드캠프(딩코) · 2026.06 – 2026.09
-    desc: Claude Code 중심의 바이브 코딩 과정. PRD 문서 작성부터 Supabase·Vercel 배포까지 익히며 소개 페이지와 미니 노션 웹서비스를 제작하고 있습니다.
-    tags: [Claude Code, Supabase, Vercel]
+    desc: Claude Code 중심의 바이브 코딩 과정. PRD 문서 작성부터 Supabase·Vercel 배포, 포트원 결제 연동까지 익히며 소개 페이지·미니 노션·맛집 커뮤니티를 제작했습니다.
+    tags: [Claude Code, Supabase, Vercel, Portone]
     thumb: /assets/thumbs/academy-codecamp.png
     actions:
-      - { label: 체험하기, url: /academy/codecamp/ }
+      - { label: 상세문서, url: /academy/codecamp/ }
       - { label: GitHub, url: "https://github.com/ReDocu/Sesac_CC_ClaudeCode" }
 ---
-{%- assign software = site.data.projects | where: "kind", "software" | sort: "order" -%}
+{%- comment -%} 메인 포트폴리오는 page.portfolio 에 적은 slug 만, 그 순서대로 {%- endcomment -%}
+{%- assign software = "" | split: "" -%}{%- for s in page.portfolio -%}{%- assign item = site.data.projects | where: "slug", s | first -%}{%- assign software = software | push: item -%}{%- endfor -%}
 {%- assign games = site.data.projects | where: "kind", "game" | sort: "order" -%}
 
 <section class="hero" id="hero">
   <div class="container hero__inner">
     <div class="hero__text">
       <p class="hero__ident" aria-hidden="true">// IDENTIFICATION_</p>
-      <p class="hero__eyebrow"><span class="hero__line" aria-hidden="true"></span>콘텐츠 개발자 / 메타버스 개발자</p>
+      <p class="hero__eyebrow"><span class="hero__line" aria-hidden="true"></span>AX 개발자</p>
       <h1 class="hero__title" data-text="DOCU">DOCU</h1>
       <p class="hero__desc">게임 클라이언트 개발에서 시작해 비전 AI 모델 학습, 웹 서비스 개발까지 영역을 넓혀 온 개발자입니다. 지금은 Claude Code를 중심으로 개발 도구와 웹 게임을 만들고, 배운 것을 문서로 정리해 나누고 있습니다.</p>
       <div class="chips hero__chips" aria-label="핵심 기술">
-        <span class="chip">Unity</span><span class="chip">Unreal Engine</span><span class="chip">C/C++</span><span class="chip">Python · AI</span><span class="chip">Claude Code</span>
+        <span class="chip">C/C++</span><span class="chip">Unity</span><span class="chip">Unreal</span><span class="chip">Full Stack</span><span class="chip">AI Agent</span>
       </div>
       <div class="hero__actions">
         <a class="btn" href="/files/portfolio.pdf">포트폴리오 보기</a>
@@ -72,8 +74,8 @@ academies:
       <dl class="hud__readout">
         <div><dt>ID</dt><dd data-type>0x44OC-2026</dd></div>
         <div><dt>NAME</dt><dd data-type>DOCU</dd></div>
-        <div><dt>ROLE</dt><dd data-type>CONTENT · METAVERSE DEV</dd></div>
-        <div><dt>STACK</dt><dd data-type>UNITY / C++ / PY · AI / CLAUDE</dd></div>
+        <div><dt>ROLE</dt><dd data-type>AX DEVELOPER</dd></div>
+        <div><dt>STACK</dt><dd data-type>C++ / UNITY / UNREAL / FULL STACK / AI AGENT</dd></div>
         <div><dt>STATUS</dt><dd class="warn" data-type><span class="hud__led" aria-hidden="true">●</span> BUILDING</dd></div>
       </dl>
       <div class="hud__progress" style="--p:67%"><span></span></div>

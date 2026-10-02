@@ -16,13 +16,13 @@
   padding: 36px 24px 40px var(--gutter); border-right: 1px solid var(--line);
 }
 .wikidoc-course { display: grid; gap: 6px; margin-bottom: 28px; }
-.wikidoc-course__name { font-size: 15px; font-weight: 700; line-height: 1.45; transition: color 0.2s; }
+.wikidoc-course__name { font-size: 16px; font-weight: 700; line-height: 1.45; transition: color 0.2s; }
 .wikidoc-course__name:hover { color: var(--accent); }
-.wikidoc-course__meta { margin: 0; color: var(--muted); font-size: 12px; }
+.wikidoc-course__meta { margin: 0; color: var(--muted); font-size: 13px; }
 
 .wikidoc-toc > summary {
   display: flex; justify-content: space-between; cursor: pointer; list-style: none; padding: 12px 14px;
-  border: 1px solid var(--line); color: var(--accent); font-family: var(--f-display); font-size: 10px; letter-spacing: 3px;
+  border: 1px solid var(--line); color: var(--accent); font-family: var(--f-display); font-size: 11px; letter-spacing: 3px;
 }
 .wikidoc-toc > summary::-webkit-details-marker, .wikidoc-toc__group > summary::-webkit-details-marker { display: none; }
 .wikidoc-toc > summary::after { content: "▾"; }
@@ -30,19 +30,19 @@
 .wikidoc-toc__group + .wikidoc-toc__group { margin-top: 10px; }
 .wikidoc-toc__group > summary {
   display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 0; cursor: pointer; list-style: none;
-  color: var(--muted); font-size: 12px; letter-spacing: 1px; transition: color 0.2s;
+  color: var(--muted); font-size: 13px; letter-spacing: 1px; transition: color 0.2s;
 }
 .wikidoc-toc__group > summary::after { content: "›"; flex: none; transition: transform 0.25s var(--ease); }
 .wikidoc-toc__group[open] > summary { color: var(--accent); }
 .wikidoc-toc__group[open] > summary::after { transform: rotate(90deg); }
 .wikidoc-toc__group > summary:hover { color: var(--text); }
 .wikidoc-toc__glabel { min-width: 0; }
-.wikidoc-toc__count { margin-left: auto; color: var(--muted); font-family: var(--f-mono); font-size: 11px; }
+.wikidoc-toc__count { margin-left: auto; color: var(--muted); font-family: var(--f-mono); font-size: 12px; }
 .wikidoc-toc__group ul { margin: 0 0 6px; padding: 0; list-style: none; }
 .wikidoc-toc__group[open] ul { animation: drop-in 0.3s var(--ease); }
 .wikidoc-toc__group li a {
   display: block; padding: 7px 14px; border-left: 2px solid transparent;
-  color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  color: var(--muted); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   transition: color 0.2s, background-color 0.2s, border-color 0.2s;
 }
 .wikidoc-toc__group li a:hover { color: var(--text); border-left-color: var(--line-accent); }
@@ -50,15 +50,15 @@
 @media (min-width: 1024px) { .wikidoc-toc > summary { display: none; } }
 
 /* ── 본문 ── */
-.wikidoc-crumbs { font-family: var(--f-kr); font-size: 12px; letter-spacing: 0; }
+.wikidoc-crumbs { font-family: var(--f-kr); font-size: 13px; letter-spacing: 0; }
 .wikidoc-crumbs li + li::before { content: "›"; }
-.wikidoc-article { color: var(--text); font-family: var(--f-kr); font-size: 16px; line-height: 1.85; overflow-wrap: break-word; }
+.wikidoc-article { color: var(--text); font-family: var(--f-kr); font-size: 17px; line-height: 1.85; overflow-wrap: break-word; }
 .wikidoc-article > :first-child { margin-top: 0; }
-.wikidoc-article h1 { margin: 0 0 0.9em; font-size: clamp(26px, 3.4vw, 40px); line-height: 1.3; }
-.wikidoc-article h2 { margin: 2em 0 0.8em; font-size: clamp(20px, 2.4vw, 26px); line-height: 1.4; }
-.wikidoc-article h3 { margin: 1.8em 0 0.6em; font-size: 18px; }
-.wikidoc-article h3::before { content: "// "; color: var(--accent); font-family: var(--f-mono); font-size: 14px; }
-.wikidoc-article h4 { margin: 1.5em 0 0.5em; font-size: 16px; }
+.wikidoc-article h1 { margin: 0 0 0.9em; font-size: clamp(28px, 3.4vw, 43px); line-height: 1.3; }
+.wikidoc-article h2 { margin: 2em 0 0.8em; font-size: clamp(22px, 2.4vw, 28px); line-height: 1.4; }
+.wikidoc-article h3 { margin: 1.8em 0 0.6em; font-size: 19px; }
+.wikidoc-article h3::before { content: "// "; color: var(--accent); font-family: var(--f-mono); font-size: 15px; }
+.wikidoc-article h4 { margin: 1.5em 0 0.5em; font-size: 17px; }
 .wikidoc-article p { margin: 0.9em 0; }
 .wikidoc-article a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--line-accent); text-underline-offset: 3px; transition: text-decoration-color 0.2s; }
 .wikidoc-article a:hover { text-decoration-color: var(--accent); }
@@ -70,14 +70,14 @@
 .wikidoc-article li { margin: 0.35em 0; }
 .wikidoc-article li::marker { color: var(--accent); }
 
-.wikidoc-article table { display: block; overflow-x: auto; margin: 1.4em 0; border-collapse: collapse; font-size: 14px; line-height: 1.6; }
+.wikidoc-article table { display: block; overflow-x: auto; margin: 1.4em 0; border-collapse: collapse; font-size: 15px; line-height: 1.6; }
 .wikidoc-article th, .wikidoc-article td { padding: 9px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
 .wikidoc-article thead th { background: var(--surface); color: var(--muted); font-weight: 700; white-space: nowrap; }
 .wikidoc-article tbody tr:hover { background: var(--accent-soft); }
 
 .wikidoc-article code { padding: 2px 6px; border: 1px solid var(--line); border-radius: 2px; background: var(--surface); color: var(--accent); font-family: var(--f-mono); font-size: 0.86em; }
 .wikidoc-article pre { margin: 1.3em 0; padding: 18px 22px; overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 2px; line-height: 1.7; }
-.wikidoc-article pre code { padding: 0; border: 0; background: none; color: var(--text); font-size: 13px; }
+.wikidoc-article pre code { padding: 0; border: 0; background: none; color: var(--text); font-size: 14px; }
 
 .wikidoc-article img { margin: 1.2em 0; border: 1px solid var(--line); }
 .wikidoc-article details { margin: 1.2em 0; border: 1px solid var(--line); background: var(--surface); }
@@ -94,8 +94,8 @@
 .curriculum { padding-block: 56px 80px; }
 .curriculum__head { display: flex; justify-content: space-between; gap: 48px; padding-bottom: 40px; margin-bottom: 56px; border-bottom: 1px solid var(--line); }
 .curriculum__intro { display: grid; gap: 16px; max-width: 860px; align-content: start; }
-.curriculum__title { margin: 0; font-size: clamp(28px, 3.6vw, 44px); line-height: 1.25; }
-.curriculum__desc { margin: 0; color: var(--muted); font-size: 16px; }
+.curriculum__title { margin: 0; font-size: clamp(30px, 3.6vw, 48px); line-height: 1.25; }
+.curriculum__desc { margin: 0; color: var(--muted); font-size: 17px; }
 .curriculum__actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .curriculum__stats { flex: none; width: 440px; grid-template-columns: 1fr 1fr; align-content: start; }
 .curriculum__block + .curriculum__block { margin-top: 64px; }
@@ -103,14 +103,14 @@
 .roadmap { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; counter-reset: stage; }
 .roadmap__stage { position: relative; }
 .roadmap__stage + .roadmap__stage::before { /* 단계 사이 화살표 */
-  content: "›"; position: absolute; left: -12px; top: 50%; transform: translate(-50%, -50%); color: var(--line-accent); font-size: 18px;
+  content: "›"; position: absolute; left: -12px; top: 50%; transform: translate(-50%, -50%); color: var(--line-accent); font-size: 19px;
 }
 .roadmap__stage a { display: grid; gap: 14px; height: 100%; padding: 20px; background: var(--surface); border: 1px solid var(--line-accent); border-radius: 2px; transition: background-color 0.3s, transform 0.4s var(--ease); }
 .roadmap__stage a:hover { background: var(--accent-soft); transform: translateY(-3px); }
 .roadmap__stage:first-child a { background: var(--accent-soft); }
 .roadmap__top { display: flex; justify-content: space-between; gap: 8px; }
-.roadmap__top .label { font-size: 10px; }
-.roadmap__name { font-size: 16px; font-weight: 700; line-height: 1.4; }
+.roadmap__top .label { font-size: 11px; }
+.roadmap__name { font-size: 17px; font-weight: 700; line-height: 1.4; }
 .roadmap__bar { height: 2px; margin-top: auto; background: var(--line); }
 .roadmap__bar i { display: block; height: 100%; width: var(--w); background: var(--accent); transform-origin: left; transform: scaleX(0); transition: transform 1s var(--ease) calc(var(--i, 0) * 120ms + 300ms); }
 .is-in .roadmap__bar i { transform: none; }
@@ -122,16 +122,16 @@
 .unit > summary::after { content: "⌄"; color: var(--muted); transition: transform 0.3s var(--ease); }
 .unit[open] > summary { border-bottom: 1px solid var(--line); }
 .unit[open] > summary::after { transform: rotate(180deg); }
-.unit > summary .label { font-size: 10px; flex: none; }
-.unit__name { flex: 1; font-size: 16px; font-weight: 700; }
-.unit__count { margin-left: auto; color: var(--muted); font-size: 11px; }
+.unit > summary .label { font-size: 11px; flex: none; }
+.unit__name { flex: 1; font-size: 17px; font-weight: 700; }
+.unit__count { margin-left: auto; color: var(--muted); font-size: 12px; }
 .unit__list { margin: 0; padding: 0; list-style: none; }
 .unit[open] .unit__list { animation: drop-in 0.35s var(--ease); }
 .unit__list li + li { border-top: 1px solid var(--line); }
-.unit__list a { display: grid; grid-template-columns: 56px 1fr auto; gap: 16px; align-items: center; padding: 12px 20px; font-size: 14px; transition: background-color 0.2s; }
+.unit__list a { display: grid; grid-template-columns: 56px 1fr auto; gap: 16px; align-items: center; padding: 12px 20px; font-size: 15px; transition: background-color 0.2s; }
 .unit__list a:hover { background: var(--accent-soft); }
-.unit__num { color: var(--accent); font-size: 12px; }
-.unit__go { color: var(--accent); font-size: 13px; transition: transform 0.25s var(--ease); }
+.unit__num { color: var(--accent); font-size: 13px; }
+.unit__go { color: var(--accent); font-size: 14px; transition: transform 0.25s var(--ease); }
 .unit__list a:hover .unit__go { transform: translateX(4px); }
 .curriculum__doc { max-width: 1000px; }
 
@@ -158,9 +158,12 @@
   .wikidoc-content { padding: 28px var(--gutter) 64px; }
 }
 @media (max-width: 720px) {
-  .wikidoc-article { font-size: 15px; }
+  .wikidoc-article { font-size: 16px; }
   .wikidoc-article pre { margin-inline: calc(var(--gutter) * -1); border-inline: 0; padding-inline: var(--gutter); }
   .wikidoc-pagefoot__gap { display: none; }
   .wikidoc-pagefoot .btn { flex: 1 1 auto; }
   .wikidoc-next { flex-basis: 100% !important; order: -1; }
 }
+
+/* 독립 문서 (_layouts/doc.html) */
+.doc-page { max-width: calc(1000px + 2 * var(--gutter)); padding-block: 56px 80px; }

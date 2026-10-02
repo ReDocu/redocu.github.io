@@ -17,7 +17,7 @@
 
 .player__led { width: 6px; height: 6px; flex: none; border-radius: 50%; background: var(--muted); opacity: 0.5; transition: background-color 0.3s, opacity 0.3s, box-shadow 0.3s; }
 .player.is-playing .player__led { background: var(--accent); opacity: 1; box-shadow: 0 0 8px var(--accent); animation: blink 1.6s steps(2, jump-none) infinite; }
-.player__mod { display: inline-flex; align-items: center; gap: 8px; color: var(--accent); font-family: var(--f-display); font-size: 9px; letter-spacing: 3px; }
+.player__mod { display: inline-flex; align-items: center; gap: 8px; color: var(--accent); font-family: var(--f-display); font-size: 10px; letter-spacing: 3px; }
 
 /* ── 접힘: Audio/Pill ── */
 .player__pill {
@@ -30,7 +30,7 @@
 .player__name {
   max-width: 150px; padding: 2px 4px; border: 0; background: none; cursor: pointer;
   overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
-  color: var(--text); font-family: var(--f-mono); font-size: 12px; transition: color 0.2s;
+  color: var(--text); font-family: var(--f-mono); font-size: 13px; transition: color 0.2s;
 }
 .player__name:hover, .player__name[aria-expanded="true"] { color: var(--accent); }
 .player__level { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
@@ -53,15 +53,15 @@
 .player__head { display: flex; align-items: center; justify-content: space-between; }
 .player__now { display: grid; gap: 4px; }
 .player__now p { margin: 0; }
-.player__group { color: var(--muted); font-family: var(--f-display); font-size: 9px; letter-spacing: 3px; text-transform: uppercase; }
-.player__title { color: var(--text); font-size: 16px; font-weight: 700; }
-.player__desc { color: var(--muted); font-family: var(--f-kr); font-size: 12px; }
+.player__group { color: var(--muted); font-family: var(--f-display); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; }
+.player__title { color: var(--text); font-size: 17px; font-weight: 700; }
+.player__desc { color: var(--muted); font-family: var(--f-kr); font-size: 13px; }
 .player__progress { display: grid; gap: 6px; }
-.player__time { display: flex; justify-content: space-between; color: var(--muted); font-family: var(--f-mono); font-size: 11px; font-variant-numeric: tabular-nums; }
+.player__time { display: flex; justify-content: space-between; color: var(--muted); font-family: var(--f-mono); font-size: 12px; font-variant-numeric: tabular-nums; }
 .player__controls { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .player__transport { display: flex; align-items: center; gap: 8px; }
 .player__vol { display: flex; align-items: center; gap: 8px; }
-.player__vol-val { width: 3ch; color: var(--accent); font-family: var(--f-mono); font-size: 11px; }
+.player__vol-val { width: 3ch; color: var(--accent); font-family: var(--f-mono); font-size: 12px; }
 .player.is-fixed-volume .player__range--vol, .player.is-fixed-volume .player__vol-val { display: none; }
 
 /* 진행 바 · 음량 슬라이더: 4px 트랙 + 채움(--p). 클릭·드래그·방향키는 기본 range 동작 */
@@ -89,10 +89,10 @@
 }
 .player__row:hover { background: var(--accent-soft); }
 .player__row.is-current { background: var(--accent-soft); color: var(--accent); }
-.player__num, .player__row-dur { color: var(--muted); font-family: var(--f-mono); font-size: 11px; }
+.player__num, .player__row-dur { color: var(--muted); font-family: var(--f-mono); font-size: 12px; }
 .player__row.is-current .player__num { color: var(--accent); }
-.player__row-title { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 13px; }
-.player__row-group { color: var(--muted); font-family: var(--f-display); font-size: 9px; letter-spacing: 2px; }
+.player__row-title { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 14px; }
+.player__row-group { color: var(--muted); font-family: var(--f-display); font-size: 10px; letter-spacing: 2px; }
 
 @keyframes level { from { transform: scaleY(0.25); } to { transform: scaleY(1); } }
 @keyframes player-in { from { opacity: 0; transform: translateY(12px); } }

@@ -24,7 +24,7 @@
 		{% include footer.html %}
 		{% include player.html %}
 		<script src="/assets/js/main.js"></script>
-		{% for j in page.js %}<script src="/assets/js/{{ j }}.js"></script>
+		{% for j in page.js %}<script src="/assets/js/{{ j }}.js" data-page></script>
 		{% endfor %}
 		{% if page.intro %}<script src="/assets/js/intro.js"></script>{% endif %}
 	</body>

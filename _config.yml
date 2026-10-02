@@ -106,3 +106,4 @@ exclude:
   - CLAUDE.md
   - README.md
   - "*.pen"
+  - projects/spm/README.md

@@ -16,6 +16,7 @@ groups:
       - { name: ClaudeCockpit, slug: claude-cockpit, desc: Claude Code 세션 관리·모니터링 로컬 대시보드, note: v0.3 배포, repo: ReDocu/ClaudeCodeTemplate, link: { label: 기술문서, url: /projects/claude-cockpit/tech-doc.html } }
       - { name: 지식 나눔터, desc: 문서·게시판·노트·일정·채팅 통합 지식 공유 공간, status: active, note: 운영중, repo: ReDocu/CompanyProcess, link: { label: 서비스 방문, url: "https://company-process.vercel.app/" } }
       - { name: EduCraft, slug: educraft, desc: BookCraft · LMSCraft · LecView · 미니게임 학습 플랫폼, note: 운영중, repo: ReDocu/EduCraft, link: { label: 서비스 방문, url: "http://www.eqment.store/" } }
+      - { name: SPM (PA_), slug: spm, desc: 1인 개발 스튜디오 운영 어시스턴트 · 프로젝트·외주·배포·장부·지식 통합, note: 배포, link: { label: 기술명세서, url: /personal-assistant/spec/ } }
       - { name: EQMUX, slug: eqmux, desc: AI 에이전트 팀 관제 Windows 데스크톱 앱, note: v0.3.0 배포, repo: ReDocu/EQMUX, link: { label: 소개 사이트, url: "https://eqmux-web-site.vercel.app/ko/" } }
   - title: 게임 소프트웨어
     head: PROJECT
@@ -68,7 +69,7 @@ groups:
         <tbody data-stagger="left">
           {%- for r in g.rows %}
           {%- assign st = r.status %}{%- assign href = r.href %}
-          {%- if r.slug %}{%- assign d = site.data.projects | where: "slug", r.slug | first %}{%- assign st = d.status %}{%- assign href = "/projects/" | append: r.slug | append: "/" %}{%- endif %}
+          {%- if r.slug %}{%- assign d = site.data.projects | where: "slug", r.slug | first %}{%- assign st = d.status %}{%- if d.url %}{%- assign href = d.url %}{%- else %}{%- assign href = "/projects/" | append: r.slug | append: "/" %}{%- endif %}{%- endif %}
           {%- case st %}
             {%- when "active" %}{%- assign bl = "ACTIVE" %}{%- assign bc = "active" %}
             {%- when "complete" %}{%- assign bl = "COMPLETE" %}{%- assign bc = "complete" %}

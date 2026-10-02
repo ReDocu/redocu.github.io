@@ -1,7 +1,7 @@
 /* 이력서 (/files/resume.html) — 화면은 Sci-Fi 토큰, 인쇄는 흰 바탕 흑백 A4 (PRD_NEXT 4.6) */
 .print-bar { border-bottom: 1px solid var(--line); background: var(--surface); }
 .print-bar__inner { display: flex; align-items: center; gap: 24px; padding-block: 14px; }
-.print-bar__hint { flex: 1; margin: 0; color: var(--muted); font-size: 13px; }
+.print-bar__hint { flex: 1; margin: 0; color: var(--muted); font-size: 14px; }
 
 .resume { --r-accent: var(--accent); --r-ink: var(--text); --r-muted: var(--muted); --r-line: var(--line); padding: 48px var(--gutter) 80px; display: grid; gap: 24px; }
 .resume .page {
@@ -12,53 +12,53 @@
 .resume a { color: var(--r-accent); }
 
 .resume .masthead { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--line-accent); }
-.resume .id-name { margin: 0; font-size: 40px; font-weight: 700; line-height: 1.1; letter-spacing: 2px; }
-.resume .id-name span { margin-left: 10px; color: var(--r-muted); font-family: var(--f-display); font-size: 15px; font-weight: 400; letter-spacing: 3px; text-transform: uppercase; }
-.resume .id-role { margin: 8px 0 0; color: var(--r-accent); font-size: 16px; font-weight: 700; }
-.resume .id-sub { margin: 4px 0 0; color: var(--r-muted); font-family: var(--f-mono); font-size: 12px; }
-.resume .id-contact { color: var(--r-muted); font-family: var(--f-mono); font-size: 12px; line-height: 1.8; text-align: right; white-space: nowrap; }
+.resume .id-name { margin: 0; font-size: 43px; font-weight: 700; line-height: 1.1; letter-spacing: 2px; }
+.resume .id-name span { margin-left: 10px; color: var(--r-muted); font-family: var(--f-display); font-size: 16px; font-weight: 400; letter-spacing: 3px; text-transform: uppercase; }
+.resume .id-role { margin: 8px 0 0; color: var(--r-accent); font-size: 17px; font-weight: 700; }
+.resume .id-sub { margin: 4px 0 0; color: var(--r-muted); font-family: var(--f-mono); font-size: 13px; }
+.resume .id-contact { color: var(--r-muted); font-family: var(--f-mono); font-size: 13px; line-height: 1.8; text-align: right; white-space: nowrap; }
 .resume .id-contact b { font-weight: 400; }
 
-.resume .summary { margin: 20px 0 0; padding: 16px 20px; border-left: 2px solid var(--r-accent); background: var(--accent-soft); color: var(--r-ink); font-size: 15px; line-height: 1.8; }
+.resume .summary { margin: 20px 0 0; padding: 16px 20px; border-left: 2px solid var(--r-accent); background: var(--accent-soft); color: var(--r-ink); font-size: 16px; line-height: 1.8; }
 .resume .summary strong { color: var(--r-accent); }
 
 .resume section { margin-top: 36px; }
-.resume h2.sec { display: flex; align-items: baseline; gap: 12px; margin: 0 0 16px; padding-bottom: 10px; border-bottom: 1px solid var(--r-line); font-size: 20px; font-weight: 700; }
-.resume h2.sec::before { content: "//"; color: var(--r-accent); font-family: var(--f-mono); font-size: 14px; }
-.resume h2.sec small { color: var(--r-accent); font-family: var(--f-display); font-size: 11px; font-weight: 400; letter-spacing: 3px; text-transform: uppercase; }
+.resume h2.sec { display: flex; align-items: baseline; gap: 12px; margin: 0 0 16px; padding-bottom: 10px; border-bottom: 1px solid var(--r-line); font-size: 22px; font-weight: 700; }
+.resume h2.sec::before { content: "//"; color: var(--r-accent); font-family: var(--f-mono); font-size: 15px; }
+.resume h2.sec small { color: var(--r-accent); font-family: var(--f-display); font-size: 12px; font-weight: 400; letter-spacing: 3px; text-transform: uppercase; }
 
 .resume .skills { display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; }
-.resume .skill-row { display: grid; grid-template-columns: 110px 1fr; gap: 12px; margin: 0; padding: 10px 0; border-bottom: 1px solid var(--r-line); font-size: 14px; }
-.resume .skill-row dt { color: var(--r-muted); font-family: var(--f-display); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; padding-top: 3px; }
+.resume .skill-row { display: grid; grid-template-columns: 110px 1fr; gap: 12px; margin: 0; padding: 10px 0; border-bottom: 1px solid var(--r-line); font-size: 15px; }
+.resume .skill-row dt { color: var(--r-muted); font-family: var(--f-display); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding-top: 3px; }
 .resume .skill-row dd { margin: 0; }
 
 .resume .item { position: relative; margin-bottom: 20px; padding-left: 20px; border-left: 1px solid var(--r-line); break-inside: avoid; }
 .resume .item::before { content: ""; position: absolute; left: -4px; top: 8px; width: 7px; height: 7px; border-radius: 50%; background: var(--r-accent); }
 .resume .item:last-child { margin-bottom: 0; }
 .resume .item-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
-.resume .item-title { margin: 0; font-size: 16px; font-weight: 700; }
+.resume .item-title { margin: 0; font-size: 17px; font-weight: 700; }
 .resume .item-org { color: var(--r-accent); }
-.resume .item-meta { color: var(--r-muted); font-family: var(--f-mono); font-size: 12px; white-space: nowrap; }
-.resume .item ul { margin: 6px 0 0; padding-left: 18px; color: var(--r-muted); font-size: 14px; }
+.resume .item-meta { color: var(--r-muted); font-family: var(--f-mono); font-size: 13px; white-space: nowrap; }
+.resume .item ul { margin: 6px 0 0; padding-left: 18px; color: var(--r-muted); font-size: 15px; }
 .resume .item li { margin: 3px 0; }
 .resume .item li b { color: var(--r-ink); }
 .resume .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-.resume .tag { padding: 2px 8px; border: 1px solid var(--line-accent); border-radius: 2px; color: var(--r-accent); font-family: var(--f-body); font-size: 11px; }
+.resume .tag { padding: 2px 8px; border: 1px solid var(--line-accent); border-radius: 2px; color: var(--r-accent); font-family: var(--f-body); font-size: 12px; }
 .resume .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .resume .mini { display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; }
-.resume .mini .m { padding: 10px 0; border-bottom: 1px solid var(--r-line); font-size: 14px; }
+.resume .mini .m { padding: 10px 0; border-bottom: 1px solid var(--r-line); font-size: 15px; }
 .resume .mini .m span { color: var(--r-muted); }
-.resume .foot { display: flex; justify-content: space-between; gap: 16px; margin-top: 40px; padding-top: 12px; border-top: 1px solid var(--r-line); color: var(--r-muted); font-family: var(--f-mono); font-size: 11px; }
+.resume .foot { display: flex; justify-content: space-between; gap: 16px; margin-top: 40px; padding-top: 12px; border-top: 1px solid var(--r-line); color: var(--r-muted); font-family: var(--f-mono); font-size: 12px; }
 
 @media (max-width: 720px) {
   .print-bar__inner { flex-wrap: wrap; gap: 8px 16px; }
-  .print-bar__hint { flex-basis: 100%; order: 3; font-size: 12px; }
+  .print-bar__hint { flex-basis: 100%; order: 3; font-size: 13px; }
   .print-bar .btn { margin-left: auto; padding: 8px 14px; }
   .resume { padding-block: 24px 56px; }
   .resume .page { padding: 28px 18px; }
   .resume .masthead { flex-direction: column; align-items: flex-start; }
-  .resume .id-name { font-size: 30px; }
-  .resume .id-name span { display: block; margin: 6px 0 0; font-size: 12px; }
+  .resume .id-name { font-size: 32px; }
+  .resume .id-name span { display: block; margin: 6px 0 0; font-size: 13px; }
   .resume .id-contact { text-align: left; white-space: normal; overflow-wrap: anywhere; }
   .resume .skills, .resume .cols, .resume .mini { grid-template-columns: 1fr; }
   .resume .skill-row { grid-template-columns: 1fr; gap: 2px; }

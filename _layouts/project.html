@@ -236,7 +236,8 @@ css: [project]
       <span class="pager__title">{{ list_title }}</span>
     </a>
     {% if group.size > 1 %}
-    <a class="pager__next" href="/projects/{{ nx.slug }}/">
+    {%- if nx.url %}{% assign nx_href = nx.url %}{% else %}{% assign nx_href = "/projects/" | append: nx.slug | append: "/" %}{% endif %}
+    <a class="pager__next" href="{{ nx_href }}">
       <span class="label">NEXT&nbsp;&nbsp;{{ next_num }} / {{ total }}&nbsp;&nbsp;▶</span>
       <span class="pager__title">{{ nx.title }}</span>
     </a>

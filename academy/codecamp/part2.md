@@ -10,7 +10,7 @@ sub: "팀처럼, 통제하며 만든다 — 협업 구조·설계·안전장치�
 days: "Day 6 ~ 16 · 5부 구성"
 resources:
   - ["가이드 HTML", "/academy/codecamp/part2-mini-notion/02-part2-guide.html"]
-  - ["결과물 — 미니 노션", "/academy/codecamp/part2-mini-notion/02-mini-notion.html"]
+  - ["결과물 — 미니 노션", "/academy/codecamp/part2-mini-notion/demo-mini-notion.html"]
   - ["PDF 다운로드", "/academy/codecamp/part2-mini-notion/claude-code-part2.pdf"]
 next: ["나 혼자 MVP 만들기", "/academy/codecamp/part3.html"]
 ---

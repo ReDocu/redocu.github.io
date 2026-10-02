@@ -10,8 +10,8 @@ sub: "다 만든 제품에 결제를 얹다 — PRD 업데이트·모바일 배�
 days: "Day 30 ~ 34 · 6부 구성"
 resources:
   - ["가이드 HTML", "/academy/codecamp/part4-food-community-advance/04-part4-guide.html"]
-  - ["결과물 — 결제 플로우", "/academy/codecamp/part4-food-community-advance/04-food-payment.html"]
-  - ["원장 시뮬레이터", "/academy/codecamp/part4-food-community-advance/04-payment-ledger.html"]
+  - ["결과물 — 결제 플로우", "/academy/codecamp/part4-food-community-advance/demo-food-payment.html"]
+  - ["원장 시뮬레이터", "/academy/codecamp/part4-food-community-advance/demo-payment-ledger.html"]
 ---
 
 > **여는 글** — Part 3에서 맛집 커뮤니티를 **배포까지 완주**했습니다. Part 4는 방향이 반대입니다 —

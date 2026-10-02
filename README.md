@@ -64,7 +64,7 @@ bundle exec jekyll build    # 정적 빌드 → _site/ 에 생성
 - **프로젝트**: `_data/projects.yml`에 항목을 추가하고 `projects/<slug>/index.md`(layout: project)를 만들면 메인 카드와 상세 페이지가 함께 생깁니다. 썸네일은 `assets/thumbs/`(WebP).
 - **모션**: 요소에 `data-reveal`(up·fade·left·right·scale·clip), 부모에 `data-stagger`, 숫자에 `data-count`. 모션 줄이기 설정을 자동으로 따릅니다.
 - **학원 학습문서**: 원본 HTML/PDF를 `academy/<학원>/`에 넣고, 같은 폴더의 `index.md`에서 링크합니다.
-  학습문서 스타일은 `academy/mbc/study-note.css`(노트북 스타일)를 사용하고,
+  학습문서 스타일은 layout `academy-doc` + `assets/css/academy-doc.css`·`adoc-<학원>.css`를 사용하고,
   생성 프롬프트는 `_prompts/`에 보관합니다.
 - **학습 위키**: `wiki/<과정>/lessons/<파트>/`에 md 파일을 추가하면 목차에 자동으로 붙습니다.
   새 과정은 `_data/courses.yml`에, 새 파트 폴더 이름은 `_data/wiki_parts.yml`에 등록합니다. 커리큘럼 로드맵·검색 색인(`/wiki/search.json`)은 자동 생성됩니다.

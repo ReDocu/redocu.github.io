@@ -1,0 +1,198 @@
+/* 경일게임아카데미 학습노트·기술문서 — academy/kyungil/{study-notes,ky16-tech-doc}.html (layout: academy-doc)
+   본문 인라인 style이 쓰는 옛 변수(--tx, --c-*)를 사이트 토큰으로 다시 묶는다. 사이트 전역 .card/.chip 과 겹치지 않게 .kcard/.kchip 사용 */
+.adoc--kyungil {
+  --bg-soft: color-mix(in srgb, var(--surface) 70%, var(--bg));
+  --bg-card: var(--surface);
+  --bg-elev: color-mix(in srgb, var(--surface) 88%, var(--accent) 4%);
+  --line-soft: color-mix(in srgb, var(--line) 70%, var(--bg));
+  --tx: var(--text);
+  --tx-dim: var(--muted);
+  --tx-mute: color-mix(in srgb, var(--muted) 62%, var(--bg));
+  --mono: var(--f-mono);
+
+  /* 단계별 강조색 — 기초(시안) · 절차적(앰버) · OOP(퍼플) · 이슈(레드) */
+  --c-basic: var(--accent);
+  --c-proc: var(--warn);
+  --c-oop: #B79CFF;
+  --c-warn: #FF6B6B;
+  --c-basic-bg: color-mix(in srgb, var(--c-basic) 9%, transparent);
+  --c-proc-bg: color-mix(in srgb, var(--c-proc) 9%, transparent);
+  --c-oop-bg: color-mix(in srgb, var(--c-oop) 9%, transparent);
+  --c-warn-bg: color-mix(in srgb, var(--c-warn) 9%, transparent);
+
+  padding-top: 24px;
+  color: var(--tx);
+  font-feature-settings: "tnum";
+}
+.adoc--kyungil :where(h1, h2, h3, h4, p, ul) { margin: 0; }
+
+/* ── 레이아웃 ── */
+.adoc--kyungil .layout { display: grid; grid-template-columns: 248px minmax(0, 1fr); }
+
+/* ── 사이드 목차 ── */
+.adoc--kyungil aside {
+  position: sticky; top: var(--header-height); align-self: start;
+  max-height: calc(100vh - var(--header-height)); overflow-y: auto;
+  padding: 28px 20px 40px 0; border-right: 1px solid var(--line);
+}
+.adoc--kyungil aside .brand { color: var(--tx-mute); font-family: var(--f-display); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
+.adoc--kyungil aside .brand b { color: var(--c-basic); font-weight: 400; }
+.adoc--kyungil aside h2 { font-size: 16px; font-weight: 700; margin-bottom: 20px; }
+.adoc--kyungil .toc-group { margin: 20px 0 8px; color: var(--tx-mute); font-size: 11px; font-weight: 700; letter-spacing: 2px; }
+.adoc--kyungil .toc a {
+  display: block; padding: 6px 12px; border-left: 2px solid transparent; border-radius: 0;
+  color: var(--tx-dim); font-size: 13.5px; transition: color 0.2s, background-color 0.2s, border-color 0.2s;
+}
+.adoc--kyungil .toc a:hover { color: var(--tx); background: var(--accent-soft); }
+.adoc--kyungil .toc a.active { color: var(--tx); border-left-color: var(--accent, var(--c-basic)); background: var(--bg-elev); }
+.adoc--kyungil .toc a .num { margin-right: 8px; color: var(--tx-mute); font-family: var(--f-display); font-size: 10px; letter-spacing: 1px; }
+.adoc--kyungil .toc a.active .num { color: var(--accent, var(--c-basic)); }
+
+/* ── 본문 ── */
+.adoc--kyungil .kmain { min-width: 0; padding: 0 0 0 48px; }
+.adoc--kyungil section { scroll-margin-top: 16px; padding-top: 56px; }
+
+/* ── 히어로 ── */
+.adoc--kyungil .hero { padding: 32px 0 40px; border-bottom: 1px solid var(--line); }
+.adoc--kyungil .hero .eyebrow { margin-bottom: 14px; color: var(--c-proc); font-family: var(--f-display); font-size: 12px; letter-spacing: 3px; }
+.adoc--kyungil .hero h1 { margin-bottom: 18px; font-size: 40px; font-weight: 700; line-height: 1.2; letter-spacing: 1px; }
+.adoc--kyungil .hero h1 .grad { background: linear-gradient(120deg, var(--c-basic), var(--c-oop)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.adoc--kyungil .hero p.lead { max-width: 660px; color: var(--tx-dim); font-size: 16px; }
+.adoc--kyungil .meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.adoc--kyungil .kchip {
+  display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px;
+  background: var(--bg-card); border: 1px solid var(--line); border-radius: 2px; color: var(--tx-dim); font-size: 13px;
+}
+.adoc--kyungil .kchip b { color: var(--tx); font-weight: 700; }
+.adoc--kyungil .kchip .dot { width: 6px; height: 6px; border-radius: 50%; box-shadow: 0 0 6px currentColor; }
+
+/* ── 섹션 헤더 ── */
+.adoc--kyungil .sec-head { margin-bottom: 28px; }
+.adoc--kyungil .sec-head .kicker { margin-bottom: 8px; font-family: var(--f-display); font-size: 12px; letter-spacing: 3px; text-transform: uppercase; }
+.adoc--kyungil .sec-head h2 { font-size: 28px; font-weight: 700; letter-spacing: 1px; }
+.adoc--kyungil .sec-head p { max-width: 760px; margin-top: 10px; color: var(--tx-dim); font-size: 15px; }
+
+/* ── 로드맵 타임라인 ── */
+.adoc--kyungil .roadmap { display: flex; flex-direction: column; margin-top: 8px; }
+.adoc--kyungil .rm-row { display: grid; grid-template-columns: 130px 1fr; gap: 20px; padding: 18px 0; border-bottom: 1px dashed var(--line); }
+.adoc--kyungil .rm-row:last-child { border-bottom: none; }
+.adoc--kyungil .rm-stage { display: flex; align-items: center; gap: 10px; padding-top: 2px; font-family: var(--f-display); font-size: 11px; letter-spacing: 2px; }
+.adoc--kyungil .rm-stage .bar { width: 3px; height: 34px; box-shadow: 0 0 8px currentColor; }
+.adoc--kyungil .rm-body h4 { margin-bottom: 4px; font-size: 15.5px; font-weight: 700; }
+.adoc--kyungil .rm-body h4 code { font-size: 13px; }
+.adoc--kyungil .rm-body p { color: var(--tx-dim); font-size: 13.5px; }
+
+/* ── 카드 ── */
+.adoc--kyungil .kcard {
+  position: relative; overflow: hidden; margin-bottom: 22px; padding: 26px 28px;
+  background: var(--bg-card); border: 1px solid var(--line); border-radius: 2px;
+}
+.adoc--kyungil .kcard::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--accent, var(--c-basic)); box-shadow: 0 0 10px var(--accent, var(--c-basic)); }
+.adoc--kyungil .card-head { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 14px; margin-bottom: 18px; }
+.adoc--kyungil .card-badge {
+  padding: 4px 10px; border: 1px solid color-mix(in srgb, var(--accent, var(--c-basic)) 40%, transparent); border-radius: 2px;
+  background: var(--accent-bg, var(--c-basic-bg)); color: var(--accent, var(--c-basic));
+  font-family: var(--f-display); font-size: 11px; letter-spacing: 2px; white-space: nowrap;
+}
+.adoc--kyungil .card-head .titles { flex: 1; min-width: 200px; }
+.adoc--kyungil .card-head h3 { font-size: 20px; font-weight: 700; }
+.adoc--kyungil .card-head .file { margin-top: 3px; color: var(--tx-mute); font-family: var(--f-mono); font-size: 12.5px; }
+.adoc--kyungil .card-head .file::before { content: "// "; color: var(--accent, var(--c-basic)); }
+
+/* ── 표 ── */
+.adoc--kyungil .tbl-wrap { overflow-x: auto; margin: 4px 0 6px; border: 1px solid var(--line); border-radius: 2px; }
+.adoc--kyungil table { width: 100%; min-width: 520px; border-collapse: collapse; font-size: 13.5px; }
+.adoc--kyungil thead th {
+  padding: 11px 14px; background: var(--bg-elev); border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap;
+  color: var(--accent, var(--c-basic)); font-family: var(--f-kr); font-size: 12.5px; font-weight: 700; letter-spacing: 0;
+}
+.adoc--kyungil tbody td { padding: 11px 14px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+.adoc--kyungil tbody tr:last-child td { border-bottom: none; }
+.adoc--kyungil tbody tr:hover { background: var(--accent-soft); }
+.adoc--kyungil td.idx { width: 44px; color: var(--accent, var(--c-basic)); font-family: var(--f-display); font-size: 12px; text-align: center; }
+.adoc--kyungil code {
+  padding: 1px 6px; background: var(--bg-elev); border: 1px solid var(--line); border-radius: 2px;
+  color: var(--tx); font-family: var(--f-mono); font-size: 0.86em; white-space: nowrap;
+}
+.adoc--kyungil :is(td, li) strong { color: var(--tx); font-weight: 700; }
+
+/* ── 코드/다이어그램 블록 (기술문서) ── */
+.adoc--kyungil .codeblock {
+  overflow-x: auto; margin: 6px 0 4px; padding: 16px 18px;
+  background: var(--bg-soft); border: 1px solid var(--line); border-left: 2px solid var(--line-accent); border-radius: 2px;
+  color: var(--tx-dim); font-family: var(--f-mono); font-size: 12.5px; line-height: 1.55; white-space: pre; tab-size: 2;
+}
+.adoc--kyungil .codeblock .cm { color: var(--tx-mute); font-style: normal; }
+.adoc--kyungil .codeblock .kw { color: var(--c-oop); }
+.adoc--kyungil .codeblock .fn { color: var(--c-basic); }
+.adoc--kyungil .codeblock .hl { color: var(--c-proc); }
+.adoc--kyungil .code-cap { margin: 14px 0 4px; color: var(--tx-mute); font-family: var(--f-mono); font-size: 11.5px; }
+
+/* ── 리스트 ── */
+.adoc--kyungil .klist { display: flex; flex-direction: column; gap: 10px; margin: 6px 0; padding: 0; list-style: none; }
+.adoc--kyungil .klist li { position: relative; padding-left: 26px; color: var(--tx-dim); font-size: 14px; }
+.adoc--kyungil .klist li::before { content: "▸"; position: absolute; left: 6px; color: var(--accent, var(--c-basic)); }
+.adoc--kyungil .klist li :is(b, strong) { color: var(--tx); }
+
+/* ── 정리 박스 ── */
+.adoc--kyungil .takeaway {
+  display: flex; gap: 10px; margin-top: 18px; padding: 14px 18px;
+  background: var(--accent-bg, var(--c-basic-bg)); border: 1px solid color-mix(in srgb, var(--accent, var(--c-basic)) 25%, transparent); border-radius: 2px;
+  color: var(--tx-dim); font-size: 14px;
+}
+.adoc--kyungil .takeaway b { color: var(--accent, var(--c-basic)); }
+.adoc--kyungil .takeaway .ico { flex-shrink: 0; }
+
+/* ── 개념 그리드 ── */
+.adoc--kyungil .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.adoc--kyungil .concept-card { padding: 22px; background: var(--bg-card); border: 1px solid var(--line); border-radius: 2px; transition: border-color 0.3s; }
+.adoc--kyungil .concept-card:hover { border-color: var(--line-accent); }
+.adoc--kyungil .concept-card h4 { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; font-size: 15px; font-weight: 700; }
+.adoc--kyungil .concept-card h4 .n {
+  display: grid; place-items: center; width: 26px; height: 26px; border: 1px solid var(--line-accent); border-radius: 2px;
+  background: var(--accent-soft); color: var(--accent, var(--c-basic)); font-family: var(--f-display); font-size: 11px;
+}
+.adoc--kyungil .concept-card ul { display: flex; flex-direction: column; gap: 7px; padding: 0; list-style: none; }
+.adoc--kyungil .concept-card li { position: relative; padding-left: 16px; color: var(--tx-dim); font-size: 13px; }
+.adoc--kyungil .concept-card li::before { content: "·"; position: absolute; left: 4px; color: var(--tx-mute); }
+.adoc--kyungil .concept-card li b { color: var(--tx); }
+
+/* ── 단계 스텝 ── */
+.adoc--kyungil .steps { display: flex; flex-direction: column; gap: 14px; margin-top: 6px; counter-reset: step; }
+.adoc--kyungil .step {
+  display: grid; grid-template-columns: 48px 1fr; gap: 16px; align-items: start; padding: 18px 20px;
+  background: var(--bg-card); border: 1px solid var(--line); border-radius: 2px;
+}
+.adoc--kyungil .step .n {
+  counter-increment: step; display: grid; place-items: center; width: 44px; height: 44px;
+  border: 1px solid var(--line-accent); border-radius: 2px; background: var(--accent-soft);
+  color: var(--c-proc); font-family: var(--f-display); font-size: 18px;
+}
+.adoc--kyungil .step .n::before { content: counter(step, decimal-leading-zero); }
+.adoc--kyungil .step p { color: var(--tx-dim); font-size: 14.5px; }
+.adoc--kyungil .step p b { color: var(--tx); }
+
+.adoc--kyungil .final-quote {
+  margin-top: 26px; padding: 24px 28px; border: 1px solid var(--line-accent); border-radius: 2px; text-align: center;
+  background: linear-gradient(120deg, var(--c-basic-bg), var(--c-oop-bg)); font-size: 16px; line-height: 1.7;
+}
+.adoc--kyungil .final-quote b { background: linear-gradient(120deg, var(--c-basic), var(--c-oop)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+.adoc--kyungil footer { margin-top: 60px; padding: 32px 0 0; border-top: 1px solid var(--line); text-align: center; color: var(--tx-mute); font-family: var(--f-mono); font-size: 12px; }
+
+/* ── 반응형 ── */
+@media (max-width: 900px) {
+  .adoc--kyungil .layout { grid-template-columns: minmax(0, 1fr); }
+  .adoc--kyungil aside { display: none; } /* 목차는 접고 본문만 — 섹션 이동은 사이트 내비·스크롤 */
+  .adoc--kyungil .kmain { padding: 0; }
+  .adoc--kyungil .hero h1 { font-size: 30px; }
+  .adoc--kyungil .rm-row { grid-template-columns: 1fr; gap: 8px; }
+}
+@media (max-width: 720px) {
+  .adoc--kyungil .kcard { padding: 22px 18px; }
+  .adoc--kyungil .step { grid-template-columns: 40px 1fr; gap: 12px; padding: 16px; }
+  .adoc--kyungil .step .n { width: 40px; height: 40px; font-size: 15px; }
+  .adoc--kyungil .sec-head h2 { font-size: 23px; }
+  .adoc--kyungil code { white-space: normal; overflow-wrap: anywhere; }
+  .adoc--kyungil .codeblock { font-size: 12px; }
+}

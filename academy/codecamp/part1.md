@@ -10,7 +10,7 @@ sub: "첫 서비스를 세상에 띄우기까지 — 도구를 손에 쥐고, �
 days: "Day 1 ~ 5 · 5부 구성"
 resources:
   - ["가이드 HTML", "/academy/codecamp/part1-intro/01-part1-guide.html"]
-  - ["결과물 — 소개 페이지", "/academy/codecamp/part1-intro/intro.html"]
+  - ["결과물 — 소개 페이지", "/academy/codecamp/part1-intro/demo-intro.html"]
   - ["PDF 다운로드", "/academy/codecamp/part1-intro/claude-code-part1.pdf"]
 next: ["팀처럼, 통제하며 만든다", "/academy/codecamp/part2.html"]
 ---

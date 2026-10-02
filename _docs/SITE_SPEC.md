@@ -38,19 +38,19 @@ bundle exec jekyll build    # _site/ 생성
 ├── _config.yml            # 사이트 설정, 위키 렌더링 기본값, 게시 제외(exclude)
 ├── index.markdown         # 메인 페이지
 ├── 404.html               # 404 + 개편 전 URL 리다이렉트 표 (9장)
-├── _layouts/              # main.html(공통), wikidoc.html(위키)
+├── _layouts/              # main.html(공통), wikidoc.html(위키), academy-doc·academy-demo.html(학원)
 ├── _includes/             # nav.html, footer.html, wikidoc_toc.html
 ├── _docs/                 # 운영 문서 (게시 안 됨)
 ├── _prompts/              # 학습문서 생성 프롬프트 (게시 안 됨)
 ├── assets/
-│   ├── css/               # styles.css(공통), wikidoc.css(위키)
+│   ├── css/               # styles.css(공통), wikidoc.css(위키), academy-doc.css + adoc-<학원>.css(학원 문서)
 │   ├── js/main.js         # 다크모드, 모바일 메뉴, 카드 슬라이더
 │   ├── images/            # 프로필 이미지
 │   └── thumbs/            # 모든 카드 썸네일
 ├── academy/
 │   ├── kyungil/           # index.md + ky16-tech-doc.html, study-notes.html, ZIP
-│   ├── mbc/               # index.md + *-notes.html, PDF, study-note.css
-│   └── codecamp/          # index.md + part1~4.md, part*/ 가이드·결과물
+│   ├── mbc/               # index.md + *-notes.html, PDF
+│   └── codecamp/          # index.md + part1~4.md, part*/ 가이드·결과물·demo-*.md(체험하기 뷰어)
 ├── wiki/
 │   ├── index.html         # 위키 홈
 │   └── <과정>/
@@ -123,7 +123,7 @@ Contact의 문의 폼 버튼은 `_config.yml`의 `contact_form_url`(한국어)·
 
 ## 8. 학원·프로젝트·미니앱
 
-**학원 (`academy/<학원>/index.md`)** — 페이지마다 자체 `<style>`과 트랙 앵커 칩, 트랙별 '학습한 내용 / 제작한 결과물' 2단 구성. 학습문서 HTML은 `_prompts/학습문서-생성-프롬프트.md`로 만들고 `academy/mbc/study-note.css`를 공유한다.
+**학원 (`academy/<학원>/index.md`)** — 페이지마다 자체 `<style>`과 트랙 앵커 칩, 트랙별 '학습한 내용 / 제작한 결과물' 2단 구성. 학습문서·가이드 HTML은 URL을 유지한 채 layout `academy-doc`(front matter `family`·`crumb`·`css`)으로 사이트 셸에 들어가고, 스타일은 `assets/css/academy-doc.css` + 학원별 `adoc-<학원>.css`를 쓴다(`study-note.css`는 제거). 결과물 데모는 `demo-*.md`(layout `academy-demo`)가 원본 HTML을 iframe으로 띄우는 뷰어 페이지로 보여 준다.
 
 **프로젝트 (`projects/`)** — `index.md`는 프로젝트 16건의 상태 현황판이다. 요약 수치와 상태는 직접 입력하므로 메인 카드의 상태와 함께 고친다.
 

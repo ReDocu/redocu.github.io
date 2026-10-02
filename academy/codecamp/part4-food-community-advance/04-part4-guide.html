@@ -1,256 +1,23 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Part 4 학습문서 — 맛집커뮤니티 어드밴스 · 다 만든 제품에 결제를 얹기</title>
-<style>
-  :root {
-    --ink: #1f2430;
-    --muted: #5b6472;
-    --line: #e6e9ef;
-    --bg: #f5f7fa;
-    --card: #ffffff;
-    --amber: #A97614;
-    --amber-soft: #FBF3E3;
-    --moss: #4F7A3D;
-    --moss-soft: #F3F7EE;
-    --mint: #a7f0cd;
-    --sub-card: #f7f8fa;
-    --accent: var(--amber);
-    --accent-soft: var(--amber-soft);
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: "Pretendard", "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
-    line-height: 1.6;
-    padding: 0 24px 90px;
-  }
-  .wrap { max-width: 1040px; margin: 0 auto; }
-  a { color: inherit; }
-
-  /* ── 상단 진행바 (sticky) ───────────────── */
-  .topbar {
-    position: sticky; top: 0; z-index: 20;
-    background: rgba(245, 247, 250, .92);
-    backdrop-filter: blur(6px);
-    border-bottom: 1px solid var(--line);
-    margin: 0 -24px 44px;
-    padding: 12px 24px;
-  }
-  .topbar-in {
-    max-width: 1040px; margin: 0 auto;
-    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-  }
-  .topbar .label { font-size: 14px; font-weight: 800; white-space: nowrap; }
-  .bar { flex: 1; min-width: 160px; height: 8px; border-radius: 999px; background: #e3e8f0; overflow: hidden; }
-  .bar > i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 999px; transition: width .25s; }
-  .topbar .count { font-size: 14px; font-weight: 800; color: var(--accent); white-space: nowrap; }
-  .reset-btn {
-    border: 1px solid var(--line); background: #fff; color: var(--muted);
-    border-radius: 999px; padding: 5px 14px; font-size: 13px; font-weight: 700;
-    font-family: inherit; cursor: pointer;
-  }
-  .reset-btn:hover { background: var(--sub-card); color: var(--ink); }
-
-  /* ── 페이지 헤더 ─────────────────────────── */
-  .page-head { margin-bottom: 36px; }
-  .page-head .eyebrow { font-size: 14px; font-weight: 700; color: var(--muted); letter-spacing: .02em; }
-  .page-head h1 { font-size: 38px; font-weight: 800; margin: 6px 0 12px; line-height: 1.28; }
-  .page-head p { color: var(--muted); font-size: 16px; max-width: 830px; }
-  .page-head p + p { margin-top: 6px; }
-  .page-head b { color: var(--ink); }
-  .tags { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 20px; }
-  .tags span {
-    background: var(--accent-soft); color: var(--accent);
-    border: 1px solid color-mix(in srgb, var(--accent) 25%, #fff);
-    border-radius: 999px; padding: 6px 15px; font-size: 13.5px; font-weight: 700;
-  }
-  .btns { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
-  .btn {
-    display: inline-block; text-decoration: none; font-weight: 800; font-size: 15px;
-    padding: 12px 26px; border-radius: 14px; color: var(--ink); transition: filter .15s;
-  }
-  .btn:hover { filter: brightness(.96); }
-  .btn.primary { background: var(--mint); }
-  .btn.ghost { background: #fff; border: 1px solid var(--line); }
-
-  /* ── 카드 공통 ───────────────────────────── */
-  .card {
-    background: var(--card); border: 1px solid var(--line); border-radius: 22px;
-    padding: 36px 40px 40px; margin-bottom: 28px;
-    position: relative; overflow: hidden;
-    box-shadow: 0 2px 10px rgba(31, 36, 48, .04);
-  }
-  .card::before {
-    content: ""; position: absolute; top: 0; left: 24px; right: 24px; height: 5px;
-    border-radius: 0 0 6px 6px; background: var(--accent);
-  }
-  .sec-title {
-    display: flex; align-items: center; gap: 10px;
-    font-size: 18px; font-weight: 800; margin-bottom: 18px;
-  }
-  .sec-title::before { content: ""; width: 5px; height: 18px; border-radius: 3px; background: var(--accent); }
-
-  /* ── 한마디 카드 ─────────────────────────── */
-  .oneline h2 { font-size: 26px; font-weight: 800; margin-bottom: 12px; }
-  .oneline > p { color: var(--muted); font-size: 16px; }
-  .week-split { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 22px; }
-  .week-box {
-    background: var(--sub-card); border: 1px solid var(--line);
-    border-radius: 16px; padding: 20px 22px;
-  }
-  .week-box .wk {
-    display: inline-block; background: #fff; border: 1px solid var(--line);
-    border-radius: 999px; padding: 4px 14px; font-size: 13px; font-weight: 800;
-    color: var(--accent); margin-bottom: 10px;
-  }
-  .week-box p { font-size: 14.5px; color: var(--muted); }
-  .week-box b { color: var(--ink); }
-  .quote {
-    margin-top: 22px; background: var(--accent-soft);
-    border-left: 5px solid var(--accent); border-radius: 0 12px 12px 0;
-    padding: 16px 20px; font-size: 16px; font-weight: 700;
-  }
-  .quote small { display: block; font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
-
-  /* ── 로드맵 표 ───────────────────────────── */
-  table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
-  th, td { border-bottom: 1px solid var(--line); padding: 11px 9px; text-align: left; vertical-align: top; }
-  th { background: var(--sub-card); font-weight: 800; font-size: 13.5px; white-space: nowrap; }
-  td.day, th.day { text-align: center; width: 52px; font-weight: 800; }
-  td.stage {
-    white-space: nowrap; font-size: 13px; font-weight: 700;
-    color: var(--accent);
-  }
-  td.topic { font-weight: 700; }
-  td.key { color: var(--muted); }
-  td a { color: var(--accent); font-weight: 700; text-decoration: none; white-space: nowrap; }
-  td a:hover { text-decoration: underline; }
-  .table-note { margin-top: 16px; font-size: 14.5px; color: var(--muted); }
-  .table-note + .table-note { margin-top: 6px; }
-  .table-note a { color: var(--accent); font-weight: 700; text-decoration: none; }
-  .table-note a:hover { text-decoration: underline; }
-
-  /* ── Day 카드 ────────────────────────────── */
-  .day-head { display: flex; gap: 18px; align-items: flex-start; margin-bottom: 28px; }
-  .badge-icon {
-    flex: 0 0 auto; width: 62px; height: 62px; border-radius: 16px;
-    background: var(--accent-soft); color: var(--accent);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 19px; font-weight: 800;
-  }
-  .stage-chip {
-    display: inline-block; background: var(--sub-card); border: 1px solid var(--line);
-    border-radius: 999px; padding: 3px 12px; font-size: 12.5px; font-weight: 800;
-    color: var(--muted); margin-bottom: 6px;
-  }
-  .day-title { font-size: 25px; font-weight: 800; line-height: 1.3; }
-  .day-sub { color: var(--muted); font-size: 14.5px; margin-top: 4px; }
-  .day-body { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; }
-
-  .learn ul { list-style: none; }
-  .learn li {
-    position: relative; padding-left: 18px; margin: 10px 0;
-    color: var(--muted); font-size: 15.5px;
-  }
-  .learn li::before {
-    content: ""; position: absolute; left: 0; top: 10px;
-    width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
-  }
-  .learn b { color: var(--ink); }
-  .learn .star { color: var(--accent); font-weight: 800; }
-  code {
-    font-family: Consolas, "D2Coding", monospace; font-size: 13.5px;
-    background: var(--sub-card); padding: 1px 6px; border-radius: 5px; color: #e0483d;
-  }
-
-  .practice {
-    background: var(--sub-card); border: 1px solid var(--line);
-    border-radius: 16px; padding: 20px 22px; margin-bottom: 22px;
-  }
-  .practice .tag {
-    display: inline-block; background: #fff; border: 1px solid var(--line);
-    border-radius: 999px; padding: 4px 14px; font-size: 13px; font-weight: 700; margin-bottom: 10px;
-  }
-  .practice p { font-size: 15px; color: var(--muted); }
-  .practice b { color: var(--ink); }
-
-  /* ── 체크리스트 ──────────────────────────── */
-  .check-list { list-style: none; }
-  .check-list li { margin: 8px 0; }
-  .check-list label {
-    display: flex; gap: 10px; align-items: flex-start;
-    font-size: 15px; cursor: pointer; user-select: none;
-    padding: 8px 12px; border-radius: 10px; border: 1px solid transparent;
-    transition: background .15s;
-  }
-  .check-list label:hover { background: var(--sub-card); }
-  .check-list input { display: none; }
-  .box {
-    flex: 0 0 auto; width: 20px; height: 20px; margin-top: 1px;
-    border: 2px solid #cbd3e0; border-radius: 6px; background: #fff;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; color: #fff; font-weight: 800; transition: all .15s;
-  }
-  .check-list input:checked + .box { background: var(--accent); border-color: var(--accent); }
-  .check-list input:checked + .box::after { content: "✓"; }
-  .check-list input:checked ~ .txt { color: var(--muted); text-decoration: line-through; }
-
-  /* ── 졸업 카드 ───────────────────────────── */
-  .grad h2 { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
-  .grad .lead { color: var(--muted); font-size: 15.5px; margin-bottom: 20px; }
-  .grad .check-list { columns: 2; column-gap: 28px; }
-  .grad .check-list li { break-inside: avoid; }
-  .grad .check-list label { font-size: 15px; font-weight: 600; }
-
-  /* ── 이전 단계 ───────────────────────────── */
-  .prev {
-    background: #fff; border: 1px solid var(--line); border-radius: 22px;
-    padding: 30px 36px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
-  }
-  .prev .arrow-big { font-size: 34px; color: var(--moss); }
-  .prev h3 { font-size: 21px; font-weight: 800; margin-bottom: 4px; }
-  .prev p { color: var(--muted); font-size: 15px; max-width: 620px; }
-  .prev .go { margin-left: auto; }
-  .prev .go a {
-    display: inline-block; text-decoration: none; font-weight: 800; font-size: 15px;
-    padding: 12px 24px; border-radius: 14px;
-    background: var(--moss-soft); color: var(--moss); white-space: nowrap;
-  }
-  .prev .go a:hover { filter: brightness(.97); }
-
-  footer { margin-top: 34px; text-align: center; color: var(--muted); font-size: 13.5px; }
-
-  @media (max-width: 900px) {
-    body { padding: 0 16px 70px; }
-    .topbar { margin: 0 -16px 32px; padding: 10px 16px; }
-    .card { padding: 26px 22px 30px; }
-    .page-head h1 { font-size: 28px; }
-    .week-split { grid-template-columns: 1fr; gap: 14px; }
-    .day-body { grid-template-columns: 1fr; gap: 28px; }
-    .day-title { font-size: 21px; }
-    .grad .check-list { columns: 1; }
-    td.stage, td.topic, td.key { white-space: normal; }
-    .prev .go { margin-left: 0; }
-  }
-</style>
-</head>
-<body>
-
+---
+layout: academy-doc
+title: "Part 4 학습문서 — 맛집커뮤니티 어드밴스 · 다 만든 제품에 결제를 얹기"
+description: "Part 4 학습 로드맵 — 완성된 맛집커뮤니티에 insert-only 원장과 포트원 결제를 얹는 Day 30–34 과정."
+family: codecamp
+css: [adoc-codecamp]
+crumb: [[CODECAMP, /academy/codecamp/], [PART 4, /academy/codecamp/part4.html], [학습 로드맵]]
+render_with_liquid: false
+---
 <!-- ═══════════ 진행률 바 ═══════════ -->
 <div class="topbar">
   <div class="topbar-in">
-    <span class="label">학습 진행률</span>
+    <span class="prog-label">학습 진행률</span>
     <span class="bar"><i id="bar-fill"></i></span>
     <span class="count" id="bar-count">0 / 0</span>
-    <button class="reset-btn" id="btn-reset">초기화</button>
+    <button type="button" class="reset-btn" id="btn-reset">초기화</button>
   </div>
 </div>
 
-<div class="wrap">
+<div class="wrap p4">
 
   <!-- ═══════════ 페이지 헤더 ═══════════ -->
   <header class="page-head">
@@ -258,23 +25,23 @@
     <h1>맛집커뮤니티 어드밴스 — 다 만든 제품에 결제를 얹기</h1>
     <p><b>PRD 업데이트 → Pencil 증분 디자인·핸드오프 → 카피·CTA 모바일 배너 → 정산·결제 링크 → insert-only 결제 DB → 포트원 실연동 → 웹훅·취소</b>까지,
        Part 3에서 출시한 맛집커뮤니티(<code>E-food-community-part-2</code>)에 <b>결제의 전 생애</b>를 얹습니다.</p>
-    <p>결과물은 이 폴더의 <b>04-food-payment.html</b>(결제 플로우 목업), <b>04-mobile-banner.html</b>(카피·CTA 배너 실습),
-       <b>04-payment-ledger.html</b>(insert-only 원장·웹훅 시뮬레이터)으로 확인할 수 있습니다.</p>
+    <p>결과물은 이 폴더의 <a href="./demo-food-payment.html"><b>04-food-payment.html</b></a>(결제 플로우 목업), <a href="./demo-mobile-banner.html"><b>04-mobile-banner.html</b></a>(카피·CTA 배너 실습),
+       <a href="./demo-payment-ledger.html"><b>04-payment-ledger.html</b></a>(insert-only 원장·웹훅 시뮬레이터)으로 확인할 수 있습니다.</p>
     <div class="tags">
       <span>PRD 업데이트</span><span>delta.txt</span><span>/strategy-red-team</span><span>Node ID 핸드오프</span>
       <span>카피 · CTA</span><span>3D 아이콘 배너</span><span>정산</span><span>결제 링크</span><span>빌링키</span>
       <span>insert-only 원장</span><span>결제스냅샷</span><span>트랜잭션키</span><span>PortoneMCP</span><span>결제 SSOT</span><span>웹훅</span>
     </div>
     <div class="btns">
-      <a class="btn primary" href="./04-food-payment.html">💳 결과물 페이지 열기</a>
-      <a class="btn ghost" href="./04-mobile-banner.html">📣 배너 실습</a>
-      <a class="btn ghost" href="./04-payment-ledger.html">📒 원장 시뮬레이터</a>
-      <a class="btn ghost" href="./">원문 README</a>
+      <a class="btn" href="./demo-food-payment.html">💳 결과물 페이지 열기</a>
+      <a class="btn btn--ghost" href="./demo-mobile-banner.html">📣 배너 실습</a>
+      <a class="btn btn--ghost" href="./demo-payment-ledger.html">📒 원장 시뮬레이터</a>
+      <a class="btn btn--ghost" href="./">원문 README</a>
     </div>
   </header>
 
   <!-- ═══════════ Part 4의 한마디 ═══════════ -->
-  <section class="card oneline">
+  <section class="gcard oneline">
     <h2>Part 4의 한마디 — "결제는 코드가 전부가 아니다"</h2>
     <p>Part 3가 "내 서비스를, 시스템으로 만들어, 세상에 내놓는다"였다면 Part 4는 <b>"내놓은 제품에 돈이 흐르게 하고, 끝까지 책임진다"</b> 입니다.</p>
     <div class="week-split">
@@ -302,9 +69,9 @@
   </section>
 
   <!-- ═══════════ 학습 로드맵 ═══════════ -->
-  <section class="card">
+  <section class="gcard">
     <div class="sec-title">학습 로드맵</div>
-    <table>
+    <div class="tbl"><table>
       <thead>
         <tr><th class="day">Day</th><th>단계</th><th>주제</th><th>핵심 키워드</th></tr>
       </thead>
@@ -335,12 +102,12 @@
           <td class="key">웹훅 = localhost X · 서명 검증 · 서비스 롤 키 · 취소의 분류학 · 취소 웹훅</td>
         </tr>
       </tbody>
-    </table>
+    </table></div>
     <p class="table-note">파트 요약본: <a href="../part4.html">part4.md</a> · 원문: <a href="./">README.md</a></p>
   </section>
 
   <!-- ── Day 30 ── -->
-  <section class="card" id="day30">
+  <section class="gcard" id="day30">
     <div class="day-head">
       <div class="badge-icon">D30</div>
       <div>
@@ -377,7 +144,7 @@
   </section>
 
   <!-- ── Day 31 ── -->
-  <section class="card" id="day31">
+  <section class="gcard" id="day31">
     <div class="day-head">
       <div class="badge-icon">D31</div>
       <div>
@@ -413,7 +180,7 @@
   </section>
 
   <!-- ── Day 32 ── -->
-  <section class="card" id="day32">
+  <section class="gcard" id="day32">
     <div class="day-head">
       <div class="badge-icon">D32</div>
       <div>
@@ -449,7 +216,7 @@
   </section>
 
   <!-- ── Day 33 ── -->
-  <section class="card" id="day33">
+  <section class="gcard" id="day33">
     <div class="day-head">
       <div class="badge-icon">D33</div>
       <div>
@@ -485,7 +252,7 @@
   </section>
 
   <!-- ── Day 34 ── -->
-  <section class="card" id="day34">
+  <section class="gcard" id="day34">
     <div class="day-head">
       <div class="badge-icon">D34</div>
       <div>
@@ -520,7 +287,7 @@
   </section>
 
   <!-- ═══════════ 졸업 체크리스트 ═══════════ -->
-  <section class="card grad">
+  <section class="gcard grad">
     <h2>🎓 Part 4 졸업 체크리스트</h2>
     <p class="lead">열두 가지가 모두 켜지면 결제는 "붙인 기능"이 아니라 "끝까지 책임지는 시스템"이 됩니다.</p>
     <ul class="check-list">
@@ -594,5 +361,3 @@
   render();
 })();
 </script>
-</body>
-</html>

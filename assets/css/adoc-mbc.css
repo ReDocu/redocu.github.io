@@ -1,0 +1,138 @@
+/* MBC컴퓨터아카데미 학습문서 (academy/mbc/*.html) — academy-doc 레이아웃 위. 문서별 보조색은 .mdoc / 챕터의 --ch */
+.adoc--mbc .mdoc { max-width: 920px; margin-inline: auto; }
+.adoc--mbc .doc-id { margin: 0 0 -24px; color: var(--muted); font-family: var(--f-display); font-size: 11px; letter-spacing: 3px; }
+
+/* ── 히어로 ── */
+.adoc--mbc .hero { padding: 40px 0 36px; border-bottom: 1px solid var(--line); }
+.adoc--mbc .hero .eyebrow { margin: 0 0 14px; color: var(--ch, var(--accent)); font-family: var(--f-display); font-size: 12px; letter-spacing: 3px; }
+.adoc--mbc .hero h1 { margin: 0; font-size: clamp(28px, 4.6vw, 40px); font-weight: 700; line-height: 1.25; letter-spacing: 1px; }
+.adoc--mbc .hero h1 .grad { color: var(--accent); text-shadow: 0 0 24px color-mix(in srgb, var(--accent) 35%, transparent); }
+.adoc--mbc .hero .lead { margin: 16px 0 0; max-width: 680px; color: var(--muted); font-size: 16px; }
+.adoc--mbc .hero .lead b { color: var(--text); }
+.adoc--mbc .chips { gap: 8px; margin-top: 24px; }
+.adoc--mbc .chip { display: inline-flex; align-items: center; gap: 7px; padding: 5px 12px; color: var(--muted); font-size: 13px; transition: background-color 0.25s, color 0.25s; }
+.adoc--mbc .chip b { color: var(--text); font-weight: 700; }
+.adoc--mbc .chip .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ch, var(--accent)); box-shadow: 0 0 8px var(--ch, var(--accent)); }
+.adoc--mbc a.chip:hover { background: var(--accent-soft); border-color: var(--accent); }
+
+/* ── 요약 타일 ── */
+.adoc--mbc .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 28px; }
+.adoc--mbc .stat { position: relative; padding: 16px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 2px; }
+.adoc--mbc .stat::before { content: ""; position: absolute; left: -1px; top: -1px; width: 10px; height: 10px; border-left: 1px solid var(--accent); border-top: 1px solid var(--accent); }
+.adoc--mbc .stat .v { font-size: 20px; font-weight: 700; line-height: 1.3; }
+.adoc--mbc .stat .v small { margin-left: 2px; color: var(--muted); font-size: 13px; font-weight: 400; }
+.adoc--mbc .stat .k { margin-top: 4px; color: var(--muted); font-family: var(--f-display); font-size: 10px; letter-spacing: 2px; }
+
+/* ── 섹션 ── */
+.adoc--mbc section { margin-top: 64px; scroll-margin-top: calc(var(--header-height) + 16px); }
+.adoc--mbc .chapter { padding-top: 48px; border-top: 1px solid var(--line); }
+.adoc--mbc .sec-head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+.adoc--mbc .sec-head .n {
+  flex: none; padding: 4px 10px; background: var(--accent-soft); border: 1px solid var(--line-accent); border-radius: 2px;
+  color: var(--ch, var(--accent)); font-family: var(--f-display); font-size: 12px; letter-spacing: 2px;
+}
+.adoc--mbc .sec-head h2 { margin: 0; font-size: 23px; font-weight: 700; }
+.adoc--mbc .sec-desc, .adoc--mbc .prose { max-width: 740px; margin: -6px 0 20px; color: var(--muted); font-size: 15px; }
+.adoc--mbc .prose { margin: 0 0 12px; }
+.adoc--mbc .sec-desc b, .adoc--mbc .prose b { color: var(--text); }
+.adoc--mbc h3.sub { display: flex; align-items: center; gap: 10px; margin: 36px 0 12px; font-size: 17px; font-weight: 700; }
+.adoc--mbc h3.sub .m { color: var(--ch, var(--accent)); font-family: var(--f-display); font-size: 11px; font-weight: 400; letter-spacing: 2px; }
+
+/* ── 학습 목표 ── */
+.adoc--mbc .goal-box { margin-bottom: 22px; padding: 16px 20px; background: var(--accent-soft); border: 1px solid var(--line-accent); border-left: 2px solid var(--ch, var(--accent)); border-radius: 2px; }
+.adoc--mbc .goal-box h4 { margin: 0 0 8px; color: var(--ch, var(--accent)); font-size: 13px; letter-spacing: 2px; }
+.adoc--mbc .goal-box ul { display: grid; gap: 5px; margin: 0; padding: 0; list-style: none; }
+.adoc--mbc .goal-box li { position: relative; padding-left: 18px; color: var(--muted); font-size: 14px; }
+.adoc--mbc .goal-box li::before { content: ">"; position: absolute; left: 0; color: var(--ch, var(--accent)); font-family: var(--f-mono); }
+
+/* ── 진행 파이프라인 ── */
+.adoc--mbc .pipeline { display: flex; flex-wrap: wrap; gap: 10px; }
+.adoc--mbc .pipe {
+  flex: 1 1 150px; min-width: 150px; padding: 14px 16px;
+  background: var(--surface); border: 1px solid var(--line); border-top: 2px solid var(--ch, var(--accent)); border-radius: 2px;
+}
+.adoc--mbc .pipe .t { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; }
+.adoc--mbc .pipe .t .idx { color: var(--ch, var(--accent)); font-family: var(--f-display); font-size: 10px; font-weight: 400; letter-spacing: 2px; }
+.adoc--mbc .pipe p { margin: 6px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+/* ── 개념 카드 ── */
+.adoc--mbc .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+.adoc--mbc .concept { padding: 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 2px; transition: border-color 0.3s; }
+.adoc--mbc .concept:hover { border-color: var(--line-accent); }
+.adoc--mbc .concept h3 { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; font-size: 15px; font-weight: 700; }
+.adoc--mbc .concept h3::before { content: ""; flex: none; width: 4px; height: 14px; background: var(--ch, var(--accent)); }
+.adoc--mbc .concept ul { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.adoc--mbc .concept li { position: relative; padding-left: 16px; color: var(--muted); font-size: 14px; }
+.adoc--mbc .concept li::before { content: ">"; position: absolute; left: 0; color: var(--line-accent); font-family: var(--f-mono); }
+.adoc--mbc .concept li b { color: var(--text); }
+
+/* ── 노트북 셀 ── */
+.adoc--mbc .cell { margin: 18px 0; overflow: hidden; background: var(--surface); border: 1px solid var(--line); border-radius: 2px; }
+.adoc--mbc .cell-head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 8px 14px; border-bottom: 1px solid var(--line); background: var(--accent-soft); }
+.adoc--mbc .cell-head .in { color: var(--accent); font-family: var(--f-mono); font-size: 12px; }
+.adoc--mbc .cell-head .cap { color: var(--muted); font-size: 13px; }
+.adoc--mbc .cell pre { margin: 0; border: 0; border-radius: 0; background: var(--bg); color: var(--frame); font-size: 13px; tab-size: 4; }
+
+/* ── 표 ── */
+.adoc--mbc .tbl { margin: 14px 0; overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 2px; }
+.adoc--mbc .tbl table { min-width: 520px; }
+.adoc--mbc .tbl th { white-space: nowrap; background: var(--accent-soft); }
+.adoc--mbc .tbl td { color: var(--muted); }
+.adoc--mbc .tbl tbody tr:last-child td { border-bottom: 0; }
+.adoc--mbc td b, .adoc--mbc td strong { color: var(--text); }
+
+/* ── 콜아웃 ── */
+.adoc--mbc .callout {
+  display: flex; gap: 12px; margin: 16px 0; padding: 15px 18px;
+  background: var(--accent-soft); border: 1px solid var(--line-accent); border-left: 2px solid var(--accent); border-radius: 2px;
+}
+.adoc--mbc .callout .ico { flex: none; }
+.adoc--mbc .callout p { margin: 0; color: var(--muted); font-size: 14px; }
+.adoc--mbc .callout b { color: var(--text); }
+.adoc--mbc .callout .tt { margin-right: 6px; color: var(--accent); font-weight: 700; }
+
+/* ── 배운 점 ── */
+.adoc--mbc .klist { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.adoc--mbc .klist li {
+  position: relative; padding: 13px 16px 13px 40px; color: var(--muted); font-size: 14px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 2px;
+}
+.adoc--mbc .klist li::before { content: "▸"; position: absolute; left: 17px; color: var(--accent); }
+.adoc--mbc .klist li b { color: var(--text); }
+
+/* ── 문서 꼬리 ── */
+.adoc--mbc .mdoc > footer {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; margin-top: 72px; padding-top: 24px;
+  border-top: 1px solid var(--line); color: var(--muted); font-family: var(--f-mono); font-size: 12px;
+}
+.adoc--mbc .mdoc > footer a { color: var(--accent); }
+
+/* ── 전체 교육 문서: 사이드 목차 ── */
+.adoc--mbc .mlayout { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 40px; }
+.adoc--mbc .mlayout .mdoc { max-width: none; margin: 0; }
+.adoc--mbc .toc-side {
+  position: sticky; top: var(--header-height); align-self: start; max-height: calc(100vh - var(--header-height)); overflow-y: auto;
+  padding: 24px 18px 40px 0; border-right: 1px solid var(--line);
+}
+.adoc--mbc .toc-side .brand { margin-bottom: 4px; color: var(--muted); font-family: var(--f-display); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; }
+.adoc--mbc .toc-side .brand b { color: var(--accent); font-weight: 400; }
+.adoc--mbc .toc-side h2 { margin: 0 0 18px; font-size: 16px; font-weight: 700; }
+.adoc--mbc .toc-group { margin: 18px 0 6px; color: var(--muted); font-size: 11px; letter-spacing: 2px; }
+.adoc--mbc .toc a {
+  display: block; padding: 6px 10px; border-left: 1px solid transparent; color: var(--muted); font-size: 13px;
+  transition: color 0.2s, background-color 0.2s, border-color 0.2s;
+}
+.adoc--mbc .toc a:hover, .adoc--mbc .toc a.active { background: var(--accent-soft); color: var(--text); }
+.adoc--mbc .toc a.active { border-left-color: var(--ch, var(--accent)); }
+.adoc--mbc .toc a .num { margin-right: 8px; color: var(--ch, var(--muted)); font-family: var(--f-display); font-size: 10px; letter-spacing: 1px; }
+
+@media (max-width: 960px) {
+  .adoc--mbc .mlayout { grid-template-columns: minmax(0, 1fr); }
+  .adoc--mbc .toc-side { display: none; }
+}
+@media (max-width: 600px) {
+  .adoc--mbc .hero { padding: 32px 0 28px; }
+  .adoc--mbc .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .adoc--mbc .sec-head { align-items: flex-start; }
+  .adoc--mbc .sec-head h2 { font-size: 20px; }
+}

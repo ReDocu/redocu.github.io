@@ -1,21 +1,14 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>카테고리 분석에 따른 여행지 추천 — 학습문서</title>
-<link rel="stylesheet" href="study-note.css">
-<style>:root { --accent: #10b981; }</style>
-</head>
-<body>
-
-<header class="topbar">
-  <a class="back" href="/academy/mbc/">← MBC아카데미</a>
-  <span class="doc-id">STUDY NOTE · 02 / 05</span>
-  <button data-theme-toggle>◐ 테마</button>
-</header>
-
-<main>
+---
+layout: academy-doc
+title: "카테고리 분석에 따른 여행지 추천 — 학습문서"
+description: "공공데이터·크롤링 데이터를 분석해 여행지를 추천한 팀 프로젝트의 학습 노트."
+family: mbc
+css: [adoc-mbc]
+crumb: [[MBC, /academy/mbc/], ["카테고리 분석에 따른 여행지 추천"]]
+render_with_liquid: false
+---
+<div class="mdoc" style="--ch:#10b981">
+  <p class="doc-id">STUDY NOTE · 02 / 05</p>
   <!-- ── 히어로 ── -->
   <header class="hero">
     <p class="eyebrow">MBC컴퓨터아카데미 · DATA ANALYSIS</p>
@@ -172,22 +165,4 @@ top = (summary[summary[<span class="st">"category"</span>] == <span class="st">"
     <span>MBC컴퓨터아카데미 · 학습문서 02</span>
     <span><a href="/academy/mbc/travel-recommend.pdf" target="_blank" rel="noopener">프로젝트 PDF ↗</a></span>
   </footer>
-</main>
-
-<script>
-(function () {
-  var root = document.documentElement;
-  var saved = localStorage.getItem('mbc-doc-theme');
-  if (saved) root.dataset.theme = saved;
-  else if (matchMedia('(prefers-color-scheme: dark)').matches) root.dataset.theme = 'dark';
-  document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var next = root.dataset.theme === 'dark' ? 'light' : 'dark';
-      root.dataset.theme = next;
-      localStorage.setItem('mbc-doc-theme', next);
-    });
-  });
-})();
-</script>
-</body>
-</html>
+</div>

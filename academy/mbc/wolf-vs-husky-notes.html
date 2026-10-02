@@ -1,21 +1,14 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>늑대 vs 허스키 — 학습문서</title>
-<link rel="stylesheet" href="study-note.css">
-<style>:root { --accent: #8b5cf6; }</style>
-</head>
-<body>
-
-<header class="topbar">
-  <a class="back" href="/academy/mbc/">← MBC아카데미</a>
-  <span class="doc-id">STUDY NOTE · 03 / 05</span>
-  <button data-theme-toggle>◐ 테마</button>
-</header>
-
-<main>
+---
+layout: academy-doc
+title: "늑대 vs 허스키 — 학습문서"
+description: "CNN 이미지 분류로 늑대와 허스키를 구분한 팀 프로젝트의 학습 노트."
+family: mbc
+css: [adoc-mbc]
+crumb: [[MBC, /academy/mbc/], ["늑대 vs 허스키"]]
+render_with_liquid: false
+---
+<div class="mdoc" style="--ch:#a78bfa">
+  <p class="doc-id">STUDY NOTE · 03 / 05</p>
   <!-- ── 히어로 ── -->
   <header class="hero">
     <p class="eyebrow">MBC컴퓨터아카데미 · SUPERVISED LEARNING · CNN</p>
@@ -167,22 +160,4 @@ plt.legend()                    <span class="cm"># 두 곡선이 벌어지면 �
     <span>MBC컴퓨터아카데미 · 학습문서 03</span>
     <span><a href="/academy/mbc/wolf-vs-husky.pdf" target="_blank" rel="noopener">프로젝트 PDF ↗</a></span>
   </footer>
-</main>
-
-<script>
-(function () {
-  var root = document.documentElement;
-  var saved = localStorage.getItem('mbc-doc-theme');
-  if (saved) root.dataset.theme = saved;
-  else if (matchMedia('(prefers-color-scheme: dark)').matches) root.dataset.theme = 'dark';
-  document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var next = root.dataset.theme === 'dark' ? 'light' : 'dark';
-      root.dataset.theme = next;
-      localStorage.setItem('mbc-doc-theme', next);
-    });
-  });
-})();
-</script>
-</body>
-</html>
+</div>

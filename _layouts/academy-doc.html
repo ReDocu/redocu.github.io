@@ -1,0 +1,25 @@
+---
+layout: main
+css: [academy-doc]
+---
+{%- comment -%} 학원 학습노트·가이드·기술문서 — 사이트 셸(내비·푸터·플레이어) 안에서 렌더. 문서군 스타일은 page.css(adoc-<학원>), 루트 클래스는 page.family {%- endcomment -%}
+<div class="adoc-progress" aria-hidden="true"><span></span></div>
+<div class="container adoc adoc--{{ page.family }}">
+  <ol class="crumb">
+    <li><a href="/#academy">ACADEMY</a></li>
+    {%- for c in page.crumb %}
+    <li{% if forloop.last %} aria-current="page"{% endif %}>{% if c[1] and forloop.last == false %}<a href="{{ c[1] }}">{{ c[0] }}</a>{% else %}{{ c[0] }}{% endif %}</li>
+    {%- endfor %}
+  </ol>
+  {{ content }}
+</div>
+<script>
+  (function () {
+    var bar = document.querySelector('.adoc-progress span');
+    function on() {
+      var h = document.documentElement, max = h.scrollHeight - h.clientHeight;
+      bar.style.transform = 'scaleX(' + (max > 0 ? h.scrollTop / max : 0) + ')';
+    }
+    addEventListener('scroll', on, { passive: true }); on();
+  })();
+</script>

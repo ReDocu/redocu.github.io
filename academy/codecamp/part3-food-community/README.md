@@ -11,14 +11,14 @@ book: "Part 3 학습 가이드"
 heading: "맛집커뮤니티 — 내 서비스를, 시스템으로 만들어, 세상에 내놓기"
 days: "Day 17 – 29 · 학습 로드맵"
 resources:
-  - ["결과물 — 맛집커뮤니티", "/academy/codecamp/part3-food-community/03-food-community.html"]
+  - ["결과물 — 맛집커뮤니티", "/academy/codecamp/part3-food-community/demo-food-community.html"]
   - ["가이드 HTML", "/academy/codecamp/part3-food-community/03-part3-guide.html"]
-  - ["디자인 시스템", "/academy/codecamp/part3-food-community/03-design-system.html"]
+  - ["디자인 시스템", "/academy/codecamp/part3-food-community/demo-design-system.html"]
 next: ["누구나 만드는 사람이 된다 · Part 3", "/academy/codecamp/part3.html", "PART 3 학습 북"]
 ---
 **기획(PRD) → 디자인 시스템 → UI 컴포넌트 → 스토리북 핸드오프 → DB 설계 → BFF → 외부 API 연동 → 배포 · 도메인 · 상표권 · PWA** 까지, 남의 서비스를 따라 만드는 것이 아니라 **내 서비스 하나를 기획부터 출시까지 완주**합니다.
 
-결과물은 이 폴더의 [`03-food-community.html`](./03-food-community.html)(맛집커뮤니티 목업)과 [`03-design-system.html`](./03-design-system.html)(디자인 시스템)으로 확인할 수 있습니다.
+결과물은 이 폴더의 [`03-food-community.html`](./demo-food-community.html)(맛집커뮤니티 목업)과 [`03-design-system.html`](./demo-design-system.html)(디자인 시스템)으로 확인할 수 있습니다.
 
 `● 솔로프리너` `● 비즈니스 모델` `● 반응형 360` `● 디자인 토큰` `● UI 컴포넌트 23종` `● 스토리북 · SSOT` `● DB 정규화` `● BFF` `● 소프트 삭제` `● 네이버 검색/지도 API` `● 배포 · 도메인` `● 상표권 · 로고` `● PWA`
 
@@ -284,8 +284,8 @@ Part 1이 *"혼자서 만들 수 있다"*, Part 2가 *"팀처럼, 통제하며 �
 
 | 파일 | 내용 |
 |:---|:---|
-| [`03-food-community.html`](./03-food-community.html) | **맛집커뮤니티 목업** — 360×740 화면 8장(로그인·목록·상세·등록 에러·장소 등록·장소 검색·검색 결과 없음·마이페이지) + PWA 설치 배너. 화면별로 어느 Day의 어떤 개념이 구현됐는지 노트가 붙어 있습니다. |
-| [`03-design-system.html`](./03-design-system.html) | **디자인 시스템** — 프리미티브/시맨틱 2층 토큰, 명암비 판정, 타이포 10종, 아이콘 24/터치 48, 스페이싱 6종, UI 컴포넌트 매트릭스. |
+| [`03-food-community.html`](./demo-food-community.html) | **맛집커뮤니티 목업** — 360×740 화면 8장(로그인·목록·상세·등록 에러·장소 등록·장소 검색·검색 결과 없음·마이페이지) + PWA 설치 배너. 화면별로 어느 Day의 어떤 개념이 구현됐는지 노트가 붙어 있습니다. |
+| [`03-design-system.html`](./demo-design-system.html) | **디자인 시스템** — 프리미티브/시맨틱 2층 토큰, 명암비 판정, 타이포 10종, 아이콘 24/터치 48, 스페이싱 6종, UI 컴포넌트 매트릭스. |
 
 > **🧪 목업 안내** — 이 예제안은 **실제 서비스 없이 동작하는 목업**입니다.
 > **지도**는 CSS로 그린 모형이고, **네이버 지역 검색 결과·구글 로그인·DB·이미지 업로드**는 모두 화면 안에 넣어 둔 **더미 데이터**입니다. 실제 연동은 Day 24~27에서 BFF와 API 키로 대체합니다.

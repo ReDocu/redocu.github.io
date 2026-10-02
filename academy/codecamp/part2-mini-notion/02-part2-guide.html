@@ -1,291 +1,23 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Part 2 학습문서 — 미니 노션 · 팀처럼, 통제하며, 지키면서 만들기</title>
-<style>
-  :root {
-    --ink: #1f2430;
-    --muted: #5b6472;
-    --line: #e6e9ef;
-    --bg: #f5f7fa;
-    --card: #ffffff;
-    --blue: #3b82f6;
-    --violet: #7c6cf0;
-    --violet-soft: #efedfd;
-    --mint: #a7f0cd;
-    --sub-card: #f7f8fa;
-    --accent: var(--violet);
-    --accent-soft: var(--violet-soft);
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: "Pretendard", "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
-    line-height: 1.6;
-    padding: 0 24px 90px;
-  }
-  .wrap { max-width: 1040px; margin: 0 auto; }
-  a { color: inherit; }
-
-  /* ── 상단 진행바 (sticky) ───────────────── */
-  .topbar {
-    position: sticky; top: 0; z-index: 20;
-    background: rgba(245, 247, 250, .92);
-    backdrop-filter: blur(6px);
-    border-bottom: 1px solid var(--line);
-    margin: 0 -24px 44px;
-    padding: 12px 24px;
-  }
-  .topbar-in {
-    max-width: 1040px; margin: 0 auto;
-    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-  }
-  .topbar .label { font-size: 14px; font-weight: 800; white-space: nowrap; }
-  .bar { flex: 1; min-width: 160px; height: 8px; border-radius: 999px; background: #e3e8f0; overflow: hidden; }
-  .bar > i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 999px; transition: width .25s; }
-  .topbar .count { font-size: 14px; font-weight: 800; color: var(--accent); white-space: nowrap; }
-  .reset-btn {
-    border: 1px solid var(--line); background: #fff; color: var(--muted);
-    border-radius: 999px; padding: 5px 14px; font-size: 13px; font-weight: 700;
-    font-family: inherit; cursor: pointer;
-  }
-  .reset-btn:hover { background: var(--sub-card); color: var(--ink); }
-
-  /* ── 페이지 헤더 ─────────────────────────── */
-  .page-head { margin-bottom: 36px; }
-  .page-head .eyebrow { font-size: 14px; font-weight: 700; color: var(--muted); letter-spacing: .02em; }
-  .page-head h1 { font-size: 38px; font-weight: 800; margin: 6px 0 12px; line-height: 1.28; }
-  .page-head p { color: var(--muted); font-size: 16px; max-width: 830px; }
-  .page-head p + p { margin-top: 6px; }
-  .page-head b { color: var(--ink); }
-  .tags { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 20px; }
-  .tags span {
-    background: var(--accent-soft); color: var(--accent);
-    border: 1px solid color-mix(in srgb, var(--accent) 25%, #fff);
-    border-radius: 999px; padding: 6px 15px; font-size: 13.5px; font-weight: 700;
-  }
-  .btns { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
-  .btn {
-    display: inline-block; text-decoration: none; font-weight: 800; font-size: 15px;
-    padding: 12px 26px; border-radius: 14px; color: var(--ink); transition: filter .15s;
-  }
-  .btn:hover { filter: brightness(.96); }
-  .btn.primary { background: var(--mint); }
-  .btn.ghost { background: #fff; border: 1px solid var(--line); }
-
-  /* ── 카드 공통 ───────────────────────────── */
-  .card {
-    background: var(--card); border: 1px solid var(--line); border-radius: 22px;
-    padding: 36px 40px 40px; margin-bottom: 28px;
-    position: relative; overflow: hidden;
-    box-shadow: 0 2px 10px rgba(31, 36, 48, .04);
-  }
-  .card::before {
-    content: ""; position: absolute; top: 0; left: 24px; right: 24px; height: 5px;
-    border-radius: 0 0 6px 6px; background: var(--accent);
-  }
-  .sec-title {
-    display: flex; align-items: center; gap: 10px;
-    font-size: 18px; font-weight: 800; margin-bottom: 18px;
-  }
-  .sec-title::before { content: ""; width: 5px; height: 18px; border-radius: 3px; background: var(--accent); }
-
-  /* ── 한마디 카드 ─────────────────────────── */
-  .oneline h2 { font-size: 26px; font-weight: 800; margin-bottom: 12px; }
-  .oneline > p { color: var(--muted); font-size: 16px; }
-  .week-split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 22px; }
-  .week-box {
-    background: var(--sub-card); border: 1px solid var(--line);
-    border-radius: 16px; padding: 20px 22px;
-  }
-  .week-box .wk {
-    display: inline-block; background: #fff; border: 1px solid var(--line);
-    border-radius: 999px; padding: 4px 14px; font-size: 13px; font-weight: 800;
-    color: var(--accent); margin-bottom: 10px;
-  }
-  .week-box p { font-size: 15px; color: var(--muted); }
-  .week-box b { color: var(--ink); }
-  .quote {
-    margin-top: 22px; background: var(--accent-soft);
-    border-left: 5px solid var(--accent); border-radius: 0 12px 12px 0;
-    padding: 16px 20px; font-size: 16px; font-weight: 700;
-  }
-  .quote small { display: block; font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
-
-  /* ── 로드맵 표 ───────────────────────────── */
-  table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
-  th, td { border-bottom: 1px solid var(--line); padding: 11px 9px; text-align: left; vertical-align: top; }
-  th { background: var(--sub-card); font-weight: 800; font-size: 13.5px; white-space: nowrap; }
-  td.day, th.day { text-align: center; width: 52px; font-weight: 800; }
-  td.stage {
-    white-space: nowrap; font-size: 13px; font-weight: 700;
-    color: var(--accent);
-  }
-  td.topic { font-weight: 700; }
-  td.key { color: var(--muted); }
-  td a { color: var(--accent); font-weight: 700; text-decoration: none; white-space: nowrap; }
-  td a:hover { text-decoration: underline; }
-  tr.wk-sep td { border-top: 2px solid var(--accent-soft); }
-  .table-note { margin-top: 16px; font-size: 14.5px; color: var(--muted); }
-  .table-note + .table-note { margin-top: 6px; }
-  .table-note a { color: var(--accent); font-weight: 700; text-decoration: none; }
-  .table-note a:hover { text-decoration: underline; }
-
-  /* ── 주차 구분선 ─────────────────────────── */
-  .week-head { margin: 44px 0 22px; }
-  .week-head .wk-title {
-    display: inline-flex; align-items: baseline; gap: 12px;
-    font-size: 22px; font-weight: 800;
-  }
-  .week-head .wk-range {
-    background: var(--accent-soft); color: var(--accent);
-    border-radius: 999px; padding: 4px 14px; font-size: 13.5px; font-weight: 800;
-  }
-  .week-head p { color: var(--muted); font-size: 15px; margin-top: 6px; }
-
-  /* ── Day 카드 ────────────────────────────── */
-  .day-head { display: flex; gap: 18px; align-items: flex-start; margin-bottom: 28px; }
-  .badge-icon {
-    flex: 0 0 auto; width: 62px; height: 62px; border-radius: 16px;
-    background: var(--accent-soft); color: var(--accent);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 19px; font-weight: 800;
-  }
-  .stage-chip {
-    display: inline-block; background: var(--sub-card); border: 1px solid var(--line);
-    border-radius: 999px; padding: 3px 12px; font-size: 12.5px; font-weight: 800;
-    color: var(--muted); margin-bottom: 6px;
-  }
-  .day-title { font-size: 25px; font-weight: 800; line-height: 1.3; }
-  .day-sub { color: var(--muted); font-size: 14.5px; margin-top: 4px; }
-  .day-body { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; }
-
-  .learn ul { list-style: none; }
-  .learn li {
-    position: relative; padding-left: 18px; margin: 10px 0;
-    color: var(--muted); font-size: 15.5px;
-  }
-  .learn li::before {
-    content: ""; position: absolute; left: 0; top: 10px;
-    width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
-  }
-  .learn b { color: var(--ink); }
-  .learn .star { color: var(--accent); font-weight: 800; }
-  code {
-    font-family: Consolas, "D2Coding", monospace; font-size: 13.5px;
-    background: var(--sub-card); padding: 1px 6px; border-radius: 5px; color: #e0483d;
-  }
-
-  .practice {
-    background: var(--sub-card); border: 1px solid var(--line);
-    border-radius: 16px; padding: 20px 22px; margin-bottom: 22px;
-  }
-  .practice .tag {
-    display: inline-block; background: #fff; border: 1px solid var(--line);
-    border-radius: 999px; padding: 4px 14px; font-size: 13px; font-weight: 700; margin-bottom: 10px;
-  }
-  .practice p { font-size: 15px; color: var(--muted); }
-  .practice b { color: var(--ink); }
-  .practice .ref {
-    display: block; margin-top: 10px; font-size: 13.5px; color: var(--muted);
-    border-top: 1px dashed var(--line); padding-top: 10px;
-  }
-  .practice .ref a { color: var(--accent); font-weight: 700; text-decoration: none; }
-  .practice .ref a:hover { text-decoration: underline; }
-
-  /* ── 체크리스트 ──────────────────────────── */
-  .check-list { list-style: none; }
-  .check-list li { margin: 8px 0; }
-  .check-list label {
-    display: flex; gap: 10px; align-items: flex-start;
-    font-size: 15px; cursor: pointer; user-select: none;
-    padding: 8px 12px; border-radius: 10px; border: 1px solid transparent;
-    transition: background .15s;
-  }
-  .check-list label:hover { background: var(--sub-card); }
-  .check-list input { display: none; }
-  .box {
-    flex: 0 0 auto; width: 20px; height: 20px; margin-top: 1px;
-    border: 2px solid #cbd3e0; border-radius: 6px; background: #fff;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; color: #fff; font-weight: 800; transition: all .15s;
-  }
-  .check-list input:checked + .box { background: var(--accent); border-color: var(--accent); }
-  .check-list input:checked + .box::after { content: "✓"; }
-  .check-list input:checked ~ .txt { color: var(--muted); text-decoration: line-through; }
-
-  /* ── 졸업 카드 ───────────────────────────── */
-  .grad h2 { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
-  .grad .lead { color: var(--muted); font-size: 15.5px; margin-bottom: 20px; }
-  .grad .check-list { columns: 2; column-gap: 28px; }
-  .grad .check-list li { break-inside: avoid; }
-  .grad .check-list label { font-size: 15px; font-weight: 600; }
-
-  /* ── 이전 단계 ───────────────────────────── */
-  .prev {
-    background: #fff; border: 1px solid var(--line); border-radius: 22px;
-    padding: 30px 36px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
-  }
-  .prev .arrow-big { font-size: 34px; color: var(--blue); }
-  .prev h3 { font-size: 21px; font-weight: 800; margin-bottom: 4px; }
-  .prev p { color: var(--muted); font-size: 15px; max-width: 620px; }
-  .prev .go { margin-left: auto; }
-  .prev .go a {
-    display: inline-block; text-decoration: none; font-weight: 800; font-size: 15px;
-    padding: 12px 24px; border-radius: 14px;
-    background: #eaf2fe; color: var(--blue); white-space: nowrap;
-  }
-  .prev .go a:hover { filter: brightness(.97); }
-
-  /* ── 다음 단계 ───────────────────────────── */
-  .next {
-    background: #fff; border: 1px solid var(--line); border-radius: 22px;
-    padding: 30px 36px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
-    margin-bottom: 22px;
-  }
-  .next .arrow-big { font-size: 34px; color: #4F7A3D; }
-  .next h3 { font-size: 21px; font-weight: 800; margin-bottom: 4px; }
-  .next p { color: var(--muted); font-size: 15px; max-width: 620px; }
-  .next .go { margin-left: auto; }
-  .next .go a {
-    display: inline-block; text-decoration: none; font-weight: 800; font-size: 15px;
-    padding: 12px 24px; border-radius: 14px;
-    background: #F3F7EE; color: #4F7A3D; white-space: nowrap;
-  }
-  .next .go a:hover { filter: brightness(.97); }
-
-  footer { margin-top: 34px; text-align: center; color: var(--muted); font-size: 13.5px; }
-
-  @media (max-width: 900px) {
-    body { padding: 0 16px 70px; }
-    .topbar { margin: 0 -16px 32px; padding: 10px 16px; }
-    .card { padding: 26px 22px 30px; }
-    .page-head h1 { font-size: 28px; }
-    .week-split { grid-template-columns: 1fr; gap: 14px; }
-    .day-body { grid-template-columns: 1fr; gap: 28px; }
-    .day-title { font-size: 21px; }
-    .grad .check-list { columns: 1; }
-    td.stage, td.topic, td.key { white-space: normal; }
-    .prev .go, .next .go { margin-left: 0; }
-  }
-</style>
-</head>
-<body>
-
+---
+layout: academy-doc
+title: "Part 2 학습문서 — 미니 노션 · 팀처럼, 통제하며, 지키면서 만들기"
+description: "Part 2 학습 로드맵 — 기획·디자인·개발 핸드오프로 미니 노션을 만들고 인증·훅스·워크트리·배포까지 확장하는 Day 6–16 과정."
+family: codecamp
+css: [adoc-codecamp]
+crumb: [[CODECAMP, /academy/codecamp/], [PART 2, /academy/codecamp/part2.html], [학습 로드맵]]
+render_with_liquid: false
+---
 <!-- ═══════════ 진행률 바 ═══════════ -->
 <div class="topbar">
   <div class="topbar-in">
-    <span class="label">학습 진행률</span>
+    <span class="prog-label">학습 진행률</span>
     <span class="bar"><i id="bar-fill"></i></span>
     <span class="count" id="bar-count">0 / 0</span>
-    <button class="reset-btn" id="btn-reset">초기화</button>
+    <button type="button" class="reset-btn" id="btn-reset">초기화</button>
   </div>
 </div>
 
-<div class="wrap">
+<div class="wrap p2">
 
   <!-- ═══════════ 페이지 헤더 ═══════════ -->
   <header class="page-head">
@@ -294,21 +26,21 @@
     <p><b>기획(PM-Skills) → 디자인(클로드 디자인) → 개발(하네스 엔지니어링)</b> 을 핸드오프로 잇는 역할 분리형 구조로
        미니 노션 웹서비스를 만들고, 외부 API 연동 · 인증/보안 · 구글로그인 · 자동 안전장치(훅스) · 워크트리 병렬 구현 · 이미지 스토리지,
        그리고 <b>Git·Vercel 배포와 모니터링(로그·메트릭)</b>까지 확장합니다.</p>
-    <p>결과물은 이 폴더의 <b>02-mini-notion.html</b>(미니 노션)로 확인할 수 있습니다.</p>
+    <p>결과물은 이 폴더의 <a href="./demo-mini-notion.html"><b>02-mini-notion.html</b></a>(미니 노션)로 확인할 수 있습니다.</p>
     <div class="tags">
       <span>PM-Skills</span><span>Claude Design</span><span>DB 설계</span><span>TDD · SDD</span>
       <span>API · CORS</span><span>인증 · 보안</span><span>OAuth · JWT</span><span>Hooks</span>
       <span>Git 워크트리</span><span>Supabase Storage</span><span>배포 · Vercel</span><span>모니터링 · 로그/메트릭</span>
     </div>
     <div class="btns">
-      <a class="btn primary" href="./02-mini-notion.html">📝 결과물 페이지 열기</a>
-      <a class="btn ghost" href="../">전체 커리큘럼</a>
-      <a class="btn ghost" href="./">원문 README</a>
+      <a class="btn" href="./demo-mini-notion.html">📝 결과물 페이지 열기</a>
+      <a class="btn btn--ghost" href="../">전체 커리큘럼</a>
+      <a class="btn btn--ghost" href="./">원문 README</a>
     </div>
   </header>
 
   <!-- ═══════════ Part 2의 한마디 ═══════════ -->
-  <section class="card oneline">
+  <section class="gcard oneline">
     <h2>Part 2의 한마디 — "팀처럼 만들고, 구조로 강제하라"</h2>
     <p>Part 1이 "혼자서 만들 수 있다"였다면, Part 2는 두 걸음 더 나아갑니다.</p>
     <div class="week-split">
@@ -331,9 +63,9 @@
   </section>
 
   <!-- ═══════════ 학습 로드맵 ═══════════ -->
-  <section class="card">
+  <section class="gcard">
     <div class="sec-title">학습 로드맵</div>
-    <table>
+    <div class="tbl"><table>
       <thead>
         <tr><th class="day">Day</th><th>단계</th><th>주제</th><th>핵심 키워드</th><th>원문</th></tr>
       </thead>
@@ -405,7 +137,7 @@
           <td>book-day16.md</td>
         </tr>
       </tbody>
-    </table>
+    </table></div>
     <p class="table-note">주차 요약본:
       book_week2.md ·
       book_week3.md</p>
@@ -423,7 +155,7 @@
   </div>
 
   <!-- ── Day 6 ── -->
-  <section class="card" id="day6">
+  <section class="gcard" id="day6">
     <div class="day-head">
       <div class="badge-icon">D6</div>
       <div>
@@ -457,7 +189,7 @@
   </section>
 
   <!-- ── Day 7 ── -->
-  <section class="card" id="day7">
+  <section class="gcard" id="day7">
     <div class="day-head">
       <div class="badge-icon">D7</div>
       <div>
@@ -490,7 +222,7 @@
   </section>
 
   <!-- ── Day 8 ── -->
-  <section class="card" id="day8">
+  <section class="gcard" id="day8">
     <div class="day-head">
       <div class="badge-icon">D8</div>
       <div>
@@ -523,7 +255,7 @@
   </section>
 
   <!-- ── Day 9 ── -->
-  <section class="card" id="day9">
+  <section class="gcard" id="day9">
     <div class="day-head">
       <div class="badge-icon">D9</div>
       <div>
@@ -557,7 +289,7 @@
   </section>
 
   <!-- ── Day 10 ── -->
-  <section class="card" id="day10">
+  <section class="gcard" id="day10">
     <div class="day-head">
       <div class="badge-icon">D10</div>
       <div>
@@ -596,7 +328,7 @@
   </div>
 
   <!-- ── Day 11 ── -->
-  <section class="card" id="day11">
+  <section class="gcard" id="day11">
     <div class="day-head">
       <div class="badge-icon">D11</div>
       <div>
@@ -629,7 +361,7 @@
   </section>
 
   <!-- ── Day 12 ── -->
-  <section class="card" id="day12">
+  <section class="gcard" id="day12">
     <div class="day-head">
       <div class="badge-icon">D12</div>
       <div>
@@ -659,7 +391,7 @@
   </section>
 
   <!-- ── Day 13 ── -->
-  <section class="card" id="day13">
+  <section class="gcard" id="day13">
     <div class="day-head">
       <div class="badge-icon">D13</div>
       <div>
@@ -694,7 +426,7 @@
   </section>
 
   <!-- ── Day 14 ── -->
-  <section class="card" id="day14">
+  <section class="gcard" id="day14">
     <div class="day-head">
       <div class="badge-icon">D14</div>
       <div>
@@ -731,7 +463,7 @@
   </section>
 
   <!-- ── Day 15 ── -->
-  <section class="card" id="day15">
+  <section class="gcard" id="day15">
     <div class="day-head">
       <div class="badge-icon">D15</div>
       <div>
@@ -768,7 +500,7 @@
   </section>
 
   <!-- ── Day 16 ── -->
-  <section class="card" id="day16">
+  <section class="gcard" id="day16">
     <div class="day-head">
       <div class="badge-icon">D16</div>
       <div>
@@ -812,7 +544,7 @@
   </section>
 
   <!-- ═══════════ 졸업 체크리스트 ═══════════ -->
-  <section class="card grad">
+  <section class="gcard grad">
     <h2>🎓 Part 2 졸업 체크리스트</h2>
     <p class="lead">아홉 가지가 모두 켜지면 미니 노션은 "만든 것"을 넘어 "운영되는 서비스"가 됩니다.</p>
     <ul class="check-list">
@@ -893,5 +625,3 @@
   render();
 })();
 </script>
-</body>
-</html>

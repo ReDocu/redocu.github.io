@@ -11,15 +11,15 @@ book: "Part 4 학습 가이드"
 heading: "맛집커뮤니티 어드밴스 — 다 만든 제품에 결제를 얹기"
 days: "Day 30 – 34 · 학습 로드맵"
 resources:
-  - ["결과물 — 결제 플로우", "/academy/codecamp/part4-food-community-advance/04-food-payment.html"]
+  - ["결과물 — 결제 플로우", "/academy/codecamp/part4-food-community-advance/demo-food-payment.html"]
   - ["가이드 HTML", "/academy/codecamp/part4-food-community-advance/04-part4-guide.html"]
-  - ["원장 시뮬레이터", "/academy/codecamp/part4-food-community-advance/04-payment-ledger.html"]
-  - ["모바일 배너", "/academy/codecamp/part4-food-community-advance/04-mobile-banner.html"]
+  - ["원장 시뮬레이터", "/academy/codecamp/part4-food-community-advance/demo-payment-ledger.html"]
+  - ["모바일 배너", "/academy/codecamp/part4-food-community-advance/demo-mobile-banner.html"]
 next: ["누구나 만드는 사람이 된다 · Part 4", "/academy/codecamp/part4.html", "PART 4 학습 북"]
 ---
 **PRD 업데이트 → Pencil 증분 디자인·핸드오프 → 카피·CTA 모바일 배너 → 정산·결제 링크 → insert-only 결제 DB → 포트원 실연동 → 웹훅·취소**까지, Part 3에서 출시한 맛집커뮤니티(`E-food-community-part-2`)에 **결제의 전 생애**를 얹습니다.
 
-결과물은 이 폴더의 [`04-food-payment.html`](./04-food-payment.html)(결제 플로우 목업), [`04-mobile-banner.html`](./04-mobile-banner.html)(카피·CTA 배너 실습), [`04-payment-ledger.html`](./04-payment-ledger.html)(insert-only 원장·웹훅 시뮬레이터)으로 확인할 수 있습니다.
+결과물은 이 폴더의 [`04-food-payment.html`](./demo-food-payment.html)(결제 플로우 목업), [`04-mobile-banner.html`](./demo-mobile-banner.html)(카피·CTA 배너 실습), [`04-payment-ledger.html`](./demo-payment-ledger.html)(insert-only 원장·웹훅 시뮬레이터)으로 확인할 수 있습니다.
 
 `● PRD 업데이트` `● delta.txt` `● /strategy-red-team` `● Node ID 핸드오프` `● 카피 · CTA` `● 3D 아이콘 배너` `● 정산` `● 결제 링크` `● 빌링키` `● insert-only 원장` `● 결제스냅샷` `● 트랜잭션키` `● PortoneMCP` `● 결제 SSOT` `● 웹훅`
 
@@ -145,9 +145,9 @@ Part 3가 *"내 서비스를, 시스템으로 만들어, 세상에 내놓는다"
 
 | 파일 | 내용 |
 |:---|:---|
-| [`04-food-payment.html`](./04-food-payment.html) | **결제 플로우 목업** — 360×740 화면 5장(메인 배너 · 모임 상세 + 결제 바텀시트 · 결제 완료 · 마이 결제 내역 + 취소 모달/토스트 · 마이 취소 내역). 한 상품(구로 골목 미식회 · 30,000원)이 5화면을 관통하고, 화면마다 어느 Day의 어떤 개념이 구현됐는지 노트가 붙어 있습니다. |
-| [`04-mobile-banner.html`](./04-mobile-banner.html) | **카피·CTA 배너 실습** — 마케터(카피·CTA) → 디자이너 협업 구조를 그대로 폼으로 옮긴 360×180 배너. 소재 절반이 프레임 밖으로 잘리고, "배경 + 코딩글자" vs "이미지에 글자 포함" 두 모드를 토글하며 트레이드오프를 체험합니다. 데스크톱 배너가 "늘이기"가 아니라 "재배치"인 것도 나란히 보여줍니다. |
-| [`04-payment-ledger.html`](./04-payment-ledger.html) | **insert-only 원장·웹훅 시뮬레이터** — [결제하기] [결제 취소] [웹훅 재발송] [예약만 취소] 버튼으로 웹훅 로그(서명 검증 → 중복 검사 → INSERT)와 `payment`·`payment_snapshot` 테이블이 어떻게 쌓이는지 봅니다. 취소는 음수 행, 재발송은 중복 검증에 걸려 무시되고, 예약만 취소는 원장에 아무것도 남기지 않습니다. 정산 계산과 환경변수 2분법, 결제 SSOT 발췌도 함께 있습니다. |
+| [`04-food-payment.html`](./demo-food-payment.html) | **결제 플로우 목업** — 360×740 화면 5장(메인 배너 · 모임 상세 + 결제 바텀시트 · 결제 완료 · 마이 결제 내역 + 취소 모달/토스트 · 마이 취소 내역). 한 상품(구로 골목 미식회 · 30,000원)이 5화면을 관통하고, 화면마다 어느 Day의 어떤 개념이 구현됐는지 노트가 붙어 있습니다. |
+| [`04-mobile-banner.html`](./demo-mobile-banner.html) | **카피·CTA 배너 실습** — 마케터(카피·CTA) → 디자이너 협업 구조를 그대로 폼으로 옮긴 360×180 배너. 소재 절반이 프레임 밖으로 잘리고, "배경 + 코딩글자" vs "이미지에 글자 포함" 두 모드를 토글하며 트레이드오프를 체험합니다. 데스크톱 배너가 "늘이기"가 아니라 "재배치"인 것도 나란히 보여줍니다. |
+| [`04-payment-ledger.html`](./demo-payment-ledger.html) | **insert-only 원장·웹훅 시뮬레이터** — [결제하기] [결제 취소] [웹훅 재발송] [예약만 취소] 버튼으로 웹훅 로그(서명 검증 → 중복 검사 → INSERT)와 `payment`·`payment_snapshot` 테이블이 어떻게 쌓이는지 봅니다. 취소는 음수 행, 재발송은 중복 검증에 걸려 무시되고, 예약만 취소는 원장에 아무것도 남기지 않습니다. 정산 계산과 환경변수 2분법, 결제 SSOT 발췌도 함께 있습니다. |
 
 > **🧪 목업 안내** — 이 예제안은 **실제 결제 없이 동작하는 목업**입니다.
 > **페이앱·포트원·PG·카드사·웹훅·Supabase**는 모두 화면 안의 **시뮬레이션**이고, 실제 키는 한 글자도 들어 있지 않습니다(자리표시자만 사용). 실제 연동은 Day 32~34의 절차 — 결제 링크 발급, PortoneMCP, 웹훅 URL 등록, Vercel 배포 — 로 대체합니다.

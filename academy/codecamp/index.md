@@ -23,7 +23,7 @@ tracks:
         focus: PRD → 클로드코드 → Vercel 배포
         actions:
           - [Part 1 학습 북, /academy/codecamp/part1.html]
-          - [체험하기, /academy/codecamp/part1-intro/intro.html]
+          - [체험하기, /academy/codecamp/part1-intro/demo-intro.html]
           - [학습 로드맵, /academy/codecamp/part1-intro/01-part1-guide.html]
           - [E-Book PDF, /academy/codecamp/part1-intro/claude-code-part1.pdf]
   - id: part-2
@@ -42,7 +42,7 @@ tracks:
         focus: 역할 분리 핸드오프 · OAuth · 훅스 · 워크트리
         actions:
           - [Part 2 학습 북, /academy/codecamp/part2.html]
-          - [체험하기, /academy/codecamp/part2-mini-notion/02-mini-notion.html]
+          - [체험하기, /academy/codecamp/part2-mini-notion/demo-mini-notion.html]
           - [학습 로드맵, /academy/codecamp/part2-mini-notion/02-part2-guide.html]
           - [E-Book PDF, /academy/codecamp/part2-mini-notion/claude-code-part2.pdf]
   - id: part-3
@@ -61,9 +61,9 @@ tracks:
         focus: 디자인 시스템 · 컴포넌트 핸드오프 · BFF
         actions:
           - [Part 3 학습 북, /academy/codecamp/part3.html]
-          - [체험하기, /academy/codecamp/part3-food-community/03-food-community.html]
+          - [체험하기, /academy/codecamp/part3-food-community/demo-food-community.html]
           - [학습 로드맵, /academy/codecamp/part3-food-community/03-part3-guide.html]
-          - [디자인 시스템, /academy/codecamp/part3-food-community/03-design-system.html]
+          - [디자인 시스템, /academy/codecamp/part3-food-community/demo-design-system.html]
   - id: part-4
     badge: P4
     jump: PART 4
@@ -80,8 +80,9 @@ tracks:
         focus: insert-only 원장 · 포트원 웹훅 · 결제 SSOT
         actions:
           - [Part 4 학습 북, /academy/codecamp/part4.html]
-          - [체험하기, /academy/codecamp/part4-food-community-advance/04-food-payment.html]
+          - [체험하기, /academy/codecamp/part4-food-community-advance/demo-food-payment.html]
           - [학습 로드맵, /academy/codecamp/part4-food-community-advance/04-part4-guide.html]
-          - [원장 시뮬레이터, /academy/codecamp/part4-food-community-advance/04-payment-ledger.html]
+          - [원장 시뮬레이터, /academy/codecamp/part4-food-community-advance/demo-payment-ledger.html]
+          - [모바일 배너, /academy/codecamp/part4-food-community-advance/demo-mobile-banner.html]
 ---
 <p class="academy__foot mono">// 과정 저장소: <a href="https://github.com/ReDocu/Sesac_CC_ClaudeCode" target="_blank" rel="noopener">ReDocu/Sesac_CC_ClaudeCode</a></p>

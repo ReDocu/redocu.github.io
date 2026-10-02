@@ -11,14 +11,14 @@ book: "Part 2 학습 가이드"
 heading: "미니 노션 — 팀처럼, 통제하며, 지키면서, 세상에 내보내며 만들기"
 days: "Day 6 – 16 · 학습 로드맵"
 resources:
-  - ["결과물 — 미니 노션", "/academy/codecamp/part2-mini-notion/02-mini-notion.html"]
+  - ["결과물 — 미니 노션", "/academy/codecamp/part2-mini-notion/demo-mini-notion.html"]
   - ["가이드 HTML", "/academy/codecamp/part2-mini-notion/02-part2-guide.html"]
   - ["PDF 다운로드", "/academy/codecamp/part2-mini-notion/claude-code-part2.pdf"]
 next: ["누구나 만드는 사람이 된다 · Part 2", "/academy/codecamp/part2.html", "PART 2 학습 북"]
 ---
 **기획(PM-Skills) → 디자인(클로드 디자인) → 개발(하네스 엔지니어링)** 을 핸드오프로 잇는 역할 분리형 구조로 미니 노션 웹서비스를 만들고, 외부 API 연동 · 인증/보안 · 구글로그인 · 자동 안전장치(훅스) · 워크트리 병렬 구현 · 이미지 스토리지, 그리고 **Git·Vercel 배포와 모니터링(로그·메트릭)**까지 확장합니다.
 
-결과물은 이 폴더의 [`02-mini-notion.html`](./02-mini-notion.html)(미니 노션)로 확인할 수 있습니다.
+결과물은 이 폴더의 [`02-mini-notion.html`](./demo-mini-notion.html)(미니 노션)로 확인할 수 있습니다.
 
 `● PM-Skills` `● Claude Design` `● DB 설계` `● TDD · SDD` `● API · CORS` `● 인증 · 보안` `● OAuth · JWT` `● Hooks` `● Git 워크트리` `● Supabase Storage` `● 배포 · Vercel` `● 모니터링 · 로그/메트릭`
 

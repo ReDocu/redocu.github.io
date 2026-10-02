@@ -1,272 +1,23 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Part 3 학습문서 — 맛집커뮤니티 · 내 서비스를, 시스템으로 만들어, 세상에 내놓기</title>
-<style>
-  :root {
-    --ink: #1f2430;
-    --muted: #5b6472;
-    --line: #e6e9ef;
-    --bg: #f5f7fa;
-    --card: #ffffff;
-    --moss: #4F7A3D;
-    --moss-soft: #F3F7EE;
-    --amber: #A97614;
-    --amber-soft: #FBF3E3;
-    --mint: #a7f0cd;
-    --sub-card: #f7f8fa;
-    --accent: var(--moss);
-    --accent-soft: var(--moss-soft);
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: "Pretendard", "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
-    line-height: 1.6;
-    padding: 0 24px 90px;
-  }
-  .wrap { max-width: 1040px; margin: 0 auto; }
-  a { color: inherit; }
-
-  /* ── 상단 진행바 (sticky) ───────────────── */
-  .topbar {
-    position: sticky; top: 0; z-index: 20;
-    background: rgba(245, 247, 250, .92);
-    backdrop-filter: blur(6px);
-    border-bottom: 1px solid var(--line);
-    margin: 0 -24px 44px;
-    padding: 12px 24px;
-  }
-  .topbar-in {
-    max-width: 1040px; margin: 0 auto;
-    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-  }
-  .topbar .label { font-size: 14px; font-weight: 800; white-space: nowrap; }
-  .bar { flex: 1; min-width: 160px; height: 8px; border-radius: 999px; background: #e3e8f0; overflow: hidden; }
-  .bar > i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 999px; transition: width .25s; }
-  .topbar .count { font-size: 14px; font-weight: 800; color: var(--accent); white-space: nowrap; }
-  .reset-btn {
-    border: 1px solid var(--line); background: #fff; color: var(--muted);
-    border-radius: 999px; padding: 5px 14px; font-size: 13px; font-weight: 700;
-    font-family: inherit; cursor: pointer;
-  }
-  .reset-btn:hover { background: var(--sub-card); color: var(--ink); }
-
-  /* ── 페이지 헤더 ─────────────────────────── */
-  .page-head { margin-bottom: 36px; }
-  .page-head .eyebrow { font-size: 14px; font-weight: 700; color: var(--muted); letter-spacing: .02em; }
-  .page-head h1 { font-size: 38px; font-weight: 800; margin: 6px 0 12px; line-height: 1.28; }
-  .page-head p { color: var(--muted); font-size: 16px; max-width: 830px; }
-  .page-head p + p { margin-top: 6px; }
-  .page-head b { color: var(--ink); }
-  .tags { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 20px; }
-  .tags span {
-    background: var(--accent-soft); color: var(--accent);
-    border: 1px solid color-mix(in srgb, var(--accent) 25%, #fff);
-    border-radius: 999px; padding: 6px 15px; font-size: 13.5px; font-weight: 700;
-  }
-  .btns { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
-  .btn {
-    display: inline-block; text-decoration: none; font-weight: 800; font-size: 15px;
-    padding: 12px 26px; border-radius: 14px; color: var(--ink); transition: filter .15s;
-  }
-  .btn:hover { filter: brightness(.96); }
-  .btn.primary { background: var(--mint); }
-  .btn.ghost { background: #fff; border: 1px solid var(--line); }
-
-  /* ── 카드 공통 ───────────────────────────── */
-  .card {
-    background: var(--card); border: 1px solid var(--line); border-radius: 22px;
-    padding: 36px 40px 40px; margin-bottom: 28px;
-    position: relative; overflow: hidden;
-    box-shadow: 0 2px 10px rgba(31, 36, 48, .04);
-  }
-  .card::before {
-    content: ""; position: absolute; top: 0; left: 24px; right: 24px; height: 5px;
-    border-radius: 0 0 6px 6px; background: var(--accent);
-  }
-  .sec-title {
-    display: flex; align-items: center; gap: 10px;
-    font-size: 18px; font-weight: 800; margin-bottom: 18px;
-  }
-  .sec-title::before { content: ""; width: 5px; height: 18px; border-radius: 3px; background: var(--accent); }
-
-  /* ── 한마디 카드 ─────────────────────────── */
-  .oneline h2 { font-size: 26px; font-weight: 800; margin-bottom: 12px; }
-  .oneline > p { color: var(--muted); font-size: 16px; }
-  .week-split { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 22px; }
-  .week-box {
-    background: var(--sub-card); border: 1px solid var(--line);
-    border-radius: 16px; padding: 20px 22px;
-  }
-  .week-box .wk {
-    display: inline-block; background: #fff; border: 1px solid var(--line);
-    border-radius: 999px; padding: 4px 14px; font-size: 13px; font-weight: 800;
-    color: var(--accent); margin-bottom: 10px;
-  }
-  .week-box p { font-size: 14.5px; color: var(--muted); }
-  .week-box b { color: var(--ink); }
-  .quote {
-    margin-top: 22px; background: var(--accent-soft);
-    border-left: 5px solid var(--accent); border-radius: 0 12px 12px 0;
-    padding: 16px 20px; font-size: 16px; font-weight: 700;
-  }
-  .quote small { display: block; font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
-
-  /* ── 로드맵 표 ───────────────────────────── */
-  table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
-  th, td { border-bottom: 1px solid var(--line); padding: 11px 9px; text-align: left; vertical-align: top; }
-  th { background: var(--sub-card); font-weight: 800; font-size: 13.5px; white-space: nowrap; }
-  td.day, th.day { text-align: center; width: 52px; font-weight: 800; }
-  td.stage {
-    white-space: nowrap; font-size: 13px; font-weight: 700;
-    color: var(--accent);
-  }
-  td.topic { font-weight: 700; }
-  td.key { color: var(--muted); }
-  td a { color: var(--accent); font-weight: 700; text-decoration: none; white-space: nowrap; }
-  td a:hover { text-decoration: underline; }
-  tr.wk-sep td { border-top: 2px solid var(--accent-soft); }
-  .table-note { margin-top: 16px; font-size: 14.5px; color: var(--muted); }
-  .table-note + .table-note { margin-top: 6px; }
-  .table-note a { color: var(--accent); font-weight: 700; text-decoration: none; }
-  .table-note a:hover { text-decoration: underline; }
-
-  /* ── 주차 구분선 ─────────────────────────── */
-  .week-head { margin: 44px 0 22px; }
-  .week-head .wk-title {
-    display: inline-flex; align-items: baseline; gap: 12px;
-    font-size: 22px; font-weight: 800;
-  }
-  .week-head .wk-range {
-    background: var(--accent-soft); color: var(--accent);
-    border-radius: 999px; padding: 4px 14px; font-size: 13.5px; font-weight: 800;
-  }
-  .week-head p { color: var(--muted); font-size: 15px; margin-top: 6px; }
-
-  /* ── Day 카드 ────────────────────────────── */
-  .day-head { display: flex; gap: 18px; align-items: flex-start; margin-bottom: 28px; }
-  .badge-icon {
-    flex: 0 0 auto; width: 62px; height: 62px; border-radius: 16px;
-    background: var(--accent-soft); color: var(--accent);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 19px; font-weight: 800;
-  }
-  .stage-chip {
-    display: inline-block; background: var(--sub-card); border: 1px solid var(--line);
-    border-radius: 999px; padding: 3px 12px; font-size: 12.5px; font-weight: 800;
-    color: var(--muted); margin-bottom: 6px;
-  }
-  .day-title { font-size: 25px; font-weight: 800; line-height: 1.3; }
-  .day-sub { color: var(--muted); font-size: 14.5px; margin-top: 4px; }
-  .day-body { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; }
-
-  .learn ul { list-style: none; }
-  .learn li {
-    position: relative; padding-left: 18px; margin: 10px 0;
-    color: var(--muted); font-size: 15.5px;
-  }
-  .learn li::before {
-    content: ""; position: absolute; left: 0; top: 10px;
-    width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
-  }
-  .learn b { color: var(--ink); }
-  .learn .star { color: var(--accent); font-weight: 800; }
-  code {
-    font-family: Consolas, "D2Coding", monospace; font-size: 13.5px;
-    background: var(--sub-card); padding: 1px 6px; border-radius: 5px; color: #e0483d;
-  }
-
-  .practice {
-    background: var(--sub-card); border: 1px solid var(--line);
-    border-radius: 16px; padding: 20px 22px; margin-bottom: 22px;
-  }
-  .practice .tag {
-    display: inline-block; background: #fff; border: 1px solid var(--line);
-    border-radius: 999px; padding: 4px 14px; font-size: 13px; font-weight: 700; margin-bottom: 10px;
-  }
-  .practice p { font-size: 15px; color: var(--muted); }
-  .practice b { color: var(--ink); }
-
-  /* ── 체크리스트 ──────────────────────────── */
-  .check-list { list-style: none; }
-  .check-list li { margin: 8px 0; }
-  .check-list label {
-    display: flex; gap: 10px; align-items: flex-start;
-    font-size: 15px; cursor: pointer; user-select: none;
-    padding: 8px 12px; border-radius: 10px; border: 1px solid transparent;
-    transition: background .15s;
-  }
-  .check-list label:hover { background: var(--sub-card); }
-  .check-list input { display: none; }
-  .box {
-    flex: 0 0 auto; width: 20px; height: 20px; margin-top: 1px;
-    border: 2px solid #cbd3e0; border-radius: 6px; background: #fff;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; color: #fff; font-weight: 800; transition: all .15s;
-  }
-  .check-list input:checked + .box { background: var(--accent); border-color: var(--accent); }
-  .check-list input:checked + .box::after { content: "✓"; }
-  .check-list input:checked ~ .txt { color: var(--muted); text-decoration: line-through; }
-
-  /* ── 졸업 카드 ───────────────────────────── */
-  .grad h2 { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
-  .grad .lead { color: var(--muted); font-size: 15.5px; margin-bottom: 20px; }
-  .grad .check-list { columns: 2; column-gap: 28px; }
-  .grad .check-list li { break-inside: avoid; }
-  .grad .check-list label { font-size: 15px; font-weight: 600; }
-
-  /* ── 이전 · 다음 단계 ────────────────────── */
-  .prev, .next {
-    background: #fff; border: 1px solid var(--line); border-radius: 22px;
-    padding: 30px 36px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
-    margin-bottom: 22px;
-  }
-  .prev .arrow-big { font-size: 34px; color: #7c6cf0; }
-  .next .arrow-big { font-size: 34px; color: var(--amber); }
-  .prev h3, .next h3 { font-size: 21px; font-weight: 800; margin-bottom: 4px; }
-  .prev p, .next p { color: var(--muted); font-size: 15px; max-width: 620px; }
-  .prev .go, .next .go { margin-left: auto; }
-  .prev .go a, .next .go a {
-    display: inline-block; text-decoration: none; font-weight: 800; font-size: 15px;
-    padding: 12px 24px; border-radius: 14px; white-space: nowrap;
-  }
-  .prev .go a { background: #efedfd; color: #7c6cf0; }
-  .next .go a { background: var(--amber-soft); color: var(--amber); }
-  .prev .go a:hover, .next .go a:hover { filter: brightness(.97); }
-
-  footer { margin-top: 34px; text-align: center; color: var(--muted); font-size: 13.5px; }
-
-  @media (max-width: 900px) {
-    body { padding: 0 16px 70px; }
-    .topbar { margin: 0 -16px 32px; padding: 10px 16px; }
-    .card { padding: 26px 22px 30px; }
-    .page-head h1 { font-size: 28px; }
-    .week-split { grid-template-columns: 1fr; gap: 14px; }
-    .day-body { grid-template-columns: 1fr; gap: 28px; }
-    .day-title { font-size: 21px; }
-    .grad .check-list { columns: 1; }
-    td.stage, td.topic, td.key { white-space: normal; }
-    .prev .go, .next .go { margin-left: 0; }
-  }
-</style>
-</head>
-<body>
-
+---
+layout: academy-doc
+title: "Part 3 학습문서 — 맛집커뮤니티 · 내 서비스를, 시스템으로 만들어, 세상에 내놓기"
+description: "Part 3 학습 로드맵 — 디자인 시스템·DB·BFF·외부 API로 맛집커뮤니티 MVP를 만들어 출시하는 Day 17–29 과정."
+family: codecamp
+css: [adoc-codecamp]
+crumb: [[CODECAMP, /academy/codecamp/], [PART 3, /academy/codecamp/part3.html], [학습 로드맵]]
+render_with_liquid: false
+---
 <!-- ═══════════ 진행률 바 ═══════════ -->
 <div class="topbar">
   <div class="topbar-in">
-    <span class="label">학습 진행률</span>
+    <span class="prog-label">학습 진행률</span>
     <span class="bar"><i id="bar-fill"></i></span>
     <span class="count" id="bar-count">0 / 0</span>
-    <button class="reset-btn" id="btn-reset">초기화</button>
+    <button type="button" class="reset-btn" id="btn-reset">초기화</button>
   </div>
 </div>
 
-<div class="wrap">
+<div class="wrap p3">
 
   <!-- ═══════════ 페이지 헤더 ═══════════ -->
   <header class="page-head">
@@ -274,21 +25,21 @@
     <h1>맛집커뮤니티 — 내 서비스를, 시스템으로 만들어, 세상에 내놓기</h1>
     <p><b>기획(PRD) → 디자인 시스템 → UI 컴포넌트 → 스토리북 핸드오프 → DB 설계 → BFF → 외부 API 연동 → 배포 · 도메인 · 상표권 · PWA</b> 까지,
        남의 서비스를 따라 만드는 것이 아니라 <b>내 서비스 하나를 기획부터 출시까지 완주</b>합니다.</p>
-    <p>결과물은 이 폴더의 <b>03-food-community.html</b>(맛집커뮤니티 목업)과 <b>03-design-system.html</b>(디자인 시스템)으로 확인할 수 있습니다.</p>
+    <p>결과물은 이 폴더의 <a href="./demo-food-community.html"><b>03-food-community.html</b></a>(맛집커뮤니티 목업)과 <a href="./demo-design-system.html"><b>03-design-system.html</b></a>(디자인 시스템)으로 확인할 수 있습니다.</p>
     <div class="tags">
       <span>솔로프리너</span><span>비즈니스 모델</span><span>반응형 360</span><span>디자인 토큰</span>
       <span>UI 컴포넌트 23종</span><span>스토리북 · SSOT</span><span>DB 정규화</span><span>BFF</span>
       <span>소프트 삭제</span><span>네이버 검색/지도 API</span><span>배포 · 도메인</span><span>상표권 · 로고</span><span>PWA</span>
     </div>
     <div class="btns">
-      <a class="btn primary" href="./03-food-community.html">🍜 결과물 페이지 열기</a>
-      <a class="btn ghost" href="./03-design-system.html">🎨 디자인 시스템</a>
-      <a class="btn ghost" href="./">원문 README</a>
+      <a class="btn" href="./demo-food-community.html">🍜 결과물 페이지 열기</a>
+      <a class="btn btn--ghost" href="./demo-design-system.html">🎨 디자인 시스템</a>
+      <a class="btn btn--ghost" href="./">원문 README</a>
     </div>
   </header>
 
   <!-- ═══════════ Part 3의 한마디 ═══════════ -->
-  <section class="card oneline">
+  <section class="gcard oneline">
     <h2>Part 3의 한마디 — "내 서비스를, 시스템으로"</h2>
     <p>Part 1이 "혼자서 만들 수 있다", Part 2가 "팀처럼, 통제하며 만든다"였다면 Part 3는 <b>"내 서비스를, 시스템으로 만들어, 세상에 내놓는다"</b> 입니다.</p>
     <div class="week-split">
@@ -315,9 +66,9 @@
   </section>
 
   <!-- ═══════════ 학습 로드맵 ═══════════ -->
-  <section class="card">
+  <section class="gcard">
     <div class="sec-title">학습 로드맵</div>
-    <table>
+    <div class="tbl"><table>
       <thead>
         <tr><th class="day">Day</th><th>단계</th><th>주제</th><th>핵심 키워드</th></tr>
       </thead>
@@ -388,7 +139,7 @@
           <td class="key">KIPRIS 2,458건 · 에셋 16종 · 브랜치 · 하이드레이션</td>
         </tr>
       </tbody>
-    </table>
+    </table></div>
     <p class="table-note">파트 요약본: <a href="../part3.html">part3.md</a> · 원문: <a href="./">README.md</a></p>
   </section>
 
@@ -399,7 +150,7 @@
   </div>
 
   <!-- ── Day 17 ── -->
-  <section class="card" id="day17">
+  <section class="gcard" id="day17">
     <div class="day-head">
       <div class="badge-icon">D17</div>
       <div>
@@ -435,7 +186,7 @@
   </section>
 
   <!-- ── Day 18 ── -->
-  <section class="card" id="day18">
+  <section class="gcard" id="day18">
     <div class="day-head">
       <div class="badge-icon">D18</div>
       <div>
@@ -469,7 +220,7 @@
   </section>
 
   <!-- ── Day 19 ── -->
-  <section class="card" id="day19">
+  <section class="gcard" id="day19">
     <div class="day-head">
       <div class="badge-icon">D19</div>
       <div>
@@ -503,7 +254,7 @@
   </section>
 
   <!-- ── Day 20 ── -->
-  <section class="card" id="day20">
+  <section class="gcard" id="day20">
     <div class="day-head">
       <div class="badge-icon">D20</div>
       <div>
@@ -537,7 +288,7 @@
   </section>
 
   <!-- ── Day 21 ── -->
-  <section class="card" id="day21">
+  <section class="gcard" id="day21">
     <div class="day-head">
       <div class="badge-icon">D21</div>
       <div>
@@ -572,7 +323,7 @@
   </section>
 
   <!-- ── Day 22 ── -->
-  <section class="card" id="day22">
+  <section class="gcard" id="day22">
     <div class="day-head">
       <div class="badge-icon">D22</div>
       <div>
@@ -613,7 +364,7 @@
   </div>
 
   <!-- ── Day 23 ── -->
-  <section class="card" id="day23">
+  <section class="gcard" id="day23">
     <div class="day-head">
       <div class="badge-icon">D23</div>
       <div>
@@ -648,7 +399,7 @@
   </section>
 
   <!-- ── Day 24 ── -->
-  <section class="card" id="day24">
+  <section class="gcard" id="day24">
     <div class="day-head">
       <div class="badge-icon">D24</div>
       <div>
@@ -683,7 +434,7 @@
   </section>
 
   <!-- ── Day 25 ── -->
-  <section class="card" id="day25">
+  <section class="gcard" id="day25">
     <div class="day-head">
       <div class="badge-icon">D25</div>
       <div>
@@ -724,7 +475,7 @@
   </div>
 
   <!-- ── Day 26 ── -->
-  <section class="card" id="day26">
+  <section class="gcard" id="day26">
     <div class="day-head">
       <div class="badge-icon">D26</div>
       <div>
@@ -760,7 +511,7 @@
   </section>
 
   <!-- ── Day 27 ── -->
-  <section class="card" id="day27">
+  <section class="gcard" id="day27">
     <div class="day-head">
       <div class="badge-icon">D27</div>
       <div>
@@ -796,7 +547,7 @@
   </section>
 
   <!-- ── Day 28 ── -->
-  <section class="card" id="day28">
+  <section class="gcard" id="day28">
     <div class="day-head">
       <div class="badge-icon">D28</div>
       <div>
@@ -832,7 +583,7 @@
   </section>
 
   <!-- ── Day 29 ── -->
-  <section class="card" id="day29">
+  <section class="gcard" id="day29">
     <div class="day-head">
       <div class="badge-icon">D29</div>
       <div>
@@ -867,7 +618,7 @@
   </section>
 
   <!-- ═══════════ 졸업 체크리스트 ═══════════ -->
-  <section class="card grad">
+  <section class="gcard grad">
     <h2>🎓 Part 3 졸업 체크리스트</h2>
     <p class="lead">열한 가지가 모두 켜지면 맛집커뮤니티는 "따라 만든 것"이 아니라 "출시된 내 서비스"가 됩니다.</p>
     <ul class="check-list">
@@ -950,5 +701,3 @@
   render();
 })();
 </script>
-</body>
-</html>

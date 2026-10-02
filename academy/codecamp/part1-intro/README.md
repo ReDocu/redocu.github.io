@@ -11,14 +11,14 @@ book: "Part 1 학습 가이드"
 heading: "소개 페이지 — 혼자서 만들고, 세상에 띄우기"
 days: "Day 1 – 5 · 학습 로드맵"
 resources:
-  - ["결과물 — 소개 페이지", "/academy/codecamp/part1-intro/intro.html"]
+  - ["결과물 — 소개 페이지", "/academy/codecamp/part1-intro/demo-intro.html"]
   - ["가이드 HTML", "/academy/codecamp/part1-intro/01-part1-guide.html"]
   - ["PDF 다운로드", "/academy/codecamp/part1-intro/claude-code-part1.pdf"]
 next: ["누구나 만드는 사람이 된다 · Part 1", "/academy/codecamp/part1.html", "PART 1 학습 북"]
 ---
 **PRD → 웹의 구조 → 클로드코드 다루기 → Supabase·MCP → 배포** 순서로, 한 사람이 아이디어를 문서로 정리하고 실제 인터넷 주소가 있는 웹사이트로 배포하기까지의 전 과정을 다룹니다.
 
-결과물은 이 폴더의 [`ending-credits.html`](./ending-credits.html)(소개 페이지)로 확인할 수 있습니다.
+결과물은 이 폴더의 [`intro.html`](./demo-intro.html)(소개 페이지)로 확인할 수 있습니다.
 
 `● Claude Code` `● PRD` `● Supabase` `● MCP` `● Git · GitHub` `● Vercel`
 

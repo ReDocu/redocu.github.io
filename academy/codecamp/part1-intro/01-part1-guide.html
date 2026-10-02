@@ -1,239 +1,23 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Part 1 학습문서 — 소개 페이지 · 혼자서 만들고, 세상에 띄우기</title>
-<style>
-  :root {
-    --ink: #1f2430;
-    --muted: #5b6472;
-    --line: #e6e9ef;
-    --bg: #f5f7fa;
-    --card: #ffffff;
-    --blue: #3b82f6;
-    --blue-soft: #eaf2fe;
-    --violet: #7c6cf0;
-    --mint: #a7f0cd;
-    --sub-card: #f7f8fa;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: "Pretendard", "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
-    line-height: 1.6;
-    padding: 0 24px 90px;
-  }
-  .wrap { max-width: 1040px; margin: 0 auto; }
-  a { color: inherit; }
-
-  /* ── 상단 진행바 (sticky) ───────────────── */
-  .topbar {
-    position: sticky; top: 0; z-index: 20;
-    background: rgba(245, 247, 250, .92);
-    backdrop-filter: blur(6px);
-    border-bottom: 1px solid var(--line);
-    margin: 0 -24px 44px;
-    padding: 12px 24px;
-  }
-  .topbar-in {
-    max-width: 1040px; margin: 0 auto;
-    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-  }
-  .topbar .label { font-size: 14px; font-weight: 800; white-space: nowrap; }
-  .bar {
-    flex: 1; min-width: 160px; height: 8px; border-radius: 999px;
-    background: #e3e8f0; overflow: hidden;
-  }
-  .bar > i { display: block; height: 100%; width: 0; background: var(--blue); border-radius: 999px; transition: width .25s; }
-  .topbar .count { font-size: 14px; font-weight: 800; color: var(--blue); white-space: nowrap; }
-  .reset-btn {
-    border: 1px solid var(--line); background: #fff; color: var(--muted);
-    border-radius: 999px; padding: 5px 14px; font-size: 13px; font-weight: 700;
-    font-family: inherit; cursor: pointer;
-  }
-  .reset-btn:hover { background: var(--sub-card); color: var(--ink); }
-
-  /* ── 페이지 헤더 ─────────────────────────── */
-  .page-head { margin-bottom: 36px; }
-  .page-head .eyebrow { font-size: 14px; font-weight: 700; color: var(--muted); letter-spacing: .02em; }
-  .page-head h1 { font-size: 40px; font-weight: 800; margin: 6px 0 12px; line-height: 1.25; }
-  .page-head p { color: var(--muted); font-size: 16px; max-width: 800px; }
-  .page-head p + p { margin-top: 6px; }
-  .page-head b { color: var(--ink); }
-  .tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
-  .tags span {
-    background: var(--blue-soft); color: var(--blue);
-    border: 1px solid color-mix(in srgb, var(--blue) 25%, #fff);
-    border-radius: 999px; padding: 6px 16px; font-size: 14px; font-weight: 700;
-  }
-  .btns { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
-  .btn {
-    display: inline-block; text-decoration: none; font-weight: 800; font-size: 15px;
-    padding: 12px 26px; border-radius: 14px; color: var(--ink); transition: filter .15s;
-  }
-  .btn:hover { filter: brightness(.96); }
-  .btn.primary { background: var(--mint); }
-  .btn.ghost { background: #fff; border: 1px solid var(--line); }
-
-  /* ── 카드 공통 ───────────────────────────── */
-  .card {
-    background: var(--card); border: 1px solid var(--line); border-radius: 22px;
-    padding: 36px 40px 40px; margin-bottom: 28px;
-    position: relative; overflow: hidden;
-    box-shadow: 0 2px 10px rgba(31, 36, 48, .04);
-  }
-  .card::before {
-    content: ""; position: absolute; top: 0; left: 24px; right: 24px; height: 5px;
-    border-radius: 0 0 6px 6px; background: var(--blue);
-  }
-  .sec-title {
-    display: flex; align-items: center; gap: 10px;
-    font-size: 18px; font-weight: 800; margin-bottom: 18px;
-  }
-  .sec-title::before { content: ""; width: 5px; height: 18px; border-radius: 3px; background: var(--blue); }
-
-  /* ── 한마디 카드 ─────────────────────────── */
-  .oneline h2 { font-size: 26px; font-weight: 800; margin-bottom: 12px; }
-  .oneline p { color: var(--muted); font-size: 16px; }
-  .oneline .flow {
-    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
-    margin: 20px 0 4px;
-  }
-  .flow .step {
-    background: var(--sub-card); border: 1px solid var(--line); border-radius: 12px;
-    padding: 9px 16px; font-size: 14.5px; font-weight: 700;
-  }
-  .flow .arrow { color: var(--blue); font-weight: 800; }
-  .quote {
-    margin-top: 24px; background: var(--blue-soft);
-    border-left: 5px solid var(--blue); border-radius: 0 12px 12px 0;
-    padding: 16px 20px; font-size: 16px; font-weight: 700;
-  }
-  .quote small { display: block; font-size: 13px; font-weight: 700; color: var(--blue); margin-bottom: 4px; }
-
-  /* ── 로드맵 표 ───────────────────────────── */
-  table { border-collapse: collapse; width: 100%; font-size: 15px; }
-  th, td { border-bottom: 1px solid var(--line); padding: 12px 10px; text-align: left; vertical-align: top; }
-  th { background: var(--sub-card); font-weight: 800; font-size: 14px; white-space: nowrap; }
-  td.day, th.day { text-align: center; width: 56px; font-weight: 800; }
-  td.topic { font-weight: 700; white-space: nowrap; }
-  td.key { color: var(--muted); }
-  td a { color: var(--blue); font-weight: 700; text-decoration: none; white-space: nowrap; }
-  td a:hover { text-decoration: underline; }
-  .table-note { margin-top: 16px; font-size: 14.5px; color: var(--muted); }
-  .table-note a { color: var(--blue); font-weight: 700; text-decoration: none; }
-  .table-note a:hover { text-decoration: underline; }
-
-  /* ── Day 카드 ────────────────────────────── */
-  .day-head { display: flex; gap: 18px; align-items: flex-start; margin-bottom: 28px; }
-  .badge-icon {
-    flex: 0 0 auto; width: 62px; height: 62px; border-radius: 16px;
-    background: var(--blue-soft); color: var(--blue);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; font-weight: 800;
-  }
-  .day-title { font-size: 26px; font-weight: 800; line-height: 1.3; }
-  .day-sub { color: var(--muted); font-size: 15px; margin-top: 4px; }
-  .day-body { display: grid; grid-template-columns: 1.15fr 1fr; gap: 40px; }
-
-  .learn ul { list-style: none; }
-  .learn li {
-    position: relative; padding-left: 18px; margin: 10px 0;
-    color: var(--muted); font-size: 15.5px;
-  }
-  .learn li::before {
-    content: ""; position: absolute; left: 0; top: 10px;
-    width: 6px; height: 6px; border-radius: 50%; background: var(--blue);
-  }
-  .learn b { color: var(--ink); }
-  code {
-    font-family: Consolas, "D2Coding", monospace; font-size: 14px;
-    background: var(--sub-card); padding: 1px 6px; border-radius: 5px; color: #e0483d;
-  }
-
-  .practice {
-    background: var(--sub-card); border: 1px solid var(--line);
-    border-radius: 16px; padding: 20px 22px; margin-bottom: 22px;
-  }
-  .practice .tag {
-    display: inline-block; background: #fff; border: 1px solid var(--line);
-    border-radius: 999px; padding: 4px 14px; font-size: 13px; font-weight: 700; margin-bottom: 10px;
-  }
-  .practice p { font-size: 15px; color: var(--muted); }
-  .practice b { color: var(--ink); }
-
-  /* ── 체크리스트 ──────────────────────────── */
-  .check-list { list-style: none; }
-  .check-list li { margin: 8px 0; }
-  .check-list label {
-    display: flex; gap: 10px; align-items: flex-start;
-    font-size: 15px; cursor: pointer; user-select: none;
-    padding: 8px 12px; border-radius: 10px; border: 1px solid transparent;
-    transition: background .15s;
-  }
-  .check-list label:hover { background: var(--sub-card); }
-  .check-list input { display: none; }
-  .box {
-    flex: 0 0 auto; width: 20px; height: 20px; margin-top: 1px;
-    border: 2px solid #cbd3e0; border-radius: 6px; background: #fff;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; color: #fff; font-weight: 800; transition: all .15s;
-  }
-  .check-list input:checked + .box { background: var(--blue); border-color: var(--blue); }
-  .check-list input:checked + .box::after { content: "✓"; }
-  .check-list input:checked ~ .txt { color: var(--muted); text-decoration: line-through; }
-
-  /* ── 졸업 카드 ───────────────────────────── */
-  .grad { --pad: 36px; }
-  .grad h2 { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
-  .grad .lead { color: var(--muted); font-size: 15.5px; margin-bottom: 20px; }
-  .grad .check-list label { font-size: 16px; font-weight: 600; }
-
-  /* ── 다음 단계 ───────────────────────────── */
-  .next {
-    background: #fff; border: 1px solid var(--line); border-radius: 22px;
-    padding: 30px 36px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
-  }
-  .next .arrow-big { font-size: 34px; color: var(--violet); }
-  .next h3 { font-size: 21px; font-weight: 800; margin-bottom: 4px; }
-  .next p { color: var(--muted); font-size: 15px; max-width: 620px; }
-  .next .go { margin-left: auto; }
-  .next .go a {
-    display: inline-block; text-decoration: none; font-weight: 800; font-size: 15px;
-    padding: 12px 24px; border-radius: 14px;
-    background: #efedfd; color: var(--violet); white-space: nowrap;
-  }
-  .next .go a:hover { filter: brightness(.97); }
-
-  footer { margin-top: 34px; text-align: center; color: var(--muted); font-size: 13.5px; }
-
-  @media (max-width: 900px) {
-    body { padding: 0 16px 70px; }
-    .topbar { margin: 0 -16px 32px; padding: 10px 16px; }
-    .card { padding: 26px 22px 30px; }
-    .page-head h1 { font-size: 30px; }
-    .day-body { grid-template-columns: 1fr; gap: 28px; }
-    .day-title { font-size: 22px; }
-    td.topic, td.key { white-space: normal; }
-    .next .go { margin-left: 0; }
-  }
-</style>
-</head>
-<body>
-
+---
+layout: academy-doc
+title: "Part 1 학습문서 — 소개 페이지 · 혼자서 만들고, 세상에 띄우기"
+description: "Part 1 학습 로드맵 — PRD부터 Supabase·MCP, Vercel 배포까지 혼자서 소개 페이지를 만들어 띄우는 Day 1–5 과정."
+family: codecamp
+css: [adoc-codecamp]
+crumb: [[CODECAMP, /academy/codecamp/], [PART 1, /academy/codecamp/part1.html], [학습 로드맵]]
+render_with_liquid: false
+---
 <!-- ═══════════ 진행률 바 ═══════════ -->
 <div class="topbar">
   <div class="topbar-in">
-    <span class="label">학습 진행률</span>
+    <span class="prog-label">학습 진행률</span>
     <span class="bar"><i id="bar-fill"></i></span>
     <span class="count" id="bar-count">0 / 0</span>
-    <button class="reset-btn" id="btn-reset">초기화</button>
+    <button type="button" class="reset-btn" id="btn-reset">초기화</button>
   </div>
 </div>
 
-<div class="wrap">
+<div class="wrap p1">
 
   <!-- ═══════════ 페이지 헤더 ═══════════ -->
   <header class="page-head">
@@ -241,20 +25,20 @@
     <h1>소개 페이지 — 혼자서 만들고, 세상에 띄우기</h1>
     <p><b>PRD → 웹의 구조 → 클로드코드 다루기 → Supabase·MCP → 배포</b> 순서로,
        한 사람이 아이디어를 문서로 정리하고 실제 인터넷 주소가 있는 웹사이트로 배포하기까지의 전 과정을 다룹니다.</p>
-    <p>결과물은 이 폴더의 <b>ending-credits.html</b>(소개 페이지)로 확인할 수 있습니다.</p>
+    <p>결과물은 이 폴더의 <a href="./demo-intro.html"><b>intro.html</b></a>(소개 페이지)로 확인할 수 있습니다.</p>
     <div class="tags">
       <span>Claude Code</span><span>PRD</span><span>Supabase</span>
       <span>MCP</span><span>Git · GitHub</span><span>Vercel</span>
     </div>
     <div class="btns">
-      <a class="btn primary" href="./ending-credits.html">🎬 결과물 페이지 열기</a>
-      <a class="btn ghost" href="../">전체 커리큘럼</a>
-      <a class="btn ghost" href="./">원문 README</a>
+      <a class="btn" href="./demo-intro.html">🎬 결과물 페이지 열기</a>
+      <a class="btn btn--ghost" href="../">전체 커리큘럼</a>
+      <a class="btn btn--ghost" href="./">원문 README</a>
     </div>
   </header>
 
   <!-- ═══════════ Part 1의 한마디 ═══════════ -->
-  <section class="card oneline">
+  <section class="gcard oneline">
     <h2>Part 1의 한마디 — "혼자서 만들 수 있다"</h2>
     <p>직군의 경계가 허물어진 시대에 클로드코드라는 도구를 손에 쥐고, 아래 다섯 걸음으로 나아갑니다.</p>
     <div class="flow">
@@ -271,9 +55,9 @@
   </section>
 
   <!-- ═══════════ 학습 로드맵 ═══════════ -->
-  <section class="card">
+  <section class="gcard">
     <div class="sec-title">학습 로드맵</div>
-    <table>
+    <div class="tbl"><table>
       <thead>
         <tr>
           <th class="day">Day</th><th>주제</th><th>핵심 키워드</th><th>원문</th>
@@ -311,12 +95,12 @@
           <td>book-day05.md</td>
         </tr>
       </tbody>
-    </table>
+    </table></div>
     <p class="table-note">주차 요약본: book_week1.md</p>
   </section>
 
   <!-- ═══════════ Day 1 ═══════════ -->
-  <section class="card" id="day1">
+  <section class="gcard" id="day1">
     <div class="day-head">
       <div class="badge-icon">D1</div>
       <div>
@@ -350,7 +134,7 @@
   </section>
 
   <!-- ═══════════ Day 2 ═══════════ -->
-  <section class="card" id="day2">
+  <section class="gcard" id="day2">
     <div class="day-head">
       <div class="badge-icon">D2</div>
       <div>
@@ -383,7 +167,7 @@
   </section>
 
   <!-- ═══════════ Day 3 ═══════════ -->
-  <section class="card" id="day3">
+  <section class="gcard" id="day3">
     <div class="day-head">
       <div class="badge-icon">D3</div>
       <div>
@@ -417,7 +201,7 @@
   </section>
 
   <!-- ═══════════ Day 4 ═══════════ -->
-  <section class="card" id="day4">
+  <section class="gcard" id="day4">
     <div class="day-head">
       <div class="badge-icon">D4</div>
       <div>
@@ -450,7 +234,7 @@
   </section>
 
   <!-- ═══════════ Day 5 ═══════════ -->
-  <section class="card" id="day5">
+  <section class="gcard" id="day5">
     <div class="day-head">
       <div class="badge-icon">D5</div>
       <div>
@@ -485,7 +269,7 @@
   </section>
 
   <!-- ═══════════ 졸업 체크리스트 ═══════════ -->
-  <section class="card grad">
+  <section class="gcard grad">
     <h2>🎓 Part 1 졸업 체크리스트</h2>
     <p class="lead">네 가지가 모두 켜지면 Part 1은 끝입니다.</p>
     <ul class="check-list">
@@ -551,5 +335,3 @@
   render();
 })();
 </script>
-</body>
-</html>

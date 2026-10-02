@@ -1,0 +1,27 @@
+---
+layout: main
+css: [academy-doc]
+---
+{%- comment -%} 체험하기 뷰어 — 데모 원본(page.src)은 자체 디자인을 유지한 채 iframe으로, 바깥은 사이트 셸(내비·플레이어 유지) {%- endcomment -%}
+<div class="container adoc">
+  <ol class="crumb">
+    <li><a href="/#academy">ACADEMY</a></li>
+    {%- for c in page.crumb %}
+    <li{% if forloop.last %} aria-current="page"{% endif %}>{% if c[1] and forloop.last == false %}<a href="{{ c[1] }}">{{ c[0] }}</a>{% else %}{{ c[0] }}{% endif %}</li>
+    {%- endfor %}
+  </ol>
+  <header class="demo__head">
+    <div>
+      <p class="label">{{ page.label | default: "LIVE DEMO" }}</p>
+      <h1 class="demo__title">{{ page.title }}</h1>
+      {%- if page.description %}<p class="demo__desc">{{ page.description }}</p>{% endif %}
+    </div>
+    <div class="demo__actions">
+      {%- for a in page.links %}<a class="btn btn--sm btn--ghost" href="{{ a[1] }}">{{ a[0] }}</a>{% endfor %}
+      <a class="btn btn--sm" href="{{ page.src }}" target="_blank" rel="noopener">새 창으로 열기 ↗</a>
+    </div>
+  </header>
+  <div class="demo__frame" data-src="{{ page.src }}">
+    <iframe src="{{ page.src }}" title="{{ page.title }}" loading="lazy"></iframe>
+  </div>
+</div>

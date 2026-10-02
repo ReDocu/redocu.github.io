@@ -1,0 +1,43 @@
+/* 학원 문서 공통 셸 — _layouts/academy-doc.html. 문서군별 본문 스타일은 adoc-<학원>.css 에서 .adoc--<학원> 아래로 스코프 */
+.adoc { padding-block: 32px 120px; } /* 하단 120px: 고정 플레이어에 본문이 가리지 않게 */
+.adoc-progress { position: fixed; top: var(--header-height); left: 0; right: 0; height: 2px; z-index: 49; pointer-events: none; }
+.adoc-progress span {
+  display: block; height: 100%; background: var(--accent); box-shadow: 0 0 8px var(--accent);
+  transform: scaleX(0); transform-origin: left;
+}
+
+/* 문서 본문 공통 타이포 — 문서군 CSS가 덮어쓴다 */
+.adoc :where(h1, h2, h3, h4) { color: var(--text); line-height: 1.3; }
+.adoc :where(p, li) { color: color-mix(in srgb, var(--text) 86%, var(--muted)); }
+.adoc :where(a:not([class])) { color: var(--accent); }
+.adoc :where(a:not([class]):hover) { text-decoration: underline; }
+.adoc :where(code, pre, kbd) { font-family: var(--f-mono); font-size: 0.9em; }
+.adoc :where(:not(pre) > code) { padding: 1px 6px; background: var(--accent-soft); border: 1px solid var(--line); border-radius: 2px; color: var(--accent); }
+.adoc :where(pre) { overflow-x: auto; padding: 16px 18px; background: var(--surface); border: 1px solid var(--line); border-left: 2px solid var(--line-accent); border-radius: 2px; line-height: 1.6; }
+.adoc :where(table) { width: 100%; border-collapse: collapse; font-size: 14px; }
+.adoc :where(th, td) { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.adoc :where(th) { color: var(--accent); font-family: var(--f-display); font-size: 11px; font-weight: 400; letter-spacing: 2px; }
+.adoc :where(blockquote) { margin: 0; padding: 12px 18px; border-left: 2px solid var(--accent); background: var(--accent-soft); }
+
+/* 코드 하이라이트 토큰 (문서들이 공통으로 쓰는 .kw .st .nm .cm .fn) */
+.adoc .kw { color: #C792EA; }
+.adoc .st { color: #9EE6A0; }
+.adoc .nm { color: var(--warn); }
+.adoc .cm { color: var(--muted); font-style: italic; }
+.adoc .fn { color: var(--accent); }
+
+/* 체험하기(데모) 뷰어 — _layouts/academy-demo.html */
+.demo__head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.demo__title { margin: 6px 0 0; font-family: var(--f-display); font-size: clamp(22px, 3vw, 32px); letter-spacing: 2px; }
+.demo__desc { margin: 8px 0 0; color: var(--muted); max-width: 720px; }
+.demo__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.demo__frame {
+  position: relative; border: 1px solid var(--line-accent); border-radius: 2px; background: var(--surface);
+  box-shadow: 0 0 0 1px var(--bg), 0 0 40px color-mix(in srgb, var(--accent) 8%, transparent);
+}
+.demo__frame::before {
+  content: attr(data-src); display: block; padding: 8px 14px; border-bottom: 1px solid var(--line);
+  color: var(--muted); font-family: var(--f-mono); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.demo__frame iframe { display: block; width: 100%; height: calc(100vh - var(--header-height) - 130px); min-height: 560px; /* 130px = 주소바 + 고정 플레이어 여유: 프레임을 헤더 밑에 맞추면 플레이어 위에서 끝난다 */ border: 0; background: #fff; }
+@media (max-width: 720px) { .demo__frame iframe { min-height: 70vh; } }

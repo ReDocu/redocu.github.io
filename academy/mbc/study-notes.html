@@ -1,63 +1,13 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MBC컴퓨터아카데미 — 전체 교육 문서</title>
-<link rel="stylesheet" href="study-note.css">
-<style>
-  :root { --accent: #38bdf8; }
-  html { scroll-padding-top: 70px; }
-
-  /* ── 진행바 ── */
-  #progress {
-    position: fixed; top: 0; left: 0; height: 3px; width: 0%;
-    background: linear-gradient(90deg, #38bdf8, #10b981, #8b5cf6, #6366f1, #f59e0b);
-    z-index: 100; transition: width .1s linear;
-  }
-
-  /* ── 사이드 목차 레이아웃 ── */
-  .layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); max-width: 1180px; margin: 0 auto; }
-  .layout > main { max-width: none; }
-  aside.toc-side {
-    position: sticky; top: 0; align-self: start; height: 100vh; overflow-y: auto;
-    padding: 24px 18px 40px; border-right: 1px solid var(--line);
-  }
-  .toc-side .brand { font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em; color: var(--tx-mute); margin-bottom: 4px; }
-  .toc-side .brand b { color: var(--accent); }
-  .toc-side h2 { font-size: 16px; font-weight: 800; margin-bottom: 18px; letter-spacing: -.01em; }
-  .toc-group { font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--tx-mute); font-weight: 700; margin: 18px 0 6px; }
-  .toc a {
-    display: block; color: var(--tx-dim); text-decoration: none; font-size: 13px;
-    padding: 5px 11px; border-radius: 7px; border-left: 2px solid transparent; transition: all .15s;
-  }
-  .toc a:hover { color: var(--tx); background: var(--bg-soft); }
-  .toc a.active { color: var(--tx); background: var(--bg-soft); border-left-color: var(--ch, var(--accent)); font-weight: 600; }
-  .toc a .num { font-family: var(--mono); font-size: 11px; color: var(--ch, var(--tx-mute)); margin-right: 7px; }
-
-  /* ── 챕터 공통 ── */
-  .chapter { border-top: 1px solid var(--line); }
-  .goal-box { background: var(--accent-soft); border: 1px solid var(--accent-line); border-radius: 12px; padding: 16px 20px; margin-bottom: 22px; }
-  .goal-box h4 { font-size: 13px; font-weight: 800; color: var(--accent); letter-spacing: .04em; margin-bottom: 8px; }
-  .goal-box ul { list-style: none; display: grid; gap: 5px; }
-  .goal-box li { font-size: 13.5px; color: var(--tx-dim); padding-left: 18px; position: relative; }
-  .goal-box li::before { content: "🎯"; position: absolute; left: 0; font-size: 10.5px; top: 3px; }
-  h3.sub { font-size: 17px; font-weight: 800; margin: 34px 0 12px; display: flex; align-items: center; gap: 9px; letter-spacing: -.01em; }
-  h3.sub .m { font-family: var(--mono); font-size: 12px; color: var(--accent); }
-  .prose { font-size: 14.5px; color: var(--tx-dim); max-width: 740px; margin-bottom: 12px; }
-  .prose b { color: var(--tx); }
-
-  @media (max-width: 960px) {
-    .layout { grid-template-columns: 1fr; }
-    aside.toc-side { display: none; }
-  }
-</style>
-</head>
-<body>
-<div id="progress"></div>
-
-<div class="layout">
-  <!-- ───────── 사이드 목차 ───────── -->
+---
+layout: academy-doc
+title: "MBC컴퓨터아카데미 — 전체 교육 문서"
+description: "파이썬 첫 문법부터 실시간 객체 탐지 서비스 배포까지, 8개월 과정을 교재 형태로 정리한 문서."
+family: mbc
+css: [adoc-mbc]
+crumb: [[MBC, /academy/mbc/], ["전체 교육 문서"]]
+render_with_liquid: false
+---
+<div class="mlayout">
   <aside class="toc-side">
     <div class="brand">MBC <b>Computer</b> Academy</div>
     <h2>전체 교육 문서</h2>
@@ -67,18 +17,16 @@
       <a href="#ch1" style="--ch:#38bdf8"><span class="num">01</span>Python 기초</a>
       <a href="#ch2" style="--ch:#10b981"><span class="num">02</span>데이터 분석</a>
       <div class="toc-group">2부 · 인공지능</div>
-      <a href="#ch3" style="--ch:#8b5cf6"><span class="num">03</span>지도 학습 · 딥러닝</a>
-      <a href="#ch4" style="--ch:#6366f1"><span class="num">04</span>머신러닝 예측 모델</a>
+      <a href="#ch3" style="--ch:#a78bfa"><span class="num">03</span>지도 학습 · 딥러닝</a>
+      <a href="#ch4" style="--ch:#818cf8"><span class="num">04</span>머신러닝 예측 모델</a>
       <div class="toc-group">3부 · 실전</div>
       <a href="#ch5" style="--ch:#f59e0b"><span class="num">05</span>Object Detection</a>
       <a href="#ch6" style="--ch:#f59e0b"><span class="num">06</span>모델 서비스화</a>
       <a href="#outro" style="--ch:#38bdf8"><span class="num">07</span>마무리</a>
     </nav>
-    <button id="themeBtnSide" data-theme-toggle style="margin-top:24px;width:100%;background:var(--bg-card);border:1px solid var(--line);color:var(--tx-dim);border-radius:8px;padding:8px;font-size:12.5px;font-family:inherit;cursor:pointer;">◐ 라이트 / 다크 전환</button>
   </aside>
 
-  <!-- ───────── 본문 ───────── -->
-  <main>
+  <div class="mdoc">
     <!-- ── 히어로 ── -->
     <header class="hero">
       <p class="eyebrow">MBC컴퓨터아카데미 · 비전 기반 AI 모델 생성 커리큘럼</p>
@@ -109,12 +57,12 @@
         그래서 커리큘럼은 도구(Python) → 재료(데이터) → 두뇌(모델) → 재료 만들기(라벨링) → 완성품(서비스) 순서로 쌓아 올라간다.
       </p>
       <div class="pipeline">
-        <div class="pipe" style="--accent:#38bdf8"><div class="t"><span class="idx">CH1</span>Python</div><p>게임을 만들며 프로그래밍 기초 체득</p></div>
-        <div class="pipe" style="--accent:#10b981"><div class="t"><span class="idx">CH2</span>데이터 분석</div><p>Pandas/NumPy로 데이터를 다루는 법</p></div>
-        <div class="pipe" style="--accent:#8b5cf6"><div class="t"><span class="idx">CH3</span>딥러닝</div><p>CNN으로 이미지를 분류하는 법</p></div>
-        <div class="pipe" style="--accent:#6366f1"><div class="t"><span class="idx">CH4</span>머신러닝</div><p>수치를 예측하는 모델과 평가·튜닝</p></div>
-        <div class="pipe" style="--accent:#f59e0b"><div class="t"><span class="idx">CH5</span>라벨링</div><p>Object Detection 데이터 만들기</p></div>
-        <div class="pipe" style="--accent:#f59e0b"><div class="t"><span class="idx">CH6</span>서비스화</div><p>모델을 웹 서비스로 배포하기</p></div>
+        <div class="pipe" style="--ch:#38bdf8"><div class="t"><span class="idx">CH1</span>Python</div><p>게임을 만들며 프로그래밍 기초 체득</p></div>
+        <div class="pipe" style="--ch:#10b981"><div class="t"><span class="idx">CH2</span>데이터 분석</div><p>Pandas/NumPy로 데이터를 다루는 법</p></div>
+        <div class="pipe" style="--ch:#a78bfa"><div class="t"><span class="idx">CH3</span>딥러닝</div><p>CNN으로 이미지를 분류하는 법</p></div>
+        <div class="pipe" style="--ch:#818cf8"><div class="t"><span class="idx">CH4</span>머신러닝</div><p>수치를 예측하는 모델과 평가·튜닝</p></div>
+        <div class="pipe" style="--ch:#f59e0b"><div class="t"><span class="idx">CH5</span>라벨링</div><p>Object Detection 데이터 만들기</p></div>
+        <div class="pipe" style="--ch:#f59e0b"><div class="t"><span class="idx">CH6</span>서비스화</div><p>모델을 웹 서비스로 배포하기</p></div>
       </div>
       <h3 class="sub"><span class="m">SETUP</span>학습 환경</h3>
       <div class="tbl">
@@ -131,7 +79,7 @@
     </section>
 
     <!-- ══ CH1 Python ══ -->
-    <section id="ch1" class="chapter" style="--accent:#38bdf8">
+    <section id="ch1" class="chapter" style="--ch:#38bdf8">
       <div class="sec-head"><span class="n">CH.1</span><h2>Python 기초 — 게임으로 배우는 프로그래밍</h2></div>
       <div class="goal-box">
         <h4>학습 목표</h4>
@@ -212,7 +160,7 @@ screen.blit(images[<span class="st">"player"</span>], (x, y))       <span class=
     </section>
 
     <!-- ══ CH2 데이터 분석 ══ -->
-    <section id="ch2" class="chapter" style="--accent:#10b981">
+    <section id="ch2" class="chapter" style="--ch:#10b981">
       <div class="sec-head"><span class="n">CH.2</span><h2>데이터 분석 — Pandas / NumPy</h2></div>
       <div class="goal-box">
         <h4>학습 목표</h4>
@@ -291,7 +239,7 @@ top5 = summary.sort_values(<span class="st">"score"</span>, ascending=<span clas
     </section>
 
     <!-- ══ CH3 지도 학습 ══ -->
-    <section id="ch3" class="chapter" style="--accent:#8b5cf6">
+    <section id="ch3" class="chapter" style="--ch:#a78bfa">
       <div class="sec-head"><span class="n">CH.3</span><h2>지도 학습 · 딥러닝 — 이미지 분류</h2></div>
       <div class="goal-box">
         <h4>학습 목표</h4>
@@ -361,7 +309,7 @@ plt.plot(history.history[<span class="st">"val_accuracy"</span>], label=<span cl
     </section>
 
     <!-- ══ CH4 머신러닝 예측 모델 ══ -->
-    <section id="ch4" class="chapter" style="--accent:#6366f1">
+    <section id="ch4" class="chapter" style="--ch:#818cf8">
       <div class="sec-head"><span class="n">CH.4</span><h2>머신러닝 예측 모델 — EDA부터 튜닝까지</h2></div>
       <div class="goal-box">
         <h4>학습 목표</h4>
@@ -442,7 +390,7 @@ print(grid.best_params_)         <span class="cm"># 최적 조합 확인</span><
     </section>
 
     <!-- ══ CH5 Object Detection ══ -->
-    <section id="ch5" class="chapter" style="--accent:#f59e0b">
+    <section id="ch5" class="chapter" style="--ch:#f59e0b">
       <div class="sec-head"><span class="n">CH.5</span><h2>Object Detection — 데이터 라벨링</h2></div>
       <div class="goal-box">
         <h4>학습 목표</h4>
@@ -496,7 +444,7 @@ print(grid.best_params_)         <span class="cm"># 최적 조합 확인</span><
     </section>
 
     <!-- ══ CH6 모델 서비스화 ══ -->
-    <section id="ch6" class="chapter" style="--accent:#f59e0b">
+    <section id="ch6" class="chapter" style="--ch:#f59e0b">
       <div class="sec-head"><span class="n">CH.6</span><h2>모델 서비스화 — Flask와 실시간 CCTV</h2></div>
       <div class="goal-box">
         <h4>학습 목표</h4>
@@ -565,7 +513,7 @@ app = Flask(__name__)
     </section>
 
     <!-- ══ 마무리 ══ -->
-    <section id="outro" class="chapter" style="--accent:#38bdf8">
+    <section id="outro" class="chapter" style="--ch:#38bdf8">
       <div class="sec-head"><span class="n">07</span><h2>마무리 — 챕터와 프로젝트 한눈에</h2></div>
       <div class="tbl">
         <table>
@@ -593,32 +541,13 @@ app = Flask(__name__)
       <span>MBC컴퓨터아카데미 · 전체 교육 문서</span>
       <span><a href="/academy/mbc/">과정 상세 페이지 ↗</a></span>
     </footer>
-  </main>
+  </div>
 </div>
 
 <script>
 (function () {
-  var root = document.documentElement;
-  var saved = localStorage.getItem('mbc-doc-theme');
-  if (saved) root.dataset.theme = saved;
-  else if (matchMedia('(prefers-color-scheme: dark)').matches) root.dataset.theme = 'dark';
-  document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var next = root.dataset.theme === 'dark' ? 'light' : 'dark';
-      root.dataset.theme = next;
-      localStorage.setItem('mbc-doc-theme', next);
-    });
-  });
-
-  // 읽기 진행바
-  var bar = document.getElementById('progress');
-  addEventListener('scroll', function () {
-    var h = document.documentElement;
-    bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
-  }, { passive: true });
-
   // 목차 현재 위치 하이라이트
-  var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  var links = Array.prototype.slice.call(document.querySelectorAll('.adoc--mbc .toc a'));
   var sections = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
   var observer = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
@@ -632,5 +561,3 @@ app = Flask(__name__)
   sections.forEach(function (s) { if (s) observer.observe(s); });
 })();
 </script>
-</body>
-</html>

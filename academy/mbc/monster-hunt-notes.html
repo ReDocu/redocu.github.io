@@ -1,21 +1,14 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>몬스터를 찾아서 — 학습문서</title>
-<link rel="stylesheet" href="study-note.css">
-<style>:root { --accent: #38bdf8; }</style>
-</head>
-<body>
-
-<header class="topbar">
-  <a class="back" href="/academy/mbc/">← MBC아카데미</a>
-  <span class="doc-id">STUDY NOTE · 01 / 05</span>
-  <button data-theme-toggle>◐ 테마</button>
-</header>
-
-<main>
+---
+layout: academy-doc
+title: "몬스터를 찾아서 — 학습문서"
+description: "pygame으로 만든 종스크롤 슈팅 게임 팀 프로젝트의 학습 노트."
+family: mbc
+css: [adoc-mbc]
+crumb: [[MBC, /academy/mbc/], ["몬스터를 찾아서"]]
+render_with_liquid: false
+---
+<div class="mdoc" style="--ch:#38bdf8">
+  <p class="doc-id">STUDY NOTE · 01 / 05</p>
   <!-- ── 히어로 ── -->
   <header class="hero">
     <p class="eyebrow">MBC컴퓨터아카데미 · PYTHON GAME PROGRAMMING</p>
@@ -173,22 +166,4 @@ images = {}                          <span class="cm"># {"player": Surface, "mon
     <span>MBC컴퓨터아카데미 · 학습문서 01</span>
     <span><a href="/academy/mbc/monster-hunt.pdf" target="_blank" rel="noopener">프로젝트 PDF ↗</a></span>
   </footer>
-</main>
-
-<script>
-(function () {
-  var root = document.documentElement;
-  var saved = localStorage.getItem('mbc-doc-theme');
-  if (saved) root.dataset.theme = saved;
-  else if (matchMedia('(prefers-color-scheme: dark)').matches) root.dataset.theme = 'dark';
-  document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var next = root.dataset.theme === 'dark' ? 'light' : 'dark';
-      root.dataset.theme = next;
-      localStorage.setItem('mbc-doc-theme', next);
-    });
-  });
-})();
-</script>
-</body>
-</html>
+</div>

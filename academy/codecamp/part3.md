@@ -10,8 +10,8 @@ sub: "나 혼자 MVP 만들기 — 기획·디자인 시스템·데이터·외�
 days: "Day 17 ~ 29 · 5부 구성"
 resources:
   - ["가이드 HTML", "/academy/codecamp/part3-food-community/03-part3-guide.html"]
-  - ["결과물 — 맛집커뮤니티", "/academy/codecamp/part3-food-community/03-food-community.html"]
-  - ["디자인 시스템", "/academy/codecamp/part3-food-community/03-design-system.html"]
+  - ["결과물 — 맛집커뮤니티", "/academy/codecamp/part3-food-community/demo-food-community.html"]
+  - ["디자인 시스템", "/academy/codecamp/part3-food-community/demo-design-system.html"]
 next: ["다 만든 제품에 결제를 얹다", "/academy/codecamp/part4.html"]
 ---
 

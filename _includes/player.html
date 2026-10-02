@@ -1,0 +1,45 @@
+{%- comment -%} 배경음악 플레이어 (PRD 6장, home.pen Audio/*). 목록: _data/playlist.yml · 동작: assets/js/sound-player.js · 스타일: assets/css/player.css {%- endcomment -%}
+{%- if site.data.playlist.size > 0 -%}
+<div class="player" id="player" hidden>
+  <section class="player__panel" id="playerPanel" aria-label="배경음악" hidden>
+    <span class="player__handle" aria-hidden="true"></span>
+    <div class="player__head">
+      <span class="player__mod"><span class="player__led" aria-hidden="true"></span>AUDIO.MODULE</span>
+      <button class="player__icon" type="button" data-act="close" aria-label="패널 닫기"><svg viewBox="0 0 16 16"><path d="m4 4 8 8m0-8-8 8"/></svg></button>
+    </div>
+    <div class="player__now">
+      <p class="player__group" data-f="group"></p>
+      <p class="player__title" data-f="title"></p>
+      <p class="player__desc" data-f="desc"></p>
+    </div>
+    <div class="player__progress">
+      <input class="player__range" type="range" min="0" max="1000" value="0" step="1" data-f="seek" aria-label="재생 위치" />
+      <div class="player__time"><span data-f="cur">00:00</span><span data-f="dur">00:00</span></div>
+    </div>
+    <div class="player__controls">
+      <div class="player__transport">
+        <button class="player__icon" type="button" data-act="prev" aria-label="이전 곡"><svg viewBox="0 0 16 16"><path d="M3.5 3v10M13 3.5v9L6 8z"/></svg></button>
+        <button class="player__icon player__icon--lg" type="button" data-act="toggle" aria-label="재생"><svg class="i-play" viewBox="0 0 16 16"><path d="M4.5 3v10L13 8z"/></svg><svg class="i-pause" viewBox="0 0 16 16"><path d="M5 3v10m6-10v10"/></svg></button>
+        <button class="player__icon" type="button" data-act="next" aria-label="다음 곡"><svg viewBox="0 0 16 16"><path d="M12.5 3v10M3 3.5v9L10 8z"/></svg></button>
+      </div>
+      <div class="player__vol">
+        <button class="player__icon" type="button" data-act="mute" aria-label="음소거"><svg class="i-vol" viewBox="0 0 16 16"><path d="M2 6h2.5L8 3v10L4.5 10H2zM10.5 5.5a3.5 3.5 0 0 1 0 5M12 3.5a6 6 0 0 1 0 9"/></svg><svg class="i-mute" viewBox="0 0 16 16"><path d="M2 6h2.5L8 3v10L4.5 10H2zM10.5 6l4 4m0-4-4 4"/></svg></button>
+        <input class="player__range player__range--vol" type="range" min="0" max="100" value="40" step="1" data-f="vol" aria-label="음량" />
+        <span class="player__vol-val" data-f="volv">040</span>
+      </div>
+    </div>
+    <ol class="player__list" aria-label="곡 목록"></ol>
+  </section>
+  <div class="player__pill">
+    <span class="player__led" aria-hidden="true"></span>
+    <span class="player__mod" aria-hidden="true">AUDIO</span>
+    <button class="player__icon" type="button" data-act="toggle" aria-label="재생"><svg class="i-play" viewBox="0 0 16 16"><path d="M4.5 3v10L13 8z"/></svg><svg class="i-pause" viewBox="0 0 16 16"><path d="M5 3v10m6-10v10"/></svg></button>
+    <button class="player__name" type="button" data-act="panel" data-f="title" aria-expanded="false" aria-controls="playerPanel" title="곡 정보 열기"></button>
+    <span class="player__level" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    <button class="player__icon" type="button" data-act="mute" aria-label="음소거"><svg class="i-vol" viewBox="0 0 16 16"><path d="M2 6h2.5L8 3v10L4.5 10H2zM10.5 5.5a3.5 3.5 0 0 1 0 5M12 3.5a6 6 0 0 1 0 9"/></svg><svg class="i-mute" viewBox="0 0 16 16"><path d="M2 6h2.5L8 3v10L4.5 10H2zM10.5 6l4 4m0-4-4 4"/></svg></button>
+    <button class="player__icon" type="button" data-act="next" aria-label="다음 곡"><svg viewBox="0 0 16 16"><path d="M12.5 3v10M3 3.5v9L10 8z"/></svg></button>
+  </div>
+</div>
+<script type="application/json" id="playlistData">{{ site.data.playlist | jsonify }}</script>
+<script src="/assets/js/sound-player.js"></script>
+{%- endif -%}

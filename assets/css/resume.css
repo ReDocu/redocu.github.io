@@ -1,0 +1,96 @@
+/* 이력서 (/files/resume.html) — 화면은 Sci-Fi 토큰, 인쇄는 흰 바탕 흑백 A4 (PRD_NEXT 4.6) */
+.print-bar { border-bottom: 1px solid var(--line); background: var(--surface); }
+.print-bar__inner { display: flex; align-items: center; gap: 24px; padding-block: 14px; }
+.print-bar__hint { flex: 1; margin: 0; color: var(--muted); font-size: 13px; }
+
+.resume { --r-accent: var(--accent); --r-ink: var(--text); --r-muted: var(--muted); --r-line: var(--line); padding: 48px var(--gutter) 80px; display: grid; gap: 24px; }
+.resume .page {
+  position: relative; width: 100%; max-width: 980px; margin-inline: auto; padding: 48px 56px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 2px; color: var(--r-ink);
+}
+.resume .page::before { content: ""; position: absolute; inset: 0 0 auto; height: 2px; background: var(--r-accent); transform-origin: left; animation: rule-draw 1.2s var(--ease) both; }
+.resume a { color: var(--r-accent); }
+
+.resume .masthead { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--line-accent); }
+.resume .id-name { margin: 0; font-size: 40px; font-weight: 700; line-height: 1.1; letter-spacing: 2px; }
+.resume .id-name span { margin-left: 10px; color: var(--r-muted); font-family: var(--f-display); font-size: 15px; font-weight: 400; letter-spacing: 3px; text-transform: uppercase; }
+.resume .id-role { margin: 8px 0 0; color: var(--r-accent); font-size: 16px; font-weight: 700; }
+.resume .id-sub { margin: 4px 0 0; color: var(--r-muted); font-family: var(--f-mono); font-size: 12px; }
+.resume .id-contact { color: var(--r-muted); font-family: var(--f-mono); font-size: 12px; line-height: 1.8; text-align: right; white-space: nowrap; }
+.resume .id-contact b { font-weight: 400; }
+
+.resume .summary { margin: 20px 0 0; padding: 16px 20px; border-left: 2px solid var(--r-accent); background: var(--accent-soft); color: var(--r-ink); font-size: 15px; line-height: 1.8; }
+.resume .summary strong { color: var(--r-accent); }
+
+.resume section { margin-top: 36px; }
+.resume h2.sec { display: flex; align-items: baseline; gap: 12px; margin: 0 0 16px; padding-bottom: 10px; border-bottom: 1px solid var(--r-line); font-size: 20px; font-weight: 700; }
+.resume h2.sec::before { content: "//"; color: var(--r-accent); font-family: var(--f-mono); font-size: 14px; }
+.resume h2.sec small { color: var(--r-accent); font-family: var(--f-display); font-size: 11px; font-weight: 400; letter-spacing: 3px; text-transform: uppercase; }
+
+.resume .skills { display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; }
+.resume .skill-row { display: grid; grid-template-columns: 110px 1fr; gap: 12px; margin: 0; padding: 10px 0; border-bottom: 1px solid var(--r-line); font-size: 14px; }
+.resume .skill-row dt { color: var(--r-muted); font-family: var(--f-display); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; padding-top: 3px; }
+.resume .skill-row dd { margin: 0; }
+
+.resume .item { position: relative; margin-bottom: 20px; padding-left: 20px; border-left: 1px solid var(--r-line); break-inside: avoid; }
+.resume .item::before { content: ""; position: absolute; left: -4px; top: 8px; width: 7px; height: 7px; border-radius: 50%; background: var(--r-accent); }
+.resume .item:last-child { margin-bottom: 0; }
+.resume .item-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+.resume .item-title { margin: 0; font-size: 16px; font-weight: 700; }
+.resume .item-org { color: var(--r-accent); }
+.resume .item-meta { color: var(--r-muted); font-family: var(--f-mono); font-size: 12px; white-space: nowrap; }
+.resume .item ul { margin: 6px 0 0; padding-left: 18px; color: var(--r-muted); font-size: 14px; }
+.resume .item li { margin: 3px 0; }
+.resume .item li b { color: var(--r-ink); }
+.resume .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.resume .tag { padding: 2px 8px; border: 1px solid var(--line-accent); border-radius: 2px; color: var(--r-accent); font-family: var(--f-body); font-size: 11px; }
+.resume .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.resume .mini { display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; }
+.resume .mini .m { padding: 10px 0; border-bottom: 1px solid var(--r-line); font-size: 14px; }
+.resume .mini .m span { color: var(--r-muted); }
+.resume .foot { display: flex; justify-content: space-between; gap: 16px; margin-top: 40px; padding-top: 12px; border-top: 1px solid var(--r-line); color: var(--r-muted); font-family: var(--f-mono); font-size: 11px; }
+
+@media (max-width: 720px) {
+  .print-bar__inner { flex-wrap: wrap; gap: 8px 16px; }
+  .print-bar__hint { flex-basis: 100%; order: 3; font-size: 12px; }
+  .print-bar .btn { margin-left: auto; padding: 8px 14px; }
+  .resume { padding-block: 24px 56px; }
+  .resume .page { padding: 28px 18px; }
+  .resume .masthead { flex-direction: column; align-items: flex-start; }
+  .resume .id-name { font-size: 30px; }
+  .resume .id-name span { display: block; margin: 6px 0 0; font-size: 12px; }
+  .resume .id-contact { text-align: left; white-space: normal; overflow-wrap: anywhere; }
+  .resume .skills, .resume .cols, .resume .mini { grid-template-columns: 1fr; }
+  .resume .skill-row { grid-template-columns: 1fr; gap: 2px; }
+  .resume .item-head { flex-direction: column; gap: 2px; }
+  .resume .tag { overflow-wrap: anywhere; }
+  .resume .foot { flex-direction: column; }
+}
+
+/* ── 인쇄: 흰 바탕 흑백 A4 ── */
+@page { size: A4; margin: 12mm; }
+@media print {
+  .site-header, .site-footer, .player, .sound-player, .no-print, .skip-link { display: none !important; }
+  html, body { background: #fff !important; color: #000; font-size: 10pt; }
+  .js [data-reveal] { opacity: 1 !important; transform: none !important; clip-path: none !important; }
+  .resume { --r-accent: #000; --r-ink: #000; --r-muted: #444; --r-line: #ccc; padding: 0; display: block; }
+  .resume .page { max-width: none; padding: 0; border: 0; background: #fff; }
+  .resume .page + .page { break-before: page; }
+  .resume .page::before { display: none; }
+  .resume .masthead { border-color: #000; padding-bottom: 8px; }
+  .resume .id-name { font-size: 24pt; }
+  .resume .id-role { font-size: 11pt; }
+  .resume .summary { margin-top: 10px; padding: 6px 10px; background: none; border-color: #000; font-size: 9.8pt; line-height: 1.6; }
+  .resume section { margin-top: 14px; }
+  .resume h2.sec { margin-bottom: 6px; padding-bottom: 4px; font-size: 12pt; }
+  .resume h2.sec small, .resume .skill-row dt { color: #444; }
+  .resume .skill-row, .resume .mini .m { padding: 3px 0; font-size: 9.3pt; }
+  .resume .item { margin-bottom: 9px; padding-left: 12px; }
+  .resume .item::before { background: #000; }
+  .resume .item-title { font-size: 10.5pt; }
+  .resume .item ul { font-size: 9.4pt; }
+  .resume .item li { margin: 1px 0; }
+  .resume .tag { border-color: #999; font-size: 8pt; }
+  .resume .foot { margin-top: 16px; font-size: 8pt; }
+  .resume a { color: #000; text-decoration: none; }
+}

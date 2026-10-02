@@ -1,386 +1,198 @@
 ---
-layout : main
-title : main
+layout: main
+intro: true
+css: [home]
+js: [home]
+description: 게임 클라이언트에서 비전 AI, 웹 서비스까지 — 콘텐츠·메타버스 개발자 DOCU의 포트폴리오
+# 학습 위키 그리드 (PRD 4.6). 문서 수는 수동 입력 — 과정 추가 시 SITE_SPEC 7장 절차에 포함
+courses:
+  - { slug: game-to-unity,  name: 게임 개발 24주,      docs: 125 }
+  - { slug: data-to-vision, name: 비전 AI 36주,        docs: 191 }
+  - { slug: git,            name: Git 15주,            docs: 35 }
+  - { slug: mlops,          name: MLOps 32주,          docs: 174 }
+  - { slug: aws,            name: AWS 16주,            docs: 44 }
+  - { slug: info-engineer,  name: 정보처리기사 8주,    docs: 38 }
+# 학원 교육 카드 (PRD 4.7) — _includes/card.html 형식
+academies:
+  - title: 게임 클라이언트/콘텐츠 개발 커리큘럼
+    url: /academy/kyungil/
+    status: complete
+    meta: 디벨로퍼로켓 · 2019.09 – 2020.03
+    desc: C/C++ 콘솔 → WinAPI 프레임워크 → Unity 엔진 순서로 게임 클라이언트 개발을 배우고, 단계마다 슈팅·SRPG·턴제 전략 게임을 직접 제작했습니다.
+    tags: [C/C++, WinAPI, Unity, 게임 개발]
+    thumb: /assets/thumbs/academy-kyungil.png
+    actions:
+      - { label: 상세문서, url: /academy/kyungil/ }
+      - { label: GitHub, url: "https://github.com/ReDocu/KYGameAcademy" }
+      - { label: 학습문서, url: /academy/kyungil/study-notes.html }
+  - title: 비전 기반 AI 모델 생성 커리큘럼
+    url: /academy/mbc/
+    status: complete
+    meta: MBC컴퓨터아카데미 · 2023.09 – 2024.05
+    desc: Python 게임 제작에서 시작해 데이터 분석과 CNN 딥러닝, Object Detection 라벨링을 거쳐, 학습시킨 모델을 실시간 CCTV 웹 서비스로 배포했습니다.
+    tags: [Python, Pandas, TensorFlow, Flask]
+    thumb: /assets/thumbs/academy-mbc.png
+    actions:
+      - { label: 상세문서, url: /academy/mbc/ }
+      - { label: 학습문서, url: /academy/mbc/study-notes.html }
+  - title: 웹 기반 바이브 코딩 커리큘럼
+    url: /academy/codecamp/
+    status: progress
+    meta: 코드캠프(딩코) · 2026.06 – 2026.09
+    desc: Claude Code 중심의 바이브 코딩 과정. PRD 문서 작성부터 Supabase·Vercel 배포까지 익히며 소개 페이지와 미니 노션 웹서비스를 제작하고 있습니다.
+    tags: [Claude Code, Supabase, Vercel]
+    thumb: /assets/thumbs/academy-codecamp.png
+    actions:
+      - { label: 체험하기, url: /academy/codecamp/ }
+      - { label: GitHub, url: "https://github.com/ReDocu/Sesac_CC_ClaudeCode" }
 ---
+{%- assign software = site.data.projects | where: "kind", "software" | sort: "order" -%}
+{%- assign games = site.data.projects | where: "kind", "game" | sort: "order" -%}
 
 <section class="hero" id="hero">
   <div class="container hero__inner">
-    <div class="hero__media">
-      <img src="assets/images/Profile.jpg" alt="대표 캐릭터 또는 프로필 이미지" class="hero__image" />
-    </div>
-    <div class="hero__content">
-      <p class="eyebrow">콘텐츠 개발자 / 메타버스 개발자</p>
-      <h1>DOCU</h1>
-      <p class="hero__desc">
-        게임 클라이언트 개발에서 시작해 비전 AI 모델 학습, 웹 서비스 개발까지 영역을 넓혀 온 개발자입니다.
-        지금은 Claude Code를 중심으로 개발 도구와 웹 게임을 만들고, 배운 것을 문서로 정리해 나누고 있습니다.
-      </p>
-      <div class="hero__tags" aria-label="핵심 키워드">
-        <span class="chip">Unity</span>
-        <span class="chip">Unreal Engine</span>
-        <span class="chip">C/C++</span>
-        <span class="chip">Python · AI</span>
-        <span class="chip">Claude Code</span>
+    <div class="hero__text">
+      <p class="hero__ident" aria-hidden="true">// IDENTIFICATION_</p>
+      <p class="hero__eyebrow"><span class="hero__line" aria-hidden="true"></span>콘텐츠 개발자 / 메타버스 개발자</p>
+      <h1 class="hero__title" data-text="DOCU">DOCU</h1>
+      <p class="hero__desc">게임 클라이언트 개발에서 시작해 비전 AI 모델 학습, 웹 서비스 개발까지 영역을 넓혀 온 개발자입니다. 지금은 Claude Code를 중심으로 개발 도구와 웹 게임을 만들고, 배운 것을 문서로 정리해 나누고 있습니다.</p>
+      <div class="chips hero__chips" aria-label="핵심 기술">
+        <span class="chip">Unity</span><span class="chip">Unreal Engine</span><span class="chip">C/C++</span><span class="chip">Python · AI</span><span class="chip">Claude Code</span>
       </div>
       <div class="hero__actions">
-        <a class="btn" href="/data/포트폴리오.pdf">포트폴리오 보기</a>
+        <a class="btn" href="/files/portfolio.pdf">포트폴리오 보기</a>
         <a class="btn btn--ghost" href="https://github.com/redocu" target="_blank" rel="noopener">GitHub</a>
         <a class="btn btn--ghost" href="#contact">Contact</a>
-        <a class="btn btn--ghost" href="/project/Dashboard">포트폴리오 요약</a>
+        <a class="btn btn--ghost" href="/projects/">포트폴리오 요약</a>
       </div>
+    </div>
+    <div class="hud hero__hud">
+      <div class="hud__top"><span>PROFILE.MODULE</span><span>ID // 0X44OC</span></div>
+      <div class="hud__frame"><div class="hud__view"><img src="/assets/images/hud-fox.webp" alt="노트북을 든 여우 마스코트" width="300" height="280" /></div></div>
+      <dl class="hud__readout">
+        <div><dt>ID</dt><dd data-type>0x44OC-2026</dd></div>
+        <div><dt>NAME</dt><dd data-type>DOCU</dd></div>
+        <div><dt>ROLE</dt><dd data-type>CONTENT · METAVERSE DEV</dd></div>
+        <div><dt>STACK</dt><dd data-type>UNITY / C++ / PY · AI / CLAUDE</dd></div>
+        <div><dt>STATUS</dt><dd class="warn" data-type><span class="hud__led" aria-hidden="true">●</span> BUILDING</dd></div>
+      </dl>
+      <div class="hud__progress" style="--p:67%"><span></span></div>
     </div>
   </div>
 </section>
 
-<!-- Section 01 : 소프트웨어 -->
-<section class="section portfolio-section" id="software">
+<section class="section home-sec" id="software" data-slider>
   <div class="container">
-    <div class="section-head">
-      <p class="section-label">Section 01</p>
-      <h2>소프트웨어</h2>
-      <p class="section-copy">웹 서비스와 개발 도구 등 아이디어를 실제 코드로 완성해 온 소프트웨어 프로젝트 모음입니다.</p>
-    </div>
-    <div class="portfolio-slider" data-slider>
-      <button class="slider-arrow slider-arrow--left" type="button" aria-label="이전 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <div class="slider-track" tabindex="0">
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="project/EQMUX/banner.png" alt="EQMUX 프로젝트 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>EQMUX</h3>
-            <p>하나의 git 저장소를 AI 에이전트 팀이 함께 작업하고 사람이 관제하는 Windows 데스크톱 앱입니다. 터미널을 나눠 Claude Code 세션을 병렬로 띄우고, 관제 대시보드에서 상태 확인·임무 배정·개입을 처리합니다.</p>
-            <div class="tag-list"><span class="tag">Tauri 2</span><span class="tag">Rust</span><span class="tag">SolidJS</span><span class="tag">v0.3.0</span></div>
-            <div class="card-actions">
-              <a class="btn" href="https://eqmux-web-site.vercel.app/ko/" target="_blank" rel="noopener">사이트</a>
-              <a class="btn" href="https://github.com/ReDocu/EQMUX/releases/latest" target="_blank" rel="noopener">다운로드</a>
-              <a class="btn" href="https://github.com/ReDocu/EQMUX" target="_blank" rel="noopener">GitHub</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="project/ClaudeCockpit/banner.png" alt="ClaudeCockpit 프로젝트 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>ClaudeCockpit</h3>
-            <p>여러 프로젝트의 Claude Code 세션을 한 화면에서 관리·모니터링하는 로컬 대시보드입니다. 세션 상태 확인과 빠른 전환을 지원합니다.</p>
-            <div class="tag-list"><span class="tag">Claude Code</span><span class="tag">Node.js</span><span class="tag">wmux</span><span class="tag">v0.3</span></div>
-            <div class="card-actions">
-              <a class="btn" href="project/ClaudeCockpit/ClaudeCockpit-v0.3.0.zip" target="_blank" rel="noopener">다운로드</a>
-              <a class="btn" href="https://github.com/ReDocu/ClaudeCodeTemplate" target="_blank" rel="noopener">GitHub</a>
-              <a class="btn" href="project/ClaudeCockpit/Tech_document.html" target="_blank" rel="noopener">기술문서</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="/project/COS/COS_overview.png" alt="팀 워크스페이스 프로젝트 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>팀 워크스페이스</h3>
-            <p>소규모 팀의 운영 허브입니다. 필수 메뉴얼과 프로젝트 일정(간트)·일일 업데이트·게시판·채팅·참조 자료를 한곳에 모았습니다.</p>
-            <div class="tag-list"><span class="tag">Next.js</span><span class="tag">TypeScript</span><span class="tag">사용중</span></div>
-            <div class="card-actions">
-              <a class="btn" href="project/COS/index.html" target="_blank" rel="noopener">기능 데모</a>
-              <a class="btn" href="https://team-workspace-zeta.vercel.app" target="_blank" rel="noopener">배포</a>
-              <a class="btn" href="project/COS/Tech_document.html" target="_blank" rel="noopener">기술문서</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="/project/VRS/VRS_overview.png" alt="가상 이력서 시뮬레이션 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>가상 이력서 시뮬레이션</h3>
-            <p>이력서를 등록하면 128명 캐릭터 코퍼스와의 성향 근접도를 계산해 개인 분석과 팀 배치 시뮬레이션을 보여 주는 데스크톱 앱입니다.</p>
-            <div class="tag-list"><span class="tag">Windows 앱</span><span class="tag">Vanilla JS</span><span class="tag">오프라인</span><span class="tag">완료</span></div>
-            <div class="card-actions">
-              <a class="btn" href="https://github.com/ReDocu/ResumeAnalyze/releases/tag/v0.1" target="_blank" rel="noopener">다운로드</a>
-              <a class="btn" href="https://github.com/ReDocu/ResumeAnalyze" target="_blank" rel="noopener">GitHub</a>
-              <a class="btn" href="/project/VRS/Tech_document.html" target="_blank" rel="noopener">기술문서</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/EduCraft_hub.svg" alt="EduCraft 프로젝트 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>EduCraft</h3>
-            <p>학습 플랫폼. 책 제작 플랫폼 BookCraft, 학습 관리 LMSCraft, 강의 탐색·리뷰 LecView, 미니게임 네 개의 공방을 사용하는 단일 Next.js 앱입니다.</p>
-            <div class="tag-list"><span class="tag">Next.js</span><span class="tag">Supabase</span><span class="tag">모노레포</span><span class="tag">Vercel</span></div>
-            <div class="card-actions">
-              <a class="btn" href="http://www.eqment.store/" target="_blank" rel="noopener">방문</a>
-              <a class="btn" href="https://github.com/ReDocu/EduCraft" target="_blank" rel="noopener">GitHub</a>
-              <a class="btn" href="https://github.com/ReDocu/CompanyProcess#readme" target="_blank" rel="noopener">기술문서</a>
-            </div>
-          </div>
-        </article>
-      </div>
-      <button class="slider-arrow slider-arrow--right" type="button" aria-label="다음 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5L16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    </div>
-  </div>
-</section>
-
-<!-- Section 02 : 게임 소프트웨어 -->
-<section class="section portfolio-section" id="games">
-  <div class="container">
-    <div class="section-head">
-      <p class="section-label">Section 02</p>
-      <h2>게임 소프트웨어</h2>
-      <p class="section-copy">직접 설계하고 구현한 게임과 게임 개발 프레임워크 모음입니다.</p>
-    </div>
-    <div class="portfolio-slider" data-slider>
-      <button class="slider-arrow slider-arrow--left" type="button" aria-label="이전 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <div class="slider-track" tabindex="0">
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="project/CSGP/banner.png" alt="CSGP 프로젝트 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>CSGP 게임 개발 C언어 학습용 프레임워크</h3>
-            <p>Win32 API 기반 C++ 콘솔 게임 프레임워크. 엔진과 콘텐츠를 분리한 구조로 9종의 콘솔 게임을 단계적으로 개발하며 학습하는 프로젝트입니다.</p>
-            <div class="tag-list"><span class="tag">C++</span><span class="tag">Win32 API</span><span class="tag">콘솔게임</span><span class="tag">교육</span><span class="tag">완료</span></div>
-            <div class="card-actions">
-              <a class="btn" href="https://github.com/ReDocu/CSGPProject/releases/tag/v1.0" target="_blank" rel="noopener">다운로드</a>
-              <a class="btn" href="https://github.com/ReDocu/CSGPProject" target="_blank" rel="noopener">GitHub</a>
-              <a class="btn" href="project/CSGP/study_doc/index.html" target="_blank" rel="noopener">학습문서</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="assets/images/portfolio/AcademySim.svg" alt="학원 운영 시뮬레이션 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>학원 운영 시뮬레이션</h3>
-            <p>학원을 운영하며 커리큘럼과 수강생을 관리하는 경영 시뮬레이션 게임입니다. 팀 프로젝트로 정식 출시를 목표로 개발하고 있습니다.</p>
-            <div class="tag-list"><span class="tag">개발중</span><span class="tag">출시목적</span><span class="tag">팀</span><span class="tag">GitHub</span></div>
-            <div class="card-actions">
-              <a class="btn" href="https://github.com/ReDocu/Project_Academy_Ops" target="_blank" rel="noopener">GitHub 바로가기</a>
-            </div>
-          </div>
-        </article>
-      </div>
-      <button class="slider-arrow slider-arrow--right" type="button" aria-label="다음 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5L16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    </div>
-  </div>
-</section>
-
-<!-- Section 03 : 학습 위키 -->
-<section class="section portfolio-section" id="wiki">
-  <div class="container">
-    <div class="section-head">
-      <p class="section-label">Section 03</p>
-      <h2>학습 위키</h2>
-      <p class="section-copy">직접 설계한 커리큘럼을 하루 단위 위키형 학습 문서로 정리했습니다. <a href="/WikiDoc/">위키 홈에서 전체 과정 보기 →</a></p>
-    </div>
-    <div class="portfolio-slider" data-slider>
-      <button class="slider-arrow slider-arrow--left" type="button" aria-label="이전 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <div class="slider-track" tabindex="0">
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="/WikiDoc/GameToUnity_overview.png" alt="게임 개발 24주 학습 위키 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>[24주] C에서 Unity까지</h3>
-            <p>C 콘솔 → WinAPI 프레임워크 → Unity 순서로, 120일 동안 매일 실행되는 게임을 만드는 학습 위키입니다. 게임 17편과 프레임워크 1식을 완성합니다.</p>
-            <div class="tag-list"><span class="tag">C/C++</span><span class="tag">WinAPI</span><span class="tag">Unity</span><span class="tag">120일</span></div>
-            <div class="card-actions">
-              <a class="btn" href="/WikiDoc/GameToUnity/curriculum/커리큘럼_24주차_주차별.html">커리큘럼</a>
-              <a class="btn btn--ghost" href="/WikiDoc/GameToUnity/docs/part1_c/Day001_개발환경과_첫_빌드.html">학습문서</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="/WikiDoc/DataAnalasyToVision_overview.png" alt="비전 AI 36주 학습 위키 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>[36주] 데이터에서 Object Detection</h3>
-            <p>파이썬 기초부터 데이터 분석, CNN 딥러닝을 거쳐 직접 라벨링한 데이터로 YOLO 모델을 학습시키고 CCTV 웹 서비스로 배포하는 180일 학습 위키입니다.</p>
-            <div class="tag-list"><span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">TensorFlow</span><span class="tag">YOLO</span></div>
-            <div class="card-actions">
-              <a class="btn" href="/WikiDoc/DataAnalasyToVision/curriculum/">커리큘럼</a>
-              <a class="btn btn--ghost" href="/WikiDoc/DataAnalasyToVision/lessons/01-python/day-001.html">학습문서</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="/WikiDoc/Git_overview.png" alt="Git 15주 학습 위키 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>[15주] GIT 혼자서, 팀으로, 자동화까지</h3>
-            <p>버전 관리 개념부터 브랜치 전략과 PR 협업, .git 내부 구조·훅·CI 자동화, 사고 복구까지 30강으로 다루는 Git 학습 위키입니다.</p>
-            <div class="tag-list"><span class="tag">Git</span><span class="tag">GitHub</span><span class="tag">브랜치 전략</span><span class="tag">CI · 훅</span></div>
-            <div class="card-actions">
-              <a class="btn" href="/WikiDoc/Git/curriculum/">커리큘럼</a>
-              <a class="btn btn--ghost" href="/WikiDoc/Git/lessons/01-beginner/lesson-01.html">학습문서</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="/WikiDoc/MLOps_overview.png" alt="MLOps 32주 학습 위키 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>[32주] MLOps 엔지니어 양성과정</h3>
-            <p>파이썬·SQL 데이터 파이프라인부터 머신러닝·딥러닝 모델 서빙, Docker·CI/CD 운영까지 AI 서비스 전체 수명주기를 160일 동안 구축하는 학습 위키입니다.</p>
-            <div class="tag-list"><span class="tag">Python</span><span class="tag">SQL</span><span class="tag">Docker</span><span class="tag">MLOps</span></div>
-            <div class="card-actions">
-              <a class="btn" href="/WikiDoc/MLOps/curriculum/">커리큘럼</a>
-              <a class="btn btn--ghost" href="/WikiDoc/MLOps/lessons/01-python-data/day-001.html">학습문서</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="/WikiDoc/AWS_preview.png" alt="AWS 16주 학습 위키 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>[16주] AWS 인프라부터 서버리스까지</h3>
-            <p>계정·IAM 기초에서 VPC 네트워크 설계, 고가용성 3계층 아키텍처, 서버리스와 IaC·CI/CD 자동 배포까지 32강으로 다루는 AWS 학습 위키입니다. SAA-C03 자격증과 연계됩니다.</p>
-            <div class="tag-list"><span class="tag">AWS</span><span class="tag">VPC · EC2</span><span class="tag">서버리스</span><span class="tag">IaC · CI/CD</span></div>
-            <div class="card-actions">
-              <a class="btn" href="/WikiDoc/AWS/curriculum/">커리큘럼</a>
-              <a class="btn btn--ghost" href="/WikiDoc/AWS/lessons/01-cloud-foundation/lesson-01.html">학습문서</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="/WikiDoc/InfoProcessingEngineer_overview.png" alt="정보처리기사 실기 8주 학습 위키 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>[8주] 정보처리기사 실기 완성</h3>
-            <p>C·Java·Python 코드 추적과 SQL을 집중 훈련하고 핵심 이론 암기와 실전 모의고사로 마무리하는 16강 구성의 정보처리기사 실기 대비 학습 위키입니다.</p>
-            <div class="tag-list"><span class="tag">정보처리기사</span><span class="tag">C · Java · Python</span><span class="tag">SQL</span><span class="tag">실기 필답형</span></div>
-            <div class="card-actions">
-              <a class="btn" href="/WikiDoc/InfoProcessingEngineer/curriculum/">커리큘럼</a>
-              <a class="btn btn--ghost" href="/WikiDoc/InfoProcessingEngineer/lessons/01-foundation/lesson-01.html">학습문서</a>
-            </div>
-          </div>
-        </article>
-      </div>
-      <button class="slider-arrow slider-arrow--right" type="button" aria-label="다음 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5L16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    </div>
-  </div>
-</section>
-
-<!-- Section 04 : 학원 교육 -->
-<section class="section portfolio-section" id="academy">
-  <div class="container">
-    <div class="section-head">
-      <p class="section-label">Section 04</p>
-      <h2>학원 교육</h2>
-      <p class="section-copy">학원 과정별로 배운 내용과 직접 만든 결과물을 정리했습니다.</p>
-    </div>
-    <div class="portfolio-slider" data-slider>
-      <button class="slider-arrow slider-arrow--left" type="button" aria-label="이전 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <div class="slider-track" tabindex="0">
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="/Academy/KYGameAcademy/KYGame_overview.png" alt="경일게임아카데미 게임 개발 커리큘럼 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>게임 클라이언트/콘텐츠 개발 커리큘럼</h3>
-            <p>디벨로퍼로켓(전 경일게임아카데미)</p>
-            <p>2019-09-02 ~ 2020-03-23</p>
-            <p>C/C++ 콘솔 → WinAPI 프레임워크 → Unity 엔진 순서로 게임 클라이언트 개발을 배우고, 단계마다 슈팅·SRPG·턴제 전략 게임을 직접 제작했습니다.</p>
-            <div class="tag-list"><span class="tag">C/C++</span><span class="tag">WinAPI</span><span class="tag">Unity</span><span class="tag">게임 개발</span></div>
-            <div class="card-actions">
-              <a class="btn" href="/Academy/Kyungil_Academy" target="_blank" rel="noopener">상세문서</a>
-              <a class="btn" href="https://github.com/ReDocu/KYGameAcademy" target="_blank" rel="noopener">Github</a>
-              <a class="btn" href="/Academy/KYGameAcademy/학습정리.html" target="_blank" rel="noopener">학습문서</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="/Academy/MBCAcademy/MBCAcademy_overview.png" alt="MBC컴퓨터아카데미 AI 커리큘럼 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>비전 기반 AI 모델 생성 커리큘럼</h3>
-            <p>MBC컴퓨터아카데미(전 국제컴퓨터아트학원) </p>
-            <p>2023-09-13 ~ 2024-05-08 </p>
-            <p>Python 게임 제작에서 시작해 데이터 분석과 CNN 딥러닝, Object Detection 라벨링을 거쳐, 학습시킨 모델을 실시간 CCTV 웹 서비스로 배포했습니다.</p>
-            <div class="tag-list"><span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">TensorFlow</span><span class="tag">Flask</span></div>
-            <div class="card-actions">
-              <a class="btn" href="/Academy/MBC_Academy" target="_blank" rel="noopener">상세문서</a>
-              <a class="btn" href="/Academy/MBCAcademy/학습정리.html" target="_blank" rel="noopener">학습문서</a>
-            </div>
-          </div>
-        </article>
-        <article class="portfolio-card">
-          <div class="portfolio-card__thumb">
-            <img src="/Academy/CodeCampAcademy/CCAcademy_overview.png" alt="코드캠프 바이브 코딩 커리큘럼 썸네일" />
-          </div>
-          <div class="portfolio-card__body">
-            <h3>웹 기반 바이브 코딩 커리큘럼</h3>
-            <p>코드캠프(딩코)</p>
-            <p>2026-06-29 ~ 2026-09-11</p>
-            <p>Claude Code 중심의 바이브 코딩 과정. PRD 문서 작성부터 Supabase·Vercel 배포까지 익히며 소개 페이지와 미니 노션 웹서비스를 제작하고 있습니다.</p>
-            <div class="tag-list"><span class="tag">Claude Code</span><span class="tag">Supabase</span><span class="tag">Vercel</span><span class="tag">진행중</span></div>
-            <div class="card-actions">
-              <a class="btn" href="/Academy/CodeCamp_Academy" target="_blank" rel="noopener">체험하기</a>
-              <a class="btn" href="https://github.com/ReDocu/Sesac_CC_ClaudeCode" target="_blank" rel="noopener">Github</a>
-            </div>
-          </div>
-        </article>
-      </div>
-      <button class="slider-arrow slider-arrow--right" type="button" aria-label="다음 카드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5L16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    </div>
-  </div>
-</section>
-
-<!-- Contact Us -->
-<section class="section section--contact" id="contact">
-  <div class="container">
-    <div class="section-head">
-      <p class="section-label">Contact</p>
-      <h2>Contact Us</h2>
-      <p class="section-copy">채용 제안과 헤드헌팅, 강의·교육 제안, 프로젝트 협업, 만든 도구에 대한 피드백까지 모두 환영합니다. 문의 폼을 남겨 주시면 가장 빠르게 확인합니다.</p>
-    </div>
-    <div class="contact-box">
-      <div class="contact-primary">
-        <h3 class="contact-primary__title">문의 폼 남기기</h3>
-        <p class="contact-primary__desc">
-          문의 유형을 고르시면 그에 필요한 항목만 보여 드립니다.
-          구글 로그인 없이 바로 작성할 수 있고, 1~2분이면 충분합니다.
-        </p>
-        {% assign has_ko_form = false %}
-        {% if site.contact_form_url and site.contact_form_url != "" %}{% assign has_ko_form = true %}{% endif %}
-        {% assign has_en_form = false %}
-        {% if site.contact_form_url_en and site.contact_form_url_en != "" %}{% assign has_en_form = true %}{% endif %}
-        {% if has_ko_form or has_en_form %}
-        <div class="contact-links">
-          {% if has_ko_form %}
-          <a class="btn" href="{{ site.contact_form_url }}" target="_blank" rel="noopener">문의 폼 작성하기</a>
-          {% endif %}
-          {% if has_en_form %}
-          <a class="btn btn--ghost" href="{{ site.contact_form_url_en }}" target="_blank" rel="noopener" hreflang="en" lang="en">Contact form (English)</a>
-          {% endif %}
+    <header class="section-head" data-reveal>
+      <div class="section-head__row">
+        <div class="section-head__left">
+          <p class="label">SECTION 01 — SOFTWARE</p>
+          <h2 class="section-head__title">소프트웨어</h2>
+          <p class="section-head__desc">웹 서비스와 개발 도구 등 아이디어를 실제 코드로 완성해 온 소프트웨어 프로젝트 모음입니다.</p>
         </div>
-        {% else %}
-        <span class="contact-form-pending">문의 폼 준비 중</span>
-        {% endif %}
-        <p class="contact-note">보통 1~2일 안에 회신드립니다.</p>
+        {% include slider-nav.html total=software.size %}
       </div>
-      <div class="contact-aside">
-        <div class="contact-item">
-          <p class="contact-item__label">Email</p>
-          <a href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a>
+      <div class="rule"></div>
+    </header>
+    <div class="slider-track" tabindex="0" aria-label="소프트웨어 카드 목록" data-stagger>
+      {%- for p in software %}{% include card.html c=p n=forloop.index %}{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section home-sec" id="games" data-slider>
+  <div class="container">
+    <header class="section-head" data-reveal>
+      <div class="section-head__row">
+        <div class="section-head__left">
+          <p class="label">SECTION 02 — GAMES</p>
+          <h2 class="section-head__title">게임 소프트웨어</h2>
+          <p class="section-head__desc">직접 설계하고 구현한 게임과 게임 개발 프레임워크 모음입니다.</p>
         </div>
-        <div class="contact-item">
-          <p class="contact-item__label">채널</p>
-          <div class="contact-links">
-            <a class="btn btn--ghost" href="https://github.com/redocu" target="_blank" rel="noopener">GitHub</a>
-            <a class="btn btn--ghost" href="/data/포트폴리오.pdf" target="_blank" rel="noopener">포트폴리오 PDF</a>
-          </div>
+        {% include slider-nav.html total=games.size %}
+      </div>
+      <div class="rule"></div>
+    </header>
+    <div class="slider-track" tabindex="0" aria-label="게임 카드 목록" data-stagger>
+      {%- for p in games %}{% include card.html c=p n=forloop.index %}{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section home-sec" id="wiki">
+  <div class="container">
+    <header class="section-head" data-reveal>
+      <div class="section-head__row">
+        <div class="section-head__left">
+          <p class="label">SECTION 03 — KNOWLEDGE BASE</p>
+          <h2 class="section-head__title">학습 위키</h2>
+          <p class="section-head__desc">직접 설계한 커리큘럼을 하루 단위 위키형 학습 문서로 정리했습니다.</p>
         </div>
+        <div class="section-head__side"><a href="/wiki/">ALL COURSES ▶</a></div>
+      </div>
+      <div class="rule"></div>
+    </header>
+    <ul class="course-grid" data-stagger>
+      {%- for c in page.courses %}
+      <li><a class="course" href="/wiki/{{ c.slug }}/curriculum/">
+        <span class="course__top"><span class="course__num">{{ forloop.index | prepend: "0" | slice: -2, 2 }}</span><span class="course__docs"><span data-count="{{ c.docs }}">{{ c.docs }}</span> DOCS</span></span>
+        <span class="course__name">{{ c.name }}</span>
+        <span class="course__slug">{{ c.slug }}</span>
+        <span class="course__bar" aria-hidden="true"></span>
+      </a></li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="section home-sec" id="academy" data-slider>
+  <div class="container">
+    <header class="section-head" data-reveal>
+      <div class="section-head__row">
+        <div class="section-head__left">
+          <p class="label">SECTION 04 — ACADEMY</p>
+          <h2 class="section-head__title">학원 교육</h2>
+          <p class="section-head__desc">학원 과정별로 배운 내용과 직접 만든 결과물을 정리했습니다.</p>
+        </div>
+        <div class="section-head__side academy-side">
+          <a href="/teaching/">강의 제안 보기 ▶</a>
+          {% include slider-nav.html total=page.academies.size %}
+        </div>
+      </div>
+      <div class="rule"></div>
+    </header>
+    <div class="slider-track" tabindex="0" aria-label="학원 교육 카드 목록" data-stagger>
+      {%- for a in page.academies %}{% include card.html c=a n=forloop.index %}{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="container contact__inner">
+    <div class="contact__text" data-reveal="left">
+      <p class="label">CONTACT — OPEN CHANNEL</p>
+      <h2 class="contact__title" data-text="CONTACT US">CONTACT US</h2>
+      <p class="contact__copy">채용 제안과 헤드헌팅, 강의·교육 제안, 프로젝트 협업, 만든 도구에 대한 피드백까지 모두 환영합니다. 문의 폼을 남겨 주시면 가장 빠르게 확인합니다.</p>
+      <ul class="contact__links">
+        <li><a href="mailto:{{ site.contact_email }}"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="3" width="13" height="10" rx="1.5"/><path d="m2 4 6 4.5L14 4"/></svg>이메일</a></li>
+        <li><a href="https://github.com/redocu" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 14v-2.2c-2.6.6-3.1-1.2-3.1-1.2M10 14v-2.4c0-.7-.2-1.1-.5-1.4 1.9-.2 3.5-.9 3.5-3.6 0-.8-.3-1.5-.8-2 .1-.2.3-1-.1-2 0 0-.6-.2-2 .8a7 7 0 0 0-3.6 0c-1.4-1-2-.8-2-.8-.4 1-.2 1.8-.1 2-.5.5-.8 1.2-.8 2 0 2.7 1.6 3.4 3.5 3.6"/></svg>github.com/redocu</a></li>
+        <li><a href="/files/portfolio.pdf"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1.5h6.5L13 5v9.5H3z M9.5 1.5V5H13 M5.5 8.5h5 M5.5 11h5"/></svg>portfolio.pdf</a></li>
+        <li><a href="/files/resume.html"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="5.5" r="2.5"/><path d="M3 14c.6-2.8 2.6-4.2 5-4.2s4.4 1.4 5 4.2"/></svg>이력서</a></li>
+      </ul>
+    </div>
+    <div class="form-module" data-reveal="right">
+      <div class="form-module__top"><span>FORM.MODULE</span><span>KO / EN</span></div>
+      <h3 class="form-module__title">문의 폼 남기기</h3>
+      <p class="form-module__desc">문의 유형을 고르시면 그에 필요한 항목만 보여 드립니다. 구글 로그인 없이 바로 작성할 수 있고, 1~2분이면 충분합니다.</p>
+      <div class="form-module__actions">
+        {%- if site.contact_form_url and site.contact_form_url != "" %}
+        <a class="btn" href="{{ site.contact_form_url }}" target="_blank" rel="noopener">문의 폼 작성하기</a>
+        {%- else %}
+        <span class="form-offline"><span class="led" aria-hidden="true"></span>FORM.OFFLINE</span>
+        {%- endif %}
+        {%- if site.contact_form_url_en and site.contact_form_url_en != "" %}
+        <a class="btn btn--ghost" href="{{ site.contact_form_url_en }}" target="_blank" rel="noopener" hreflang="en" lang="en">Contact form (English)</a>
+        {%- endif %}
       </div>
     </div>
   </div>

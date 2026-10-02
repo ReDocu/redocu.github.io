@@ -1,0 +1,40 @@
+---
+layout: main
+title: 학습 위키
+description: 직접 설계한 커리큘럼을 하루 단위 위키형 학습 문서로 정리했습니다. 6과정 · 문서 607편.
+css: pages
+render_with_liquid: true
+---
+{% assign total = 0 %}{% for c in site.data.courses %}{% assign total = total | plus: c.docs %}{% endfor %}
+<section class="section section--page">
+  <div class="container">
+    <header class="section-head" data-reveal>
+      <div class="section-head__row"><div class="section-head__left">
+        <p class="label">LEARNING WIKI — /wiki/</p>
+        <h1 class="section-head__title">학습 위키</h1>
+        <p class="section-head__desc">직접 설계한 커리큘럼을 하루 단위 위키형 학습 문서로 정리했습니다. {{ site.data.courses.size }}과정 · 문서 <span data-count="{{ total }}">{{ total }}</span>편.</p>
+      </div><a class="section-head__side" href="/wiki/search/">SEARCH ▶</a></div>
+      <div class="rule"></div>
+    </header>
+
+    <div class="app-grid" data-stagger>
+      {% for c in site.data.courses %}
+      <article class="card">
+        <div class="card__thumb">
+          <div class="card__hud"><span class="card__mod">COURSE {{ forloop.index | prepend: "0" }}</span><span class="card__mod">{{ c.docs }} DOCS</span></div>
+          <img src="{{ c.thumb }}" alt="" loading="lazy" />
+        </div>
+        <div class="card__body">
+          <h2 class="card__title"><a href="/wiki/{{ c.slug }}/curriculum/">{{ c.title }}</a></h2>
+          <p class="card__desc">{{ c.desc }}</p>
+          <div class="chips">{% for t in c.tags %}<span class="chip">{{ t }}</span>{% endfor %}</div>
+          <div class="card__actions">
+            <a class="btn btn--ghost btn--sm" href="/wiki/{{ c.slug }}/curriculum/">커리큘럼</a>
+            <a class="btn btn--ghost btn--sm" href="{{ c.start }}">학습문서</a>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>

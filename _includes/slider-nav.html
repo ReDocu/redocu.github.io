@@ -1,0 +1,6 @@
+{%- comment -%} 섹션 헤더 우측 ◀ 01 / 05 ▶ 카운터. 동작은 assets/js/home.js {%- endcomment -%}
+<div class="section-head__side slider-nav">
+  <button class="slider-nav__btn" type="button" data-prev aria-label="이전 카드">◀</button>
+  <span class="slider-nav__pos"><span data-pos>01</span> / {{ include.total | prepend: "0" | slice: -2, 2 }}</span>
+  <button class="slider-nav__btn" type="button" data-next aria-label="다음 카드">▶</button>
+</div>

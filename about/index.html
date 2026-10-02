@@ -1,0 +1,115 @@
+---
+layout: main
+title: 소개
+description: 게임 클라이언트에서 비전 AI, 웹 서비스까지 — 경력 흐름과 역량을 근거 프로젝트와 함께 정리했습니다.
+css: pages
+---
+
+<section class="page-hero">
+  <div class="container page-hero__inner">
+    <div class="page-hero__text">
+      <p class="typed mono" data-reveal="fade">// ABOUT_OPERATOR<span class="caret" aria-hidden="true">_</span></p>
+      <h1 class="page-hero__title" data-reveal="clip">게임 클라이언트에서 비전 AI, 웹 서비스까지.</h1>
+      <p class="page-hero__desc" data-reveal style="--d:200ms">
+        분야를 옮길 때마다 처음부터 다시 배우고, 배운 것을 문서와 도구로 남겼습니다.
+        지금은 Claude Code를 중심으로 개발 도구를 만들고 가르치는 일을 준비하고 있습니다.
+      </p>
+      <div class="page-hero__actions" data-stagger style="--d:300ms">
+        <a class="btn" href="/files/resume.html">이력서</a>
+        <a class="btn btn--ghost" href="/files/portfolio.pdf">포트폴리오 PDF</a>
+        <a class="btn btn--ghost" href="/#contact">Contact</a>
+      </div>
+    </div>
+    <div class="hud hud--boot" data-reveal="scale">
+      <div class="hud__top"><span>OPERATOR.MODULE</span><span aria-hidden="true">ID // 0X44OC</span></div>
+      <div class="hud__frame"><div class="hud__view"><img src="/assets/images/hud-fox.webp" alt="노트북으로 작업하는 여우 마스코트" width="300" height="280" /></div></div>
+      <dl class="hud__readout" data-stagger="fade">
+        <div><dt>NAME</dt><dd>DOCU</dd></div>
+        <div><dt>FIELD</dt><dd>GAME → AI → WEB → TOOLS</dd></div>
+        <div><dt>DOCS</dt><dd><span data-count="607">607</span> PAGES</dd></div>
+        <div><dt>STATUS</dt><dd class="warn">● BUILDING</dd></div>
+      </dl>
+      <div class="hud__progress" style="--p:75%"><span></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight" id="timeline">
+  <div class="container">
+    <header class="section-head" data-reveal>
+      <div class="section-head__row"><div class="section-head__left">
+        <p class="label">SECTION 01 — TIMELINE</p>
+        <h2 class="section-head__title">경력 흐름</h2>
+        <p class="section-head__desc">분야가 바뀐 지점마다 대표 결과물로 바로 갈 수 있습니다.</p>
+      </div></div>
+      <div class="rule"></div>
+    </header>
+    {% capture tl %}2019 – 2020|게임 클라이언트 개발|디벨로퍼로켓(전 경일게임아카데미) · 수강|C/C++ 콘솔에서 WinAPI 프레임워크, Unity까지. 단계마다 슈팅·SRPG·디펜스 게임을 직접 만들었다.|경일 학원 상세|/academy/kyungil/|CSGP 프레임워크|/projects/csgp/
+2023 – 2024|비전 AI 모델 학습|MBC컴퓨터아카데미 · 수강|Python 데이터 분석과 CNN 딥러닝을 거쳐 직접 라벨링한 데이터로 YOLO 모델을 학습시키고 CCTV 웹 서비스로 배포했다.|MBC 학원 상세|/academy/mbc/|비전 AI 36주 위키|/wiki/data-to-vision/curriculum/
+2026|웹 서비스 · 바이브 코딩|코드캠프(딩코) · 수강 · 진행중|Claude Code 중심으로 PRD 작성부터 Supabase·Vercel 배포까지. 소개 페이지와 미니 노션, 맛집 커뮤니티를 만들었다.|코드캠프 상세|/academy/codecamp/|EduCraft|/projects/educraft/
+NOW|개발 도구를 만들고, 문서로 나눈다|개인 프로젝트 · 학습 위키 607편|AI 에이전트 팀을 관제하는 EQMUX와 ClaudeCockpit을 만들고, 배운 것을 6개 과정의 위키로 정리하고 있다.|EQMUX|/projects/eqmux/|ClaudeCockpit|/projects/claude-cockpit/{% endcapture %}
+    {% include timeline.html rows=tl %}
+  </div>
+</section>
+
+<section class="section section--tight" id="matrix">
+  <div class="container">
+    <header class="section-head" data-reveal>
+      <div class="section-head__row"><div class="section-head__left">
+        <p class="label">SECTION 02 — CAPABILITY MATRIX</p>
+        <h2 class="section-head__title">역량</h2>
+        <p class="section-head__desc">숙련도 막대 대신, 각 기술을 실제로 쓴 프로젝트를 근거로 적었습니다.</p>
+      </div></div>
+      <div class="rule"></div>
+    </header>
+    <div class="matrix" role="table" aria-label="분야별 기술과 근거 프로젝트">
+      <div class="matrix__row matrix__row--head" role="row">
+        <span role="columnheader">FIELD</span><span role="columnheader">STACK</span><span role="columnheader">EVIDENCE</span>
+      </div>
+      {% assign mx = "GAME|게임|C/C++,WinAPI,Unity,상태머신 · A*|CSGP>/projects/csgp/,트릭스터 택틱스>/files/trickster-tactics.pdf,덕덕 디펜스>/files/duckduck-defense.pdf
+AI|비전 AI|Python,Pandas,TensorFlow,YOLO|CCTV 웹 서비스>/academy/mbc/cctv-web-notes.html,늑대 vs 허스키>/academy/mbc/wolf-vs-husky-notes.html
+WEB|웹 서비스|Next.js,TypeScript,Supabase,Vercel|EduCraft>/projects/educraft/,팀 워크스페이스>/projects/team-workspace/
+TOOLS|개발 도구|Tauri 2,Rust,SolidJS,Node.js|EQMUX>/projects/eqmux/,ClaudeCockpit>/projects/claude-cockpit/
+TEACHING|교육|커리큘럼 설계,학습문서 607편,학습 북|학습 위키>/wiki/,코드캠프 Part 1~4>/academy/codecamp/" | newline_to_br | split: "<br />" %}
+      {% for row in mx %}{% assign f = row | strip | split: "|" %}
+      <div class="matrix__row" role="row" data-reveal style="--i:{{ forloop.index }}">
+        <div class="matrix__field" role="cell"><span class="label">{{ f[0] }}</span><span>{{ f[1] }}</span></div>
+        <div class="chips" role="cell">{% assign chips = f[2] | split: "," %}{% for c in chips %}<span class="chip">{{ c }}</span>{% endfor %}</div>
+        <div class="matrix__evidence" role="cell">{% assign ev = f[3] | split: "," %}{% for e in ev %}{% assign p = e | split: ">" %}<a href="{{ p[1] }}">→ {{ p[0] }}</a>{% endfor %}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight" id="how">
+  <div class="container">
+    <header class="section-head" data-reveal>
+      <div class="section-head__row"><div class="section-head__left">
+        <p class="label">SECTION 03 — HOW I WORK</p>
+        <h2 class="section-head__title">일하는 방식</h2>
+        <p class="section-head__desc">세 가지를 반복합니다.</p>
+      </div></div>
+      <div class="rule"></div>
+    </header>
+    <div class="feature-grid" data-stagger>
+      <article class="feature">
+        <div class="feature__head"><span class="label">WAY.01</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8zM14 3v5h5M9 13h6M9 17h6"/></svg></div>
+        <h3 class="feature__title">문서로 정리한다</h3>
+        <p class="feature__desc">하루 단위 학습문서 607편. 만든 것은 반드시 글로 남긴다.</p>
+      </article>
+      <article class="feature">
+        <div class="feature__head"><span class="label">WAY.02</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg></div>
+        <h3 class="feature__title">도구를 만든다</h3>
+        <p class="feature__desc">반복되는 일은 EQMUX·ClaudeCockpit처럼 도구로 바꾼다.</p>
+      </article>
+      <article class="feature">
+        <div class="feature__head"><span class="label">WAY.03</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5zM6 12v5c3 2 9 2 12 0v-5"/></svg></div>
+        <h3 class="feature__title">가르친다</h3>
+        <p class="feature__desc">학원에서 배운 흐름을 커리큘럼으로 다시 설계해 나눈다.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+{% include cta.html %}

@@ -1,0 +1,71 @@
+---
+layout: main
+css: [academy]
+---
+{%- comment -%} 코드캠프 Part 문서 — pen: Academy · CodeCamp Part(CsGvy). 좌측 목차는 본문 h1(제n부)에서 자동 생성 {%- endcomment -%}
+{%- assign hl = page.toc | default: "h1" -%}
+{%- assign hopen = '<' | append: hl | append: ' id="' -%}{%- assign hclose = '</' | append: hl | append: '>' -%}
+{%- assign secs = content | split: hopen -%}
+<div class="container part">
+  <aside class="part-side" aria-label="Part 목차">
+    <div class="part-side__inner">
+      <p class="label">CODECAMP · PART {{ page.part }}</p>
+      <p class="part-side__title">{{ page.book }}</p>
+      <p class="part-side__meta mono">{{ page.days }}</p>
+      <ol class="part-toc" data-stagger="left">
+        {%- for s in secs offset: 1 %}
+        {%- assign sid = s | split: '"' | first %}
+        {%- assign stext = s | split: hclose | first | split: '">' | last | strip_html %}
+        {%- assign head4 = stext | slice: 0, 4 %}
+        {%- if stext contains "(Day" %}
+          {%- assign sday = stext | split: "(" | last | remove: ")" %}{%- assign stitle = stext | split: " (Day" | first %}
+        {%- elsif head4 == "Day " and stext contains " · " %}
+          {%- assign sday = stext | split: " · " | first %}{%- assign stitle = stext | remove_first: sday | remove_first: " · " %}
+        {%- else %}{%- assign sday = "" %}{%- assign stitle = stext %}{%- endif %}
+        <li><a href="#{{ sid }}">{% if sday != "" %}<span class="part-toc__day">{{ sday }}</span>{% endif %}<span>{{ stitle }}</span></a></li>
+        {%- endfor %}
+      </ol>
+      {%- if page.resources %}
+      <div class="part-res">
+        <p class="label label--muted">RESOURCES</p>
+        {%- for r in page.resources %}<a href="{{ r[1] }}" target="_blank" rel="noopener">{{ r[0] }} ↗</a>{% endfor %}
+      </div>
+      {%- endif %}
+    </div>
+  </aside>
+
+  <article class="part-main">
+    <ol class="crumb" data-reveal="fade">
+      <li><a href="/#academy">ACADEMY</a></li>
+      <li><a href="/academy/codecamp/">CODECAMP</a></li>
+      <li aria-current="page">{% if page.crumb %}{{ page.crumb }}{% else %}PART {{ page.part }}{% endif %}</li>
+    </ol>
+    <header class="part-hero" data-stagger="up">
+      <p class="label">{{ page.part_label }}</p>
+      <h1 class="part-hero__title">{{ page.heading }}</h1>
+      {%- if page.sub %}<p class="part-hero__sub">{{ page.sub }}</p>{% endif %}
+      {%- if page.resources %}
+      <div class="part-hero__actions">
+        {%- for r in page.resources %}<a class="btn{% unless forloop.first %} btn--ghost{% endunless %}" href="{{ r[1] }}" target="_blank" rel="noopener">{{ r[0] }}</a>{% endfor %}
+      </div>
+      {%- endif %}
+    </header>
+
+    <div class="part-body">
+      {{ content }}
+    </div>
+
+    <nav class="pager" aria-label="Part 이동">
+      <a class="pager__back" href="/academy/codecamp/">
+        <span class="label label--muted">◀&nbsp;&nbsp;BACK TO LIST</span>
+        <span class="pager__title">코드캠프 Part 목록</span>
+      </a>
+      {%- if page.next %}
+      <a class="pager__next" href="{{ page.next[1] }}">
+        <span class="label">NEXT&nbsp;&nbsp;{% if page.next[2] %}{{ page.next[2] }}{% else %}PART {{ page.part | plus: 1 }}{% endif %}&nbsp;&nbsp;▶</span>
+        <span class="pager__title">{{ page.next[0] }}</span>
+      </a>
+      {%- endif %}
+    </nav>
+  </article>
+</div>

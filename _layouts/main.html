@@ -1,27 +1,31 @@
-<!DOCTYPE HTML>
-
-<html>
+<!DOCTYPE html>
+<html lang="ko">
 	<head>
-		<title>{{site.title}}</title>
 		<meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="정적 개인 포트폴리오 웹사이트" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{% if page.title and page.title != "main" %}{{ page.title }} · REDOCU{% else %}REDOCU · DOCU PORTFOLIO{% endif %}</title>
+		<meta name="description" content="{{ page.description | default: '게임 클라이언트에서 비전 AI, 웹 서비스까지 — 개발자 DOCU의 포트폴리오' }}" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&family=JetBrains+Mono:wght@400&family=Noto+Sans+KR:wght@400;700&family=Orbitron:wght@400;700&display=swap" />
 		<link rel="stylesheet" href="/assets/css/styles.css" />
+		<link rel="stylesheet" href="/assets/css/player.css" />
+		{% for c in layout.css %}<link rel="stylesheet" href="/assets/css/{{ c }}.css" />
+		{% endfor %}{% for c in page.css %}<link rel="stylesheet" href="/assets/css/{{ c }}.css" />
+		{% endfor %}
+		<script>document.documentElement.classList.add('js')</script>
 	</head>
-    <body>
-		<div id="page-wrapper">
-            {% include nav.html %}
-            {% if page.content_layout %}
-            <div style="max-width: 90%; margin: 0 auto; padding: 20px;">
-            {% endif %}
-			{{content}}
-            {% if page.post_layout %}
-            </div>
-            {% endif %}
-
-        </div>
-            {% include footer.html %}        
-		<!-- Scripts -->
-        <script src="/assets/js/main.js"></script>
-    </body>
+	<body>
+		{% if page.intro %}{% include intro.html %}{% endif %}
+		{% include nav.html %}
+		<main id="main">
+			{{ content }}
+		</main>
+		{% include footer.html %}
+		{% include player.html %}
+		<script src="/assets/js/main.js"></script>
+		{% for j in page.js %}<script src="/assets/js/{{ j }}.js"></script>
+		{% endfor %}
+		{% if page.intro %}<script src="/assets/js/intro.js"></script>{% endif %}
+	</body>
 </html>

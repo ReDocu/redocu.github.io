@@ -1,0 +1,30 @@
+{%- comment -%}
+Card/Module (PRD 4.3). include.c = projects.yml 항목 또는 index 앞부분의 academies 항목, include.n = 순번(MOD.0n)
+url이 없으면 /projects/<slug>/. 상태 배지: active · complete · dev · progress
+{%- endcomment -%}
+{%- assign c = include.c -%}
+{%- if c.url -%}{%- assign url = c.url -%}{%- else -%}{%- assign url = "/projects/" | append: c.slug | append: "/" -%}{%- endif -%}
+{%- case c.status -%}
+{%- when "active" -%}{%- assign badge = "ACTIVE" -%}
+{%- when "complete" -%}{%- assign badge = "COMPLETE" -%}
+{%- when "progress" -%}{%- assign badge = "IN PROGRESS" -%}
+{%- else -%}{%- assign badge = "IN DEV" -%}
+{%- endcase -%}
+<article class="card">
+  <div class="card__thumb">
+    <div class="card__hud"><span class="card__mod" aria-hidden="true">MOD.{{ include.n | prepend: "0" | slice: -2, 2 }}</span><span class="badge badge--{% if c.status == 'progress' %}dev{% else %}{{ c.status }}{% endif %}">{{ badge }}</span></div>
+    <img src="{{ c.thumb | replace: '.png', '.webp' }}" alt="" loading="lazy" width="432" height="180" />
+  </div>
+  <div class="card__body">
+    <h3 class="card__title"><a href="{{ url }}">{{ c.card_title | default: c.title }}</a></h3>
+    {%- if c.meta %}<p class="card__meta">{{ c.meta }}</p>{% endif %}
+    <p class="card__desc">{{ c.desc }}</p>
+    <div class="chips">{% for t in c.tags %}<span class="chip">{{ t }}</span>{% endfor %}{% if c.version %}<span class="chip">{{ c.version }}</span>{% endif %}</div>
+    <div class="card__actions">
+      {%- for a in c.actions %}
+      {%- assign ext = a.url | slice: 0, 4 %}
+      <a class="btn btn--ghost btn--sm" href="{{ a.url }}"{% if ext == "http" %} target="_blank" rel="noopener"{% endif %}>{{ a.label }}</a>
+      {%- endfor %}
+    </div>
+  </div>
+</article>

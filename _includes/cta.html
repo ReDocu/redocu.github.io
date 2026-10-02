@@ -1,0 +1,14 @@
+{% assign form = site.contact_form_url | default: '/#contact' %}
+<section class="cta" data-reveal="clip">
+  <div class="container cta__inner">
+    <div>
+      <p class="label">{{ include.label | default: "CONTACT — OPEN CHANNEL" }}</p>
+      <h2 class="cta__title">{{ include.title | default: "채용·강의·협업 제안을 기다립니다." }}</h2>
+      <p class="cta__desc">{{ include.desc | default: "문의 폼은 1~2분이면 충분하고, 가장 빠르게 확인합니다." }}</p>
+    </div>
+    <div class="cta__actions">
+      <a class="btn" href="{{ form }}">{{ include.btn | default: "문의 폼 작성하기" }}</a>
+      <a class="btn btn--ghost" href="{{ include.ghost_url | default: '/files/resume.html' }}">{{ include.ghost | default: "이력서 보기" }}</a>
+    </div>
+  </div>
+</section>

@@ -1,167 +1,97 @@
-
-const body = document.body;
-const themeToggle = document.getElementById('themeToggle');
+// ── 내비 · 기타 메뉴 ──
 const mobileNavToggle = document.getElementById('mobileNavToggle');
 const mobileNavPanel = document.getElementById('mobileNavPanel');
 const moreMenuToggle = document.getElementById('moreMenuToggle');
 const moreMenuPanel = document.getElementById('moreMenuPanel');
 
-const STORAGE_KEY = 'portfolio-theme';
-
-function applyTheme(theme) {
-  const isDark = theme === 'dark';
-  body.classList.toggle('dark-mode', isDark);
-  themeToggle.setAttribute('aria-pressed', String(isDark));
-  const icon = themeToggle.querySelector('.theme-toggle__icon');
-  if (icon) icon.textContent = isDark ? '☀' : '☾';
+function setOpen(toggle, panel, open) {
+  if (!toggle || !panel) return;
+  toggle.setAttribute('aria-expanded', String(open));
+  panel.hidden = !open;
 }
+const isOpen = (toggle) => toggle?.getAttribute('aria-expanded') === 'true';
 
-function initTheme() {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  applyTheme(saved === 'dark' ? 'dark' : 'light');
-}
-
-function closeMoreMenu() {
-  if (!moreMenuToggle || !moreMenuPanel) return;
-  moreMenuToggle.setAttribute('aria-expanded', 'false');
-  moreMenuPanel.hidden = true;
-}
-
-function openMoreMenu() {
-  if (!moreMenuToggle || !moreMenuPanel) return;
-  moreMenuToggle.setAttribute('aria-expanded', 'true');
-  moreMenuPanel.hidden = false;
-}
-
-function toggleMoreMenu() {
-  const isOpen = moreMenuToggle.getAttribute('aria-expanded') === 'true';
-  if (isOpen) closeMoreMenu();
-  else openMoreMenu();
-}
-
-function closeMobileNav() {
-  if (!mobileNavToggle || !mobileNavPanel) return;
-  mobileNavToggle.setAttribute('aria-expanded', 'false');
-  mobileNavPanel.hidden = true;
-}
-
-function toggleMobileNav() {
-  const isOpen = mobileNavToggle.getAttribute('aria-expanded') === 'true';
-  mobileNavToggle.setAttribute('aria-expanded', String(!isOpen));
-  mobileNavPanel.hidden = isOpen;
-}
-
-themeToggle?.addEventListener('click', () => {
-  const next = body.classList.contains('dark-mode') ? 'light' : 'dark';
-  localStorage.setItem(STORAGE_KEY, next);
-  applyTheme(next);
+mobileNavToggle?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  setOpen(mobileNavToggle, mobileNavPanel, !isOpen(mobileNavToggle));
 });
-
-mobileNavToggle?.addEventListener('click', (event) => {
-  event.stopPropagation();
-  toggleMobileNav();
+moreMenuToggle?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  setOpen(moreMenuToggle, moreMenuPanel, !isOpen(moreMenuToggle));
 });
-
-moreMenuToggle?.addEventListener('click', (event) => {
-  event.stopPropagation();
-  toggleMoreMenu();
+document.querySelectorAll('.mobile-nav a, .main-nav a, .more-menu__panel a').forEach((a) =>
+  a.addEventListener('click', () => {
+    setOpen(mobileNavToggle, mobileNavPanel, false);
+    setOpen(moreMenuToggle, moreMenuPanel, false);
+  })
+);
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  setOpen(mobileNavToggle, mobileNavPanel, false);
+  setOpen(moreMenuToggle, moreMenuPanel, false);
 });
-
-moreMenuPanel?.querySelectorAll('a').forEach((link) => {
-  link.addEventListener('click', () => {
-    closeMoreMenu();
-  });
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.more-menu')) setOpen(moreMenuToggle, moreMenuPanel, false);
+  if (!e.target.closest('.site-header')) setOpen(mobileNavToggle, mobileNavPanel, false);
 });
-
-document.querySelectorAll('.mobile-nav a, .main-nav a').forEach((link) => {
-  link.addEventListener('click', () => {
-    closeMobileNav();
-    closeMoreMenu();
-  });
-});
-
 window.addEventListener('resize', () => {
-  if (window.innerWidth > 1080) {
-    closeMobileNav();
-  }
-  closeMoreMenu();
+  if (window.innerWidth > 1080) setOpen(mobileNavToggle, mobileNavPanel, false);
 });
 
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape') {
-    closeMoreMenu();
-    closeMobileNav();
-  }
+// 현재 페이지 메뉴 강조 (서브 페이지)
+document.querySelectorAll('.main-nav a').forEach((a) => {
+  const path = new URL(a.href).pathname;
+  if (path !== '/' && location.pathname.startsWith(path)) a.setAttribute('aria-current', 'page');
 });
 
-document.addEventListener('click', (event) => {
-  if (!event.target.closest('.more-menu')) {
-    closeMoreMenu();
-  }
-  if (window.innerWidth <= 1080 && !event.target.closest('.site-header')) {
-    closeMobileNav();
-  }
-});
+// ── 모션 API ──
+// data-reveal[=up|fade|left|right|scale|clip] : 화면에 들어오면 .is-in
+// data-stagger (부모)                          : 자식 data-reveal 에 --i 순번 → 순차 지연
+// data-count="607"                             : 화면에 들어오면 0부터 카운트업
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-document.querySelectorAll('[data-slider]').forEach((slider) => {
-  const track = slider.querySelector('.slider-track');
-  const leftArrow = slider.querySelector('.slider-arrow--left');
-  const rightArrow = slider.querySelector('.slider-arrow--right');
-  if (!track || !leftArrow || !rightArrow) return;
-
-  const firstCard = track.querySelector('.portfolio-card');
-
-  // 진행 중인 스크롤의 목표 지점. 애니메이션 도중 화살표를 연타해도
-  // 중간 위치가 아니라 직전 목표를 기준으로 다음 페이지를 계산한다.
-  let pendingLeft = null;
-  let settleTimer = 0;
-
-  const cardUnit = () => {
-    const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
-    return firstCard ? firstCard.offsetWidth + gap : track.clientWidth;
-  };
-
-  const maxScroll = () => track.scrollWidth - track.clientWidth;
-
-  // 넘길 카드가 남아 있는 쪽 화살표만 표시 (이동 중에는 목표 지점 기준으로 판단)
-  const updateArrows = () => {
-    const pos = pendingLeft ?? track.scrollLeft;
-    const overflowing = track.scrollWidth > track.clientWidth + 1;
-    leftArrow.classList.toggle('is-visible', overflowing && pos > 1);
-    rightArrow.classList.toggle('is-visible', overflowing && pos < maxScroll() - 1);
-  };
-
-  // 클릭할 때마다 카드 한 장씩 카드 경계에 맞춰 이동
-  const page = (direction) => {
-    const unit = cardUnit();
-    const from = pendingLeft ?? track.scrollLeft;
-    const targetCard = Math.round(from / unit) + direction;
-    const left = Math.min(Math.max(targetCard, 0) * unit, maxScroll());
-    pendingLeft = left;
-    track.scrollTo({ left, behavior: 'smooth' });
-    updateArrows();
-  };
-
-  leftArrow.addEventListener('click', () => page(-1));
-  rightArrow.addEventListener('click', () => page(1));
-
-  // 사용자가 직접 스와이프·휠 스크롤을 시작하면 예약된 목표 지점을 버린다
-  ['wheel', 'touchstart', 'pointerdown'].forEach((type) => {
-    track.addEventListener(type, () => { pendingLeft = null; }, { passive: true });
+document.querySelectorAll('[data-stagger]').forEach((parent) => {
+  [...parent.children].forEach((child, i) => {
+    if (!child.hasAttribute('data-reveal')) child.setAttribute('data-reveal', parent.dataset.stagger || '');
+    child.style.setProperty('--i', i);
   });
-
-  // 스크롤이 멎으면 목표 지점을 해제해 실제 위치와 다시 동기화한다
-  track.addEventListener('scroll', () => {
-    updateArrows();
-    clearTimeout(settleTimer);
-    settleTimer = setTimeout(() => {
-      pendingLeft = null;
-      updateArrows();
-    }, 150);
-  }, { passive: true });
-
-  window.addEventListener('resize', updateArrows);
-  updateArrows();
 });
 
-initTheme();
+function countUp(el) {
+  const target = parseFloat(el.dataset.count);
+  if (reduceMotion || Number.isNaN(target)) { el.textContent = el.dataset.count; return; }
+  const pad = el.dataset.count.length; // "07" 같은 자리수 유지
+  const start = performance.now();
+  const dur = 1200;
+  const tick = (now) => {
+    const t = Math.min((now - start) / dur, 1);
+    const v = Math.round(target * (1 - Math.pow(1 - t, 3)));
+    el.textContent = String(v).padStart(pad, '0');
+    if (t < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+const revealTargets = document.querySelectorAll('[data-reveal], [data-count]');
+const reveal = (el) => {
+  el.classList.add('is-in');
+  if (el.dataset.count) countUp(el);
+};
+if (!('IntersectionObserver' in window)) {
+  revealTargets.forEach(reveal);
+} else {
+  // clip 은 시작 시 면적이 0이라 IO가 교차를 못 본다 → 부모를 대신 관찰한다
+  const watchers = new Map();
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      watchers.get(entry.target).forEach(reveal);
+      io.unobserve(entry.target);
+    });
+  }, { rootMargin: '0px 0px -10% 0px', threshold: 0 }); // 비율 기준은 아주 긴 요소(부모 main 등)에서 영영 안 걸린다
+  revealTargets.forEach((el) => {
+    const target = el.dataset.reveal === 'clip' ? el.parentElement : el;
+    if (!watchers.has(target)) { watchers.set(target, []); io.observe(target); }
+    watchers.get(target).push(el);
+  });
+}

@@ -76,7 +76,7 @@ titles_from_headings:
 
 defaults:
   - scope:
-      path: "WikiDoc"
+      path: "wiki"
     values:
       layout: "wikidoc"
       # 학습 문서 코드 예제(Jinja2 {{ }} / {% %})가 Liquid로 해석되지 않도록 차단
@@ -101,3 +101,8 @@ defaults:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+# 저장소 운영 문서는 사이트에 게시하지 않는다 (내부 문서는 _docs/ 에 둔다)
+exclude:
+  - CLAUDE.md
+  - README.md
+  - "*.pen"

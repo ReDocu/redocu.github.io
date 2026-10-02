@@ -1,289 +1,166 @@
-/* ==========================================================================
-   WikiDoc 학습 위키 — 따뜻한 종이 느낌의 문서 테마
-   styles.css의 디자인 토큰을 위키 페이지에서만 재정의한다.
-   (헤더·푸터·버튼·다크모드 토글은 메인과 동일하게 동작)
-   ========================================================================== */
+/* 학습 위키 문서 (home.pen `Wiki · Doc`) — 좌측 과정 목차 + 본문. 장문 가독성: 본문 Noto Sans KR 16, 코드 JetBrains Mono */
 
-body.wikidoc-body {
-  --primary: #f0a85e;            /* 민트 → 따뜻한 앰버 */
-  --primary-hover: #e29244;
-  --bg: #faf5eb;                 /* 크림색 종이 배경 */
-  --bg-elev: #fffdf7;
-  --bg-soft: #f2e9d8;
-  --text: #362a1e;
-  --muted: #7c6c58;
-  --line: rgba(96, 70, 40, 0.16);
-  --shadow: 0 12px 30px rgba(87, 61, 29, 0.10);
-  --shadow-strong: 0 18px 38px rgba(87, 61, 29, 0.16);
-  --wd-link: #b4632e;
-  --wd-code-bg: #2b2116;         /* 코드 블록: 라이트/다크 공통 웜 브라운 */
-  --wd-code-ink: #f3e9d5;
+.wikidoc-wide { padding-block: 56px 80px; }
+
+.wikidoc-shell {
+  max-width: calc(1440px); margin-inline: auto;
+  display: grid; grid-template-columns: 320px minmax(0, 1fr); align-items: start;
 }
-body.wikidoc-body.dark-mode {
-  --primary: #eda963;
-  --primary-hover: #f5bc80;
-  --bg: #181310;
-  --bg-elev: #211a14;
-  --bg-soft: #1c1611;
-  --text: #f0e7d8;
-  --muted: #b3a48e;
-  --line: rgba(240, 214, 170, 0.14);
-  --shadow: 0 14px 32px rgba(0, 0, 0, 0.30);
-  --shadow-strong: 0 22px 40px rgba(0, 0, 0, 0.40);
-  --wd-link: #eab179;
-  --wd-code-bg: #14100b;
-}
+.wikidoc-content { min-width: 0; padding: 40px var(--gutter) 80px 40px; animation: doc-in 0.6s var(--ease) both; }
+@keyframes doc-in { from { opacity: 0; transform: translateY(10px); } }
 
-/* ---------- 페이지 골격 ---------- */
-.wikidoc-main { padding: 40px 0 88px; }
-.wikidoc-shell { width: min(calc(100% - 32px), 880px); margin-inline: auto; }
-.wikidoc-shell--wide { width: min(calc(100% - 32px), var(--container)); }
-
-.wikidoc-crumbs {
-  display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
-  margin-bottom: 18px; font-size: 0.92rem; font-weight: 600; color: var(--muted);
-}
-.wikidoc-crumbs a { color: var(--muted); transition: color 0.2s ease; }
-.wikidoc-crumbs a:hover { color: var(--wd-link); }
-.wikidoc-crumbs__sep { opacity: 0.6; }
-
-.wikidoc-article {
-  background: var(--bg-elev);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  box-shadow: var(--shadow);
-  padding: clamp(24px, 5vw, 56px);
-  overflow-wrap: break-word;
-}
-
-.wikidoc-pagefoot { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; }
-
-/* ---------- 문서 페이지: 좌측 목차 + 본문 2단 ---------- */
-.wikidoc-shell--doc {
-  width: min(calc(100% - 32px), 1280px);
-  display: grid;
-  grid-template-columns: 300px minmax(0, 1fr);
-  gap: 26px;
-  align-items: start;
-}
-.wikidoc-content { min-width: 0; }
-
+/* ── 사이드바 ── */
 .wikidoc-side {
-  position: sticky;
-  top: calc(var(--header-height) + 18px);
-  max-height: calc(100vh - var(--header-height) - 36px);
-  overflow-y: auto;
-  scrollbar-width: thin;
+  position: sticky; top: var(--header-height);
+  max-height: calc(100dvh - var(--header-height)); overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+  padding: 36px 24px 40px var(--gutter); border-right: 1px solid var(--line);
 }
+.wikidoc-course { display: grid; gap: 6px; margin-bottom: 28px; }
+.wikidoc-course__name { font-size: 15px; font-weight: 700; line-height: 1.45; transition: color 0.2s; }
+.wikidoc-course__name:hover { color: var(--accent); }
+.wikidoc-course__meta { margin: 0; color: var(--muted); font-size: 12px; }
 
-.wikidoc-toc {
-  background: var(--bg-elev);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  box-shadow: var(--shadow);
-  padding: 10px;
-}
 .wikidoc-toc > summary {
-  cursor: pointer;
-  font-weight: 800;
-  padding: 8px 10px;
-  border-radius: 8px;
+  display: flex; justify-content: space-between; cursor: pointer; list-style: none; padding: 12px 14px;
+  border: 1px solid var(--line); color: var(--accent); font-family: var(--f-display); font-size: 10px; letter-spacing: 3px;
 }
-.wikidoc-toc > summary:hover { background: var(--bg-soft); }
-
-.wikidoc-toc__group + .wikidoc-toc__group { margin-top: 4px; }
+.wikidoc-toc > summary::-webkit-details-marker, .wikidoc-toc__group > summary::-webkit-details-marker { display: none; }
+.wikidoc-toc > summary::after { content: "▾"; }
+.wikidoc-toc[open] > summary::after { content: "▴"; }
+.wikidoc-toc__group + .wikidoc-toc__group { margin-top: 10px; }
 .wikidoc-toc__group > summary {
-  display: flex; justify-content: space-between; align-items: center; gap: 8px;
-  cursor: pointer;
-  padding: 9px 10px;
-  font-weight: 700; font-size: 0.9rem;
-  border-radius: 8px;
+  display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 0; cursor: pointer; list-style: none;
+  color: var(--muted); font-size: 12px; letter-spacing: 1px; transition: color 0.2s;
 }
-.wikidoc-toc__group > summary:hover { background: var(--bg-soft); }
-.wikidoc-toc__group[open] > summary { color: var(--wd-link); }
+.wikidoc-toc__group > summary::after { content: "›"; flex: none; transition: transform 0.25s var(--ease); }
+.wikidoc-toc__group[open] > summary { color: var(--accent); }
+.wikidoc-toc__group[open] > summary::after { transform: rotate(90deg); }
+.wikidoc-toc__group > summary:hover { color: var(--text); }
 .wikidoc-toc__glabel { min-width: 0; }
-.wikidoc-toc__count {
-  flex-shrink: 0;
-  font-size: 0.74rem; font-weight: 700; color: var(--muted);
-  background: var(--bg-soft); border-radius: 999px; padding: 2px 8px;
-}
-.wikidoc-toc__group ul { list-style: none; margin: 2px 0 8px; padding: 0 0 0 10px; }
-.wikidoc-toc__group li { margin: 1px 0; }
+.wikidoc-toc__count { margin-left: auto; color: var(--muted); font-family: var(--f-mono); font-size: 11px; }
+.wikidoc-toc__group ul { margin: 0 0 6px; padding: 0; list-style: none; }
+.wikidoc-toc__group[open] ul { animation: drop-in 0.3s var(--ease); }
 .wikidoc-toc__group li a {
-  display: block;
-  padding: 5px 10px;
-  border-radius: 8px;
-  font-size: 0.86rem; font-weight: 500;
-  color: var(--muted);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  display: block; padding: 7px 14px; border-left: 2px solid transparent;
+  color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  transition: color 0.2s, background-color 0.2s, border-color 0.2s;
 }
-.wikidoc-toc__group li a:hover { background: var(--bg-soft); color: var(--text); }
-.wikidoc-toc__group li a.is-active {
-  background: color-mix(in srgb, var(--primary) 24%, transparent);
-  color: var(--text); font-weight: 700;
-}
+.wikidoc-toc__group li a:hover { color: var(--text); border-left-color: var(--line-accent); }
+.wikidoc-toc__group li a.is-active { background: var(--accent-soft); border-left-color: var(--accent); color: var(--accent); }
+@media (min-width: 1024px) { .wikidoc-toc > summary { display: none; } }
 
-/* 데스크톱: 목차는 항상 펼침(접기 summary 숨김) */
-@media (min-width: 1024px) {
-  .wikidoc-toc > summary { display: none; }
-}
-/* 모바일·태블릿: 사이드바를 본문 위 접이식 패널로 */
-@media (max-width: 1023px) {
-  .wikidoc-shell--doc { grid-template-columns: 1fr; gap: 16px; }
-  .wikidoc-side { position: static; max-height: none; overflow: visible; }
-}
-
-/* ---------- 본문 타이포그래피 ---------- */
-.wikidoc-article { line-height: 1.85; }
-.wikidoc-article > *:first-child { margin-top: 0; }
-
-.wikidoc-article h1 {
-  font-size: clamp(1.55rem, 3.2vw, 2.15rem);
-  line-height: 1.35;
-  margin: 0 0 0.8em;
-  padding-bottom: 0.5em;
-  border-bottom: 2px solid color-mix(in srgb, var(--primary) 55%, transparent);
-}
-.wikidoc-article h2 {
-  font-size: clamp(1.25rem, 2.4vw, 1.5rem);
-  margin: 2.4em 0 0.8em;
-  padding-left: 14px;
-  border-left: 4px solid var(--primary);
-  line-height: 1.4;
-}
-.wikidoc-article h3 {
-  font-size: 1.12rem;
-  margin: 1.8em 0 0.6em;
-}
-.wikidoc-article h4 { margin: 1.5em 0 0.5em; }
+/* ── 본문 ── */
+.wikidoc-crumbs { font-family: var(--f-kr); font-size: 12px; letter-spacing: 0; }
+.wikidoc-crumbs li + li::before { content: "›"; }
+.wikidoc-article { color: var(--text); font-family: var(--f-kr); font-size: 16px; line-height: 1.85; overflow-wrap: break-word; }
+.wikidoc-article > :first-child { margin-top: 0; }
+.wikidoc-article h1 { margin: 0 0 0.9em; font-size: clamp(26px, 3.4vw, 40px); line-height: 1.3; }
+.wikidoc-article h2 { margin: 2em 0 0.8em; font-size: clamp(20px, 2.4vw, 26px); line-height: 1.4; }
+.wikidoc-article h3 { margin: 1.8em 0 0.6em; font-size: 18px; }
+.wikidoc-article h3::before { content: "// "; color: var(--accent); font-family: var(--f-mono); font-size: 14px; }
+.wikidoc-article h4 { margin: 1.5em 0 0.5em; font-size: 16px; }
 .wikidoc-article p { margin: 0.9em 0; }
-
-.wikidoc-article a { color: var(--wd-link); font-weight: 600; }
-.wikidoc-article a:hover { text-decoration: underline; text-underline-offset: 3px; }
-
-/* 문서 머리의 메타 인용구 및 일반 인용구 */
-.wikidoc-article blockquote {
-  margin: 1.2em 0;
-  padding: 14px 20px;
-  background: var(--bg-soft);
-  border-left: 4px solid var(--primary);
-  border-radius: 0 12px 12px 0;
-  color: var(--muted);
-}
-.wikidoc-article blockquote p { margin: 0.35em 0; }
-
-.wikidoc-article hr {
-  border: none;
-  border-top: 1px dashed color-mix(in srgb, var(--primary) 45%, var(--line));
-  margin: 2.6em 0;
-}
-
-.wikidoc-article ul, .wikidoc-article ol { padding-left: 1.5em; margin: 0.9em 0; }
+.wikidoc-article a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--line-accent); text-underline-offset: 3px; transition: text-decoration-color 0.2s; }
+.wikidoc-article a:hover { text-decoration-color: var(--accent); }
+.wikidoc-article strong { color: #fff; }
+.wikidoc-article blockquote { margin: 1.2em 0; padding: 14px 20px; border-left: 2px solid var(--accent); background: var(--surface); color: var(--muted); }
+.wikidoc-article blockquote p { margin: 0.3em 0; }
+.wikidoc-article hr { margin: 2.4em 0; border: 0; border-top: 1px solid var(--line); }
+.wikidoc-article ul, .wikidoc-article ol { margin: 0.9em 0; padding-left: 1.5em; }
 .wikidoc-article li { margin: 0.35em 0; }
-.wikidoc-article li > ul, .wikidoc-article li > ol { margin: 0.35em 0; }
+.wikidoc-article li::marker { color: var(--accent); }
 
-/* ---------- 표 ---------- */
-.wikidoc-article table {
-  display: block;
-  overflow-x: auto;
-  border-collapse: collapse;
-  margin: 1.4em 0;
-  font-size: 0.93rem;
-  line-height: 1.6;
-}
-.wikidoc-article th, .wikidoc-article td {
-  border: 1px solid var(--line);
-  padding: 9px 14px;
-  text-align: left;
-  vertical-align: top;
-}
-.wikidoc-article thead th {
-  background: color-mix(in srgb, var(--primary) 16%, var(--bg-soft));
-  white-space: nowrap;
-}
-.wikidoc-article tbody tr:nth-child(even) {
-  background: color-mix(in srgb, var(--bg-soft) 55%, transparent);
-}
+.wikidoc-article table { display: block; overflow-x: auto; margin: 1.4em 0; border-collapse: collapse; font-size: 14px; line-height: 1.6; }
+.wikidoc-article th, .wikidoc-article td { padding: 9px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.wikidoc-article thead th { background: var(--surface); color: var(--muted); font-weight: 700; white-space: nowrap; }
+.wikidoc-article tbody tr:hover { background: var(--accent-soft); }
 
-/* ---------- 코드 ---------- */
-.wikidoc-article code {
-  font-family: "D2Coding", "Cascadia Code", Consolas, ui-monospace, monospace;
-  font-size: 0.88em;
-  background: color-mix(in srgb, var(--primary) 16%, var(--bg-soft));
-  border-radius: 6px;
-  padding: 2px 6px;
-}
-.wikidoc-article pre {
-  background: var(--wd-code-bg);
-  color: var(--wd-code-ink);
-  border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent);
-  border-radius: 12px;
-  padding: 18px 20px;
-  margin: 1.3em 0;
-  overflow-x: auto;
-  line-height: 1.65;
-}
-.wikidoc-article pre code {
-  background: none;
-  padding: 0;
-  font-size: 0.9rem;
-  color: inherit;
-}
+.wikidoc-article code { padding: 2px 6px; border: 1px solid var(--line); border-radius: 2px; background: var(--surface); color: var(--accent); font-family: var(--f-mono); font-size: 0.86em; }
+.wikidoc-article pre { margin: 1.3em 0; padding: 18px 22px; overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 2px; line-height: 1.7; }
+.wikidoc-article pre code { padding: 0; border: 0; background: none; color: var(--text); font-size: 13px; }
 
-/* ---------- 기타 요소 ---------- */
-.wikidoc-article img { border-radius: 12px; margin: 1.2em 0; }
-.wikidoc-article details {
-  margin: 1.2em 0;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: var(--bg-elev);
-  overflow: hidden;
-}
-.wikidoc-article details summary {
-  cursor: pointer;
-  padding: 12px 18px;
-  font-weight: 700;
-  background: var(--bg-soft);
-}
+.wikidoc-article img { margin: 1.2em 0; border: 1px solid var(--line); }
+.wikidoc-article details { margin: 1.2em 0; border: 1px solid var(--line); background: var(--surface); }
+.wikidoc-article details summary { padding: 12px 18px; cursor: pointer; font-weight: 700; }
 .wikidoc-article details[open] summary { border-bottom: 1px solid var(--line); }
-.wikidoc-article details > *:not(summary) { margin-left: 18px; margin-right: 18px; }
-.wikidoc-article input[type="checkbox"] { accent-color: var(--primary); }
+.wikidoc-article details > :not(summary) { margin-inline: 18px; }
+.wikidoc-article input[type="checkbox"] { accent-color: var(--accent); }
 
-/* ==========================================================================
-   위키 허브 (WikiDoc/index.html)
-   ========================================================================== */
-.wikihub-head { margin: 8px 0 34px; }
-.wikihub-head .eyebrow {
-  margin: 0 0 6px; color: #c2703d; font-weight: 700; letter-spacing: 0.04em;
-}
-.wikihub-head h1 { margin: 0; font-size: clamp(1.8rem, 3vw, 2.6rem); }
-.wikihub-head p { margin: 12px 0 0; color: var(--muted); max-width: 640px; }
+.wikidoc-pagefoot { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--line); }
+.wikidoc-pagefoot__gap { flex: 1; }
+.wikidoc-next span { opacity: 0.6; font-weight: 400; }
 
-.wikihub-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-  gap: 22px;
+/* ── 커리큘럼 로드맵 (/wiki/<과정>/curriculum/) ── */
+.curriculum { padding-block: 56px 80px; }
+.curriculum__head { display: flex; justify-content: space-between; gap: 48px; padding-bottom: 40px; margin-bottom: 56px; border-bottom: 1px solid var(--line); }
+.curriculum__intro { display: grid; gap: 16px; max-width: 860px; align-content: start; }
+.curriculum__title { margin: 0; font-size: clamp(28px, 3.6vw, 44px); line-height: 1.25; }
+.curriculum__desc { margin: 0; color: var(--muted); font-size: 16px; }
+.curriculum__actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.curriculum__stats { flex: none; width: 440px; grid-template-columns: 1fr 1fr; align-content: start; }
+.curriculum__block + .curriculum__block { margin-top: 64px; }
+
+.roadmap { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; counter-reset: stage; }
+.roadmap__stage { position: relative; }
+.roadmap__stage + .roadmap__stage::before { /* 단계 사이 화살표 */
+  content: "›"; position: absolute; left: -12px; top: 50%; transform: translate(-50%, -50%); color: var(--line-accent); font-size: 18px;
 }
-.wikihub-card {
-  display: flex; flex-direction: column;
-  background: var(--bg-elev);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  overflow: hidden;
-  box-shadow: var(--shadow);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+.roadmap__stage a { display: grid; gap: 14px; height: 100%; padding: 20px; background: var(--surface); border: 1px solid var(--line-accent); border-radius: 2px; transition: background-color 0.3s, transform 0.4s var(--ease); }
+.roadmap__stage a:hover { background: var(--accent-soft); transform: translateY(-3px); }
+.roadmap__stage:first-child a { background: var(--accent-soft); }
+.roadmap__top { display: flex; justify-content: space-between; gap: 8px; }
+.roadmap__top .label { font-size: 10px; }
+.roadmap__name { font-size: 16px; font-weight: 700; line-height: 1.4; }
+.roadmap__bar { height: 2px; margin-top: auto; background: var(--line); }
+.roadmap__bar i { display: block; height: 100%; width: var(--w); background: var(--accent); transform-origin: left; transform: scaleX(0); transition: transform 1s var(--ease) calc(var(--i, 0) * 120ms + 300ms); }
+.is-in .roadmap__bar i { transform: none; }
+
+.units { display: grid; gap: 12px; }
+.unit { background: var(--surface); border: 1px solid var(--line); border-radius: 2px; }
+.unit > summary { display: flex; align-items: center; gap: 16px; padding: 18px 20px; cursor: pointer; list-style: none; }
+.unit > summary::-webkit-details-marker { display: none; }
+.unit > summary::after { content: "⌄"; color: var(--muted); transition: transform 0.3s var(--ease); }
+.unit[open] > summary { border-bottom: 1px solid var(--line); }
+.unit[open] > summary::after { transform: rotate(180deg); }
+.unit > summary .label { font-size: 10px; flex: none; }
+.unit__name { flex: 1; font-size: 16px; font-weight: 700; }
+.unit__count { margin-left: auto; color: var(--muted); font-size: 11px; }
+.unit__list { margin: 0; padding: 0; list-style: none; }
+.unit[open] .unit__list { animation: drop-in 0.35s var(--ease); }
+.unit__list li + li { border-top: 1px solid var(--line); }
+.unit__list a { display: grid; grid-template-columns: 56px 1fr auto; gap: 16px; align-items: center; padding: 12px 20px; font-size: 14px; transition: background-color 0.2s; }
+.unit__list a:hover { background: var(--accent-soft); }
+.unit__num { color: var(--accent); font-size: 12px; }
+.unit__go { color: var(--accent); font-size: 13px; transition: transform 0.25s var(--ease); }
+.unit__list a:hover .unit__go { transform: translateX(4px); }
+.curriculum__doc { max-width: 1000px; }
+
+@media (max-width: 1080px) {
+  .curriculum__head { flex-direction: column; }
+  .curriculum__stats { width: 100%; }
+  .roadmap__stage + .roadmap__stage::before { display: none; }
 }
-.wikihub-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-strong); }
-.wikihub-card__thumb { aspect-ratio: 16 / 9; background: var(--bg-soft); overflow: hidden; }
-.wikihub-card__thumb img { width: 100%; height: 100%; object-fit: cover; }
-.wikihub-card__body { display: grid; gap: 12px; padding: 20px; flex: 1; align-content: start; }
-.wikihub-card__body h2 { margin: 0; font-size: 1.25rem; line-height: 1.4; }
-.wikihub-card__body > p { margin: 0; color: var(--muted); }
-.wikihub-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.wikihub-chip {
-  padding: 5px 11px; border-radius: 999px; font-size: 0.82rem; font-weight: 600;
-  background: color-mix(in srgb, var(--primary) 18%, transparent);
-  color: var(--text);
+@media (max-width: 720px) {
+  .curriculum { padding-block: 32px 56px; }
+  .curriculum__head { margin-bottom: 40px; }
+  .roadmap { grid-template-columns: 1fr; }
+  .unit > summary { flex-wrap: wrap; gap: 6px 12px; }
+  .unit__name { flex-basis: 100%; order: 3; }
+  .unit__list a { grid-template-columns: 40px 1fr; padding-inline: 14px; }
+  .unit__go { display: none; }
 }
-.wikihub-card__actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; padding-top: 6px; }
-.wikihub-card__actions .btn { flex: 1; text-align: center; }
+
+@media (max-width: 1023px) {
+  .wikidoc-shell { grid-template-columns: 1fr; }
+  .wikidoc-side { position: static; max-height: none; overflow: visible; padding: 20px var(--gutter) 0; border-right: 0; }
+  .wikidoc-course { margin-bottom: 14px; }
+  .wikidoc-toc__groups { padding: 4px 14px 10px; border: 1px solid var(--line); border-top: 0; }
+  .wikidoc-content { padding: 28px var(--gutter) 64px; }
+}
+@media (max-width: 720px) {
+  .wikidoc-article { font-size: 15px; }
+  .wikidoc-article pre { margin-inline: calc(var(--gutter) * -1); border-inline: 0; padding-inline: var(--gutter); }
+  .wikidoc-pagefoot__gap { display: none; }
+  .wikidoc-pagefoot .btn { flex: 1 1 auto; }
+  .wikidoc-next { flex-basis: 100% !important; order: -1; }
+}

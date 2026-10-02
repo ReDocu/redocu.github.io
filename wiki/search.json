@@ -1,0 +1,26 @@
+---
+layout: null
+permalink: /wiki/search.json
+render_with_liquid: true
+sitemap: false
+---
+{%- comment -%}
+  위키 검색 색인 (PRD_NEXT 4.8): 문서 제목 + h2 헤딩만. 본문 전문은 넣지 않는다.
+  다른 페이지의 content는 렌더 순서에 따라 마크다운이거나 HTML이라 두 경우를 모두 처리한다.
+{%- endcomment -%}
+{%- assign docs = site.pages | where_exp: "p", "p.url contains '/wiki/'" | where_exp: "p", "p.url contains '.html' or p.url contains '/curriculum/' or p.url contains '/lessons/'" | sort: "path" -%}
+[
+{%- for p in docs -%}{%- assign seg = p.url | split: '/' -%}{%- if seg.size > 3 -%}
+{%- assign hs = '' | split: '' -%}
+{%- if p.content contains '<h2' -%}
+  {%- assign chunks = p.content | split: '<h2' -%}
+  {%- for ch in chunks offset: 1 -%}{%- assign h = ch | split: '</h2>' | first | split: '>' | shift | join: '>' | strip_html | strip -%}{%- assign hs = hs | push: h -%}{%- endfor -%}
+{%- else -%}
+  {%- assign chunks = p.content | split: '
+## ' -%}
+  {%- for ch in chunks offset: 1 -%}{%- assign h = ch | split: '
+' | first | strip -%}{%- assign hs = hs | push: h -%}{%- endfor -%}
+{%- endif -%}
+{"u":{{ p.url | jsonify }},"t":{{ p.title | default: p.name | jsonify }},"c":{{ seg[2] | jsonify }},"h":{{ hs | jsonify }}}{% unless forloop.last %},{% endunless %}
+{% endif -%}{%- endfor -%}
+]

@@ -1,0 +1,43 @@
+---
+layout: main
+title: 사운드 크레딧
+description: 사이트 배경음악 10곡 목록. 모든 곡은 SUNO로 만들었습니다.
+css: pages
+---
+<section class="section section--page">
+  <div class="container">
+    <ol class="crumb" data-reveal="fade"><li><a href="/">HOME</a></li><li aria-current="page">MUSIC</li></ol>
+    <header class="section-head" data-reveal>
+      <div class="section-head__row"><div class="section-head__left">
+        <p class="label">SOUND CREDITS — /music/</p>
+        <h1 class="section-head__title">배경음악</h1>
+        <p class="section-head__desc">플레이리스트 {{ site.data.playlist.size }}곡. 모든 곡은 SUNO로 만들었습니다. 제목을 누르면 플레이어에서 바로 재생됩니다.</p>
+      </div></div>
+      <div class="rule"></div>
+    </header>
+
+    {% assign groups = site.data.playlist | group_by: "group" %}
+    <div class="track-groups" data-stagger>
+      {% for g in groups %}
+      <section class="track-group" aria-label="{{ g.name }}">
+        <header class="track-group__head"><span class="label">{{ g.name | upcase }}</span><span class="label label--muted">{{ g.size }} TRACKS</span></header>
+        <ol class="track-list">
+          {% for t in g.items %}{% for p in site.data.playlist %}{% if p.src == t.src %}{% assign i = forloop.index0 %}{% endif %}{% endfor %}
+          <li><button class="track" type="button" data-play-index="{{ i }}">
+            <span class="track__num">{{ i | plus: 1 | prepend: "0" | slice: -2, 2 }}</span>
+            <span class="track__title">{{ t.title }}<small>{{ t.desc }}</small></span>
+            <span class="track__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <span class="track__dur mono">{{ t.dur }}</span>
+          </button></li>
+          {% endfor %}
+        </ol>
+      </section>
+      {% endfor %}
+    </div>
+
+    <aside class="note" data-reveal>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM21 16a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/></svg>
+      <p class="note__desc">Made with SUNO · 곡 제목은 임시이며 playlist.yml에서 바꿉니다. 음량 기본 40%, 선택했을 때만 재생되고 페이지를 옮겨도 이어집니다.</p>
+    </aside>
+  </div>
+</section>

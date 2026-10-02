@@ -1,0 +1,99 @@
+{% comment %}
+  커리큘럼 로드맵 (home.pen `Wiki · Curriculum`). wikidoc 레이아웃이 /wiki/<과정>/curriculum/ 에서 include.
+  단계·차시는 lessons/ 하위 폴더와 문서에서 자동으로 만든다 — 손으로 관리하는 목록 없음.
+{% endcomment %}
+{% assign idx = 0 %}{% for c in site.data.courses %}{% if c.slug == course.slug %}{% assign idx = forloop.index %}{% endif %}{% endfor %}
+{% assign lesson_prefix = course_prefix | append: 'lessons/' %}
+{% assign lessons = site.pages | where_exp: "p", "p.url contains lesson_prefix" | sort: "path" %}
+{% assign stages = lessons | group_by_exp: "p", "p.path | split: '/' | pop | last" | where_exp: "g", "g.name != 'lessons'" %}
+{% assign form = site.contact_form_url | default: '/#contact' %}
+
+<div class="container curriculum">
+  <ol class="crumb wikidoc-crumbs" data-reveal="fade">
+    <li><a href="/wiki/">학습 위키</a></li>
+    <li><a href="/wiki/{{ course.slug }}/curriculum/">{{ course.name }}</a></li>
+    <li aria-current="page">CURRICULUM</li>
+  </ol>
+
+  <section class="curriculum__head">
+    <div class="curriculum__intro">
+      <p class="label" data-reveal="fade">COURSE 0{{ idx }} — ROADMAP</p>
+      <h1 class="curriculum__title" data-reveal="clip">{{ course.name }}</h1>
+      <p class="curriculum__desc" data-reveal style="--d:150ms">{{ course.desc }}</p>
+      <div class="curriculum__actions" data-reveal style="--d:250ms">
+        <a class="btn" href="{{ course.start }}">첫 문서부터 시작</a>
+        <a class="btn btn--ghost" href="{{ form }}">강의 문의</a>
+      </div>
+    </div>
+    <dl class="spec-grid curriculum__stats" data-stagger="scale">
+      <div class="spec"><dt>DURATION</dt><dd>{{ course.span }}</dd></div>
+      <div class="spec"><dt>DOCS</dt><dd>학습문서 <span data-count="{{ course.docs }}">{{ course.docs }}</span>편</dd></div>
+      <div class="spec"><dt>TARGET</dt><dd>{{ course.target }}</dd></div>
+      <div class="spec"><dt>OUTPUT</dt><dd>{{ course.output }}</dd></div>
+    </dl>
+  </section>
+
+  {% if stages.size > 0 %}
+  <section class="curriculum__block">
+    <header class="section-head" data-reveal>
+      <div class="section-head__row"><div class="section-head__left">
+        <p class="label">SECTION 01 — ROADMAP</p>
+        <h2 class="section-head__title">로드맵</h2>
+        <p class="section-head__desc">대단원 {{ stages.size }}개를 단계로 늘어놓았습니다. 각 단계는 문서 수와 함께 표시합니다.</p>
+      </div></div>
+      <div class="rule"></div>
+    </header>
+    <ol class="roadmap" data-stagger>
+      {% for g in stages %}
+      <li class="roadmap__stage">
+        <a href="#unit-{{ forloop.index }}">
+          <span class="roadmap__top"><span class="label">STAGE 0{{ forloop.index }}</span><span class="label label--muted">{{ g.items.size }} DOCS</span></span>
+          <span class="roadmap__name">{{ site.data.wiki_parts[g.name] | default: g.name }}</span>
+          <span class="roadmap__bar" aria-hidden="true"><i style="--w:{{ g.items.size | times: 100 | divided_by: lessons.size | at_least: 6 }}%"></i></span>
+        </a>
+      </li>
+      {% endfor %}
+    </ol>
+  </section>
+
+  <section class="curriculum__block">
+    <header class="section-head" data-reveal>
+      <div class="section-head__row"><div class="section-head__left">
+        <p class="label">SECTION 02 — UNITS</p>
+        <h2 class="section-head__title">대단원 목록</h2>
+        <p class="section-head__desc">대단원을 펼치면 차시가 보이고, 각 차시는 문서로 이어집니다.</p>
+      </div></div>
+      <div class="rule"></div>
+    </header>
+    <div class="units">
+      {% for g in stages %}
+      <details class="unit" id="unit-{{ forloop.index }}" data-reveal{% if forloop.first %} open{% endif %}>
+        <summary>
+          <span class="label">UNIT 0{{ forloop.index }}</span>
+          <span class="unit__name">{{ site.data.wiki_parts[g.name] | default: g.name }}</span>
+          <span class="unit__count mono">{{ g.items.size }} DOCS</span>
+        </summary>
+        <ol class="unit__list">
+          {% for p in g.items %}
+          <li><a href="{{ p.url }}"><span class="unit__num mono">{{ forloop.index | prepend: '00' | slice: -3, 3 }}</span><span class="unit__title">{{ p.title | default: p.name }}</span><span class="unit__go">문서 →</span></a></li>
+          {% endfor %}
+        </ol>
+      </details>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <section class="curriculum__block">
+    <header class="section-head" data-reveal>
+      <div class="section-head__row"><div class="section-head__left">
+        <p class="label">SECTION 03 — PLAN</p>
+        <h2 class="section-head__title">상세 커리큘럼</h2>
+      </div></div>
+      <div class="rule"></div>
+    </header>
+    <article class="wikidoc-article curriculum__doc">
+      {{ content }}
+    </article>
+  </section>
+</div>

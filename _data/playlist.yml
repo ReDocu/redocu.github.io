@@ -1,0 +1,13 @@
+# 사이트 배경음악 목록 (위에서부터 순서대로 재생, 끝나면 처음으로). PRD.md 부록 A
+# 음원은 assets/audio/. 목록이 비면 플레이어가 표시되지 않는다.
+# group은 "분류 · 장르" — 접힌 목록에는 " · " 뒤 장르만 보인다. dur은 목록 표시용.
+- { title: "Neon Boot",             src: /assets/audio/metaverse-edm-techno-01.mp3, group: "Metaverse · EDM",       desc: "시스템이 깨어나는 비트",      dur: "3:13" }
+- { title: "Grid Runner",           src: /assets/audio/metaverse-edm-techno-02.mp3, group: "Metaverse · EDM",       desc: "가상 도시를 달리는 테크노",   dur: "2:49" }
+- { title: "Virtual Lounge Groove", src: /assets/audio/metaverse-jazz-01.mp3,       group: "Metaverse · Jazz",      desc: "가상 라운지에서 흐르는 재즈", dur: "2:39" }
+- { title: "Lounge After Hours",    src: /assets/audio/metaverse-jazz-02.mp3,       group: "Metaverse · Jazz",      desc: "늦은 밤 라운지의 재즈",       dur: "2:59" }
+- { title: "Digital Nocturne",      src: /assets/audio/metaverse-classical-01.mp3,  group: "Metaverse · Classical", desc: "디지털 공간의 야상곡",        dur: "2:58" }
+- { title: "Pixel Sonata",          src: /assets/audio/metaverse-classical-02.mp3,  group: "Metaverse · Classical", desc: "픽셀로 그린 소나타",          dur: "2:39" }
+- { title: "DK Theme 01",           src: /assets/audio/bgm-for-dk-01.mp3,           group: "DK · BGM",              desc: "DK 배경음악",                 dur: "2:59" }
+- { title: "DK Theme 02",           src: /assets/audio/bgm-for-dk-02.mp3,           group: "DK · BGM",              desc: "DK 배경음악",                 dur: "2:59" }
+- { title: "DK Theme 03",           src: /assets/audio/bgm-for-dk-03.mp3,           group: "DK · BGM",              desc: "DK 배경음악",                 dur: "2:59" }
+- { title: "DK Theme 04",           src: /assets/audio/bgm-for-dk-04.mp3,           group: "DK · BGM",              desc: "DK 배경음악",                 dur: "2:59" }

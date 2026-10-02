@@ -1,0 +1,26 @@
+<div class="intro" id="intro" data-stage="0" role="dialog" aria-modal="true" aria-label="사이트 인트로">
+  <div class="intro__boot" aria-hidden="true">
+    <svg class="intro__logo" viewBox="0 0 40 40"><path d="M20 3 35 11.5v17L20 37 5 28.5v-17z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+    <ol class="intro__log"></ol>
+    <div class="intro__load" hidden>
+      <div class="intro__load-row"><span class="intro__item">LOADING // PROFILE</span><span class="intro__pct">0%</span></div>
+      <div class="intro__track"><span class="intro__fill"></span></div>
+    </div>
+  </div>
+  <div class="intro__standby" hidden>
+    <!-- HUD/Panel은 intro.js가 Hero에서 복제해 넣는다 -->
+    <div class="intro__keys">
+      <button class="intro__enter" id="introEnter" type="button"><span class="key">PRESS ANY KEY TO ENTER</span><span class="tap">TAP TO ENTER</span></button>
+      <button class="btn btn--ghost intro__mute" id="introMute" type="button" aria-label="음악 없이 입장">MUTE ENTER</button>
+    </div>
+  </div>
+</div>
+<script>
+  // 첫 방문만 인트로. ?intro 를 붙이면 다시 본다. 재방문이면 그리기 전에 지워 한 프레임도 안 보이게 한다.
+  (function () {
+    var intro = document.getElementById('intro'), seen = false;
+    try { seen = localStorage.getItem('intro-seen') === '1'; } catch (e) {}
+    if (seen && !/[?&]intro\b/.test(location.search)) intro.remove();
+    else document.documentElement.classList.add('intro-lock');
+  })();
+</script>

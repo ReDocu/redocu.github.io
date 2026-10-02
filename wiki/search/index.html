@@ -1,0 +1,91 @@
+---
+layout: main
+title: 위키 검색
+description: 학습 위키 문서 제목과 헤딩을 검색합니다.
+css: pages
+render_with_liquid: true
+---
+<section class="section section--page">
+  <div class="container">
+    <ol class="crumb" data-reveal="fade"><li><a href="/wiki/">학습 위키</a></li><li aria-current="page">SEARCH</li></ol>
+    <header class="section-head" data-reveal>
+      <div class="section-head__row"><div class="section-head__left">
+        <p class="label">WIKI SEARCH — /wiki/search/</p>
+        <h1 class="section-head__title">위키 검색</h1>
+        <p class="section-head__desc">문서 제목과 헤딩만 찾습니다. 빌드 때 만든 search.json 하나를 브라우저에서 필터합니다.</p>
+      </div></div>
+      <div class="rule"></div>
+    </header>
+
+    <form class="search" role="search" data-reveal onsubmit="return false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <label class="sr-only" for="q">검색어</label>
+      <input id="q" type="search" placeholder="예: 더블 버퍼링, 브랜치, YOLO" autocomplete="off" autofocus />
+      <span class="search__meta mono" id="searchMeta">LOADING…</span>
+    </form>
+
+    <div class="search__filters" role="group" aria-label="과정 필터" data-reveal style="--d:100ms">
+      <span class="label label--muted">COURSE</span>
+      <button class="search__chip" type="button" data-course="" aria-pressed="true">전체</button>
+      {% for c in site.data.courses %}<button class="search__chip" type="button" data-course="{{ c.slug }}" aria-pressed="false">{{ c.name | split: ' ' | first }}</button>{% endfor %}
+    </div>
+
+    <div class="results" aria-live="polite">
+      <p class="results__head"><span class="label label--muted" id="resultCount">RESULTS</span></p>
+      <ol class="results__list" id="results"></ol>
+    </div>
+    <p class="hint mono">// 본문 전문 검색과 외부 검색 라이브러리는 쓰지 않는다. 제목·헤딩 JSON 하나로 충분하다.</p>
+  </div>
+</section>
+
+<script>
+(function () {
+  var names = {{ site.data.courses | map: "slug" | jsonify }}, labels = {{ site.data.courses | map: "name" | jsonify }};
+  var courseName = function (slug) { var i = names.indexOf(slug); return i < 0 ? slug : labels[i].split(' · ')[0]; };
+  var q = document.getElementById('q'), list = document.getElementById('results'),
+      meta = document.getElementById('searchMeta'), count = document.getElementById('resultCount');
+  var docs = [], course = '';
+  var esc = function (s) { return s.replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var mark = function (s, words) { // 일치 구간 강조
+    var out = esc(s);
+    words.forEach(function (w) { if (w) out = out.replace(new RegExp(esc(w).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), '<mark>$&</mark>'); });
+    return out;
+  };
+  var norm = function (s) { return s.toLowerCase().replace(/\s+/g, ''); }; // 띄어쓰기 무시: "더블버퍼링" = "더블 버퍼링"
+
+  function render() {
+    var raw = q.value.trim(), t0 = performance.now();
+    var words = raw.split(/\s+/), key = norm(raw), hits = [];
+    if (key) docs.forEach(function (d) {
+      if (course && d.c !== course) return;
+      if (norm(d.t).indexOf(key) > -1) hits.push({ lv: 'DOC', t: d.t, sub: d.t, u: d.u, c: d.c });
+      d.h.forEach(function (h) {
+        if (norm(h).indexOf(key) > -1) hits.push({ lv: 'H2', t: h, sub: d.t, u: d.u + '#' + h.toLowerCase().replace(/[^\w가-힣\s-]/g, '').trim().replace(/\s+/g, '-'), c: d.c });
+      });
+    });
+    var shown = hits.slice(0, 60);
+    list.innerHTML = shown.map(function (r, i) {
+      return '<li style="--i:' + Math.min(i, 12) + '"><a href="' + r.u + '"><span class="results__lv mono">' + r.lv + '</span>' +
+        '<span class="results__text"><b>' + mark(r.t, words) + '</b><small>' + esc(courseName(r.c)) + ' › ' + esc(r.sub) + '</small></span><span class="results__go" aria-hidden="true">→</span></a></li>';
+    }).join('');
+    count.textContent = key ? 'RESULTS — ' + hits.length + ' MATCHES' + (hits.length > 60 ? ' (상위 60)' : '') + ' · ' + Math.max(1, Math.round(performance.now() - t0)) + ' MS' : 'RESULTS — 검색어를 입력하세요';
+  }
+
+  document.querySelectorAll('.search__chip').forEach(function (b) {
+    b.addEventListener('click', function () {
+      course = b.dataset.course;
+      document.querySelectorAll('.search__chip').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      render();
+    });
+  });
+  var timer; q.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(render, 80); });
+
+  var init = new URLSearchParams(location.search).get('q'); if (init) q.value = init;
+  fetch('/wiki/search.json').then(function (r) { return r.json(); }).then(function (data) {
+    docs = data;
+    var hc = data.reduce(function (n, d) { return n + d.h.length; }, 0);
+    meta.textContent = data.length + ' DOCS · ' + hc.toLocaleString() + ' HEADINGS';
+    render();
+  }).catch(function () { meta.textContent = 'INDEX.OFFLINE'; meta.classList.add('warn'); });
+})();
+</script>

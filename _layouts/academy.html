@@ -1,0 +1,77 @@
+---
+layout: main
+css: [academy]
+---
+{%- comment -%} 학원 상세 — pen: Academy · Kyungil(Jva8c) · MBC(z3zNcr) · CodeCamp(IfXJY). 트랙 데이터는 페이지 front matter(tracks) {%- endcomment -%}
+<div class="container academy">
+  <ol class="crumb" data-reveal="fade">
+    <li><a href="/">HOME</a></li>
+    <li><a href="/#academy">ACADEMY</a></li>
+    <li aria-current="page">{{ page.crumb }}</li>
+  </ol>
+
+  <header class="section-head" data-reveal>
+    <div class="section-head__row"><div class="section-head__left">
+      <p class="label">{{ page.label }}</p>
+      <h1 class="section-head__title">{{ page.heading }}</h1>
+      <p class="section-head__desc">{{ page.copy }}</p>
+    </div></div>
+    <div class="rule"></div>
+  </header>
+
+  <nav class="chips track-jump" aria-label="트랙 바로가기" data-stagger="fade">
+    {%- for t in page.tracks %}<a class="chip" href="#{{ t.id }}">{{ t.jump | default: t.title }}</a>{% endfor %}
+  </nav>
+
+  {%- for t in page.tracks %}
+  <article class="track" id="{{ t.id }}" data-reveal>
+    <div class="track__head">
+      <span class="track__badge">{{ t.badge }}</span>
+      <div class="track__head-text">
+        <h2 class="track__title">{{ t.title }}{% if t.sub %} <span>· {{ t.sub }}</span>{% endif %}</h2>
+        <p class="track__tag">{{ t.tag }}</p>
+      </div>
+    </div>
+    <div class="track__grid">
+      <div class="track__col">
+        <h3 class="track__col-title">학습한 내용</h3>
+        {%- if t.learn %}
+        <ul class="track__learn" data-stagger="left">
+          {%- for l in t.learn %}<li><b>{{ l[0] }}</b><span>{{ l[1] }}</span></li>{% endfor %}
+        </ul>
+        {%- endif %}
+        {%- if t.summary %}<p class="track__summary">{{ t.summary }}</p>{% endif %}
+        {%- if t.motto %}<p class="track__motto mono">// {{ t.motto }}</p>{% endif %}
+        {%- if t.tags %}<div class="chips">{% for g in t.tags %}<span class="chip">{{ g }}</span>{% endfor %}</div>{% endif %}
+      </div>
+      <div class="track__col">
+        <h3 class="track__col-title">{{ t.out_label | default: page.out_label | default: "제작한 결과물" }}</h3>
+        <div class="track__outputs" data-stagger="up">
+          {%- for o in t.outputs %}
+          {%- case o.status %}
+            {%- when "progress" %}{%- assign bl = "IN PROGRESS" %}{%- assign bc = "dev" %}
+            {%- when "dev" %}{%- assign bl = "IN DEV" %}{%- assign bc = "dev" %}
+            {%- else %}{%- assign bl = "COMPLETE" %}{%- assign bc = "complete" %}
+          {%- endcase %}
+          <div class="output">
+            <div class="output__head"><h4 class="output__title">{{ o.title }}</h4><span class="badge badge--{{ bc }}">{{ bl }}</span></div>
+            {%- if o.kind or o.desc %}<p class="output__desc">{% if o.kind %}<span class="output__kind">{{ o.kind }}</span> {% endif %}{{ o.desc }}</p>{% endif %}
+            {%- if o.list %}<ul class="output__list">{% for i in o.list %}<li>{{ i }}</li>{% endfor %}</ul>{% endif %}
+            {%- if o.focus %}<p class="output__focus"><b>핵심 학습</b><span>{{ o.focus }}</span></p>{% endif %}
+            <div class="output__actions">
+              {%- for a in o.actions %}
+              {%- assign ext = a[1] | slice: 0, 4 %}
+              {%- assign tail = a[1] | slice: -4, 4 %}
+              <a class="btn btn--sm btn--ghost" href="{{ a[1] }}"{% if ext == "http" or tail == ".pdf" %} target="_blank" rel="noopener"{% endif %}>{{ a[0] }}</a>
+              {%- endfor %}
+            </div>
+          </div>
+          {%- endfor %}
+        </div>
+      </div>
+    </div>
+  </article>
+  {%- endfor %}
+
+  {{ content }}
+</div>

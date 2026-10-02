@@ -1,7 +1,7 @@
 # redocu.github.io
 
 Jekyll 기반 개인 포트폴리오 정적 사이트입니다. 메인 포트폴리오 페이지, 학원별 학습 정리 페이지,
-독립 실행형 웹 미니앱(스도쿠·카쿠로·파이썬 아카이브)을 GitHub Pages로 함께 배포합니다.
+독립 실행형 웹 미니앱(스도쿠·카쿠로)을 GitHub Pages로 함께 배포합니다.
 
 ## 기술 스택
 
@@ -49,7 +49,7 @@ bundle exec jekyll build    # 정적 빌드 → _site/ 에 생성
 ├── projects/              # 프로젝트 → /projects/ (현황판) · /projects/<slug>/ 상세 7개
 ├── about/ teaching/ music/ # 소개 · 강의 제안 · 사운드 크레딧
 ├── apps/                  # 미니앱 허브(index.html) + 독립 실행형 웹앱 (순수 HTML/CSS/JS)
-│   ├── puzzle-lab/ sudoku/ kakuro/ python-archive/
+│   ├── puzzle-lab/ sudoku/ kakuro/
 └── files/                 # 포트폴리오·기술문서 PDF, 이력서 (영문 파일명)
 ```
 

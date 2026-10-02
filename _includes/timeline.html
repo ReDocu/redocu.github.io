@@ -1,8 +1,8 @@
-{% comment %} include.rows: 줄마다 "연도|제목|기관|설명|링크1 이름|링크1 주소|링크2 이름|링크2 주소". 마지막 줄은 진행 중(NOW) 표시 {% endcomment %}
+{% comment %} include.rows: 줄마다 "연도|제목|기관|설명|링크1 이름|링크1 주소|링크2 이름|링크2 주소". 마지막 줄은 진행 중(NOW) 표시, now=false 면 끈다 {% endcomment %}
 {% assign rows = include.rows | newline_to_br | split: "<br />" %}
 <ol class="timeline">
   {% for row in rows %}{% assign f = row | strip | split: "|" %}{% if f.size > 1 %}
-  <li class="timeline__item{% if forloop.last %} timeline__item--now{% endif %}" data-reveal="left">
+  <li class="timeline__item{% if forloop.last and include.now != false %} timeline__item--now{% endif %}" data-reveal="left">
     <p class="timeline__year">{{ f[0] }}</p>
     <span class="timeline__rail" aria-hidden="true"></span>
     <div class="timeline__body">

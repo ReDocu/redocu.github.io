@@ -75,7 +75,6 @@ tracks:
     tags: [PRD 업데이트, 카피 · CTA, insert-only 원장, Portone, 웹훅, 결제 SSOT]
     outputs:
       - title: 맛집커뮤니티 어드밴스
-        status: progress
         kind: 개인 · 결제 확장
         desc: 한 상품이 배너부터 취소 내역까지 5화면을 관통하는 결제 플로우 목업.
         focus: insert-only 원장 · 포트원 웹훅 · 결제 SSOT

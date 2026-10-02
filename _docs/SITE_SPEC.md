@@ -15,7 +15,7 @@ Jekyll 기반 개인 포트폴리오 정적 사이트다. 메인 한 페이지�
 | 프로젝트 | `projects/` | `/projects/` | 프로젝트 현황판, 기술문서, CSGP 학습 북, 팀 워크스페이스 데모 |
 | 학습 위키 | `wiki/` | `/wiki/` | 자체 커리큘럼 6과정, 문서 607편 |
 | 학원 교육 | `academy/` | `/academy/<학원>/` | 경일게임아카데미, MBC컴퓨터아카데미, 코드캠프 |
-| 미니앱 | `apps/` | `/apps/<앱>/` | 퍼즐 랩(스도쿠·가쿠로), 파이썬 아카이브 |
+| 미니앱 | `apps/` | `/apps/<앱>/` | 퍼즐 랩(스도쿠·가쿠로) |
 | 문서 파일 | `files/` | `/files/…` | 포트폴리오·기술문서 PDF, 이력서 |
 
 ## 2. 기술 스택과 실행
@@ -64,7 +64,7 @@ bundle exec jekyll build    # _site/ 생성
 │   └── team-workspace/    # index.html(기능 데모), tech-doc.html
 ├── apps/
 │   ├── puzzle-lab/        # 스도쿠·가쿠로를 iframe으로 묶는 허브
-│   ├── sudoku/ kakuro/ python-archive/
+│   ├── sudoku/ kakuro/
 └── files/                 # portfolio.pdf, resume.html, 게임 기술문서 PDF
 ```
 
@@ -134,9 +134,8 @@ Contact의 문의 폼 버튼은 `_config.yml`의 `contact_form_url`(한국어)·
 | `puzzle-lab` | 스도쿠·가쿠로 탭 허브 (`../sudoku/`, `../kakuro/`를 iframe으로 로드) | `puzzlelab-theme` |
 | `sudoku` | 난이도별 생성, 검증, 힌트, 메모, 정답, 인쇄 | `vanilla-sudoku-current-game-v1`, `vanilla-sudoku-theme-v1` |
 | `kakuro` | 생성·유일해 검증, 조합표, 메모, 인쇄 (설계: `_docs/kakuro-gdd.md`) | `kakuroSaveV1`, `kakuroTheme` |
-| `python-archive` | 알고리즘·대회·기초 개념 조회, 관리자 편집 | `algoArchive.*` |
 
-파이썬 아카이브의 관리자 편집은 방문자 브라우저에만 저장된다. 배포 데이터를 바꾸려면 JSON을 내보내 `js/data.js`·`js/basicConcepts.js`의 기본값에 반영한다. 이 앱은 현재 메뉴·카드 어디에서도 링크되지 않는다.
+파이썬 아카이브(`python-archive`)는 2026-10에 제거했다. 새 앱으로 개편할 예정이다.
 
 ## 9. 개편 전 URL 리다이렉트
 

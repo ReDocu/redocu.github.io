@@ -22,6 +22,7 @@ permalink: /personal-assistant/
 | 형태 | 단일 웹앱(SPA) + 서버리스 API, 1인 사용 |
 | 스택 | React 19 · TypeScript · Vite 8 · Tailwind v4 · react-router 8 · Hono · Cloudflare Workers / D1 / R2 · Cron Triggers |
 | 규모 | 화면 31개 · DB 테이블 28개 · API 엔드포인트 60여 개 · TypeScript 약 6,000줄 |
+| 체험 | [체험판]({{ '/personal-assistant/demo/' | relative_url }}) (가입 없이 2분 튜토리얼) · [화면 둘러보기]({{ '/personal-assistant/screens/' | relative_url }}) (실제 화면 33장) |
 | 문서 | [기술명세서]({{ '/personal-assistant/spec/' | relative_url }}) · [기술문서]({{ '/personal-assistant/tech/' | relative_url }}) |
 
 ![홈 화면 — 지금 봐야 할 것 · 오늘 · 프로젝트/운영 · 이번 달]({{ '/projects/spm/img/home.png' | relative_url }})
@@ -115,5 +116,7 @@ PA_는 이 다섯 가지를 한 앱, 한 입력창으로 해결한다.
 
 ## 더 읽기
 
+- [체험판]({{ '/personal-assistant/demo/' | relative_url }}) — 샘플 데이터로 바로 눌러보는 2분 튜토리얼
+- [화면 둘러보기]({{ '/personal-assistant/screens/' | relative_url }}) — 실제 구현 화면 캡처 33장, 모듈별 정리
 - [기술명세서]({{ '/personal-assistant/spec/' | relative_url }}) — 아키텍처, 화면·기능·데이터·API 명세, 횡단 규칙, 보안, 비기능 요구
 - [기술문서]({{ '/personal-assistant/tech/' | relative_url }}) — 저장소 구조, 요청 흐름, 핵심 알고리즘, 보안 구현, 백업, 테스트, 개발 프로세스

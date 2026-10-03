@@ -50,6 +50,8 @@
   thumb: /assets/thumbs/spm.webp
   actions:
     - { label: 소개, url: /personal-assistant/, primary: true }
+    - { label: 체험판, url: /personal-assistant/demo/ }
+    - { label: 화면, url: /personal-assistant/screens/ }
     - { label: 기술명세서, url: /personal-assistant/spec/ }
     - { label: 기술문서, url: /personal-assistant/tech/ }
 

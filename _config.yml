@@ -107,3 +107,4 @@ exclude:
   - README.md
   - "*.pen"
   - projects/spm/README.md
+  - projects/backup/

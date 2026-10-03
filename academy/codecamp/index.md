@@ -85,4 +85,4 @@ tracks:
           - [원장 시뮬레이터, /academy/codecamp/part4-food-community-advance/demo-payment-ledger.html]
           - [모바일 배너, /academy/codecamp/part4-food-community-advance/demo-mobile-banner.html]
 ---
-<p class="academy__foot mono">// 과정 저장소: <a href="https://github.com/ReDocu/Sesac_CC_ClaudeCode" target="_blank" rel="noopener">ReDocu/Sesac_CC_ClaudeCode</a></p>
+<p class="academy__foot mono">// 과정 저장소: <a href="https://github.com/Redocu-Backup-Management/Sesac_CC_ClaudeCode" target="_blank" rel="noopener">Redocu-Backup-Management/Sesac_CC_ClaudeCode</a></p>

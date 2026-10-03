@@ -39,8 +39,8 @@ write up what I learn as documentation I can share.**
 | Project | Description | Stack | Links |
 | --- | --- | --- | --- |
 | **Knowledge Sharing Center** | A shared knowledge space that brings documents, boards, notes, schedules and chat into one place. Research documents and study materials are indexed automatically. | Node.js · Vercel · Upstash Redis | [Live](https://company-process.vercel.app/) · [Repo](https://github.com/ReDocu/CompanyProcess) |
-| **EduCraft** | A learning platform that bundles four workshops — BookCraft (authoring), LMSCraft (course management), LecView (lecture discovery & reviews) and mini-games — into a single Next.js app. | Next.js · Supabase · Monorepo | [Live](http://www.eqment.store/) · [Repo](https://github.com/ReDocu/EduCraft) |
-| **ClaudeCockpit** `v0.3` | A local dashboard for managing and monitoring Claude Code sessions across multiple projects from one screen, with session status and fast switching. | Claude Code · Node.js · wmux | [Tech doc](https://redocu.github.io/projects/claude-cockpit/tech-doc.html) · [Repo](https://github.com/ReDocu/ClaudeCodeTemplate) |
+| **EduCraft** | A learning platform that bundles four workshops — BookCraft (authoring), LMSCraft (course management), LecView (lecture discovery & reviews) and mini-games — into a single Next.js app. | Next.js · Supabase · Monorepo | [Live](http://www.eqment.store/) · [Repo](https://github.com/Redocu-Backup-Management/EduCraft) |
+| **ClaudeCockpit** `v0.3` | A local dashboard for managing and monitoring Claude Code sessions across multiple projects from one screen, with session status and fast switching. | Claude Code · Node.js · wmux | [Tech doc](https://redocu.github.io/projects/claude-cockpit/tech-doc.html) · [Repo](https://github.com/Redocu-Backup-Management/ClaudeCodeTemplate) |
 
 ## Games & Puzzles
 
@@ -48,7 +48,7 @@ write up what I learn as documentation I can share.**
 | --- | --- | --- | --- |
 | **CSGP** | A C++ console game framework built on the Win32 API. Engine and content are kept separate so nine console games can be built step by step as a learning path. | C++ · Win32 API | [Study docs](https://redocu.github.io/projects/csgp/study-doc/index.html) · [Repo](https://github.com/ReDocu/CSGPProject) |
 | **Puzzle Lab** | A web puzzle game that generates and solves Sudoku and Kakuro in one place, with difficulty selection, hints, pencil marks and print output. | Vanilla JS | [Play](https://redocu.github.io/apps/puzzle-lab/index.html) |
-| **Animal Guard** | A tower-defense game about protecting animals. A personal project being built toward a proper release. | In progress | [Repo](https://github.com/ReDocu/AnimalDeffence) |
+| **Animal Guard** | A tower-defense game about protecting animals. A personal project being built toward a proper release. | In progress | [Repo](https://github.com/EQMent-Studio/AnimalDeffence) |
 | **Academy Management Sim** | A management simulation where you run an academy, shaping its curriculum and students. Built as a team project. | In progress · Team | [Repo](https://github.com/ReDocu/Project_Academy_Ops) |
 | **Game Dev & Live Ops Tool** | An automation tool that supports game development and live operations. A personal project being built toward a proper release. | In progress | [Repo](https://github.com/ReDocu/GameDevAuto) |
 

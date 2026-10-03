@@ -29,7 +29,7 @@ tracks:
         actions:
           - [게임 다운로드, /academy/kyungil/ky16-project-v1.0.zip]
           - [기술문서, /academy/kyungil/ky16-tech-doc.html]
-          - [GitHub, "https://github.com/ReDocu/KYGameAcademy"]
+          - [GitHub, "https://github.com/Redocu-Backup-Management/KYGameAcademy"]
   - id: track-winapi
     badge: API
     jump: WINAPI

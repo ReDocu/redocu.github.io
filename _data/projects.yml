@@ -67,7 +67,7 @@
   thumb: /assets/thumbs/claude-cockpit.webp
   actions:
     - { label: 다운로드 v0.3.0, url: /projects/claude-cockpit/ClaudeCockpit-v0.3.0.zip, primary: true }
-    - { label: GitHub, url: "https://github.com/ReDocu/ClaudeCodeTemplate" }
+    - { label: GitHub, url: "https://github.com/Redocu-Backup-Management/ClaudeCodeTemplate" }
     - { label: 기술문서, url: /projects/claude-cockpit/tech-doc.html }
   spec:
     PLATFORM: Windows · 로컬 웹 대시보드
@@ -157,7 +157,7 @@
   thumb: /assets/thumbs/educraft-hub.svg
   actions:
     - { label: 사이트 방문, url: "http://www.eqment.store/", primary: true }
-    - { label: GitHub, url: "https://github.com/ReDocu/EduCraft" }
+    - { label: GitHub, url: "https://github.com/Redocu-Backup-Management/EduCraft" }
     - { label: 기술문서, url: "https://github.com/ReDocu/CompanyProcess#readme" }
   spec:
     PLATFORM: 웹

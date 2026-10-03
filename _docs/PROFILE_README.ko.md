@@ -38,8 +38,8 @@
 | 프로젝트 | 설명 | 스택 | 링크 |
 | --- | --- | --- | --- |
 | **지식 나눔터** | 문서·게시판·노트·일정·채팅을 한 자리에 모아 함께 읽고 나누는 지식 공유 공간. 리서치 문서와 학습 자료를 자동 색인해 관리합니다. | Node.js · Vercel · Upstash Redis | [서비스](https://company-process.vercel.app/) · [Repo](https://github.com/ReDocu/CompanyProcess) |
-| **EduCraft** | 책 제작(BookCraft), 학습 관리(LMSCraft), 강의 탐색·리뷰(LecView), 미니게임 — 네 개의 공방을 하나의 Next.js 앱으로 묶은 학습 플랫폼. | Next.js · Supabase · 모노레포 | [서비스](http://www.eqment.store/) · [Repo](https://github.com/ReDocu/EduCraft) |
-| **ClaudeCockpit** `v0.3` | 여러 프로젝트의 Claude Code 세션을 한 화면에서 관리·모니터링하는 로컬 대시보드. 세션 상태 확인과 빠른 전환을 지원합니다. | Claude Code · Node.js · wmux | [기술문서](https://redocu.github.io/projects/claude-cockpit/tech-doc.html) · [Repo](https://github.com/ReDocu/ClaudeCodeTemplate) |
+| **EduCraft** | 책 제작(BookCraft), 학습 관리(LMSCraft), 강의 탐색·리뷰(LecView), 미니게임 — 네 개의 공방을 하나의 Next.js 앱으로 묶은 학습 플랫폼. | Next.js · Supabase · 모노레포 | [서비스](http://www.eqment.store/) · [Repo](https://github.com/Redocu-Backup-Management/EduCraft) |
+| **ClaudeCockpit** `v0.3` | 여러 프로젝트의 Claude Code 세션을 한 화면에서 관리·모니터링하는 로컬 대시보드. 세션 상태 확인과 빠른 전환을 지원합니다. | Claude Code · Node.js · wmux | [기술문서](https://redocu.github.io/projects/claude-cockpit/tech-doc.html) · [Repo](https://github.com/Redocu-Backup-Management/ClaudeCodeTemplate) |
 
 ## 게임 · 퍼즐
 
@@ -47,7 +47,7 @@
 | --- | --- | --- | --- |
 | **CSGP** | Win32 API 기반 C++ 콘솔 게임 프레임워크. 엔진과 콘텐츠를 분리한 구조로 콘솔 게임 9종을 단계적으로 만들어 가는 학습용 프로젝트입니다. | C++ · Win32 API | [학습문서](https://redocu.github.io/projects/csgp/study-doc/index.html) · [Repo](https://github.com/ReDocu/CSGPProject) |
 | **Puzzle Lab** | 스도쿠·가쿠로를 한 화면에서 생성하고 푸는 웹 퍼즐 게임. 난이도 선택, 힌트, 메모, 인쇄 출력을 지원합니다. | Vanilla JS | [플레이](https://redocu.github.io/apps/puzzle-lab/index.html) |
-| **동물 수호대** | 동물들을 지켜내는 디펜스 게임. 정식 출시를 목표로 개발 중인 개인 프로젝트입니다. | 개발중 | [Repo](https://github.com/ReDocu/AnimalDeffence) |
+| **동물 수호대** | 동물들을 지켜내는 디펜스 게임. 정식 출시를 목표로 개발 중인 개인 프로젝트입니다. | 개발중 | [Repo](https://github.com/EQMent-Studio/AnimalDeffence) |
 | **학원 운영 시뮬레이션** | 학원을 운영하며 커리큘럼과 수강생을 관리하는 경영 시뮬레이션. 팀 프로젝트로 개발 중입니다. | 개발중 · 팀 | [Repo](https://github.com/ReDocu/Project_Academy_Ops) |
 | **게임 개발 운영 툴** | 게임 개발과 라이브 운영을 돕는 자동화 툴. 정식 출시를 목표로 개발 중입니다. | 개발중 | [Repo](https://github.com/ReDocu/GameDevAuto) |
 

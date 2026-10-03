@@ -24,7 +24,7 @@ academies:
     thumb: /assets/thumbs/academy-kyungil.png
     actions:
       - { label: 상세문서, url: /academy/kyungil/ }
-      - { label: GitHub, url: "https://github.com/ReDocu/KYGameAcademy" }
+      - { label: GitHub, url: "https://github.com/Redocu-Backup-Management/KYGameAcademy" }
       - { label: 학습문서, url: /academy/kyungil/study-notes.html }
   - title: 비전 기반 AI 모델 생성 커리큘럼
     url: /academy/mbc/
@@ -45,7 +45,7 @@ academies:
     thumb: /assets/thumbs/academy-codecamp.png
     actions:
       - { label: 상세문서, url: /academy/codecamp/ }
-      - { label: GitHub, url: "https://github.com/ReDocu/Sesac_CC_ClaudeCode" }
+      - { label: GitHub, url: "https://github.com/Redocu-Backup-Management/Sesac_CC_ClaudeCode" }
 ---
 {%- comment -%} 메인 포트폴리오는 page.portfolio 에 적은 slug 만, 그 순서대로 {%- endcomment -%}
 {%- assign software = "" | split: "" -%}{%- for s in page.portfolio -%}{%- assign item = site.data.projects | where: "slug", s | first -%}{%- assign software = software | push: item -%}{%- endfor -%}

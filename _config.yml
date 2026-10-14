@@ -81,6 +81,14 @@ defaults:
       layout: "wikidoc"
       # 학습 문서 코드 예제(Jinja2 {{ }} / {% %})가 Liquid로 해석되지 않도록 차단
       render_with_liquid: false
+  - scope:
+      path: "projects/csgp/study-doc"
+    values:
+      layout: "book"
+      render_with_liquid: false
+      book: "콘솔 게임으로 배우는 C · C++"
+      book_home: /projects/csgp/study-doc/
+      crumb: [[CSGP, /projects/csgp/]]
 
 # Exclude from processing.
 # The following items will not be processed, by default.

@@ -1,56 +1,9 @@
-<!doctype html>
-<html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>부록 — 용어집 · 핵심 이슈 · 요약</title>
-<script>try{var _t=localStorage.getItem('csgp-theme');if(_t)document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
-<link rel="stylesheet" href="book.css">
-
-</head>
-<body>
-<div class="topbar">
-  <button class="drawer-toggle" id="drawerToggle" type="button" aria-label="목차 열기/닫기" aria-expanded="false">☰ 목차</button>
-  <a class="home" href="index.html">📘 CSGP</a>
-  <span class="crumb">콘솔 게임으로 배우는 C · C++</span>
-  <button class="theme-toggle" id="themeToggle" type="button" aria-label="라이트/다크 전환">🌙</button>
-</div>
-<div class="backdrop" id="backdrop"></div>
-<aside class="drawer" id="drawer" aria-label="책 목차">
-  <div class="drawer-dash">
-    <div class="dash-title">콘솔 게임으로 배우는 C · C++</div>
-    <div class="dash-sub">학습 목차 · 대시보드</div>
-    <div class="dash-progress"><div class="dash-bar"><i id="dashBar"></i></div><span class="dash-pct" id="dashPct"></span></div>
-    <input class="drawer-search" id="drawerSearch" type="search" placeholder="🔍 챕터 검색…" aria-label="챕터 검색">
-  </div>
-  <nav class="booknav" aria-label="책 목차"><a class="booknav-home" href="index.html">📘 전체 목차</a><ul class="booknav-list"><li class="grp">1부 · C 기본 문법</li><li><a href="Part1_00.html" title="1부 — C 기본 문법: 회사를 키우며 배우는 언어">1부 개요</a></li><li><a href="Part1_01.html" title="A 모듈 · 1–4장 — 값·계산·분기: 회사에 숫자를 세우다">A · 값·계산·분기</a></li><li><a href="Part1_02.html" title="B 모듈 · 5–6장 — 반복문과 함수: 회사에 심장을 달다">B · 반복문·함수</a></li><li><a href="Part1_03.html" title="C 모듈 · 7–8장 — 배열과 문자열: 회사에 사람과 이름을 채우다">C · 배열·문자열</a></li><li><a href="Part1_04.html" title="D 모듈 · 9–10장 — 구조체와 포인터: 데이터에 모양을 주다">D · 구조체·포인터</a></li><li><a href="Part1_05.html" title="E 모듈 · 11–12장 — 동적 메모리와 랜덤: 회사가 자라고, 시장이 살아난다">E · 메모리·랜덤</a></li><li><a href="Part1_06.html" title="F 모듈 · 13–15장 — 파일·모듈·캡스톤: 회사를 저장하고, 게임을 출시하다">F · 파일·모듈·캡스톤</a></li><li class="grp">2부 · C++ 프레임워크</li><li><a href="Part2_00.html" title="2부 — C++ 콘솔 게임 프레임워크: 7개의 게임으로 오르기">2부 개요</a></li><li><a href="Part2_01.html" title="1단계 · Snake — 자료구조·충돌·상태머신">1단계 · Snake</a></li><li><a href="Part2_02.html" title="2단계 · Tetris — 알고리즘과 그리드">2단계 · Tetris</a></li><li><a href="Part2_03.html" title="3단계 · Dino — 물리와 스크롤">3단계 · Dino</a></li><li><a href="Part2_04.html" title="4단계 · Road Fighter — 엔티티 시스템과 리소스">4단계 · Road Fighter</a></li><li><a href="Part2_05.html" title="번외 · GameDevTycoon 이식 — C에서 C++로">번외 · Tycoon 이식</a></li><li><a href="Part2_06.html" title="5단계 · Galaga — 오브젝트 풀링">5단계 · Galaga</a></li><li><a href="Part2_07.html" title="6단계 · Maze — 알고리즘 심화 (생성 + 탐색)">6단계 · Maze</a></li><li><a href="Part2_08.html" title="7단계 · Battle City — 종합 캡스톤 (맵 생성 + 풀링)">7단계 · Battle City</a></li><li><a href="Part2_09.html" title="확장 · Pac-Man — 유령 AI와 상태머신">확장 · Pac-Man</a></li><li class="grp">부록</li><li class="active"><a href="Appendix.html" title="부록 — 용어집 · 핵심 이슈 · 요약">부록</a><ul class="sections">
-<li><a href="#a1-값--연산--제어-흐름-1부-ab-모듈"
-id="toc-a1-값--연산--제어-흐름-1부-ab-모듈">A.1 값 · 연산 · 제어 흐름
-(1부 A·B 모듈)</a></li>
-<li><a href="#a2-배열--문자열--데이터-1부-cd-모듈"
-id="toc-a2-배열--문자열--데이터-1부-cd-모듈">A.2 배열 · 문자열 · 데이터
-(1부 C·D 모듈)</a></li>
-<li><a href="#a3-포인터--동적-메모리-1부-de-모듈"
-id="toc-a3-포인터--동적-메모리-1부-de-모듈">A.3 포인터 · 동적 메모리
-(1부 D·E 모듈)</a></li>
-<li><a href="#a4-랜덤--파일--모듈-1부-ef-모듈"
-id="toc-a4-랜덤--파일--모듈-1부-ef-모듈">A.4 랜덤 · 파일 · 모듈 (1부 E·F
-모듈)</a></li>
-<li><a href="#a5-c--객체--엔진-2부-0단계"
-id="toc-a5-c--객체--엔진-2부-0단계">A.5 C++ · 객체 · 엔진 (2부
-0단계)</a></li>
-<li><a href="#a6-프레임워크--게임-루프-2부-0단계"
-id="toc-a6-프레임워크--게임-루프-2부-0단계">A.6 프레임워크 · 게임 루프
-(2부 0단계)</a></li>
-<li><a href="#a7-게임-기법-2부-전반" id="toc-a7-게임-기법-2부-전반">A.7
-게임 기법 (2부 전반)</a></li>
-<li><a href="#a8-알고리즘--자료구조-2부-mazebattle-city"
-id="toc-a8-알고리즘--자료구조-2부-mazebattle-city">A.8 알고리즘 ·
-자료구조 (2부 Maze·Battle City)</a></li>
-</ul></li></ul></nav>
-</aside>
-<main class="reader">
-  <article class="page">
+---
+title: "부록 — 용어집 · 핵심 이슈 · 요약"
+order: 18
+part: "부록"
+nav_title: "부록"
+---
 <h1 id="부록--용어집--핵심-이슈--요약">부록 — 용어집 · 핵심 이슈 ·
 요약</h1>
 <blockquote>
@@ -1236,12 +1189,3 @@ PowerShell CP949로</td>
 종합 캡스톤</a> | <strong>처음으로 →</strong> <a
 href="index.html">목차</a></p>
 </blockquote>
-  </article>
-</main>
-<footer class="site-footer">
-  <a href="index.html">← 목차로 돌아가기</a>
-  <span>CSGP Learn · 표시용 원고 (코드는 UTF-8 사본)</span>
-</footer>
-<script src="book-nav.js"></script>
-</body>
-</html>

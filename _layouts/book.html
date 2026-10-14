@@ -1,0 +1,56 @@
+---
+layout: main
+css: wikidoc
+---
+{% comment %} 여러 장으로 된 학습 북 (예: CSGP 학습문서). 같은 폴더에서 order가 있는 페이지를 모아 part별 목차를 만든다. book·book_home·crumb은 _config.yml defaults에서 받는다 {% endcomment %}
+{% assign toc_pages = site.pages | where: "dir", page.dir | where_exp: "p", "p.order" | sort: "order" %}
+{% for p in toc_pages %}{% if p.url == page.url %}{% assign cur = forloop.index0 %}{% endif %}{% endfor %}
+<div class="wikidoc-shell">
+  <aside class="wikidoc-side">
+    <div class="wikidoc-course">
+      <p class="label">LEARNING BOOK</p>
+      <a class="wikidoc-course__name" href="{{ page.book_home }}">{{ page.book }}</a>
+      <p class="wikidoc-course__meta mono">{{ toc_pages.size }}장</p>
+    </div>
+    <details class="wikidoc-toc" open>
+      <summary>CONTENTS</summary>
+      <div class="wikidoc-toc__groups">
+        {% assign groups = toc_pages | group_by: "part" %}
+        {% for g in groups %}
+        <details class="wikidoc-toc__group"{% if g.name == page.part or cur == nil and forloop.first %} open{% endif %}>
+          <summary><span class="wikidoc-toc__glabel">{{ g.name }}</span><span class="wikidoc-toc__count">{{ g.items | size }}</span></summary>
+          <ul>
+            {% for p in g.items %}
+            <li><a href="{{ p.url }}"{% if p.url == page.url %} class="is-active" aria-current="page"{% endif %} title="{{ p.title | escape }}">{{ p.nav_title | default: p.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </details>
+        {% endfor %}
+      </div>
+    </details>
+  </aside>
+  <div class="wikidoc-content">
+    <ol class="crumb wikidoc-crumbs">
+      {% for c in page.crumb %}<li><a href="{{ c[1] }}">{{ c[0] }}</a></li>{% endfor %}
+      <li><a href="{{ page.book_home }}">{{ page.book }}</a></li>
+    </ol>
+    <article class="wikidoc-article">
+      {{ content }}
+    </article>
+    <nav class="wikidoc-pagefoot" aria-label="문서 이동">
+      <a class="btn btn--ghost" href="#top">↑ 맨 위로</a>
+      <span class="wikidoc-pagefoot__gap"></span>
+      {% if cur == nil %}{% assign next = toc_pages.first %}{% else %}
+        {% assign pi = cur | minus: 1 %}{% assign ni = cur | plus: 1 %}{% assign next = toc_pages[ni] %}
+        {% if cur > 0 %}{% assign prev = toc_pages[pi] %}<a class="btn btn--ghost" href="{{ prev.url }}" title="{{ prev.title | escape }}">← 이전</a>{% else %}<a class="btn btn--ghost" href="{{ page.book_home }}">목차</a>{% endif %}
+      {% endif %}
+      {% if next %}<a class="btn wikidoc-next" href="{{ next.url }}"><span>다음</span> {{ next.nav_title | default: next.title | truncate: 28 }} →</a>{% endif %}
+    </nav>
+  </div>
+</div>
+<script>
+  (function () {
+    var toc = document.querySelector('.wikidoc-toc');
+    if (toc && matchMedia('(max-width: 1023px)').matches) toc.removeAttribute('open'); // 모바일: 목차 접힌 채 시작
+  })();
+</script>

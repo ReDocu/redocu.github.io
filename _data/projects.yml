@@ -226,6 +226,53 @@
     - { label: 학습문서 열기, url: /projects/csgp/study-doc/index.html, primary: true }
     - { label: 아키텍처 PDF, url: /projects/csgp/architecture.pdf }
 
+- slug: adless-puzzle
+  kind: game
+  order: 1.5
+  title: Adless Puzzle
+  status: active
+  tagline: 광고에서 본 그 퍼즐, 이제 광고 없이 끝까지.
+  desc: 모바일 광고에 자주 나오는 퍼즐 미니게임 32종을 광고·하트·에너지·결제 없이 한 앱에 모은 모바일 세로 화면 우선 웹앱입니다. 32종 × 100스테이지, 3,200레벨 전부를 자동 테스트로 풀 수 있음을 증명했습니다.
+  tags: [Next.js 16, React 19, TypeScript, Supabase]
+  thumb: /assets/thumbs/adless-puzzle.webp
+  screen_label: KEY.VISUAL
+  screen_meta: MOBILE WEB · 390×844
+  actions:
+    - { label: 플레이, url: "https://adless-puzzle.vercel.app/", primary: true }
+    - { label: 기술문서, url: /projects/adless-puzzle/tech/ }
+    - { label: 개발 프로세스, url: /projects/adless-puzzle/process/ }
+  spec:
+    PLATFORM: 모바일 웹 (세로 화면 우선)
+    STACK: Next.js 16 · React 19 · TS
+    GAMES: 32종 × 100스테이지
+    LEVELS: 3,200 · 무한모드 26종
+    TESTS: 1,855개 통과
+    STATUS:
+    DEPLOY: Vercel
+    SITE: adless-puzzle.vercel.app
+  features_head: 모든 레벨을 풀 수 있고, 실패해도 벌칙이 없고, 로그인 없이 전부 플레이합니다.
+  features:
+    - { title: 결정론 시뮬레이션, desc: "랜덤은 시드 고정 난수만 씁니다. 되돌리기 무제한, 정답 재생 테스트, 무한모드 점수의 서버 재검증이 가능합니다." }
+    - { title: "3,200레벨 풀이 증명", desc: "게임마다 솔버(BFS·A*·빔 탐색·DP 제약 전파)나 정답 재생으로 모든 레벨이 풀린다는 것을 자동 테스트 1,849개로 확인합니다. 공용 라이브러리 테스트 6개를 더해 모두 1,855개입니다." }
+    - { title: 규칙과 화면 분리, desc: "규칙은 React 없는 순수 TS, 화면은 컴포넌트로 나눕니다. 레벨 51~100은 생성기로 만듭니다." }
+    - { title: 오디오 파일 0개, desc: "32종 전용 효과음·배경음악을 모두 Web Audio API로 합성합니다." }
+    - { title: 벌칙 없는 실패, desc: "하트·에너지·광고가 없습니다. 로그인은 기록 동기화와 랭킹용이고, 서버가 없어도 게임은 그대로 돕니다." }
+    - { title: 플레이 QA, desc: "여러 AI 세션이 390×844에서 32종을 직접 플레이하며 사용성 평가 3차·이미지 평가를 반영했습니다. 터치 44px·글씨 14px 기준." }
+  layers_title: 공용 쉘 + 독립 게임 모듈
+  layers_head: 허브·레벨 선택·결과 연출·저장·소리·튜토리얼은 공용 쉘이 맡고, 게임은 GameProps 계약 하나만 지킵니다.
+  layers:
+    engine: [허브 · 레벨 선택 · 결과 연출, 저장 · 기록 동기화 (Supabase), Web Audio 합성 사운드, 튜토리얼 · 무한모드 랭킹]
+    content: [Coco's Pins, Tower of Might, Gate Tactics, Pick to Rescue, Leo's Flood, Cut & Rescue, Draw to Shield, Line Bridge, Dig Down, Screw Sort Zen, Pour & Sort, Lot Out, Merge Formation, Match Line Defense, Brick & Siege, Pour Line, Pixel Logic, Block Fill, Triple Tray, Doodle Arrows, Bibi's Hive, Pixel Go-Round, Paper Swap, Pipe Pals, Miyu's Yarn, Ricochet, Paper Pop, Number Paws, Paint Slide, Pack It, Sudoku Zen, Pair Path]
+    note: 핀 뽑기·물 정렬·나사 풀기·주차장 탈출·노노그램·스도쿠 등 장르 32종. 새 게임은 GameProps만 구현하면 허브에 붙습니다.
+  screens_tall: true
+  screens:
+    - { src: /projects/adless-puzzle/img/hub.webp, caption: 홈 — 광고 0 · 하트 0 }
+    - { src: /projects/adless-puzzle/img/level-select.webp, caption: "Pour & Sort 레벨 선택 — 100판 · 별 기록 · 무한모드" }
+    - { src: /projects/adless-puzzle/img/play-pin-rescue.webp, caption: "Coco's Pins — 핀 뽑기" }
+    - { src: /projects/adless-puzzle/img/play-pipe-rescue.webp, caption: Pipe Pals — 파이프 회전 }
+    - { src: /projects/adless-puzzle/img/play-tile-link.webp, caption: Pair Path — 짝 잇기 }
+    - { src: /projects/adless-puzzle/img/daily.webp, caption: 오늘의 퍼즐 — 모두 같은 한 판 }
+
 - slug: academy-sim
   kind: game
   order: 2

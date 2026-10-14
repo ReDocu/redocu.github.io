@@ -123,6 +123,9 @@
 .shot a { display: block; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--line); border-radius: 2px; background: radial-gradient(circle, #0F1B2A, #070A0F); }
 .shot img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s var(--ease); }
 .shot a:hover img { transform: scale(1.04); }
+.shots--tall { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.shots--tall .shot a { aspect-ratio: 390 / 844; }
+.shots--tall .shot figcaption { font-size: 13px; }
 .shot figcaption { display: flex; gap: 10px; font-size: 14px; }
 .shot figcaption .mono { color: var(--accent); font-size: 13px; }
 
@@ -169,6 +172,7 @@
   .spec-grid--bar { grid-template-columns: 1fr 1fr; gap: 8px; background: none; border: 0; }
   .spec-grid--bar .spec, .spec-grid--bar .spec:last-child { background: var(--surface); border: 1px solid var(--line); border-radius: 2px; padding: 14px 16px; }
   .feature-grid--4, .feature-grid--3, .stage-grid, .shots, .book { grid-template-columns: 1fr; }
+  .shots--tall { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .p-section { gap: 16px; }
   .flow__loop { justify-content: flex-start; text-align: left; }
   .layers { flex-direction: column; align-items: stretch; }

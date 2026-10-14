@@ -22,6 +22,7 @@ groups:
     head: PROJECT
     rows:
       - { name: CSGP, slug: csgp, desc: Win32 API 기반 C++ 콘솔 게임 프레임워크 · 콘솔 게임 9종, note: 완료, repo: ReDocu/CSGPProject, link: { label: 학습문서, url: /projects/csgp/study-doc/index.html } }
+      - { name: Adless Puzzle, slug: adless-puzzle, desc: 광고 없는 모바일 퍼즐 미니게임 32종 · 3,200레벨 웹앱, note: 배포, link: { label: 플레이, url: "https://adless-puzzle.vercel.app/" } }
       - { name: 게임 개발 운영 툴, desc: 게임 개발·라이브 운영 자동화 툴 · 개인 프로젝트, status: dev, note: 개발중, repo: ReDocu/GameDevAuto }
       - { name: 동물 수호대, desc: 동물들을 지켜내는 디펜스 게임 · 개인 프로젝트, status: dev, note: 개발중, repo: ReDocu/AnimalDeffence }
       - { name: 학원 운영 시뮬레이션, slug: academy-sim, desc: 커리큘럼·수강생을 관리하는 경영 시뮬레이션 · 팀 프로젝트, note: 개발중, repo: ReDocu/Project_Academy_Ops }

@@ -173,7 +173,7 @@ css: [project]
       </div></div>
       <div class="rule"></div>
     </header>
-    <div class="shots">
+    <div class="shots{% if p.screens_tall %} shots--tall{% endif %}">
       {%- for s in p.screens %}
       <figure class="shot" data-reveal="clip" style="--i: {{ forloop.index0 }}">
         <a href="{{ s.src }}" target="_blank" rel="noopener"><img src="{{ s.src }}" alt="{{ s.caption }}" loading="lazy" /></a>

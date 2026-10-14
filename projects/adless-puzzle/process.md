@@ -5,8 +5,6 @@ description: "11일 동안 여러 Claude Code 세션을 병렬로 돌려 기획�
 permalink: /projects/adless-puzzle/process/
 ---
 
-[← 소개]({{ '/projects/adless-puzzle/' | relative_url }}) · [← 기술문서]({{ '/projects/adless-puzzle/tech/' | relative_url }})
-
 이 문서는 "어떤 순서로, 어떻게 일했나"를 다룬다. 구조와 코드는 [기술문서]({{ '/projects/adless-puzzle/tech/' | relative_url }})에 있다.
 
 ## 1. 요약

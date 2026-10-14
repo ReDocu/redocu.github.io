@@ -12,7 +12,7 @@ url이 없으면 /projects/<slug>/. 상태 배지: active · complete · dev · 
 {%- endcase -%}
 <article class="card">
   <div class="card__thumb">
-    <div class="card__hud"><span class="card__mod" aria-hidden="true">MOD.{{ include.n | prepend: "0" | slice: -2, 2 }}</span><span class="badge badge--{% if c.status == 'progress' %}dev{% else %}{{ c.status }}{% endif %}">{{ badge }}</span></div>
+    <div class="card__hud"><span class="card__mod" aria-hidden="true">MOD.{{ c.order | default: include.n | prepend: "0" | slice: -2, 2 }}</span><span class="badge badge--{% if c.status == 'progress' %}dev{% else %}{{ c.status }}{% endif %}">{{ badge }}</span></div>
     <img src="{{ c.thumb | replace: '.png', '.webp' }}" alt="" loading="lazy" width="432" height="180" />
   </div>
   <div class="card__body">

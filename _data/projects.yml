@@ -4,7 +4,7 @@
 
 - slug: eqmux
   kind: software
-  order: 1
+  order: 3
   title: EQMUX
   status: active
   version: v0.3.0
@@ -39,82 +39,55 @@
 
 - slug: spm
   kind: software
-  order: 1.5
+  order: 2
   title: SPM
   card_title: SPM · 1인 개발 스튜디오 운영 어시스턴트
-  url: /personal-assistant/
   status: active
   tagline: 프로젝트·외주·배포·장부·지식을 한 화면에서.
-  desc: 1인 개발 스튜디오의 프로젝트·외주·배포·장부·지식을 한 화면에서 관리하는 업무 앱(PA_). PRD부터 배포까지 3일 만에 만들었습니다.
+  desc: 1인 개발 스튜디오의 프로젝트·외주·배포·장부·지식을 한 화면에서 관리하는 업무 앱(PA_)입니다. 아침 30초에 오늘을 파악하고, 5초에 캡처하고, 같은 돈은 장부에 한 번만 남깁니다. PRD부터 배포까지 3일 만에 만들었습니다.
   tags: [React 19, TypeScript, Cloudflare Workers, D1 · R2]
   thumb: /assets/thumbs/spm.webp
+  screen_label: HOME.DASHBOARD
+  screen_meta: WEB APP · 1440×900
   actions:
-    - { label: 소개, url: /personal-assistant/, primary: true }
-    - { label: 체험판, url: /personal-assistant/demo/ }
-    - { label: 화면, url: /personal-assistant/screens/ }
-    - { label: 기술명세서, url: /personal-assistant/spec/ }
-    - { label: 기술문서, url: /personal-assistant/tech/ }
-
-- slug: claude-cockpit
-  kind: software
-  order: 2
-  title: ClaudeCockpit
-  status: active
-  version: v0.3.0
-  tagline: 여러 프로젝트의 Claude Code 세션을 한 화면에서 관제합니다.
-  desc: 여러 프로젝트의 Claude Code 세션을 한 화면에서 관리·모니터링하는 로컬 대시보드입니다. 세션 상태 확인과 빠른 전환을 지원합니다.
-  tags: [Claude Code, Node.js, wmux]
-  thumb: /assets/thumbs/claude-cockpit.webp
-  actions:
-    - { label: 다운로드 v0.3.0, url: /projects/claude-cockpit/ClaudeCockpit-v0.3.0.zip, primary: true }
-    - { label: GitHub, url: "https://github.com/Redocu-Backup-Management/ClaudeCodeTemplate" }
-    - { label: 기술문서, url: /projects/claude-cockpit/tech-doc.html }
+    - { label: 체험판, url: /projects/spm/try/, primary: true }
+    - { label: 기획 개요, url: /projects/spm/overview/ }
+    - { label: 기술명세서, url: /projects/spm/spec/ }
+    - { label: 기술문서, url: /projects/spm/tech/ }
   spec:
-    PLATFORM: Windows · 로컬 웹 대시보드
-    STACK: Node.js · Claude Code 훅
-    VERSION: v0.3.0
+    PLATFORM: 웹앱(SPA) · 모바일 캡처 PWA
+    STACK: React 19 · Hono · Workers
+    DATA: D1 28테이블 · R2 2버킷
+    SCALE: 화면 31 · API 60여 개
+    PERIOD: 2026-09-27 ~ 09-29
     STATUS:
-    DISTRIBUTION: ZIP 다운로드
-    SECURITY: 127.0.0.1 바인드 · 토큰 인증
-  features_head: 세션을 띄우고, 상태를 보고, 오가는 일을 대시보드 하나로 처리합니다.
+    DEPLOY: Cloudflare Workers
+  features_head: 다섯 역할(메이커·프리랜서·운영자·사업자·학습자)의 기록을 한 입력창, 한 화면으로 모읍니다.
   features:
-    - { title: 세션 상태 한눈에, desc: 여러 프로젝트의 Claude Code 세션 상태를 주기적으로 읽어 한 화면에 보여 줍니다. }
-    - { title: 세션 스폰 · 빠른 전환, desc: 대시보드에서 프로젝트 세션을 바로 띄우고 오갈 수 있습니다. }
-    - { title: 활동 배지, desc: Claude Code 훅으로 세션별 작업 활동을 배지로 표시합니다. }
-    - { title: 로컬 전용 보안, desc: "내 PC 안에서만 열리고, 모든 요청은 토큰으로 확인합니다." }
-
-- slug: team-workspace
-  kind: software
-  order: 3
-  title: 팀 워크스페이스
-  status: active
-  tagline: 소규모 팀의 운영을 한 주소에 모았습니다.
-  desc: 소규모 팀의 운영 허브입니다. 필수 메뉴얼과 프로젝트 일정(간트)·일일 업데이트·게시판·채팅·참조 자료를 한곳에 모았습니다.
-  tags: [Next.js, TypeScript, Supabase]
-  thumb: /assets/thumbs/team-workspace.webp
-  actions:
-    - { label: 배포 사이트, url: "https://team-workspace-zeta.vercel.app", primary: true }
-    - { label: 기능 데모, url: /projects/team-workspace/demo.html }
-    - { label: 기술문서, url: /projects/team-workspace/tech-doc.html }
-  spec:
-    PLATFORM: 웹 · Android 앱
-    STACK: Next.js · TypeScript
-    DATA: Supabase · localStorage 폴백
-    STATUS:
-    ACCESS: 팀 공용 비밀번호 게이트
-    DEPLOY: Vercel
-  features_head: 팀이 매일 여는 여섯 개 메뉴를 한 앱에 담았습니다.
-  features:
-    - { title: 필수 메뉴얼, desc: 팀이 꼭 알아야 할 규칙과 절차를 문서로 모아 둡니다. }
-    - { title: 프로젝트 일정 (간트), desc: 프로젝트별 일정을 간트 차트로 보고 조정합니다. }
-    - { title: 일일 업데이트, desc: 오늘 한 일과 내일 할 일을 짧게 공유합니다. }
-    - { title: 게시판, desc: 공지와 논의를 글로 남기고 이어 갑니다. }
-    - { title: 채팅, desc: 팀원과 바로 대화합니다. }
-    - { title: 참조 자료, desc: 자주 보는 링크와 문서를 한곳에 정리합니다. }
+    - { title: 캡처 한 곳 · 분류는 나중에, desc: "Ctrl+K 입력창이 URL·코드·날짜·시간·금액을 읽어 유형을 미리 보여 주고 Enter 한 번에 저장합니다. 인박스에서 9개 목적지로 1~2탭 이동." }
+    - { title: 돈은 묻히지 않게, desc: "장애 → 미수금 → 정산 지연 → 만료 D-7 → 지난 마감 순으로 홈 상단에 고정. 해결될 때까지 사라지지 않습니다." }
+    - { title: 같은 돈은 한 번만, desc: "고정비 자동 거래에 캡처·수동 입력·CSV를 결제일 ±3일·키워드·금액 ±5% 조건으로 병합합니다. 병합도 5초 되돌리기 대상." }
+    - { title: 세금 방식이 미수금을 결정, desc: "발주처별 세금계산서 / 3.3% 원천징수 / 없음에 따라 청구액과 입금 분리가 달라집니다. 입금 1건이 장부 매출로 자동 연결." }
+    - { title: 첨부 포함 ZIP 스트리밍, desc: "워커 메모리 한계 안에서 수백 MB 첨부를 내보내려고 무압축 ZIP 라이터를 직접 작성. 백업은 앱 키로 지울 수 없는 별도 버킷에 매일 쌓입니다." }
+    - { title: 병렬 세션 구현, desc: "모듈별 파일 소유권을 정해 Claude Code 세션 4개가 병렬 구현. 모듈 간 계약을 함수 export로 고정하고 리드 세션만 커밋했습니다." }
+  flow_head: PRD에서 배포까지 3일. 사용성 테스트에서 찾은 누락을 구현 전에 PRD로 되돌렸습니다.
+  flow:
+    - { key: PRD, title: PRD v0.5, desc: 5역할·하루 흐름 → 기능 ID 110여 개 → 데이터 모델 }
+    - { key: REVIEW, title: 사용성 테스트, desc: 시나리오 9개 워크스루로 P0 누락 7건 발견 }
+    - { key: DESIGN, title: 디자인, desc: 브루탈리즘 토큰 기준 화면 48장 }
+    - { key: BUILD, title: Claude Code × 4, desc: 모듈별 소유권으로 병렬 구현, accent: true }
+    - { key: DEPLOY, title: Workers · D1 · R2, desc: Cron 포함 무료 한도 안에서 운영 }
+  screens:
+    - { src: /projects/spm/img/home.png, caption: 홈 — 지금 봐야 할 것 · 오늘 · 이번 달 }
+    - { src: /projects/spm/img/outsourcing.png, caption: 외주 — 정산대기 상시 노출 }
+    - { src: /projects/spm/img/mobile-capture.png, caption: 모바일 캡처 /c — 고정비 병합 미리보기 }
+    - { src: /projects/spm/img/common-ui.png, caption: 공통 UI — 토스트·빈 상태·토큰·단축키 }
+    - { src: /projects/spm/screenshots/01-1-캡처-Ctrl+K-오버레이.png, caption: 캡처 — Ctrl+K 오버레이 }
+    - { src: /projects/spm/screenshots/06-1-장부-거래내역.png, caption: 장부 — 거래 내역 }
 
 - slug: resume-sim
   kind: software
-  order: 4
+  order: 1
   title: 가상 이력서 시뮬레이션
   status: complete
   version: v0.1
@@ -145,33 +118,6 @@
     - { key: PROJECTION, title: 18차원 투영, desc: 키워드 사전으로 성향 벡터를 만든다 }
     - { key: MATCHING, title: 성향 근접도, desc: 128명 코퍼스와 코사인 근접도를 잰다, accent: true }
     - { key: TEAM, title: 팀 배치, desc: 관계 점수로 팀을 진단하고 구성을 추천한다 }
-
-- slug: educraft
-  kind: software
-  order: 5
-  title: EduCraft
-  status: active
-  tagline: 책을 만들고, 배우고, 강의를 고르는 네 개의 공방.
-  desc: 학습 플랫폼. 책 제작 플랫폼 BookCraft, 학습 관리 LMSCraft, 강의 탐색·리뷰 LecView, 미니게임 네 개의 공방을 사용하는 단일 Next.js 앱입니다.
-  tags: [Next.js, Supabase, 모노레포, Vercel]
-  thumb: /assets/thumbs/educraft-hub.svg
-  actions:
-    - { label: 사이트 방문, url: "http://www.eqment.store/", primary: true }
-    - { label: GitHub, url: "https://github.com/Redocu-Backup-Management/EduCraft" }
-    - { label: 기술문서, url: "https://github.com/ReDocu/CompanyProcess#readme" }
-  spec:
-    PLATFORM: 웹
-    STACK: Next.js · Supabase
-    STRUCTURE: 모노레포 · 공방 4개
-    STATUS:
-    DEPLOY: Vercel
-    SITE: eqment.store
-  features_head: 하나의 앱 안에서 네 공방이 계정과 데이터를 함께 씁니다.
-  features:
-    - { title: BookCraft, desc: 학습용 책을 쓰고 엮어 출판하는 책 제작 공방입니다. }
-    - { title: LMSCraft, desc: 수강생과 진도를 관리하는 학습 관리 공방입니다. }
-    - { title: LecView, desc: 강의를 탐색하고 리뷰를 남기는 공방입니다. }
-    - { title: 미니게임, desc: 배운 내용을 가볍게 확인하는 게임 공방입니다. }
 
 - slug: csgp
   kind: game
@@ -228,7 +174,7 @@
 
 - slug: adless-puzzle
   kind: game
-  order: 1.5
+  order: 2
   title: Adless Puzzle
   status: active
   tagline: 광고에서 본 그 퍼즐, 이제 광고 없이 끝까지.
@@ -273,19 +219,42 @@
     - { src: /projects/adless-puzzle/img/play-tile-link.webp, caption: Pair Path — 짝 잇기 }
     - { src: /projects/adless-puzzle/img/daily.webp, caption: 오늘의 퍼즐 — 모두 같은 한 판 }
 
-- slug: academy-sim
+- slug: character-chat
   kind: game
-  order: 2
-  title: 학원 운영 시뮬레이션
+  order: 3
+  title: CharacterChat
   status: dev
-  tagline: 커리큘럼과 수강생을 꾸려 학원을 키우는 경영 시뮬레이션.
-  desc: 학원을 운영하며 커리큘럼과 수강생을 관리하는 경영 시뮬레이션 게임입니다. 팀 프로젝트로 정식 출시를 목표로 개발하고 있습니다.
-  tags: [경영 시뮬레이션, 팀 프로젝트, 출시 목적]
-  thumb: /assets/thumbs/academy-sim.svg
+  tagline: 내 PC의 AI와 나누는, 관계가 쌓이는 비주얼 노벨형 캐릭터 대화.
+  desc: 브라우저에서 여는 비주얼 노벨 화면 위에서, 내 PC에서 돌아가는 로컬 LLM과 캐릭터 대화를 나눕니다. 캐릭터가 말할 때마다 LLM이 대사와 함께 포즈·배경·옷차림·호감도 변화를 직접 골라 화면에 반영하고, 대화가 쌓이면 관계가 "어색함"에서 "연인"까지 다섯 단계로 깊어집니다. 대화 데이터는 PC 밖으로 나가지 않습니다.
+  tags: [로컬 LLM, 비주얼 노벨, 연애 시뮬레이션, Vanilla JS]
+  thumb: /assets/thumbs/character-chat.webp
+  screen_label: KEY.VISUAL
+  screen_meta: DESKTOP BROWSER · 1280×720
   actions:
-    - { label: GitHub, url: "https://github.com/ReDocu/Project_Academy_Ops", primary: true }
+    - { label: 기획 개요, url: /projects/character-chat/overview/, primary: true }
+    - { label: 기술명세서, url: /projects/character-chat/spec/ }
+    - { label: 기술문서, url: /projects/character-chat/tech/ }
+    - { label: 개발 프로세스, url: /projects/character-chat/process/ }
   spec:
-    GENRE: 경영 시뮬레이션
-    TEAM: 팀 프로젝트
-    GOAL: 정식 출시
+    PLATFORM: 데스크톱 브라우저 (Chrome / Edge)
+    STACK: HTML · CSS · JS 모듈 · 의존성 0
+    AI: 로컬 LLM (OpenAI 호환 API · 12B)
+    GENRE: 연애 시뮬레이션 · 비주얼 노벨형 AI 대화
+    SCALE: 캐릭터 3명 · 포즈 260 · 배경 60
+    STORAGE: IndexedDB (로컬 전용)
     STATUS:
+  features_head: LLM이 대사와 함께 연출까지 고르고, 대화가 쌓일수록 관계가 깊어집니다.
+  features:
+    - { title: LLM이 연출까지 고른다, desc: "응답 JSON 하나에 대사·포즈·배경·옷차림·호감도·사건·메모가 담기고, JSON 스키마로 지금 고를 수 있는 ID만 허용합니다." }
+    - { title: 호감도 5단계, desc: "단계마다 말투가 바뀌고 고호감 포즈·배경·숨겨진 과거가 열립니다." }
+    - { title: 쌓이는 기억, desc: "의미 있는 사건과 캐릭터의 1인칭 메모가 다음 대화에 들어가고, 연인이 되면 그동안의 이야기를 회상 한 단락으로 정리합니다." }
+    - { title: 현실 시간 연동, desc: "지금 시각·요일·실제 날씨·캐릭터 일정을 알고, 오랜만에 돌아오면 캐릭터가 먼저 말을 겁니다." }
+    - { title: 되돌릴 수 없는 관계, desc: "저장 슬롯과 되감기를 일부러 빼서 대화 하나하나에 무게를 줬습니다." }
+    - { title: 완전 로컬, desc: "LLM·음성 인식·음성 합성을 모두 내 PC에서 돌려 대화가 밖으로 나가지 않습니다." }
+  screens:
+    - { src: /projects/character-chat/img/intro.webp, caption: 인트로 — 대표 캐릭터 민소양 }
+    - { src: /projects/character-chat/img/select.webp, caption: 캐릭터 선택 — 그림 없는 캐릭터는 이름 첫 글자 }
+    - { src: /projects/character-chat/img/play-cafe.webp, caption: "대화 화면 — 카페, 호감 단계" }
+    - { src: /projects/character-chat/img/play-hangang.webp, caption: "운동복으로 갈아입은 한강 노을 장면, 설렘 단계" }
+    - { src: /projects/character-chat/img/notes.webp, caption: 캐릭터의 메모 — 사용자에 대한 1인칭 기록 }
+    - { src: /projects/character-chat/img/log.webp, caption: 대화 로그 — 대사마다 당시 포즈 썸네일 }

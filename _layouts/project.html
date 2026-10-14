@@ -4,7 +4,8 @@ css: [project]
 ---
 {%- comment -%} 프로젝트 상세 — 데이터: _data/projects.yml (page.slug). 섹션은 데이터 키가 있을 때만 출력 {%- endcomment -%}
 {%- assign p = site.data.projects | where: "slug", page.slug | first -%}
-{%- assign group = site.data.projects | where: "kind", p.kind | sort: "order" -%}
+{%- comment -%} 목록과 같은 순서(최신 먼저 = order 역순)로 다음 프로젝트를 넘긴다. 번호는 MOD(order) 그대로 {%- endcomment -%}
+{%- assign group = site.data.projects | where: "kind", p.kind | sort: "order" | reverse -%}
 {%- for g in group -%}{%- if g.slug == p.slug -%}{%- assign idx = forloop.index0 -%}{%- endif -%}{%- endfor -%}
 {%- assign next_i = idx | plus: 1 | modulo: group.size -%}
 {%- assign nx = group[next_i] -%}

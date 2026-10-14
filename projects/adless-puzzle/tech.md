@@ -5,8 +5,6 @@ description: "광고 없는 퍼즐 미니게임 32종 웹앱의 내부 구조 �
 permalink: /projects/adless-puzzle/tech/
 ---
 
-[← 소개]({{ '/projects/adless-puzzle/' | relative_url }}) · [개발 프로세스 →]({{ '/projects/adless-puzzle/process/' | relative_url }})
-
 이 문서는 "어떻게 만들었나"를 다룬다. 기준일은 2026-10-15.
 
 ## 1. 한눈에

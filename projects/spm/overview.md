@@ -1,17 +1,9 @@
 ---
 layout: doc
-title: "PA_ — 1인 개발 스튜디오 운영 어시스턴트"
-description: "프로젝트·외주·배포·장부·지식을 한 화면에서. Cloudflare Workers + D1 + R2 위에 올린 1인용 업무 앱."
-permalink: /personal-assistant/
+title: "SPM 기획 개요"
+description: "PA_를 왜 만들었나 — 사용자·사용 시점, 설계 원칙, 모듈, 눈여겨볼 구현, 만든 과정."
+permalink: /projects/spm/overview/
 ---
-
-<!--
-  Jekyll 연결 방법
-  - 이 폴더(index.md · spec.md · tech.md · img/)를 사이트 루트에 personal-assistant/ 이름으로 복사한다.
-  - 결과 경로: /personal-assistant/  /personal-assistant/spec/  /personal-assistant/tech/
-  - 경로를 바꾸려면 세 파일의 permalink 와 img/ 절대 경로를 함께 바꾼다.
-  - layout 이름은 테마에 맞게 수정 (page / default / post 등).
--->
 
 > 아침 30초에 오늘을 파악하고, 5초에 캡처하고, 같은 돈은 장부에 한 번만.
 > 개발자·프리랜서·운영자·사업자·학습자 — 하루에 다섯 역할을 번갈아 맡는 1인 스튜디오를 위한 운영 콘솔.
@@ -22,8 +14,8 @@ permalink: /personal-assistant/
 | 형태 | 단일 웹앱(SPA) + 서버리스 API, 1인 사용 |
 | 스택 | React 19 · TypeScript · Vite 8 · Tailwind v4 · react-router 8 · Hono · Cloudflare Workers / D1 / R2 · Cron Triggers |
 | 규모 | 화면 31개 · DB 테이블 28개 · API 엔드포인트 60여 개 · TypeScript 약 6,000줄 |
-| 체험 | [체험판]({{ '/personal-assistant/demo/' | relative_url }}) (가입 없이 2분 튜토리얼) · [화면 둘러보기]({{ '/personal-assistant/screens/' | relative_url }}) (실제 화면 33장) |
-| 문서 | [기술명세서]({{ '/personal-assistant/spec/' | relative_url }}) · [기술문서]({{ '/personal-assistant/tech/' | relative_url }}) |
+| 체험 | [체험판]({{ '/projects/spm/try/' | relative_url }}) (가입 없이 2분 튜토리얼) · [화면 둘러보기](#화면-둘러보기) (실제 화면 33장) |
+| 문서 | [기술명세서]({{ '/projects/spm/spec/' | relative_url }}) · [기술문서]({{ '/projects/spm/tech/' | relative_url }}) |
 
 ![홈 화면 — 지금 봐야 할 것 · 오늘 · 프로젝트/운영 · 이번 달]({{ '/projects/spm/img/home.png' | relative_url }})
 *홈 디자인 시안. 1440×900 한 화면에 5개 역할의 신호가 긴급도 순으로 놓인다.*
@@ -114,9 +106,133 @@ PA_는 이 다섯 가지를 한 앱, 한 입력창으로 해결한다.
 ![공통 UI — 토스트·빈 상태·토큰·단축키]({{ '/projects/spm/img/common-ui.png' | relative_url }})
 *공통 UI 시안. 삭제 토스트, 빈 상태 문구, 색 토큰, 전역 단축키를 한 장으로 고정했다.*
 
+## 화면 둘러보기
+
+실제 구현된 앱의 화면 캡처 33장을 모듈별로 모았다. 직접 눌러보려면 [체험판]({{ '/projects/spm/try/' | relative_url }})을 본다.
+
+### 캡처 · 인박스
+
+![캡처 · Ctrl+K 오버레이]({{ '/projects/spm/screenshots/01-1-캡처-Ctrl+K-오버레이.png' | relative_url }})
+*캡처 · Ctrl+K 오버레이*
+
+![홈 · 빠른입력 자동분류]({{ '/projects/spm/screenshots/01-2-홈-빠른입력-자동분류.png' | relative_url }})
+*홈 · 빠른입력 자동분류*
+
+![인박스 · 분류]({{ '/projects/spm/screenshots/01-3-인박스-분류.png' | relative_url }})
+*인박스 · 분류*
+
+![모바일 · 캡처]({{ '/projects/spm/screenshots/01-4-모바일-캡처.png' | relative_url }})
+*모바일 · 캡처*
+
+### 홈
+
+![홈 · 대시보드]({{ '/projects/spm/screenshots/02-1-홈-대시보드.png' | relative_url }})
+*홈 · 대시보드*
+
+### 일정
+
+![일정 · 월간달력]({{ '/projects/spm/screenshots/03-1-일정-월간달력.png' | relative_url }})
+*일정 · 월간달력*
+
+![일정 · 추가]({{ '/projects/spm/screenshots/03-2-일정-추가.png' | relative_url }})
+*일정 · 추가*
+
+![일별 · 기록지 타임라인]({{ '/projects/spm/screenshots/03-3-일별-기록지-타임라인.png' | relative_url }})
+*일별 · 기록지 타임라인*
+
+### 프로젝트
+
+![프로젝트 · 목록]({{ '/projects/spm/screenshots/04-1-프로젝트-목록.png' | relative_url }})
+*프로젝트 · 목록*
+
+![프로젝트 · 상태보드]({{ '/projects/spm/screenshots/04-2-프로젝트-상태보드.png' | relative_url }})
+*프로젝트 · 상태보드*
+
+![프로젝트 · 상세 칸반]({{ '/projects/spm/screenshots/04-3-프로젝트-상세-칸반.png' | relative_url }})
+*프로젝트 · 상세 칸반*
+
+![프로젝트 · 게이트]({{ '/projects/spm/screenshots/04-4-프로젝트-게이트.png' | relative_url }})
+*프로젝트 · 게이트*
+
+### 외주
+
+![외주 · 파이프라인]({{ '/projects/spm/screenshots/05-1-외주-파이프라인.png' | relative_url }})
+*외주 · 파이프라인*
+
+![외주 · 상세 입금]({{ '/projects/spm/screenshots/05-2-외주-상세-입금.png' | relative_url }})
+*외주 · 상세 입금*
+
+### 장부
+
+![장부 · 거래내역]({{ '/projects/spm/screenshots/06-1-장부-거래내역.png' | relative_url }})
+*장부 · 거래내역*
+
+![장부 · 거래편집]({{ '/projects/spm/screenshots/06-2-장부-거래편집.png' | relative_url }})
+*장부 · 거래편집*
+
+![장부 · 거래처]({{ '/projects/spm/screenshots/06-3-장부-거래처.png' | relative_url }})
+*장부 · 거래처*
+
+![장부 · 세금]({{ '/projects/spm/screenshots/06-4-장부-세금.png' | relative_url }})
+*장부 · 세금*
+
+![장부 · 리포트]({{ '/projects/spm/screenshots/06-5-장부-리포트.png' | relative_url }})
+*장부 · 리포트*
+
+### 배포 · 운영
+
+![운영 · 대시보드]({{ '/projects/spm/screenshots/07-1-운영-대시보드.png' | relative_url }})
+*운영 · 대시보드*
+
+![운영 · 배포물상세 장애]({{ '/projects/spm/screenshots/07-2-운영-배포물상세-장애.png' | relative_url }})
+*운영 · 배포물상세 장애*
+
+![운영 · 플랫폼]({{ '/projects/spm/screenshots/07-3-운영-플랫폼.png' | relative_url }})
+*운영 · 플랫폼*
+
+### 지식
+
+![지식 · 자료수집]({{ '/projects/spm/screenshots/08-1-지식-자료수집.png' | relative_url }})
+*지식 · 자료수집*
+
+![지식 · 자료상세]({{ '/projects/spm/screenshots/08-2-지식-자료상세.png' | relative_url }})
+*지식 · 자료상세*
+
+![지식 · 위키목록]({{ '/projects/spm/screenshots/08-3-지식-위키목록.png' | relative_url }})
+*지식 · 위키목록*
+
+![지식 · 위키페이지]({{ '/projects/spm/screenshots/08-4-지식-위키페이지.png' | relative_url }})
+*지식 · 위키페이지*
+
+### 툴
+
+![툴 · 목록]({{ '/projects/spm/screenshots/09-1-툴-목록.png' | relative_url }})
+*툴 · 목록*
+
+![툴 · 상세]({{ '/projects/spm/screenshots/09-2-툴-상세.png' | relative_url }})
+*툴 · 상세*
+
+![툴 · 후보]({{ '/projects/spm/screenshots/09-3-툴-후보.png' | relative_url }})
+*툴 · 후보*
+
+### 통계
+
+![통계 · 주간]({{ '/projects/spm/screenshots/10-1-통계-주간.png' | relative_url }})
+*통계 · 주간*
+
+![통계 · 월간]({{ '/projects/spm/screenshots/10-2-통계-월간.png' | relative_url }})
+*통계 · 월간*
+
+### 설정 · 잠금
+
+![설정]({{ '/projects/spm/screenshots/11-1-설정.png' | relative_url }})
+*설정*
+
+![PIN · 잠금화면]({{ '/projects/spm/screenshots/11-2-PIN-잠금화면.png' | relative_url }})
+*PIN · 잠금화면*
+
 ## 더 읽기
 
-- [체험판]({{ '/personal-assistant/demo/' | relative_url }}) — 샘플 데이터로 바로 눌러보는 2분 튜토리얼
-- [화면 둘러보기]({{ '/personal-assistant/screens/' | relative_url }}) — 실제 구현 화면 캡처 33장, 모듈별 정리
-- [기술명세서]({{ '/personal-assistant/spec/' | relative_url }}) — 아키텍처, 화면·기능·데이터·API 명세, 횡단 규칙, 보안, 비기능 요구
-- [기술문서]({{ '/personal-assistant/tech/' | relative_url }}) — 저장소 구조, 요청 흐름, 핵심 알고리즘, 보안 구현, 백업, 테스트, 개발 프로세스
+- [체험판]({{ '/projects/spm/try/' | relative_url }}) — 샘플 데이터로 바로 눌러보는 2분 튜토리얼
+- [기술명세서]({{ '/projects/spm/spec/' | relative_url }}) — 아키텍처, 화면·기능·데이터·API 명세, 횡단 규칙, 보안, 비기능 요구
+- [기술문서]({{ '/projects/spm/tech/' | relative_url }}) — 저장소 구조, 요청 흐름, 핵심 알고리즘, 보안 구현, 백업, 테스트, 개발 프로세스

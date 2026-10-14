@@ -3,7 +3,7 @@ layout: main
 intro: true
 css: [home]
 js: [home]
-portfolio: [eqmux, spm, resume-sim]   # 메인 소프트웨어 카드 고정 목록
+portfolio: [eqmux, spm, resume-sim]   # 메인 소프트웨어 카드 고정 목록 (최신 먼저). MOD 번호는 projects.yml order (오래된 것 = 01)
 description: C/C++ · Unity · Unreal · Full Stack · AI Agent — AX 개발자 DOCU의 포트폴리오
 # 학습 위키 그리드 (PRD 4.6). 문서 수는 수동 입력 — 과정 추가 시 SITE_SPEC 7장 절차에 포함
 courses:
@@ -49,7 +49,7 @@ academies:
 ---
 {%- comment -%} 메인 포트폴리오는 page.portfolio 에 적은 slug 만, 그 순서대로 {%- endcomment -%}
 {%- assign software = "" | split: "" -%}{%- for s in page.portfolio -%}{%- assign item = site.data.projects | where: "slug", s | first -%}{%- assign software = software | push: item -%}{%- endfor -%}
-{%- assign games = site.data.projects | where: "kind", "game" | sort: "order" -%}
+{%- assign games = site.data.projects | where: "kind", "game" | sort: "order" | reverse -%}
 
 <section class="hero" id="hero">
   <div class="container hero__inner">

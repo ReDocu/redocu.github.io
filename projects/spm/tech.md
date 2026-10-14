@@ -1,13 +1,11 @@
 ---
 layout: doc
-title: "PA_ 기술문서"
+title: "SPM 기술문서"
 description: "PersonalAssistant(PA_) 내부 구조 — 저장소, 요청 흐름, 서버·프론트 설계, 핵심 알고리즘, 보안, 백업, 테스트, 개발 프로세스."
-permalink: /personal-assistant/tech/
+permalink: /projects/spm/tech/
 ---
 
-[← 소개]({{ '/personal-assistant/' | relative_url }}) · [← 기술명세서]({{ '/personal-assistant/spec/' | relative_url }})
-
-이 문서는 "어떻게 만들었나"를 다룬다. "무엇을 만들었나"는 [기술명세서]({{ '/personal-assistant/spec/' | relative_url }})에 있다.
+이 문서는 "어떻게 만들었나"를 다룬다. "무엇을 만들었나"는 [기술명세서]({{ '/projects/spm/spec/' | relative_url }})에 있다.
 
 ## 1. 저장소 구조
 
@@ -402,4 +400,4 @@ Node 22.6+의 타입 스트리핑으로 `.ts`를 바로 실행한다. 통합 테
 
 운영 측 미완(배포 직후 상태): PIN 미설정(설정 전까지 인증 없이 통과), Access 미설정, Webhook 미입력, 백업 버킷 수명 주기 규칙 미등록.
 
-[← 소개]({{ '/personal-assistant/' | relative_url }}) · [← 기술명세서]({{ '/personal-assistant/spec/' | relative_url }})
+[← 소개]({{ '/projects/spm/' | relative_url }}) · [← 기술명세서]({{ '/projects/spm/spec/' | relative_url }})

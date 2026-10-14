@@ -2,10 +2,54 @@
 layout: main
 css: [wikidoc]
 ---
-{% comment %} 독립 문서 페이지 (예: /personal-assistant/). 위키 문서와 같은 본문 타이포그래피 {% endcomment %}
+{% comment %} 독립 문서 페이지 (예: /projects/spm/spec/). 폭은 홈과 같은 .container, 좌측 목차(h2) + 본문. /projects/<slug>/... 이면 _data/projects.yml 에서 프로젝트를 찾아 경로·문서 이동 버튼을 단다 {% endcomment %}
+{%- assign parts = page.url | split: "/" -%}
+{%- if parts[1] == "projects" -%}{%- assign p = site.data.projects | where: "slug", parts[2] | first -%}{%- endif -%}
 <div class="container doc-page">
-  <article class="wikidoc-article">
-    {% if page.title %}<h1>{{ page.title }}</h1>{% endif %}
-    {{ content }}
-  </article>
+  <ol class="crumb">
+    <li><a href="/">HOME</a></li>
+    {%- if p %}
+    {%- if p.kind == "game" %}<li><a href="/#games">GAMES</a></li>{% else %}<li><a href="/#software">SOFTWARE</a></li>{% endif %}
+    <li><a href="/projects/{{ p.slug }}/">{{ p.title | upcase }}</a></li>
+    {%- endif %}
+    <li aria-current="page">DOCUMENT</li>
+  </ol>
+
+  <header class="doc-head" data-reveal>
+    <p class="label">{% if p %}{{ p.title | upcase }} // {% endif %}DOCUMENT</p>
+    <h1 class="doc-head__title">{{ page.title }}</h1>
+    {%- if page.description %}<p class="doc-head__desc">{{ page.description }}</p>{% endif %}
+    {%- if p %}
+    <nav class="doc-head__links" aria-label="프로젝트 문서">
+      <a class="btn btn--sm btn--ghost" href="/projects/{{ p.slug }}/">← 소개</a>
+      {%- for a in p.actions %}{% assign ext = a.url | slice: 0, 4 %}{% unless ext == "http" %}
+      <a class="btn btn--sm{% unless a.url == page.url %} btn--ghost{% endunless %}" href="{{ a.url }}"{% if a.url == page.url %} aria-current="page"{% endif %}>{{ a.label }}</a>
+      {%- endunless %}{% endfor %}
+    </nav>
+    {%- endif %}
+    <div class="rule"></div>
+  </header>
+
+  <div class="doc-body">
+    <aside class="doc-toc" hidden>
+      <p class="label">CONTENTS</p>
+      <ol></ol>
+    </aside>
+    <article class="wikidoc-article">
+      {{ content }}
+    </article>
+  </div>
 </div>
+<script>
+  (function () { // 본문 h2로 목차를 만든다. h2가 2개 미만이면 숨긴 채 둔다
+    var hs = document.querySelectorAll('.doc-page .wikidoc-article h2[id]');
+    var toc = document.querySelector('.doc-toc');
+    if (hs.length < 2) return;
+    var ol = toc.querySelector('ol');
+    hs.forEach(function (h) {
+      var li = document.createElement('li'), a = document.createElement('a');
+      a.href = '#' + h.id; a.textContent = h.textContent; li.appendChild(a); ol.appendChild(li);
+    });
+    toc.hidden = false;
+  })();
+</script>

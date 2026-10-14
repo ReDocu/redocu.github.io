@@ -65,6 +65,10 @@
 .wikidoc-article strong { color: #fff; }
 .wikidoc-article blockquote { margin: 1.2em 0; padding: 14px 20px; border-left: 2px solid var(--accent); background: var(--surface); color: var(--muted); }
 .wikidoc-article blockquote p { margin: 0.3em 0; }
+/* 학습 북(pandoc) 챕터 머리 상자 · 목차 카드 */
+.wikidoc-article .chapter-badge { margin: 1.2em 0 1.6em; padding: 14px 20px; border: 1px solid var(--line); border-left: 2px solid var(--accent); background: var(--surface); }
+.wikidoc-article .chapter-badge p { margin: 0.3em 0; }
+.wikidoc-article .toc-card .tag { margin-right: 10px; color: var(--accent); font-family: var(--f-mono); font-size: 13px; }
 .wikidoc-article hr { margin: 2.4em 0; border: 0; border-top: 1px solid var(--line); }
 .wikidoc-article ul, .wikidoc-article ol { margin: 0.9em 0; padding-left: 1.5em; }
 .wikidoc-article li { margin: 0.35em 0; }
@@ -165,5 +169,24 @@
   .wikidoc-next { flex-basis: 100% !important; order: -1; }
 }
 
-/* 독립 문서 (_layouts/doc.html) */
-.doc-page { max-width: calc(1000px + 2 * var(--gutter)); padding-block: 56px 80px; }
+/* 독립 문서 (_layouts/doc.html) — 폭은 홈과 같은 .container. 헤더 + 좌측 목차 · 본문 */
+.doc-page { padding-block: 40px 96px; }
+.doc-head { display: grid; gap: 16px; margin-bottom: 48px; }
+.doc-head__title { margin: 0; font-size: clamp(30px, 3.6vw, 48px); line-height: 1.25; }
+.doc-head__desc { margin: 0; max-width: 860px; color: var(--muted); font-size: 17px; }
+.doc-head__links { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 4px; }
+.doc-head .rule { margin-top: 8px; }
+
+.doc-body:has(> .doc-toc:not([hidden])) { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 56px; align-items: start; }
+.doc-toc {
+  position: sticky; top: calc(var(--header-height) + 24px); display: grid; gap: 14px;
+  max-height: calc(100dvh - var(--header-height) - 48px); overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+}
+.doc-toc ol { margin: 0; padding: 0; list-style: none; border-left: 1px solid var(--line); }
+.doc-toc a { display: block; margin-left: -1px; padding: 6px 14px; border-left: 2px solid transparent; color: var(--muted); font-size: 14px; line-height: 1.5; transition: color 0.2s, border-color 0.2s; }
+.doc-toc a:hover { color: var(--accent); border-left-color: var(--accent); }
+.doc-body .wikidoc-article > h2:first-child { margin-top: 0; }
+@media (max-width: 1023px) {
+  .doc-body:has(> .doc-toc:not([hidden])) { display: block; }
+  .doc-toc { display: none; }
+}

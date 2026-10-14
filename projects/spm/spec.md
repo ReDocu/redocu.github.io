@@ -1,11 +1,9 @@
 ---
 layout: doc
-title: "PA_ 기술명세서"
+title: "SPM 기술명세서"
 description: "PersonalAssistant(PA_) 시스템 구성, 화면·기능·데이터·API 명세, 횡단 규칙, 보안, 비기능 요구."
-permalink: /personal-assistant/spec/
+permalink: /projects/spm/spec/
 ---
-
-[← 소개]({{ '/personal-assistant/' | relative_url }}) · [기술문서 →]({{ '/personal-assistant/tech/' | relative_url }})
 
 | 항목 | 내용 |
 |---|---|
@@ -544,4 +542,4 @@ KRW / USD / EUR / JPY. 자동 환산 없음. 집계는 통화별 줄. 원화 집
 | 의도적 생략 | ZIP 가져오기(복원), 다크 팔레트(테마 값만 저장), 아침 요약의 미수금 줄, ZIP64(단일 파일·합계 4 GB 초과 시) |
 | 운영 미완 | PIN 설정, Access 설정 + 시크릿, Discord Webhook 입력, 백업 버킷 수명 주기 규칙 |
 
-[← 소개]({{ '/personal-assistant/' | relative_url }}) · [기술문서 →]({{ '/personal-assistant/tech/' | relative_url }})
+[← 소개]({{ '/projects/spm/' | relative_url }}) · [기술문서 →]({{ '/projects/spm/tech/' | relative_url }})

@@ -4,35 +4,36 @@ title: 프로젝트 현황판
 description: 이 사이트에 등록된 프로젝트의 저장소와 진행 상태를 한 화면에서 확인합니다.
 css: [project]
 # 상태: active | complete | dev | progress (PRD 4.3). slug가 있으면 상태는 _data/projects.yml을 따르고 이름이 상세로 링크된다.
+# 행 순서: 상세 페이지(slug, 최신 먼저 = order 역순) → 운영중 → 완료 → 개발중. projects/backup/ 으로 옮긴 프로젝트는 slug 없이 둔다.
 groups:
   - title: 소프트웨어
     head: PROJECT
     rows:
-      - { name: 가상 이력서 시뮬레이션, slug: resume-sim, desc: 이력서로 성향 근접도를 계산해 팀 배치를 시뮬레이션 · 개인 프로젝트, note: 완료, repo: ReDocu/ResumeAnalyze, link: { label: 기술문서, url: /projects/resume-sim/tech-doc.html } }
-      - { name: 소프트웨어 자동화 툴, desc: 반복 작업 과정을 자동화하는 툴 프로그램 · 개인 프로젝트, status: dev, note: 개발중, repo: ReDocu/ProcessingAuto }
-      - { name: 에셋 및 데이터 관리자, desc: 프로젝트 에셋·데이터 통합 관리 도구 · 개인 프로젝트, status: dev, note: 개발중, repo: ReDocu/AssetManager }
-      - { name: 사전 프로젝트, desc: 용어·지식을 정리하고 검색하는 사전 서비스 · 개인 프로젝트, status: dev, note: 개발중, repo: ReDocu/DictionaryProject }
-      - { name: 팀 워크스페이스, slug: team-workspace, desc: 메뉴얼·간트·일일 업데이트·게시판·채팅·참조 자료를 모은 팀 운영 허브, note: 사용중, link: { label: 서비스 방문, url: "https://team-workspace-zeta.vercel.app" } }
-      - { name: ClaudeCockpit, slug: claude-cockpit, desc: Claude Code 세션 관리·모니터링 로컬 대시보드, note: v0.3 배포, repo: ReDocu/ClaudeCodeTemplate, link: { label: 기술문서, url: /projects/claude-cockpit/tech-doc.html } }
-      - { name: 지식 나눔터, desc: 문서·게시판·노트·일정·채팅 통합 지식 공유 공간, status: active, note: 운영중, repo: ReDocu/CompanyProcess, link: { label: 서비스 방문, url: "https://company-process.vercel.app/" } }
-      - { name: EduCraft, slug: educraft, desc: BookCraft · LMSCraft · LecView · 미니게임 학습 플랫폼, note: 운영중, repo: ReDocu/EduCraft, link: { label: 서비스 방문, url: "http://www.eqment.store/" } }
-      - { name: SPM (PA_), slug: spm, desc: 1인 개발 스튜디오 운영 어시스턴트 · 프로젝트·외주·배포·장부·지식 통합, note: 배포, link: { label: 기술명세서, url: /personal-assistant/spec/ } }
       - { name: EQMUX, slug: eqmux, desc: AI 에이전트 팀 관제 Windows 데스크톱 앱, note: v0.3.0 배포, repo: ReDocu/EQMUX, link: { label: 소개 사이트, url: "https://eqmux-web-site.vercel.app/ko/" } }
+      - { name: SPM (PA_), slug: spm, desc: 1인 개발 스튜디오 운영 어시스턴트 · 프로젝트·외주·배포·장부·지식 통합, note: 배포, link: { label: 체험판, url: /projects/spm/try/ } }
+      - { name: 가상 이력서 시뮬레이션, slug: resume-sim, desc: 이력서로 성향 근접도를 계산해 팀 배치를 시뮬레이션 · 개인 프로젝트, note: 완료, repo: ReDocu/ResumeAnalyze, link: { label: 기술문서, url: /projects/resume-sim/tech-doc.html } }
+      - { name: 지식 나눔터, desc: 문서·게시판·노트·일정·채팅 통합 지식 공유 공간, status: active, note: 운영중, link: { label: 서비스 방문, url: "https://company-process.vercel.app/" } }
+      - { name: EduCraft, desc: BookCraft · LMSCraft · LecView · 미니게임 학습 플랫폼, status: active, note: 운영중, repo: Redocu-Backup-Management/EduCraft, link: { label: 서비스 방문, url: "http://www.eqment.store/" } }
+      - { name: 팀 워크스페이스, desc: 메뉴얼·간트·일일 업데이트·게시판·채팅·참조 자료를 모은 팀 운영 허브, status: active, note: 사용중, link: { label: 서비스 방문, url: "https://team-workspace-zeta.vercel.app" } }
+      - { name: ClaudeCockpit, desc: Claude Code 세션 관리·모니터링 로컬 대시보드, status: complete, note: v0.3 배포 · 보관, repo: Redocu-Backup-Management/ClaudeCodeTemplate }
+      - { name: 소프트웨어 자동화 툴, desc: 반복 작업 과정을 자동화하는 툴 프로그램 · 개인 프로젝트, status: dev, note: 개발중 }
+      - { name: 에셋 및 데이터 관리자, desc: 프로젝트 에셋·데이터 통합 관리 도구 · 개인 프로젝트, status: dev, note: 개발중 }
+      - { name: 사전 프로젝트, desc: 용어·지식을 정리하고 검색하는 사전 서비스 · 개인 프로젝트, status: dev, note: 개발중 }
   - title: 게임 소프트웨어
     head: PROJECT
     rows:
-      - { name: CSGP, slug: csgp, desc: Win32 API 기반 C++ 콘솔 게임 프레임워크 · 콘솔 게임 9종, note: 완료, repo: ReDocu/CSGPProject, link: { label: 학습문서, url: /projects/csgp/study-doc/index.html } }
+      - { name: CharacterChat, slug: character-chat, desc: 로컬 LLM으로 돌아가는 비주얼 노벨형 캐릭터 대화 · 호감도·기억, note: 개발중, link: { label: 기획 개요, url: /projects/character-chat/overview/ } }
       - { name: Adless Puzzle, slug: adless-puzzle, desc: 광고 없는 모바일 퍼즐 미니게임 32종 · 3,200레벨 웹앱, note: 배포, link: { label: 플레이, url: "https://adless-puzzle.vercel.app/" } }
-      - { name: 게임 개발 운영 툴, desc: 게임 개발·라이브 운영 자동화 툴 · 개인 프로젝트, status: dev, note: 개발중, repo: ReDocu/GameDevAuto }
-      - { name: 동물 수호대, desc: 동물들을 지켜내는 디펜스 게임 · 개인 프로젝트, status: dev, note: 개발중, repo: ReDocu/AnimalDeffence }
-      - { name: 학원 운영 시뮬레이션, slug: academy-sim, desc: 커리큘럼·수강생을 관리하는 경영 시뮬레이션 · 팀 프로젝트, note: 개발중, repo: ReDocu/Project_Academy_Ops }
+      - { name: CSGP, slug: csgp, desc: Win32 API 기반 C++ 콘솔 게임 프레임워크 · 콘솔 게임 9종, note: 완료, repo: ReDocu/CSGPProject, link: { label: 학습문서, url: /projects/csgp/study-doc/index.html } }
       - { name: Puzzle Lab, desc: 스도쿠·가쿠로 통합 퍼즐 생성기 · 인쇄 지원 웹 게임, status: complete, note: 완료, repo: ReDocu/redocu.github.io, link: { label: 플레이, url: /apps/puzzle-lab/index.html } }
+      - { name: 동물 수호대, desc: 동물들을 지켜내는 디펜스 게임 · 개인 프로젝트, status: dev, note: 개발중, repo: EQMent-Studio/AnimalDeffence }
+      - { name: 게임 개발 운영 툴, desc: 게임 개발·라이브 운영 자동화 툴 · 개인 프로젝트, status: dev, note: 개발중 }
   - title: 교육 과정 저장소
     head: COURSE
     rows:
-      - { name: 경일게임아카데미, href: /academy/kyungil/, desc: 게임 클라이언트/콘텐츠 개발 커리큘럼 (2019-09 ~ 2020-03), status: complete, note: 수료, repo: ReDocu/KYGameAcademy, link: { label: 학습문서, url: /academy/kyungil/study-notes.html } }
+      - { name: 경일게임아카데미, href: /academy/kyungil/, desc: 게임 클라이언트/콘텐츠 개발 커리큘럼 (2019-09 ~ 2020-03), status: complete, note: 수료, repo: Redocu-Backup-Management/KYGameAcademy, link: { label: 학습문서, url: /academy/kyungil/study-notes.html } }
       - { name: MBC컴퓨터아카데미, href: /academy/mbc/, desc: 비전 기반 AI 모델 생성 커리큘럼 (2023-09 ~ 2024-05), status: complete, note: 수료, link: { label: 학습문서, url: /academy/mbc/study-notes.html } }
-      - { name: 코드캠프(딩코), href: /academy/codecamp/, desc: 웹 기반 바이브 코딩 커리큘럼 (2026-06 ~ 2026-09), status: progress, note: 진행중, repo: ReDocu/Sesac_CC_ClaudeCode, link: { label: 체험하기, url: /academy/codecamp/ } }
+      - { name: 코드캠프(딩코), href: /academy/codecamp/, desc: 웹 기반 바이브 코딩 커리큘럼 (2026-06 ~ 2026-09), status: complete, note: 수료, repo: Redocu-Backup-Management/Sesac_CC_ClaudeCode, link: { label: 체험하기, url: /academy/codecamp/ } }
 ---
 {%- assign c_total = 0 -%}{%- assign c_active = 0 -%}{%- assign c_dev = 0 -%}{%- assign c_done = 0 -%}
 {%- for g in page.groups -%}{%- for r in g.rows -%}

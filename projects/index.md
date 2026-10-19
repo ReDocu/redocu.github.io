@@ -24,6 +24,7 @@ groups:
     rows:
       - { name: CharacterChat, slug: character-chat, desc: 로컬 LLM으로 돌아가는 비주얼 노벨형 캐릭터 대화 · 호감도·기억, note: 개발중, link: { label: 기획 개요, url: /projects/character-chat/overview/ } }
       - { name: Adless Puzzle, slug: adless-puzzle, desc: 광고 없는 모바일 퍼즐 미니게임 32종 · 3,200레벨 웹앱, note: 배포, link: { label: 플레이, url: "https://adless-puzzle.vercel.app/" } }
+      - { name: DUORBIT, slug: duorbit, desc: 원버튼 공전 · 4레인 낙하 · 실시간 전환 트리플 모드 리듬 게임 · 10곡 × 난이도 3단계, note: 배포, link: { label: 플레이, url: "https://eqmentstudio.itch.io/dourbit" } }
       - { name: CSGP, slug: csgp, desc: Win32 API 기반 C++ 콘솔 게임 프레임워크 · 콘솔 게임 9종, note: 완료, repo: ReDocu/CSGPProject, link: { label: 학습문서, url: /projects/csgp/study-doc/index.html } }
       - { name: Puzzle Lab, desc: 스도쿠·가쿠로 통합 퍼즐 생성기 · 인쇄 지원 웹 게임, status: complete, note: 완료, repo: ReDocu/redocu.github.io, link: { label: 플레이, url: /apps/puzzle-lab/index.html } }
       - { name: 동물 수호대, desc: 동물들을 지켜내는 디펜스 게임 · 개인 프로젝트, status: dev, note: 개발중, repo: EQMent-Studio/AnimalDeffence }
